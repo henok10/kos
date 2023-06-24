@@ -35,7 +35,7 @@ SECRET_KEY = 'django-insecure-040u)!+$1^zlyr*o15hee==v%aq(l#(kx=#b^805tmkakth^#r
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['mykos.domains', 'www.mykos.domains']
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
