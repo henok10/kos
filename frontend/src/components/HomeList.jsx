@@ -21,7 +21,7 @@ function HouseList() {
       async function GetAllListings() {
         try {
           const response = await Axios.get(
-            "http://127.0.0.1:8000/api/listings/",
+            "http://192.168.43.181:8000/api/listings/",
             { cancelToken: source.token }
           );
   
