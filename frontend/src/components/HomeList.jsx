@@ -21,7 +21,7 @@ function HouseList() {
       async function GetAllListings() {
         try {
           const response = await Axios.get(
-            "http://192.168.43.181:8000/api/listings/",
+            "http://mykos10.pythonanywhere.com/api/listings/",
             { cancelToken: source.token }
           );
   
