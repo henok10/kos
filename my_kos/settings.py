@@ -104,10 +104,10 @@ WSGI_APPLICATION = 'my_kos.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'rumah_kos_sj9h',
-        'USER': 'rumah_kos_sj9h_user',
-        'PASSWORD': 'BmxIUueNPykQ6FhjbICYlK0wlYZt7yxU',
-        'HOST': 'dpg-chkt3du7avj217fq33o0-a.singapore-postgres.render.com',
+        'NAME': 'mykosan',
+        'USER': 'mykosan_user',
+        'PASSWORD': 'jsFirR5U0FmtJ552Dlcm1PVXa4ZHT7y8',
+        'HOST': 'dpg-cif6odp8g3n3ipq44t7g-a.singapore-postgres.render.com',
         'PORT': '5432',
     }
 }
