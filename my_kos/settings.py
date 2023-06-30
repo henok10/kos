@@ -101,21 +101,15 @@ WSGI_APPLICATION = 'my_kos.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.postgresql',
-#         'NAME': 'mykosan',
-#         'USER': 'mykosan_user',
-#         'PASSWORD': 'jsFirR5U0FmtJ552Dlcm1PVXa4ZHT7y8',
-#         'HOST': 'dpg-cif6odp8g3n3ipq44t7g-a.singapore-postgres.render.com',
-#         'PORT': '5432',
-#     }
-# }
-
-import dj_database_url
-
 DATABASES = {
-    'default': dj_database_url.parse('postgres://mykosan_user:jsFirR5U0FmtJ552Dlcm1PVXa4ZHT7y8@dpg-cif6odp8g3n3ipq44t7g-a.singapore-postgres.render.com/mykosan')
+    'default': {
+        'ENGINE': 'django.contrib.gis.db.backends.postgis',
+        'NAME': 'mykosan',
+        'USER': 'mykosan_user',
+        'PASSWORD': 'jsFirR5U0FmtJ552Dlcm1PVXa4ZHT7y8',
+        'HOST': 'dpg-cif6odp8g3n3ipq44t7g-a.singapore-postgres.render.com',
+        'PORT': '5432',
+    }
 }
 
 
