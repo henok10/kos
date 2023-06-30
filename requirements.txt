@@ -14,7 +14,6 @@ djangorestframework==3.14.0
 djangorestframework-gis==1.0
 djangorestframework-simplejwt==5.2.2
 djoser==2.2.0
-GDAL @ file:///C:/Users/asus/Downloads/GDAL-3.4.3-cp310-cp310-win_amd64.whl
 gunicorn==20.1.0
 idna==3.4
 oauth2-provider==0.0
