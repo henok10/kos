@@ -103,14 +103,15 @@ WSGI_APPLICATION = 'my_kos.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.contrib.gis.db.backends.postgis',
+        'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'rumah_kos_sj9h',
         'USER': 'rumah_kos_sj9h_user',
         'PASSWORD': 'BmxIUueNPykQ6FhjbICYlK0wlYZt7yxU',
-        'HOST': 'dpg-chkt3du7avj217fq33o0-a.singapore-postgres.render.com',
-        'PORT': '5432',
+        'HOST': 'dpg-chkt3du7avj217fq33o0-a',
+        'PORT': '',
     }
 }
+
 
 
 
