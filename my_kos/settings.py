@@ -107,8 +107,8 @@ DATABASES = {
         'NAME': 'rumah_kos_sj9h',
         'USER': 'rumah_kos_sj9h_user',
         'PASSWORD': 'BmxIUueNPykQ6FhjbICYlK0wlYZt7yxU',
-        'HOST': 'dpg-chkt3du7avj217fq33o0-a',
-        'PORT': '',
+        'HOST': 'dpg-chkt3du7avj217fq33o0-a.singapore-postgres.render.com',
+        'PORT': '5432',
     }
 }
 
