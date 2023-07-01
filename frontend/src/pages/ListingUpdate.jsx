@@ -256,7 +256,7 @@ function ListingUpdate(props) {
         async function GetListingInfo() {
           try {
             const response = await Axios.get(
-              `http://127.0.0.1:8000/api/listings/${params.id}/`
+              `https://mykos-bi9i.onrender.com/api/listings/${params.id}/`
             );
     
             dispatch({
