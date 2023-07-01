@@ -132,7 +132,7 @@ function Order() {
   
       try {
         const response = await Axios.post(
-          `https://mykos-bi9i.onrender.com/api/transaction/create`,
+          `https://mykos2.onrender.com/api/transaction/create`,
           formData
         );
         console.log(response.data);

@@ -191,7 +191,7 @@ function ListingDetail() {
 		async function GetAllOrderKos() {
 			try {
 				const response = await Axios.get(
-					`http://127.0.0.1:8000/api/transaction/${params.id}/user`
+					`https://mykos2.onrender.com/api/transaction/${params.id}/user`
 				);
         const numItemsBought = response.data.filter(transaksi => transaksi.barang_dibeli).length;
         setNumItemsBoughtByListingId(numItemsBought);

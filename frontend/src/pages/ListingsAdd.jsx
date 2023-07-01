@@ -370,7 +370,7 @@ function ListingAdd() {
 		async function GetProfileInfo() {
 			try {
 				const response = await Axios.get(
-					`http://127.0.0.1:8000/api/profiles/owner/${ownerId}/`
+					`https://mykos2.onrender.com/api/profiles/owner/${ownerId}/`
 				);
 
 				dispatch({
@@ -451,7 +451,7 @@ function ListingAdd() {
 
 				try {
 					const response = await Axios.post(
-						"http://127.0.0.1:8000/api/listings/create/",
+						"https://mykos2.onrender.com/api/listings/create/",
 						formData
 					);
 

@@ -105,13 +105,14 @@ WSGI_APPLICATION = 'my_kos.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.contrib.gis.db.backends.postgis',
-        'NAME': 'mykosan',
-        'USER': 'mykosan_user',
-        'PASSWORD': 'jsFirR5U0FmtJ552Dlcm1PVXa4ZHT7y8',
-        'HOST': 'dpg-cif6odp8g3n3ipq44t7g-a.singapore-postgres.render.com',
+        'NAME': 'mykosan_zwjo',
+        'USER': 'mykosan_zwjo_user',
+        'PASSWORD': '97Te3VoenuKQbbR4pnuWwqmqzX347fcp',
+        'HOST': 'dpg-cifqdkd9aq012erd8i00-a.singapore-postgres.render.com',
         'PORT': '5432',
     }
 }
+
 
 # Password validation
 # https://docs.djangoproject.com/en/4.1/ref/settings/#auth-password-validators

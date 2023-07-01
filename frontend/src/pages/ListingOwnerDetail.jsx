@@ -146,7 +146,7 @@ function ListingOwnerDetail() {
     async function GetListingInfo() {
       try {
         const response = await Axios.get(
-          `http://127.0.0.1:8000/api/listings/${params.id}/`
+          `https://mykos2.onrender.com/api/listings/${params.id}/`
         );
 
         dispatch({
