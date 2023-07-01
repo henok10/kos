@@ -164,7 +164,7 @@ function ListingOwnerDetail() {
       async function GetProfileInfo() {
         try {
           const response = await Axios.get(
-            `http://127.0.0.1:8000/api/profiles/owner/${state.listingInfo.owner}/`
+            `https://mykos2.onrender.com/api/profiles/owner/${state.listingInfo.owner}/`
           );
 
           dispatch({
@@ -185,7 +185,7 @@ function ListingOwnerDetail() {
 		if (confirmDelete) {
 			try {
 				const response = await Axios.delete(
-					`http://127.0.0.1:8000/api/listings/${params.id}/delete/`
+					`https://mykos2.onrender.com/api/listings/${params.id}/delete/`
 				);
 
 				dispatch({ type: "openTheSnack" });

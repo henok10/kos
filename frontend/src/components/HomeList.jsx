@@ -21,7 +21,7 @@ function HouseList() {
       async function GetAllListings() {
         try {
           const response = await Axios.get(
-            "https://mykos-bi9i.onrender.com/api/listings/",
+            "https://mykos2.onrender.com/api/listings/",
             { cancelToken: source.token }
           );
   

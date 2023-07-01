@@ -35,7 +35,7 @@ export default function DataTableApprove() {
 		async function GetAllKos() {
 			try {
 				const response = await Axios.get(
-					`https://mykos2.onrender.com/api/transaction/${params.id}/list`
+					`http://127.0.0.1:8000/api/transaction/${params.id}/list`
 				);
                 
 				setAllKos(response.data);
@@ -50,7 +50,7 @@ export default function DataTableApprove() {
 
   async function deleteKos(id) {
     try {
-      await Axios.delete(`https://mykos2.onrender.com/api/transaction/${id}/delete`);
+      await Axios.delete(`hhttp://127.0.0.1:8000/api/transaction/${id}/delete`);
   
       setAllKos(prevState => {
         const index = prevState.findIndex(kos => kos.id === id);
@@ -69,7 +69,7 @@ export default function DataTableApprove() {
   
   async function updateBarangDibeli(id, newValue) {
     try {
-        const response = await Axios.patch(`https://mykos2.onrender.com/api/transaction/${id}/update`, {barang_dibeli: newValue});
+        const response = await Axios.patch(`http://127.0.0.1:8000/api/transaction/${id}/update`, {barang_dibeli: newValue});
     
         const updatedKos = {
           ...response.data,
