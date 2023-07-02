@@ -44,6 +44,7 @@ function ProfileUpdate(props) {
 	const userId = useSelector(state => state.auth.userId)
 	const classes = useStyles();
 	const navigate = useNavigate();
+	const ownerId = useSelector(state => state.auth.ownerId)
 
 	const initialState = {
 		agencyNameValue: props.userProfile.agencyName,
@@ -127,19 +128,19 @@ function ProfileUpdate(props) {
 					formData.append("address", state.addressValue);
 					formData.append("phone_number", state.phoneNumberValue);
 					formData.append("bio", state.bioValue);
-					// formData.append("user", state.GlobalState.userId);
+					formData.append("user", userId);
 				} else {
 					formData.append("agency_name", state.agencyNameValue);
 					formData.append("phone_number", state.phoneNumberValue);
 					formData.append("address", state.addressValue);
 					formData.append("bio", state.bioValue);
 					formData.append("profile_picture", state.profilePictureValue);
-					// formData.append("user", state.userId);
+					formData.append("user", userId);
 				}
 
 				try {
 					const response = await Axios.patch(
-						`http://127.0.0.1:8000/api/profiles/owner/${userId}/update/`,
+						`http://127.0.0.1:8000/api/profiles/owner/${ownerId}/update/`,
 						formData
 					);
 

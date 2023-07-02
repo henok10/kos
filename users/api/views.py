@@ -158,19 +158,34 @@ class OwnerDetail(generics.RetrieveAPIView):
         return owner
  
 class OwnerUpdate(generics.UpdateAPIView):
-    queryset = Owner.objects.all()
+    # queryset = Owner.objects.all()
     serializer_class = OwnerSerializer
     lookup_field = 'owner'
+    def get_object(self):
+        owner_id = self.kwargs['owner']
+        owner = Owner.objects.get(id=owner_id)
+        queryset = Owner.objects.all()
+        return owner
 
 class CustomerDetail(generics.RetrieveAPIView):
-    queryset = Customer.objects.all()
+    # queryset = Customer.objects.all()
     serializer_class = CustomerSerializer
-    lookup_field = 'user'
+    lookup_field = 'customer'
+    def get_object(self):
+        customer_id = self.kwargs['customer']
+        customer = Customer.objects.get(id=customer_id)
+        queryset = Customer.objects.all()
+        return customer
 
 class CustomerUpdate(generics.UpdateAPIView):
     queryset = Customer.objects.all()
     serializer_class = CustomerSerializer
-    lookup_field = 'user'
+    lookup_field = 'customer'
+    def get_object(self):
+        customer_id = self.kwargs['customer']
+        customer = Customer.objects.get(id=customer_id)
+        queryset = Customer.objects.all()
+        return customer
 
 
 

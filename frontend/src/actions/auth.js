@@ -38,7 +38,7 @@ export const getCustomerUser=()=>(dispatch, getState)=>{
         config.headers['Authorization'] = `Bearer ${access_token}`; 
     }
     
-    axios.get('http://127.0.0.1:8000/api/customer/dashboard', config)
+    axios.get('https://mykos2.onrender.com/api/customer/dashboard', config)
     .then(res =>{
         dispatch({
             type:CUSTOMER_USER_LOADED,
@@ -67,7 +67,7 @@ export const getOwnerUser = ()=>(dispatch, getState)=>{
         config.headers['Authorization'] = `Bearer ${access_token}`;
     }
 
-    axios.get('http://127.0.0.1:8000/api/owner/dashboard', config)
+    axios.get('https://mykos2.onrender.com/api/owner/dashboard', config)
         .then(res =>{
             dispatch({
                 type:OWNER_USER_LOADED,
@@ -89,7 +89,7 @@ export const create_customeruser=({username, email,password, password2, tc})=>(d
     }
     const body=JSON.stringify({username, email, password, password2, tc})
 
-    axios.post('http://127.0.0.1:8000/api/signup/customer/', body, config)
+    axios.post('https://mykos2.onrender.com/api/signup/customer/', body, config)
     .then(res =>{
         dispatch({
             type:REGISTER_CUSER_SUCCESS,
@@ -115,7 +115,7 @@ export const create_owneruser=({username, email,password, password2, tc})=>(disp
     }
     const body=JSON.stringify({username, email, password, password2, tc})
 
-    axios.post('http://127.0.0.1:8000/api/signup/owner/', body, config)
+    axios.post('https://mykos2.onrender.com/api/signup/owner/', body, config)
     .then(res =>{
         dispatch({
             type:REGISTER_FUSER_SUCCESS,
@@ -141,7 +141,7 @@ export const login=({email, password})=>(dispatch)=>{
     }
     const body=JSON.stringify({email, password})
 
-    axios.post('http://127.0.0.1:8000/api/login/', body, config)
+    axios.post('https://mykos2.onrender.com/api/login/', body, config)
     .then(response =>{
         dispatch({
             type:LOGIN_SUCCESS,
@@ -178,7 +178,7 @@ export const logout = () => (dispatch, getState) => {
         refresh_token: refresh_token
     };
 
-    axios.post('http://127.0.0.1:8000/api/logout/', data, config)
+    axios.post('https://mykos2.onrender.com/api/logout/', data, config)
         .then(res => {
             dispatch({
                 type: LOGOUT_SUCCESS
@@ -200,7 +200,7 @@ export const sendPasswordResetEmail = (email) => async dispatch => {
     const body = JSON.stringify({ email });
 
     try {
-        await axios.post(`http://127.0.0.1:8000/api/send-reset-password-email/`, body, config);
+        await axios.post(`https://mykos2.onrender.com/api/send-reset-password-email/`, body, config);
 
         dispatch({
             type: PASSWORD_RESET_SUCCESS
@@ -225,7 +225,7 @@ export const sendPasswordResetEmail = (email) => async dispatch => {
     const body = JSON.stringify({ password, password2 });
   
     try {
-      await axios.post(`http://127.0.0.1:8000/api/changepassword/`, body, config);
+      await axios.post(`https://mykos2.onrender.com/api/changepassword/`, body, config);
             dispatch({
                 type: PASSWORD_CHANGE_SUCCESS
             });
@@ -252,7 +252,7 @@ export const sendPasswordResetEmail = (email) => async dispatch => {
     const body = JSON.stringify({ id, token, password, password2 });
   
     try {
-      await axios.post(`http://127.0.0.1:8000/api/reset-password/${id}/${token}/`, body, config);
+      await axios.post(`https://mykos2.onrender.com/api/reset-password/${id}/${token}/`, body, config);
   
      
     dispatch({

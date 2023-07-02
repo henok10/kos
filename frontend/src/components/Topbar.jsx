@@ -34,7 +34,7 @@ function Topbar() {
             Syarat dan Ketentuan
         </Button>
       </Box>     
-      <Box sx={{flexGrow: 1}} style={{backgroundColor: 'red'}}/>
+      <Box style={{backgroundColor: 'red'}}/>
       {isAuthenticated ? authLinks : publicLinks}
       {/* </Box> */}
     </Toolbar>

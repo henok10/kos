@@ -65,7 +65,7 @@ class TransactionUser(generics.ListAPIView):
     def get_queryset(self):
         customer_id = self.kwargs['customer']
         customer = Customer.objects.get(id=customer_id)
-        queryset = Transaction.objects.filter(customer=customer, barang_dibeli=True).order_by('-date')
+        queryset = Transaction.objects.filter(customer=customer).order_by('-date')
         return queryset
     
 class TransactionCreate(generics.CreateAPIView):

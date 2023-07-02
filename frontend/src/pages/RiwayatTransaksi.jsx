@@ -5,9 +5,19 @@ import React, { useEffect, useState } from "react";
 import Axios from "axios";
 import { useSelector } from 'react-redux'
 import { useNavigate, useParams } from "react-router-dom";
+import { makeStyles } from '@mui/styles';
 
+const useStyles = makeStyles({
+  cellSuccess: {
+    backgroundColor: '#4caf50', // Ubah dengan kode warna tombol yang diinginkan
+  },
+  cellProcess: {
+    backgroundColor: '#ffc107', // Ubah dengan kode warna tombol yang diinginkan
+  },
+});
 
 export default function RiwayatTransaksi() {
+  const classes = useStyles();
   const navigate = useNavigate();
   const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
   const isCustomer = useSelector((state) => state.auth.isCustomer);
@@ -36,7 +46,7 @@ export default function RiwayatTransaksi() {
 		async function GetAllKos() {
 			try {
 				const response = await Axios.get(
-					`https://mykos2.onrender.com/api/transaction/${customerId}/userdetail`
+					`http://127.0.0.1:8000/api/transaction/${customerId}/userdetail`
 				);
                 
 				setAllKos(response.data);
@@ -58,7 +68,13 @@ export default function RiwayatTransaksi() {
     { field: 'phoneNumber', headerName: 'No. Telp', width: 130 },
     { field: 'rentalFrequency', headerName: 'Frequensi Sewa', width: 130 },
     { field: 'date', headerName: 'Date', width: 250 },
-    { field: '', headerName: 'Aksi', width: 250 },
+    {
+      field: 'barang_dibeli',
+      headerName: 'Status',
+      width: 70,
+      valueGetter: (params) => params.row.barang_dibeli ? 'Sukses' : 'Proses',
+      cellClassName: (params) => params.row.barang_dibeli ? classes.cellSuccess : classes.cellProcess,
+    },
   ];
   return (
     <>
@@ -68,11 +84,11 @@ export default function RiwayatTransaksi() {
             Pemesanan Kamar Kos
         </Typography>
       </Grid>
-      <div style={{height: 480, marginTop:'2rem', width: '85%' }}>
+      <div style={{height: 480, marginTop:'2rem', width: '95%' }}>
         <DataGrid
           rows={allKos}
           columns={columns}
-          pageSize={10}
+          pageSize={6}
           rowsPerPageOptions={[10]}
           checkboxSelection
         />
