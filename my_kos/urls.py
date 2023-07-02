@@ -22,8 +22,8 @@ urlpatterns = [
 
     path('', TemplateView.as_view(template_name='index.html')),
     path('manifest.json', TemplateView.as_view(template_name="manifest.json", content_type="application/json")),
-    path('costumer/signup/', TemplateView.as_view(template_name='index.html')),
-    path('pemilikKos/signup/', TemplateView.as_view(template_name='index.html')),
+    path('customer/signup/', TemplateView.as_view(template_name='index.html')),
+    path('owner/signup/', TemplateView.as_view(template_name='index.html')),
     path('login/', TemplateView.as_view(template_name='index.html')),
     path('listings/', TemplateView.as_view(template_name='index.html')),
     path('register/', TemplateView.as_view(template_name='index.html')),
@@ -38,6 +38,11 @@ urlpatterns = [
     path('datakos/', TemplateView.as_view(template_name='index.html')),
     path('datakosApprove/<int:id>/', TemplateView.as_view(template_name='index.html')),
     path('datakosUser/<int:id>/', TemplateView.as_view(template_name='index.html')),
+    path('riwayatTransaksi/', TemplateView.as_view(template_name='index.html')),
+    path('api/user/reset/:id/:token/', TemplateView.as_view(template_name='index.html')),
+    path('sendpasswordresetemail/', TemplateView.as_view(template_name='index.html')),
+    path('changePassword/', TemplateView.as_view(template_name='index.html')),
+    
 ] 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
