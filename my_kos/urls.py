@@ -24,6 +24,8 @@ urlpatterns = [
     path('manifest.json', TemplateView.as_view(template_name="manifest.json", content_type="application/json")),
     path('customer/signup/', TemplateView.as_view(template_name='index.html')),
     path('owner/signup/', TemplateView.as_view(template_name='index.html')),
+    path('customer/home/', TemplateView.as_view(template_name='index.html')),
+    path('owner/home/', TemplateView.as_view(template_name='index.html')),
     path('login/', TemplateView.as_view(template_name='index.html')),
     path('listings/', TemplateView.as_view(template_name='index.html')),
     path('register/', TemplateView.as_view(template_name='index.html')),
@@ -42,6 +44,7 @@ urlpatterns = [
     path('api/user/reset/:id/:token/', TemplateView.as_view(template_name='index.html')),
     path('sendpasswordresetemail/', TemplateView.as_view(template_name='index.html')),
     path('changePassword/', TemplateView.as_view(template_name='index.html')),
+
     
 ] 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
