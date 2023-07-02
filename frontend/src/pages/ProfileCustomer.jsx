@@ -65,7 +65,7 @@ function ProfileCustomer() {
 		async function GetProfileInfo() {
 			try {
 				const response = await Axios.get(
-					`http://127.0.0.1:8000/api/profiles/customer/${customerId}/`
+					`https://mykos2.onrender.com/api/profiles/customer/${customerId}/`
 				);
 
 				dispatch({
