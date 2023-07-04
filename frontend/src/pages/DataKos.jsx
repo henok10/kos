@@ -62,7 +62,7 @@ export default function DataTable() {
         const numItemsBoughtByListingId = {};
         for (const listingId of listingIds) {
           console.log(listingId)
-          const response = await Axios.get(`http://127.0.0.1:8000/api/transaction/${listingId}/user`);
+          const response = await Axios.get(`https://mykos2.onrender.com/api/transaction/${listingId}/user`);
           const data = response.data;
           const numItemsBought = data.filter(transaksi => transaksi.barang_dibeli).length;
           numItemsBoughtByListingId[listingId] = numItemsBought;

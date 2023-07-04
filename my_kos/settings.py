@@ -58,7 +58,6 @@ INSTALLED_APPS = [
     'rest_framework_gis',
     'corsheaders',
     'oauth2_provider',
-
     'users.apps.UsersConfig',
     'listings.apps.ListingsConfig',
     'rest_framework_simplejwt',
