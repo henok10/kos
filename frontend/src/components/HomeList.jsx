@@ -68,6 +68,7 @@ function HouseList() {
             </Box>
             <Listing filtered={filteredListings} isLoading={dataIsLoading} />
           </Grid>
+          <div></div>
         </Grid>
       </Grid>
     </>
