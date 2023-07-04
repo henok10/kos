@@ -109,11 +109,11 @@ function Listings() {
 
   function handleSearch(event) {
     event.preventDefault();
-    const filteredData = allListings.filter((item) =>
-      item.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      item.description.toLowerCase().includes(searchTerm.toLowerCase())
-    );
-    setSearchResults(filteredData);
+    // const filteredData = allListings.filter((item) =>
+    //   item.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    //   item.description.toLowerCase().includes(searchTerm.toLowerCase())
+    // );
+    setSearchResults(allListings);
   }
 
   const filteredListings = allListings.filter((listing) => {

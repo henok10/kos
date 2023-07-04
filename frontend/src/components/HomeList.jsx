@@ -34,15 +34,15 @@ function HouseList() {
         source.cancel();
       };
     }, []);
-
-    useEffect(() => {
-      const filteredData = allListings.filter((item) =>
-        item.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        item.listing_type.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        item.price.toLowerCase().includes(searchTerm.toLowerCase())
+  
+    const filteredListings = allListings.filter((listing) => {
+      return (
+        listing.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        listing.price_per_year.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        listing.description.toLowerCase().includes(searchTerm.toLowerCase())
       );
-      setSearchResults(filteredData);
-    }, [searchTerm, allListings]);
+    });
+  
   
     if (dataIsLoading === true) {
       return (
@@ -66,7 +66,7 @@ function HouseList() {
               <h1>Recent Rumah Kos Listed</h1>
               <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam.</p>
             </Box>
-            <Listing filtered={searchResults} isLoading={dataIsLoading} />
+            <Listing filtered={filteredListings} isLoading={dataIsLoading} />
           </Grid>
         </Grid>
       </Grid>
