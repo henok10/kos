@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { makeStyles } from "@mui/styles";
-import { Box, Button, Container, Grid, TextField, Typography, Paper} from "@mui/material";
+import { Box, Button, Container, Grid, TextField, Typography, Paper, MenuItem} from "@mui/material";
 const useStyles = makeStyles(() => ({
   title: {
     fontFamily: 'Arial, sans-serif',
@@ -67,16 +67,18 @@ function Search({setSearchTerm }) {
                     City/Street
                     </Typography>
                         <Paper>
-                            <TextField
-                                style={{height: '50%'}}
-                                id="outlined-basic"
-                                label="City/Street..."
-                                size="small"
-                                fullWidth
-                                // value={searchTerms}
-                                onChange={(e) => setTerms(e.target.value)}
-                            >
-                            </TextField>
+                        <TextField
+                          style={{ height: '50%' }}
+                          id="outlined-basic"
+                          label="City/Street..."
+                          size="small"
+                          fullWidth
+                          // value={searchTerms}
+                          onChange={(e) => setTerms(e.target.value)}
+                          select
+                        >
+                          <MenuItem value="tamalanrea">tamalanrea</MenuItem>
+                        </TextField>
                         </Paper>
                 </Box>
                 </Grid>
