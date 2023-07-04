@@ -39,7 +39,7 @@ export default function DataTable() {
 		async function GetAllKos() {
 			try {
 				const response = await Axios.get(
-					`http://127.0.0.1:8000/api/listings/${ownerId}/list`
+					`https://mykos2.onrender.com/api/listings/${ownerId}/list`
 				);
         const data = response.data;
         const listingIds = data.map(listing => parseInt(listing.id));

@@ -35,7 +35,7 @@ export default function DataTableApprove() {
 		async function GetAllKos() {
 			try {
 				const response = await Axios.get(
-					`http://127.0.0.1:8000/api/transaction/${params.id}/list`
+					`https://mykos2.onrender.com/api/transaction/${params.id}/list`
 				);
                 
 				setAllKos(response.data);

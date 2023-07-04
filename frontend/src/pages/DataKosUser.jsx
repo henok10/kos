@@ -50,7 +50,7 @@ export default function DataTableUser() {
 
   const handleDelete = async (id) => {
     try {
-      await Axios.delete(`http://127.0.0.1:8000/api/transaction/${id}/delete`);
+      await Axios.delete(`https://mykos2.onrender.com/api/transaction/${id}/delete`);
   
       setAllKos(prevState => {
         const index = prevState.findIndex(kos => kos.id === id);

@@ -80,7 +80,7 @@ function Review() {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    axios.post('http://127.0.0.1:8000/api/review/create', {
+    axios.post('https://mykos2.onrender.com/api/review/create', {
       comment: comment,
       rate: rate,
       listing: params.id,
