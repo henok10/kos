@@ -105,6 +105,7 @@ class Transaction(models.Model):
     buktiTransfer = models.ImageField(blank=True, null=True, upload_to="bukti/%Y/%m/%d/")
     fullName = models.CharField(max_length=20, null=True, blank=True)
     phoneNumber = models.CharField(max_length=20, null=True, blank=True)
+    nominal = models.DecimalField(max_digits=50, decimal_places=0, blank=True, null=True)
     choices_rental_frequency = (
         ('Year', 'Year'),
         ('Month', 'Month'),

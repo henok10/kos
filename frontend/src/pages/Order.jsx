@@ -64,6 +64,7 @@ function Order() {
     phoneNumberValue: "",
     rentalFrequencyValue: "",
     buktiTransferValue: "",
+    nominalValue: "",
     uploadedPicture: [],
     barangDipesanValue: true,
     openSnack: false,
@@ -127,6 +128,7 @@ function Order() {
       formData.append("rentalFrequency", state.rentalFrequencyValue);
       formData.append("barang_dipesan", state.barangDipesanValue);
       formData.append("buktiTransfer", state.buktiTransferValue);
+      formData.append("nominal", state.nominalValue);
       formData.append("listing", params.id);
       formData.append("customer", customerId);
   
@@ -199,7 +201,17 @@ return (
                 <MenuItem value="Day">Day</MenuItem>
               </TextField>
             </Grid>
-
+            <Grid item container style={{ marginTop: "1rem" }}>
+              <TextField
+                id="nominal pembayaran"
+                label="Jumlah Pembayaran"
+                variant="outlined"
+                fullWidth
+                value={state.nominalValue}
+                onChange={handleChange}
+                name="nominalValue" 
+              />
+            </Grid>
             <Grid
                 item
                 container

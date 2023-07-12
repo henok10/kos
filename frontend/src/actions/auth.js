@@ -16,7 +16,8 @@ import {
     PASSWORD_RESET_CONFIRM_SUCCESS,
     PASSWORD_RESET_CONFIRM_FAIL,
     PASSWORD_CHANGE_FAIL,
-    PASSWORD_CHANGE_SUCCESS
+    PASSWORD_CHANGE_SUCCESS,
+    CLEAR_ERRORS
 } from "../actions/types"
 
 
@@ -263,7 +264,12 @@ export const sendPasswordResetEmail = (email) => async dispatch => {
         type: PASSWORD_RESET_CONFIRM_FAIL
     });
 }
-  };
-  
+};
+ 
+export const clearErrors = () => {
+    return {
+      type: CLEAR_ERRORS
+    };
+};
   
 

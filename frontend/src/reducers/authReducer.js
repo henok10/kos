@@ -15,7 +15,8 @@ import {
     PASSWORD_RESET_SUCCESS,
     PASSWORD_RESET_FAIL,
     PASSWORD_CHANGE_FAIL,
-    PASSWORD_CHANGE_SUCCESS
+    PASSWORD_CHANGE_SUCCESS,
+    CLEAR_ERRORS
  } from "../actions/types"
 
 
@@ -32,12 +33,18 @@ import {
         isCustomer:null,
         isOwner: null,
         isLoading:false,
-        email: localStorage.getItem('email'),      
+        email: localStorage.getItem('email'), 
+        error: null,     
         user: null
     }
     
 export const authReducer=(state=initialState, action)=>{
     switch(action.type){
+        case CLEAR_ERRORS:
+            return {
+                ...state,
+                error: null,
+            };
         case REGISTER_CUSER_SUCCESS:
         case REGISTER_FUSER_SUCCESS:
             localStorage.setItem('token', action.payload.token);
@@ -84,10 +91,16 @@ export const authReducer=(state=initialState, action)=>{
                 isOwner:action.payload.is_owner,               
                 
             }
-            
+        case LOGIN_FAILED: 
+        return {
+            ...state,
+            isLoading: false,
+            error: action.payload,
+          };
+
         case REGISTER_CUSER_FAILED:
         case REGISTER_FUSER_FAILED:
-        case LOGIN_FAILED:
+        
 
         case CUSTOMER_USER_FAILED:
         case OWNER_USER_FAILED:

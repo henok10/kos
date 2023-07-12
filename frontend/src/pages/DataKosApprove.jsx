@@ -109,6 +109,7 @@ export default function DataTableApprove() {
       
     { field: 'phoneNumber', headerName: 'No. Telp', width: 150 },
     { field: 'rentalFrequency', headerName: 'Frequensi Sewa', width: 150 },
+    { field: 'nominal', headerName: 'Jumlah Pembayaran', width: 120 },
     { field: 'date', headerName: 'Date', width: 180 },
     {
         field: 'barang_dibeli',

@@ -67,6 +67,7 @@ export default function RiwayatTransaksi() {
     { field: 'listing_title', headerName: 'Nama Kos', width: 220 }, 
     { field: 'phoneNumber', headerName: 'No. Telp', width: 130 },
     { field: 'rentalFrequency', headerName: 'Frequensi Sewa', width: 130 },
+    { field: 'nominal', headerName: 'Jumlah Pembayaran', width: 100 },
     { field: 'date', headerName: 'Date', width: 250 },
     {
       field: 'barang_dibeli',

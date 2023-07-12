@@ -73,6 +73,7 @@ export default function DataTableUser() {
     { field: 'fullName', headerName: 'Name', width: 290,},   
     { field: 'phoneNumber', headerName: 'No. Telp', width: 220 },
     { field: 'rentalFrequency', headerName: 'Frequensi Sewa', width: 150 },
+    { field: 'nominal', headerName: 'Jumlah Pembayaran', width: 100 },
     { field: 'date', headerName: 'Date', width: 250 },
     {
         field: 'barang_dibeli',
