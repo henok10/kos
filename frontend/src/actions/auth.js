@@ -133,31 +133,41 @@ export const create_owneruser=({username, email,password, password2, tc})=>(disp
     
 }
 
-
-export const login=({email, password})=>(dispatch)=>{
-    const config={
-        headers:{
-            'Content-Type':'application/json'
+export const login = ({ email, password }) => (dispatch) => {
+    const config = {
+        headers: {
+        'Content-Type': 'application/json'
         }
-    }
-    const body=JSON.stringify({email, password})
+    };
 
-    axios.post('https://mykos2.onrender.com/api/login/', body, config)
-    .then(response =>{
+    const body = JSON.stringify({ email, password });
+
+    axios
+        .post('https://mykos2.onrender.com/api/login/', body, config)
+        .then((response) => {
         dispatch({
-            type:LOGIN_SUCCESS,
-            payload:response.data,
-            
-            
-        })
+            type: LOGIN_SUCCESS,
+            payload: response.data
+        });
         // dispatch(getCustomerUser());
-    }).catch(err =>{
-        dispatch({
-            type:LOGIN_FAILED
         })
-    })
+        .catch((err) => {
+            if (err.response && err.response.status === 400) {
+              const errorMessage = err.response?.data?.non_field_errors[0] || 'An error occurred during login.';
+              dispatch(LoginError(errorMessage));
+            } else {
+              dispatch(LoginError('An error occurred during login.'));
+            }
+          });
+          
+    };
+  
 
-}
+export const LoginError = (error) => ({
+  type: LOGIN_FAILED,
+  payload: error
+});
+
 console.log(LOGIN_SUCCESS)
 
 export const logout = () => (dispatch, getState) => {

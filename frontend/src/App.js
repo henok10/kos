@@ -28,6 +28,7 @@ import RiwayatTransaksi from "./pages/RiwayatTransaksi";
 import ResetPassword from "./pages/authentication/PasswordReset";
 import SendPasswordResetEmail from "./pages/authentication/SendPasswordResetEmail";
 import ChangePassword from "./pages/authentication/PasswordChange";
+import RulesPage from "./pages/RulesPage";
 
 
 function App() {
@@ -44,6 +45,7 @@ function App() {
                   <Route path="/customer/home" element={<CustomerHome />} />
                   <Route path="/owner/home" element={<OwnerHome />} />
                   <Route path="/login" element={<Login />} />
+                  <Route path="/syarat_ketentuan" element={<RulesPage />} />              
 
                   <Route path="api/user/reset/:id/:token" element={<ResetPassword />} />
                   <Route path="/sendpasswordresetemail" element={<SendPasswordResetEmail />} />

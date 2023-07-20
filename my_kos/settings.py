@@ -14,6 +14,10 @@ from pathlib import Path
 import os
 from datetime import timedelta
 from django.conf import settings
+import cloudinary_storage 
+import cloudinary
+import cloudinary.uploader
+import cloudinary.api
 
 if os.name == 'nt':
     VENV_BASE = os.environ['VIRTUAL_ENV']
@@ -56,6 +60,8 @@ INSTALLED_APPS = [
     'rest_framework.authentication',
     'rest_framework.permissions',
     'storages',
+    'cloudinary_storage',
+    'cloudinary',
     'rest_framework_gis',
     'corsheaders',
     'oauth2_provider',
@@ -157,6 +163,19 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+CLOUDINARY_STORAGE = {
+    'CLOUD_NAME': 'dw7j6dr8y',
+    'API_KEY': '442492132455443',
+    'API_SECRET': 'tFeBOOxJCK1GPWbN82Z-qWIziY0'
+}
+# cloudinary.config( 
+#   cloud_name = "dw7j6dr8y", 
+#   api_key = "442492132455443", 
+#   api_secret = "tFeBOOxJCK1GPWbN82Z-qWIziY0",
+#   secure = True
+# )
+DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
+# STATICFILES_STORAGE = 'cloudinary_storage.storage.StaticHashedCloudinaryStorage'
 
 
 # Default primary key field type

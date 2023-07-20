@@ -85,7 +85,7 @@ export default function RiwayatTransaksi() {
             Pemesanan Kamar Kos
         </Typography>
       </Grid>
-      <div style={{height: 480, marginTop:'2rem', width: '95%' }}>
+      <div style={{height: 480, marginTop:'2rem', width: '85%' }}>
         <DataGrid
           rows={allKos}
           columns={columns}

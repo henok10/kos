@@ -48,13 +48,14 @@ const SendPasswordResetEmail = ({ sendPasswordResetEmail }) => {
     return (
         <Grid contained marginTop={'2rem'} width='40%' margin='auto' height='100%'>
             <Typography variant='h5' style={{ textAlign: 'center' }}>Request Password Reset</Typography>
-            {successMessage && (
-                <Typography variant='body1' align='center' color='success'>
-                    {successMessage}
-                </Typography>
-            )}
+            
             <form onSubmit={e => onSubmit(e)}>
                 <Grid className='form-group' marginTop={'2rem'}>
+                    {successMessage && (
+                        <Typography variant='body1' align='center' style={{color: 'green'}}>
+                            {successMessage}
+                        </Typography>
+                    )}
                     <TextField
                         className='form-control'
                         type='email'

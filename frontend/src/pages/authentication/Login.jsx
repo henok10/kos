@@ -1,14 +1,14 @@
-import React, { useState } from 'react';
-import { connect } from 'react-redux';
-import { login } from '../../actions/auth';
-import { NavLink, Navigate, useNavigate } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
+import { login, clearErrors } from '../../actions/auth';
+import { NavLink, Navigate, useNavigate } from 'react-router-dom';
 
 // MUI
 import { Grid, Typography, Button, TextField } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import { useSelector, useDispatch } from 'react-redux';
-import { clearErrors } from '../../actions/auth';
+import Validation from './validation';
 
 const useStyles = makeStyles({
   formContainer: {
@@ -31,28 +31,35 @@ const useStyles = makeStyles({
   },
 });
 
-function Login({ login, isAuthenticated, isCustomer, isOwner }) {
+function Login({ login, isAuthenticated, isCustomer, isOwner, clearErrors }) {
   const classes = useStyles();
   const navigate = useNavigate();
   const userId = useSelector((state) => state.auth.userId);
-  const dispatch = useDispatch();
   const loginError = useSelector((state) => state.auth.error);
-
+  const dispatch = useDispatch();
   const [user, setUser] = useState({
     email: '',
     password: '',
   });
-
   const { email, password } = user;
+  const [errors, setErrors] = useState({});
+
+  useEffect(() => {
+    // Dispatch aksi CLEAR_ERRORS saat komponen dimuat ulang
+    clearErrors();
+  }, []);
 
   const loginChange = (e) => setUser({ ...user, [e.target.name]: e.target.value });
   const handleLoginSubmit = (e) => {
     e.preventDefault();
-    if (!email || !password) {
-      alert('Please fill in all fields');
-    } else {
-        dispatch(clearErrors()); // Menghapus pesan kesalahan sebelumnya
-        login({ email, password });
+    setErrors({});
+    const validationErrors = Validation({ user: user });
+    setErrors(validationErrors);
+
+    if (Object.keys(errors).length === 0) {
+      // Hanya melakukan login jika tidak ada kesalahan validasi
+      clearErrors();
+      login({ email, password });
     }
   };
 
@@ -61,9 +68,6 @@ function Login({ login, isAuthenticated, isCustomer, isOwner }) {
   } else if (isAuthenticated && isOwner) {
     return <Navigate to="/owner/home" />;
   } else {
-    console.log(userId);
-    console.log(isAuthenticated);
-    console.log(isCustomer);
 
     return (
       <div className={classes.formContainer}>
@@ -77,19 +81,21 @@ function Login({ login, isAuthenticated, isCustomer, isOwner }) {
                 {loginError}
               </Typography>
             )}
-            <form onSubmit={(e) => handleLoginSubmit(e)}>
+            <form onSubmit={handleLoginSubmit}>
               <Grid item container style={{ marginTop: '1rem' }}>
+              {errors.email && <p style={{ color: 'red' }}>{errors.email}</p>}
                 <TextField
                   id="email"
                   label="Email"
                   fullWidth
                   name="email"
                   variant="outlined"
-                  value={email}
-                  onChange={(e) => loginChange(e)}
+                  value={user.email}
+                  onChange={loginChange}
                 />
               </Grid>
               <Grid item container style={{ marginTop: '1rem' }}>
+              {errors.password && <p style={{ color: 'red' }}>{errors.password}</p>}
                 <TextField
                   id="password"
                   label="Password"
@@ -97,8 +103,8 @@ function Login({ login, isAuthenticated, isCustomer, isOwner }) {
                   name="password"
                   variant="outlined"
                   type="password"
-                  value={password}
-                  onChange={(e) => loginChange(e)}
+                  value={user.password}
+                  onChange={loginChange}
                 />
               </Grid>
               <NavLink to="/sendpasswordresetemail">Forgot Password ?</NavLink>
@@ -117,10 +123,7 @@ function Login({ login, isAuthenticated, isCustomer, isOwner }) {
             <Grid item container justifyContent="center" style={{ marginTop: '1rem' }}>
               <Typography variant="small">
                 Don't have an account yet?{' '}
-                <span
-                  onClick={() => navigate('/')}
-                  style={{ cursor: 'pointer', color: 'green' }}
-                >
+                <span onClick={() => navigate('/')} style={{ cursor: 'pointer', color: 'green' }}>
                   SIGN UP
                 </span>
               </Typography>
@@ -145,4 +148,4 @@ const mapStateToProps = (state) => ({
   isOwner: state.auth.isOwner,
 });
 
-export default connect(mapStateToProps, { login })(Login);
+export default connect(mapStateToProps, { login, clearErrors })(Login);

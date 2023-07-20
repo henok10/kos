@@ -1,8 +1,10 @@
 import React, {useState} from 'react'
-import { connect } from 'react-redux'
+import { connect, useDispatch } from 'react-redux'
 import  PropTypes from "prop-types"
 import { create_customeruser } from '../../actions/auth'
 import {Navigate, useNavigate} from "react-router-dom"
+import { clearErrors } from '../../actions/auth';
+import Validation from './validation';
 
 // MUI
 import {
@@ -18,6 +20,8 @@ import { makeStyles } from "@mui/styles";
 
 const CustomerSignup = ({create_customeruser, isAuthenticated, isCustomer}) => {
     const navigate = useNavigate();
+    const dispatch = useDispatch();
+    const [errors, setErrors] = useState({})
     const [customer, setCustomer]=useState({
         username:'',
         email:'',
@@ -42,8 +46,15 @@ const CustomerSignup = ({create_customeruser, isAuthenticated, isCustomer}) => {
            password2, 
            tc
        }
-       console.log(newCustomer)
-    create_customeruser(newCustomer)
+
+       const validationErrors = Validation({ user : customer });
+       setErrors(validationErrors);
+
+       if (Object.keys(validationErrors).length === 0) {
+        dispatch(clearErrors());
+        create_customeruser(newCustomer)
+       }
+    
    }
     if(isAuthenticated && isCustomer){
         return <Navigate to="/customer/home"/>
@@ -57,6 +68,7 @@ const CustomerSignup = ({create_customeruser, isAuthenticated, isCustomer}) => {
                 <div className='col-md-8 mx-auto'>
                     <form onSubmit={ e =>handleSubmit(e)}>
                         <Grid item container style={{ marginTop: "2rem" }}>
+                        {errors.username && <p style={{ color: 'red' }}>{errors.username}</p>}
                             <TextField
                                 id="username"
                                 label="Username"
@@ -69,6 +81,7 @@ const CustomerSignup = ({create_customeruser, isAuthenticated, isCustomer}) => {
 				        </Grid>
          
                         <Grid item container style={{ marginTop: "1rem" }}>
+                        {errors.email && <p style={{ color: 'red' }}>{errors.email}</p>}
                             <TextField
                                 id="email"
                                 label="Email"
@@ -81,6 +94,7 @@ const CustomerSignup = ({create_customeruser, isAuthenticated, isCustomer}) => {
                             />
 				        </Grid>
                         <Grid item container style={{ marginTop: "1rem" }}>
+                        {errors.password && <p style={{ color: 'red' }}>{errors.password}</p>}
                             <TextField
                                 id="password"
                                 label="Password"
@@ -93,6 +107,7 @@ const CustomerSignup = ({create_customeruser, isAuthenticated, isCustomer}) => {
                             />
 				        </Grid>
                         <Grid item container style={{ marginTop: "1rem" }}>
+                        {errors.password2 && <p style={{ color: 'red' }}>{errors.password2}</p>}
                             <TextField
                                 id="password2"
                                 label="Confirm password"

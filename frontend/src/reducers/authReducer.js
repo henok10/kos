@@ -40,11 +40,7 @@ import {
     
 export const authReducer=(state=initialState, action)=>{
     switch(action.type){
-        case CLEAR_ERRORS:
-            return {
-                ...state,
-                error: null,
-            };
+       
         case REGISTER_CUSER_SUCCESS:
         case REGISTER_FUSER_SUCCESS:
             localStorage.setItem('token', action.payload.token);
@@ -91,12 +87,18 @@ export const authReducer=(state=initialState, action)=>{
                 isOwner:action.payload.is_owner,               
                 
             }
-        case LOGIN_FAILED: 
-        return {
-            ...state,
-            isLoading: false,
-            error: action.payload,
-          };
+        case LOGIN_FAILED:
+            return {
+                ...state,
+                isLoading: false,
+                error: action.payload,
+            };
+        case CLEAR_ERRORS:
+            return {
+                ...state,
+                error: null,
+            };
+        
 
         case REGISTER_CUSER_FAILED:
         case REGISTER_FUSER_FAILED:
