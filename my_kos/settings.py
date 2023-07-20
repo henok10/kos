@@ -164,17 +164,17 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 MEDIA_URL = 'https://res.cloudinary.com/dw7j6dr8y/media/'
 
 # MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
-# CLOUDINARY_STORAGE = {
-#     'CLOUD_NAME': 'dw7j6dr8y',
-#     'API_KEY': '442492132455443',
-#     'API_SECRET': 'tFeBOOxJCK1GPWbN82Z-qWIziY0'
-# }
-cloudinary.config( 
-  cloud_name = "dw7j6dr8y", 
-  api_key = "442492132455443", 
-  api_secret = "tFeBOOxJCK1GPWbN82Z-qWIziY0",
-  secure = True
-)
+CLOUDINARY_STORAGE = {
+    'CLOUD_NAME': 'dw7j6dr8y',
+    'API_KEY': '442492132455443',
+    'API_SECRET': 'tFeBOOxJCK1GPWbN82Z-qWIziY0'
+}
+# cloudinary.config( 
+#   cloud_name = "dw7j6dr8y", 
+#   api_key = "442492132455443", 
+#   api_secret = "tFeBOOxJCK1GPWbN82Z-qWIziY0",
+#   secure = True
+# )
 DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
 # STATICFILES_STORAGE = 'cloudinary_storage.storage.StaticHashedCloudinaryStorage'
 
