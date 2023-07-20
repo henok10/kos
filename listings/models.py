@@ -20,6 +20,13 @@ from cloudinary.models import CloudinaryField
 #         return new_pic
 #     else:
 #         return None
+def upload_to(instance, filename):
+    # Dapatkan ekstensi berkas
+    ext = filename.split('.')[-1]
+    # Buat bagian unik dengan uuid
+    unique_filename = f"{uuid.uuid4().hex}.{ext}"
+    # Gabungkan nama unik dengan folder tujuan (misalnya "pictures/")
+    return os.path.join("pictures/", unique_filename)
 
 
 class Listing(models.Model):
@@ -63,16 +70,16 @@ class Listing(models.Model):
     # picture5 = models.ImageField(
     #     blank=True, null=True, upload_to="pictures/%Y/%m/%d/", max_length=455)
 
-    picture1 = CloudinaryField(
-        blank=True, null=True, folder="pictures/%Y/%m/%d/", max_length=455)
-    picture2 = CloudinaryField(
-        blank=True, null=True, folder="pictures/%Y/%m/%d/", max_length=455)
-    picture3 = CloudinaryField(
-        blank=True, null=True, folder="pictures/%Y/%m/%d/", max_length=455)
-    picture4 = CloudinaryField(
-        blank=True, null=True, folder="pictures/%Y/%m/%d/", max_length=455)
-    picture5 = CloudinaryField(
-        blank=True, null=True, folder="pictures/%Y/%m/%d/", max_length=455)
+    picture1 = models.ImageField(
+        blank=True, null=True, upload_to=upload_to, max_length=455)
+    picture2 = models.ImageField(
+        blank=True, null=True, upload_to=upload_to, max_length=455)
+    picture3 = models.ImageField(
+        blank=True, null=True, upload_to=upload_to, max_length=455)
+    picture4 = models.ImageField(
+        blank=True, null=True, upload_to=upload_to, max_length=455)
+    picture5 = models.ImageField(
+        blank=True, null=True, upload_to=upload_to, max_length=455)
 
        # tambahan atribut available_rooms
     @property
