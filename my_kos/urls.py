@@ -7,6 +7,9 @@ from users.api import views as users_api_views
 from django.views.generic import TemplateView
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 from . import views
+import cloudinary
+import cloudinary_storage
+
 
 
 urlpatterns = [
@@ -48,4 +51,6 @@ urlpatterns = [
     
 ] 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+# urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+# urlpatterns += static(cloudinary_storage.utils.CLOUDINARY_URL, document_root=settings.MEDIA_ROOT)
 urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

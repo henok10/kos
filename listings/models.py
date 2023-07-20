@@ -8,17 +8,18 @@ from django.contrib.gis.geos import Point
 from django.contrib.auth import get_user_model
 from users.models import Customer, Owner
 User = get_user_model()
+from cloudinary.models import CloudinaryField
 
 
-def compress(picture):
-    if picture:
-        pic = PIL.Image.open(picture)
-        buf = BytesIO()
-        pic.save(buf, 'JPEG', quality=35)
-        new_pic = File(buf, name=picture.name)
-        return new_pic
-    else:
-        return None
+# def compress(picture):
+#     if picture:
+#         pic = PIL.Image.open(picture)
+#         buf = BytesIO()
+#         pic.save(buf, 'JPEG', quality=35)
+#         new_pic = File(buf, name=picture.name)
+#         return new_pic
+#     else:
+#         return None
 
 
 class Listing(models.Model):
@@ -51,16 +52,27 @@ class Listing(models.Model):
     date_posted = models.DateTimeField(default=timezone.now)
     latitude = models.FloatField(blank=True, null=True)
     longitude = models.FloatField(blank=True, null=True)
-    picture1 = models.ImageField(
-        blank=True, null=True, upload_to="pictures/%Y/%m/%d/", max_length=455)
-    picture2 = models.ImageField(
-        blank=True, null=True, upload_to="pictures/%Y/%m/%d/", max_length=455)
-    picture3 = models.ImageField(
-        blank=True, null=True, upload_to="pictures/%Y/%m/%d/", max_length=455)
-    picture4 = models.ImageField(
-        blank=True, null=True, upload_to="pictures/%Y/%m/%d/", max_length=455)
-    picture5 = models.ImageField(
-        blank=True, null=True, upload_to="pictures/%Y/%m/%d/", max_length=455)
+    # picture1 = models.ImageField(
+    #     blank=True, null=True, upload_to="pictures/%Y/%m/%d/", max_length=455)
+    # picture2 = models.ImageField(
+    #     blank=True, null=True, upload_to="pictures/%Y/%m/%d/", max_length=455)
+    # picture3 = models.ImageField(
+    #     blank=True, null=True, upload_to="pictures/%Y/%m/%d/", max_length=455)
+    # picture4 = models.ImageField(
+    #     blank=True, null=True, upload_to="pictures/%Y/%m/%d/", max_length=455)
+    # picture5 = models.ImageField(
+    #     blank=True, null=True, upload_to="pictures/%Y/%m/%d/", max_length=455)
+
+    picture1 = CloudinaryField(
+        blank=True, null=True, folder="pictures/%Y/%m/%d/", max_length=455)
+    picture2 = CloudinaryField(
+        blank=True, null=True, folder="pictures/%Y/%m/%d/", max_length=455)
+    picture3 = CloudinaryField(
+        blank=True, null=True, folder="pictures/%Y/%m/%d/", max_length=455)
+    picture4 = CloudinaryField(
+        blank=True, null=True, folder="pictures/%Y/%m/%d/", max_length=455)
+    picture5 = CloudinaryField(
+        blank=True, null=True, folder="pictures/%Y/%m/%d/", max_length=455)
 
        # tambahan atribut available_rooms
     @property
@@ -72,18 +84,18 @@ class Listing(models.Model):
     def __str__(self):
         return self.title
 
-    def save(self, *args, **kwargs):
-        new_picture1 = compress(self.picture1)
-        self.picture1 = new_picture1
-        new_picture2 = compress(self.picture2)
-        self.picture2 = new_picture2
-        new_picture3 = compress(self.picture3)
-        self.picture3 = new_picture3
-        new_picture4 = compress(self.picture4)
-        self.picture4 = new_picture4
-        new_picture5 = compress(self.picture5)
-        self.picture5 = new_picture5
-        super().save(*args, **kwargs)
+    # def save(self, *args, **kwargs):
+    #     new_picture1 = compress(self.picture1)
+    #     self.picture1 = new_picture1
+    #     new_picture2 = compress(self.picture2)
+    #     self.picture2 = new_picture2
+    #     new_picture3 = compress(self.picture3)
+    #     self.picture3 = new_picture3
+    #     new_picture4 = compress(self.picture4)
+    #     self.picture4 = new_picture4
+    #     new_picture5 = compress(self.picture5)
+    #     self.picture5 = new_picture5
+    #     super().save(*args, **kwargs)
 
 
 class Poi(models.Model):
