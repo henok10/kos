@@ -9,6 +9,8 @@ from django.contrib.auth import get_user_model
 from users.models import Customer, Owner
 User = get_user_model()
 from cloudinary.models import CloudinaryField
+import os
+import uuid
 
 
 # def compress(picture):
