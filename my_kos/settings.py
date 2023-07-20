@@ -161,7 +161,8 @@ STATICFILES_DIRS = [
 
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
-MEDIA_URL = 'https://res.cloudinary.com/dw7j6dr8y/media/'
+MEDIA_URL = '/media/'
+# MEDIA_URL = 'https://res.cloudinary.com/dw7j6dr8y/media/'
 
 # MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 CLOUDINARY_STORAGE = {
