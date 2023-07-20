@@ -24,8 +24,8 @@ class ListingSerializer(serializers.ModelSerializer):
         return obj.owner.user.username
 
 
-    # def get_country(self, obj):
-    #     return "England"
+    def get_country(self, obj):
+        return "England"
 
     class Meta:
         model = Listing
