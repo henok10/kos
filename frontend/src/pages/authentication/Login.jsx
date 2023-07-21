@@ -52,6 +52,10 @@ function Login({ login, isAuthenticated, isCustomer, isOwner, clearErrors }) {
   const loginChange = (e) => setUser({ ...user, [e.target.name]: e.target.value });
   const handleLoginSubmit = (e) => {
     e.preventDefault();
+    const logins = {
+        email,
+        password
+    }
     setErrors({});
     const validationErrors = Validation({ user: user });
     setErrors(validationErrors);
@@ -59,7 +63,7 @@ function Login({ login, isAuthenticated, isCustomer, isOwner, clearErrors }) {
     if (Object.keys(errors).length === 0) {
       // Hanya melakukan login jika tidak ada kesalahan validasi
       clearErrors();
-      login({ email, password });
+      login(logins);
     }
   };
 
