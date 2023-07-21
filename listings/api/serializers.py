@@ -13,7 +13,7 @@ class ListingSerializer(serializers.ModelSerializer):
     def get_listing_pois_within_10km(self, obj):
         listing_location = Point(obj.latitude, obj.longitude, srid=4326)
         query = Poi.objects.filter(
-            location__distance_lte=(listing_location, D(km=10)))
+            location__distance_lte=(listing_location, D(km=3)))
         query_serialized = PoiSerializer(query, many=True)
         return query_serialized.data
     
