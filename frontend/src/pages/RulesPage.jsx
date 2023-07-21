@@ -58,7 +58,7 @@ const RulesPage = () => {
             </ol>
         </RulesContainer>
       </Grid>
-      <Grid item xs={12}>
+      {/* <Grid item xs={12}>
         <RulesContainer>
             <Typography variant="h5">Rules Pembayaran Pendaftaran</Typography>
             <Typography variant="body1">
@@ -116,7 +116,7 @@ const RulesPage = () => {
             <li>Pemilik rumah kost diharuskan memenuhi waktu tenggang selama 2 hari masa pemesanan tersebut sebelum melakukan penyewaan terhadap pihak lain. Dan pemilik kost dapat menghubungi pihak yang melakukan reservasi jika memerlukan konfirmasi.</li>
             </ol>
         </RulesContainer>
-      </Grid>
+      </Grid> */}
     </Grid>
   );
 };
