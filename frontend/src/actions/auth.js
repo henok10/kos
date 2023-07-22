@@ -1,4 +1,5 @@
 import axios from "axios";
+import jwt_decode from 'jwt-decode';
 import {
     CUSTOMER_USER_LOADED,
     CUSTOMER_USER_FAILED,  
@@ -20,7 +21,20 @@ import {
     CLEAR_ERRORS
 } from "../actions/types"
 
-
+// Fungsi untuk mendapatkan waktu kedaluwarsa token dari token JWT
+function getTokenExpirationDate(token) {
+    const decodedToken = jwt_decode(token);
+    if (!decodedToken.exp) return null;
+    const expirationDate = new Date(0);
+    expirationDate.setUTCSeconds(decodedToken.exp);
+    return expirationDate;
+  }
+  
+  // Fungsi untuk memeriksa apakah token sudah kedaluwarsa
+  function isTokenExpired(token) {
+    const expirationDate = getTokenExpirationDate(token);
+    return expirationDate && expirationDate < new Date();
+  }
 
 export const getCustomerUser=()=>(dispatch, getState)=>{
     const access_token = getState().auth.access_token
@@ -170,35 +184,48 @@ export const LoginError = (error) => ({
 
 console.log(LOGIN_SUCCESS)
 
+// Fungsi logout yang akan dijalankan saat token kedaluwarsa atau pengguna logout manual
 export const logout = () => (dispatch, getState) => {
+    // Cek apakah token sudah kedaluwarsa
     const access_token = getState().auth.access_token;
-    const refresh_token = getState().auth.refresh_token;
-    console.log(access_token);
-
-    const config = {
+  
+    if (access_token && isTokenExpired(access_token)) {
+      // Token sudah kedaluwarsa, lakukan logout
+      dispatch({
+        type: LOGOUT_SUCCESS
+      });
+      // Redirect ke halaman login (jika menggunakan React Router)
+      // history.push('/login');
+    } else {
+      // Token belum kedaluwarsa, lakukan logout dengan melakukan permintaan logout ke backend
+      const refresh_token = getState().auth.refresh_token;
+      console.log(access_token);
+  
+      const config = {
         headers: {
-            'Content-Type': 'application/json'
+          'Content-Type': 'application/json'
         }
-    };
-
-    if (access_token) {
+      };
+  
+      if (access_token) {
         config.headers['Authorization'] = `Bearer ${access_token}`;
-    }
-
-    const data = {
+      }
+  
+      const data = {
         refresh_token: refresh_token
-    };
-
-    axios.post('https://mykos2.onrender.com/api/logout/', data, config)
+      };
+  
+      axios.post('https://mykos2.onrender.com/api/logout/', data, config)
         .then(res => {
-            dispatch({
-                type: LOGOUT_SUCCESS
-            });
+          dispatch({
+            type: LOGOUT_SUCCESS
+          });
         })
         .catch(err => {
-            console.log(err.response.data);
+          console.log(err.response.data);
         });
-};
+    }
+  };
 
 
 export const sendPasswordResetEmail = (email) => async dispatch => {

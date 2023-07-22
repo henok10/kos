@@ -60,7 +60,7 @@ function HouseList() {
   return (
     <>
       <HomeImg searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
-      <Grid container width='60%' margin={'auto'}> 
+      <Grid container width='80%' margin={'auto'}> 
         <Grid item xs={12}>
           <Grid container spacing={1} marginTop='2rem'>
             <Box textAlign='center'>

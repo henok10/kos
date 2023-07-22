@@ -25,7 +25,7 @@ class ListingSerializer(serializers.ModelSerializer):
 
 
     def get_country(self, obj):
-        return "England"
+        return "Indonesia"
 
     class Meta:
         model = Listing

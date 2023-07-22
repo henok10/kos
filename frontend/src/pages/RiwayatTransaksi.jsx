@@ -67,7 +67,7 @@ export default function RiwayatTransaksi() {
     { field: 'listing_title', headerName: 'Nama Kos', width: 220 }, 
     { field: 'phoneNumber', headerName: 'No. Telp', width: 130 },
     { field: 'rentalFrequency', headerName: 'Frequensi Sewa', width: 130 },
-    { field: 'nominal', headerName: 'Jumlah Pembayaran', width: 100 },
+    { field: 'nominal', headerName: 'Total', width: 100 },
     { field: 'date', headerName: 'Date', width: 250 },
     {
       field: 'barang_dibeli',
@@ -80,9 +80,9 @@ export default function RiwayatTransaksi() {
   return (
     <>
     <Grid container style={{ width: '100%', height: '60%', marginLeft: '3rem'}}>
-      <Grid marginTop={'2rem'}>
-        <Typography variant={'h4'} style={{textAlign: 'center'}}>
-            Pemesanan Kamar Kos
+      <Grid container alignItems="center" justifyContent="center" marginTop="2rem">
+        <Typography variant="h4" align="center">
+          Pemesanan Kamar Kos
         </Typography>
       </Grid>
       <div style={{height: 480, marginTop:'2rem', width: '85%' }}>

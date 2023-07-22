@@ -2,12 +2,6 @@ import React, { useEffect, useRef, useState } from 'react';
 import { useMap } from 'react-leaflet';
 import L from 'leaflet';
 import 'leaflet-routing-machine';
-// import "leaflet-routing-machine/dist/leaflet-routing-machine.css";
-// import "leaflet-control-geocoder/dist/Control.Geocoder.js";
-// import "leaflet-control-geocoder/dist/Control.Geocoder.css";
-
-
-import { useSelector } from 'react-redux';
 
 function TheMapComponent({ listingInfo }) {
   const map = useMap();
@@ -45,16 +39,21 @@ function TheMapComponent({ listingInfo }) {
           name: listingInfo.title
         }
       ];
-
+  
+      // Remove previous routing control, if it exists
+      if (routingControlRef.current) {
+        routingControlRef.current.remove();
+      }
+  
       const routingControl = L.Routing.control({
         waypoints,
         createMarker: function(i, waypoint, n) {
           const marker = L.marker(waypoint.latLng, {
             draggable: true
           });
-      
+  
           marker.bindPopup(waypoint.name);
-      
+  
           return marker;
         },
         lineOptions: {
@@ -67,10 +66,12 @@ function TheMapComponent({ listingInfo }) {
         showAlternatives: true,
         show: false
       });
-      
+  
       routingControl.addTo(map);
+      routingControlRef.current = routingControl; // Save the reference to the routing control
     }
   }, [map, userLocation, listingInfo]);
+  
 
   return null; // Ganti dengan tampilan UI yang sesuai
 }

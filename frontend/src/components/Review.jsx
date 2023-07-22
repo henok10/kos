@@ -41,7 +41,7 @@ const useStyles = makeStyles((theme) => ({
   },
   textarea: {
     display: "flex",
-    border: "1px solid #a9a9a9",
+    // border: "1px solid #a9a9a9",
     borderRadius: 5,
     padding: 10,
     // margin: "20px",

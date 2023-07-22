@@ -58,6 +58,18 @@ const RulesPage = () => {
             </ol>
         </RulesContainer>
       </Grid>
+      <Grid item xs={12}>
+        <RulesContainer>
+            <Typography variant="h5">Rules Pencarian Rumah Kos</Typography>
+            <Typography variant="body1">
+            Rules login meliputi berbagai hal, diantaranya sebagai berikut:
+            </Typography>
+            <ol>
+            <li>Pemilik kost melakukan registrasi pada halaman utama website.</li>
+            <li>Pengguna setidaknya memiliki 1 atau lebih rumah kos sebelum mendaftar atau membuat akun pemilik kos.</li>
+            </ol>
+        </RulesContainer>
+      </Grid>
       {/* <Grid item xs={12}>
         <RulesContainer>
             <Typography variant="h5">Rules Pembayaran Pendaftaran</Typography>
