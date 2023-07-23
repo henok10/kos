@@ -50,6 +50,14 @@ import RoomIcon from "@mui/icons-material/Room";
 export default function Listing({ filtered, isLoading }) {
     const classes = useStyles();
     const navigate = useNavigate();
+    if (!Array.isArray(filtered)) {
+      return (
+        <Typography variant="body1" color="error">
+          Data tidak valid. Harap cek properti "filtered" yang dikirimkan ke komponen "Listing".
+        </Typography>
+      );
+    }
+  
     if (isLoading) {
       return (
         <Grid

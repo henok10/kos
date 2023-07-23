@@ -1,6 +1,8 @@
+// Search.jsx
 import React, { useState } from 'react';
 import { makeStyles } from "@mui/styles";
-import { Box, Button, Container, Grid, TextField, Typography, Paper, MenuItem} from "@mui/material";
+import { Box, Button, Container, Grid, Typography, Paper, MenuItem, Slider, TextField } from "@mui/material";
+
 const useStyles = makeStyles(() => ({
   title: {
     fontFamily: 'Arial, sans-serif',
@@ -39,90 +41,106 @@ const useStyles = makeStyles(() => ({
     fontSize: '48px',
     margin: '10px',
   },
-  }));
+  textField: {
+    height: '50%',
+},
+}));
 
-function Search({setSearchTerm }) {
-    const [terms, setTerms] = useState('');
-    const classes = useStyles();
-    
-    return (
-        <>
-        <Container>
-            <Box className={classes.title}>
-            <Typography style={{margin: "auto", textAlign: "center" }}> 
-                <Typography className={classes.heading} variant="h1">
-                Search Rumah Kos
-                </Typography>
-                <Typography className={classes.subtitle} variant="subtitle1">
-                Find new &amp; featured property located in your local city.
-                </Typography>
+function Search({ setSearchResults }) {
+  const [cityArea, setCityArea] = useState('');
+  const [priceRange, setPriceRange] = useState([0, 10000000]);
+  const classes = useStyles();
+
+  const handleSearch = () => {
+    // Menggabungkan nilai cityArea dan priceRange menjadi satu objek
+    console.log("City/Area:", cityArea);
+    console.log("Price Range:", priceRange);
+    const searchFilter = {
+      cityArea,
+      priceRange
+    };
+
+    setSearchResults(searchFilter);
+  };
+
+  return (
+    <>
+      <Container>
+        <Box className={classes.title}>
+          <Typography style={{ margin: "auto", textAlign: "center" }}>
+            <Typography className={classes.heading} variant="h1">
+              Search Rumah Kos
             </Typography>
-            </Box>
+            <Typography className={classes.subtitle} variant="subtitle1">
+              Find new &amp; featured property located in your local city.
+            </Typography>
+          </Typography>
+        </Box>
 
-            <form className={classes.form} >
-            <Grid container spacing={2}>
-                <Grid item xs={12} sm={6} md={4.5}>
-                <Box className={classes.box}>
-                    <Typography className={classes.label} variant="body1">
-                    City/Street
-                    </Typography>
-                        <Paper>
-                        <TextField
-                          style={{ height: '50%' }}
-                          id="outlined-basic"
-                          label="City/Street..."
-                          size="small"
-                          fullWidth
-                          // value={searchTerms}
-                          onChange={(e) => setTerms(e.target.value)}
-                          select
-                        >
-                          <MenuItem value="tamalanrea">tamalanrea</MenuItem>
-                        </TextField>
-                        </Paper>
-                </Box>
-                </Grid>
+        <form className={classes.form} >
+          <Grid container spacing={2}>
+            <Grid item xs={12} sm={6} md={4.5}>
+              <Box className={classes.box}>
+                <Typography className={classes.label} variant="body1">
+                  City/area
+                </Typography>
+                <Paper>
+                  <TextField
+                    style={{ height: '50%' }}
+                    id="outlined-basic"
+                    label="City/Street..."
+                    size="small"
+                    fullWidth
+                    value={cityArea}
+                    onChange={(e) => setCityArea(e.target.value)}
+                    select
+                  >
+                    <MenuItem value=""></MenuItem>
+                    <MenuItem value="tamalanrea">tamalanrea</MenuItem>
+                    {/* Tambahkan pilihan kota lainnya di sini */}
+                  </TextField>
+                </Paper>
+              </Box>
+            </Grid>
 
-                <Grid item xs={12} sm={6} md={4.5}>
-                <Box className={classes.box}> 
-                    <Typography className={classes.label} variant="body1">
-                      Price
-                    </Typography>
-                    <Paper>
-                        <TextField
-                            style={{height: '50%'}}
-                            id="outlined-basic"
-                            label="Price..."
-                            size="small"
-                            fullWidth
-                            // value={searchTerms}
-                            onChange={(e) => setTerms(e.target.value)}
-                        />
-                    </Paper>
-                </Box>
-                </Grid>
+            <Grid item xs={12} sm={6} md={4.5}>
+              <Box className={classes.box}>
+                <Typography className={classes.label} variant="body1">
+                  Price
+                </Typography>
+                <Slider
+                  value={priceRange}
+                  onChange={(e, newValue) => setPriceRange(newValue)}
+                  valueLabelDisplay="auto"
+                  min={0}
+                  max={15000000}
+                  step={500000}
+                />
 
-                <Grid item xs={12} sm={6} md={3}>
-                <Box className={classes.box}>                 
-                    <Typography className={classes.label} variant="body1" style={{ textAlign: "center" }}>
-                      Advanced Filter
-                    </Typography>
-                    <Button  
-                        variant="contained" 
-                        size="large" 
-                        style={{ margin: "auto", display: "block" }}
-                        color="primary"
-                        onClick={() => setSearchTerm(terms)}
-                    >
-                        <i className="fa fa-search">Search</i>
-                    </Button>
-                </Box>
-                </Grid>
-            </Grid> 
-            </form>
-        </Container>
-        </>
-    )
+              </Box>
+            </Grid>
+
+            <Grid item xs={12} sm={6} md={3}>
+              <Box className={classes.box}>
+                <Typography className={classes.label} variant="body1" style={{ textAlign: "center" }}>
+                  Filter
+                </Typography>
+                <Button
+                  variant="contained"
+                  size="large"
+                  style={{ margin: "auto", display: "block" }}
+                  color="primary"
+                  onClick={handleSearch}
+                >
+                  <i className="fa fa-search">Search</i>
+                </Button>
+              </Box>
+            </Grid>
+          </Grid>
+        </form>
+      </Container>
+    </>
+  )
 }
 
-export default Search
+export default Search;

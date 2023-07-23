@@ -13,14 +13,21 @@ const useStyles = makeStyles(() => ({
       display: 'flex',
       flexDirection: 'column',
       justifyContent: 'center',
+      alignItems: 'center', // Tambahkan ini agar elemen <Search /> berada di tengah
+    },
+    searchWrapper: {
+      marginTop: '20px', // Atur jarak antara gambar dan elemen <Search />
     },
 }));
 
-const HomeImg = ({setSearchTerm }) => {
+const HomeImg = ({ setSearchResults }) => { // Ganti setSearchTerm menjadi setSearchResults
     const classes = useStyles();
     return (
         <section className={classes.hero}>
-            <Search setSearchTerm={setSearchTerm} />
+            <div className={classes.searchWrapper}>
+                
+            </div>
+            <Search setSearchResults={setSearchResults} /> {/* Ganti setSearchTerm menjadi setSearchResults */}
         </section>
     );
 }
