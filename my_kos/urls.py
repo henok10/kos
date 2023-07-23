@@ -44,7 +44,7 @@ urlpatterns = [
     path('datakosApprove/<int:id>/', TemplateView.as_view(template_name='index.html')),
     path('datakosUser/<int:id>/', TemplateView.as_view(template_name='index.html')),
     path('riwayatTransaksi/', TemplateView.as_view(template_name='index.html')),
-    path('api/user/reset/:id/:token/', TemplateView.as_view(template_name='index.html')),
+    path('api/user/reset/<str:uid>/<str:token>/', TemplateView.as_view(template_name='index.html')),
     path('sendpasswordresetemail/', TemplateView.as_view(template_name='index.html')),
     path('changePassword/', TemplateView.as_view(template_name='index.html')),
 
