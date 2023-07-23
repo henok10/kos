@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { reset_password } from "../../actions/auth";
 import { useNavigate, useParams } from 'react-router-dom';
-import { Grid, Typography, TextField, Button } from '@mui/material';
+import { Grid, Typography, TextField, Button, Alert } from '@mui/material';
 import { useImmerReducer } from "use-immer";
 
 const ResetPassword = () => {
@@ -26,32 +26,29 @@ const ResetPassword = () => {
 
   const onSubmit = async e => {
     e.preventDefault();
-
-    try {
-        const response = await dispatch(reset_password(id, token, password, password2));
-        if (response.success) {
-          // Reset password success
-          setResetSuccess(true); // Set reset success message
-          setError(''); // Clear error message
-          navigate('/');
-        } else {
-          // Reset password error
-          setResetSuccess(false); // Clear reset success message
-          setError(response.message); // Set error message
-        }
-      } catch (error) {
-        // Handle error case
+      try {
+        await dispatch(reset_password(id, token, password, password2));
+        // Reset password success
+        setResetSuccess(true); // Set reset success message
+      } catch (err) {
+        // Reset password error
         setResetSuccess(false); // Clear reset success message
       }
+     
     };
-
+console.log(resetSuccess)
   return (
     <Grid contained  width={'40%'} margin='auto' height='100%'>  
       <Typography variant='h5' marginTop={'2rem'} textAlign={'center'}>
             Reset Password Anda
       </Typography>
-      {resetSuccess && <p>Password reset successful</p>} {/* Show reset success message */}
+      
       <form onSubmit={onSubmit} style={{marginTop:'2rem'}}>
+      {resetSuccess && (
+        <Alert severity="success" style={{ marginTop: '10px' }}>
+          Password reset successful
+        </Alert>
+      )}
         <Grid item container>
           <TextField
              id="password"

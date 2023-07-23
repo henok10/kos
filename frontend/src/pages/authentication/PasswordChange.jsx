@@ -1,9 +1,9 @@
-import {  Grid, TextField, Button, Alert, Typography } from '@mui/material';
-import { useState} from 'react';
-import { useDispatch } from 'react-redux';
+import React, { useState } from 'react';
+import { Grid, TextField, Button, Alert, Typography } from '@mui/material';
+import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
 import { change_user_password } from '../../actions/auth';
-// import { getToken } from '../../services/LocalStorageService'
+
 const ChangePassword = () => {
   const [formData, setFormData] = useState({
     password: '',
@@ -13,7 +13,7 @@ const ChangePassword = () => {
   const navigate = useNavigate();
   const { id, token } = useParams();
   const [changeSuccess, setChangeSuccess] = useState(false); // State for reset success message
-  const [error, setError] = useState(''); // State for error message
+  const error = useSelector((state) => state.auth.error); // Get the error state from Redux store
   const { password, password2 } = formData;
 
   const onChange = e => {
@@ -22,52 +22,48 @@ const ChangePassword = () => {
 
   const onSubmit = async e => {
     e.preventDefault();
-
     try {
-        const response = await dispatch(change_user_password(password, password2));
-        if (response.success) {
-          // Reset password success
-          setChangeSuccess(true); // Set reset success message
-          setError(''); // Clear error message
-          navigate('/');
-        } else {
-          // Reset password error
-          setChangeSuccess(false); // Clear reset success message
-          setError(response.message); // Set error message
-        }
-      } catch (error) {
-        // Handle error case
-        setChangeSuccess(false); // Clear reset success message
-      }
-    };
-  // Getting User Data from Redux Store
-  // const myData = useSelector(state => state.user)
-  // console.log("Change Password", myData)
+      await dispatch(change_user_password(password, password2));
+      // Reset password success
+      setChangeSuccess(true); // Set reset success message
+    } catch (err) {
+      // Reset password error
+      setChangeSuccess(false); // Clear reset success message
+    }
+  };
 
-  return <>
-    {/* {server_error.non_field_errors ? console.log(server_error.non_field_errors[0]) : ""}
-    {server_error.password ? console.log(server_error.password[0]) : ""}
-    {server_error.password2 ? console.log(server_error.password2[0]) : ""} */}
-     <Grid contained  width={'40%'} margin='auto' height='100%'>  
+  console.log(error)
+  return (
+    <Grid contained width={'40%'} margin='auto' height='100%'>
       <Typography variant='h5' marginTop={'2rem'} textAlign={'center'}>
-            Reset Password Anda
+        Reset Password Anda
       </Typography>
-      {changeSuccess && <p>Password reset successful</p>} {/* Show reset success message */}
-      <form onSubmit={onSubmit} style={{marginTop:'2rem'}}>
-        <Grid item container>
+     
+      <form onSubmit={onSubmit} style={{ marginTop: '2rem' }}>
+      {changeSuccess && (
+        <Alert severity="success" style={{ marginTop: '10px' }}>
+          Password reset successful
+        </Alert>
+      )}
+      {error && (
+        <Alert severity="error" style={{ marginTop: '10px' }}>
+          {error}
+        </Alert>
+      )}
+        <Grid item container marginTop={'1rem'}>
           <TextField
-             id="password"
-             label="Password"
-             fullWidth
-             name="password"
-             variant="outlined"
-             type="password"
-             value={password}
-             onChange={onChange}
+            id="password"
+            label="Password"
+            fullWidth         
+            name="password"
+            variant="outlined"
+            type="password"
+            value={password}
+            onChange={onChange}
           />
         </Grid>
-        <Grid item container marginTop={'4px'}>
-        <TextField
+        <Grid item container marginTop={'0.5rem'}>
+          <TextField
             id="password2"
             label="Konfirmasi Password"
             fullWidth
@@ -75,22 +71,22 @@ const ChangePassword = () => {
             variant="outlined"
             type="password"
             value={password2}
-            onChange={onChange} 
-        />
+            onChange={onChange}
+          />
         </Grid>
-        <Grid style={{ marginTop: "4px", display: 'flex', justifyContent: 'center' }}>
-            <Button 
-                variant="contained" 
-                color='primary' 
-                style={{ marginTop: "1rem", display: 'flex', justifyContent: 'center' }}
-                type='submit'>
-                    Reset Password
-            </Button>
+        <Grid style={{ marginTop: '4px', display: 'flex', justifyContent: 'center' }}>
+          <Button
+            variant="contained"
+            color='primary'
+            style={{ marginTop: '1rem', display: 'flex', justifyContent: 'center' }}
+            type='submit'>
+            Reset Password
+          </Button>
         </Grid>
-       <div></div>
+        <div></div>
       </form>
     </Grid>
-  </>;
+  );
 };
 
 export default ChangePassword;

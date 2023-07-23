@@ -99,7 +99,7 @@ export const authReducer=(state=initialState, action)=>{
                 error: null,
             };
         
-
+        
         case REGISTER_CUSER_FAILED:
         case REGISTER_FUSER_FAILED:
         
@@ -129,9 +129,27 @@ export const authReducer=(state=initialState, action)=>{
             
         case PASSWORD_RESET_SUCCESS:
         case PASSWORD_RESET_FAIL:
+            return {
+                ...state,
+                isLoading: false,
+                error: action.payload,
+            };
         case PASSWORD_RESET_CONFIRM_SUCCESS:
         case PASSWORD_RESET_CONFIRM_FAIL:
+            return {
+                ...state,
+                isLoading: false,
+                error: action.payload,
+            };
         case PASSWORD_CHANGE_FAIL:
+            
+            return {
+                ...state,
+                isLoading: false,
+                error: action.payload,
+                
+            };
+            
         case PASSWORD_CHANGE_SUCCESS:
             
         default:

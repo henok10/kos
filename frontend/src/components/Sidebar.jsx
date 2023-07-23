@@ -34,8 +34,7 @@ const Sidebar = () => {
   const [selected, setSelected] = useState("Dashboard");
   const isCustomer = useSelector((state) => state.auth.isCustomer);
   const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
-  console.log(isCustomer)
-  console.log(isAuthenticated)
+
   return (
     <Box sx={{ display: "flex", position: "sticky", top: 0, bottom: 0, height:"100%" }}>
     <Box 
