@@ -189,6 +189,8 @@ function ListingAdd() {
 			
 			case "catchNo_RekeningChange":
 				draft.no_rekeningValue = action.no_rekeningChosen;
+				draft.no_rekeningErrors.hasErrors = false;
+				draft.no_rekeningErrors.errorMessage = "";
 				break;
 		
 

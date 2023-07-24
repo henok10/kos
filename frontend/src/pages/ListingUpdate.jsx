@@ -94,7 +94,7 @@ function ListingUpdate(props) {
 		priceMonthValue: "",
 		priceYearValue: "",
 		roomsValue: "",
-		no_rekening: "",
+		no_rekeningValue: "",
 		addressValue: "",
 		latitudeValue: "",
 		longitudeValue: "",
