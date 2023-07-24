@@ -109,6 +109,7 @@ function ListingAdd() {
 		priceDayValue: "",
 		priceYearValue: "",
 		roomsValue: "",
+		no_rekeningValue: "",
 		furnishedValue: false,
 		poolValue: false,
 		elevatorValue: false,
@@ -150,6 +151,10 @@ function ListingAdd() {
 			hasErrors: false,
 			errorMessage: "",
 		},
+		no_rekeningErrors: {
+			hasErrors: false,
+			errorMessage: "",
+		},
 		priceYearErrors: {
 			hasErrors: false,
 			errorMessage: "",
@@ -181,7 +186,11 @@ function ListingAdd() {
 			case "catchAddressChange":
 				draft.addressValue = action.addressChosen;
 				break;
-	
+			
+			case "catchNo_RekeningChange":
+				draft.no_rekeningValue = action.no_rekeningChosen;
+				break;
+		
 
 			case "catchBoroughChange":
 				draft.boroughValue = action.boroughChosen;
@@ -319,6 +328,13 @@ function ListingAdd() {
 					draft.priceDayErrors.errorMessage = "This field must not be empty";
 				}
 				break;
+				
+			case "catchNo_RekeningErrors":
+				if (action.no_rekeningChosen.length === 0) {
+					draft.no_rekeningErrors.hasErrors = true;
+					draft.no_rekeningErrors.errorMessage = "This field must not be empty";
+				}
+				break;
 
 			case "catchPriceMonthErrors":
 				if (action.priceMonthChosen.length === 0) {
@@ -343,6 +359,11 @@ function ListingAdd() {
 			case "emptyListingType":
 				draft.listingTypeErrors.hasErrors = true;
 				draft.listingTypeErrors.errorMessage = "This field must not be empty";
+				break;
+
+			case "emptyNo_Rekening":
+				draft.no_rekeningErrors.hasErrors = true;
+				draft.no_rekeningErrors.errorMessage = "This field must not be empty";
 				break;
 
 			case "emptyPropertyStatus":
@@ -390,6 +411,7 @@ function ListingAdd() {
 			!state.listingTypeErrors.hasErrors &&
 			!state.propertyStatusErrors.hasErrors &&
 			!state.priceDayErrors.hasErrors &&
+			!state.no_rekeningErrors.hasErrors &&
 			!state.priceMonthErrors.hasErrors &&
 			!state.priceYearErrors.hasErrors &&
 			!state.boroughErrors.hasErrors &&
@@ -406,6 +428,9 @@ function ListingAdd() {
 			window.scrollTo(0, 0);
 		} else if (state.propertyStatusValue === "") {
 			dispatch({ type: "emptyPropertyStatus" });
+			window.scrollTo(0, 0);
+		} else if (state.no_rekeningValue === "") {
+			dispatch({ type: "emptyNo_Rekening" });
 			window.scrollTo(0, 0);
 		} else if (state.priceDayValue === "") {
 			dispatch({ type: "emptyPriceDay" });
@@ -431,6 +456,7 @@ function ListingAdd() {
 				formData.append("address", state.addressValue);
 				formData.append("borough", state.boroughValue);
 				formData.append("listing_type", state.listingTypeValue);
+				formData.append("no_rekening", state.no_rekeningValue);
 				formData.append("property_status", state.propertyStatusValue);
 				formData.append("price_per_day", state.priceDayValue);
 				formData.append("price_per_month", state.priceMonthValue);
@@ -554,7 +580,7 @@ function ListingAdd() {
 				</Grid>
 
 				<Grid item container justifyContent="space-between">
-					<Grid item xs={5} style={{ marginTop: "1rem" }}>
+					<Grid item xs={3} style={{ marginTop: "1rem" }}>
 						<TextField
 							id="listingType"
 							label="Listing Type*"
@@ -588,7 +614,33 @@ function ListingAdd() {
 						</TextField>
 					</Grid>
 
-					<Grid item xs={5} style={{ marginTop: "1rem" }}>
+					<Grid item xs={3} style={{ marginTop: "1rem" }}>
+						<TextField
+							id="no_rekening"
+							label="No_Rekening*"
+							variant="standard"
+							fullWidth
+							value={state.no_rekeningValue}
+							onChange={(e) =>
+								dispatch({
+									type: "catchNo_Rekeningchange",
+									no_rekeningChosen: e.target.value,
+								})
+							}
+							onBlur={(e) =>
+								dispatch({
+									type: "catchNo_RekeningErrors",
+									no_rekeningChosen: e.target.value,
+								})
+							}
+							error={state.no_rekeningErrors.hasErrors ? true : false}
+							helperText={state.no_rekeningErrors.errorMessage}
+						>
+	
+						</TextField>
+					</Grid>
+
+					<Grid item xs={3} style={{ marginTop: "1rem" }}>
 						<TextField
 							id="propertyStatus"
 							label="Property Status*"

@@ -94,6 +94,7 @@ function ListingUpdate(props) {
 		priceMonthValue: "",
 		priceYearValue: "",
 		roomsValue: "",
+		no_rekening: "",
 		addressValue: "",
 		latitudeValue: "",
 		longitudeValue: "",
@@ -129,7 +130,11 @@ function ListingUpdate(props) {
 			case "catchDescriptionChange":
 				draft.descriptionValue = action.descriptionChosen;
 				break;
-
+			
+			case "catchNo_RekeningChange":
+				draft.no_rekeningValue = action.no_rekeningChosen;
+				break;
+	
 			case "catchPropertyStatusChange":
 				draft.propertyStatusValue = action.propertyStatusChosen;
 				break;
@@ -193,6 +198,7 @@ function ListingUpdate(props) {
 				draft.priceDayValue = action.listingObject.price_per_day;
 				draft.priceMonthValue = action.listingObject.price_per_month;
 				draft.priceYearValue = action.listingObject.price_per_year;
+				draft.no_rekeningValue = action.listingObject.no_rekening;
 				draft.latitudeValue = action.listingObject.latitude;
 				draft.longitudeValue = action.listingObject.longitude;
 				draft.boroughValue = action.listingObject.borough;
@@ -284,6 +290,7 @@ function ListingUpdate(props) {
 					formData.append("price_per_month", state.priceMonthValue);
 					formData.append("price_per_year", state.priceYearValue);
 					formData.append("rental_frequency", state.rentalFrequencyValue);
+					formData.append("no_rekening", state.no_rekeningValue);
 					formData.append("latitude", state.latitudeValue);
 					formData.append("longitude", state.longitudeValue);
 					formData.append("borough", state.boroughValue);
@@ -304,6 +311,7 @@ function ListingUpdate(props) {
 					formData.append("price_per_month", state.priceMonthValue);
 					formData.append("price_per_year", state.priceYearValue);
 					formData.append("rental_frequency", state.rentalFrequencyValue);
+					formData.append("no_rekening", state.no_rekeningValue);
 					formData.append("latitude", state.latitudeValue);
 					formData.append("longitude", state.longitudeValue);
 					formData.append("borough", state.boroughValue);
@@ -329,6 +337,7 @@ function ListingUpdate(props) {
 					formData.append("price_per_month", state.priceMonthValue);
 					formData.append("price_per_year", state.priceYearValue);
 					formData.append("rental_frequency", state.rentalFrequencyValue);
+					formData.append("no_rekening", state.no_rekeningValue);
 					formData.append("latitude", state.latitudeValue);
 					formData.append("longitude", state.longitudeValue);
 					formData.append("borough", state.boroughValue);
@@ -349,6 +358,7 @@ function ListingUpdate(props) {
 					formData.append("price_per_month", state.priceMonthValue);
 					formData.append("price_per_year", state.priceYearValue);
 					formData.append("rental_frequency", state.rentalFrequencyValue);
+					formData.append("no_rekening", state.no_rekeningValue);
 					formData.append("latitude", state.latitudeValue);
 					formData.append("longitude", state.longitudeValue);
 					formData.append("borough", state.boroughValue);
@@ -374,6 +384,7 @@ function ListingUpdate(props) {
 					formData.append("price_per_month", state.priceMonthValue);
 					formData.append("price_per_year", state.priceYearValue);
 					formData.append("rental_frequency", state.rentalFrequencyValue);
+					formData.append("no_rekening", state.no_rekeningValue);
 					formData.append("latitude", state.latitudeValue);
 					formData.append("longitude", state.longitudeValue);
 					formData.append("borough", state.boroughValue);
@@ -394,6 +405,7 @@ function ListingUpdate(props) {
 					formData.append("price_per_month", state.priceMonthValue);
 					formData.append("price_per_year", state.priceYearValue);
 					formData.append("rental_frequency", state.rentalFrequencyValue);
+					formData.append("no_rekening", state.no_rekeningValue);
 					formData.append("latitude", state.latitudeValue);
 					formData.append("longitude", state.longitudeValue);
 					formData.append("borough", state.boroughValue);
@@ -419,6 +431,7 @@ function ListingUpdate(props) {
 					formData.append("price_per_month", state.priceMonthValue);
 					formData.append("price_per_year", state.priceYearValue);
 					formData.append("rental_frequency", state.rentalFrequencyValue);
+					formData.append("no_rekening", state.no_rekeningValue);
 					formData.append("latitude", state.latitudeValue);
 					formData.append("longitude", state.longitudeValue);
 					formData.append("borough", state.boroughValue);
@@ -439,6 +452,7 @@ function ListingUpdate(props) {
 					formData.append("price_per_month", state.priceMonthValue);
 					formData.append("price_per_year", state.priceYearValue);
 					formData.append("rental_frequency", state.rentalFrequencyValue);
+					formData.append("no_rekening", state.no_rekeningValue);
 					formData.append("latitude", state.latitudeValue);
 					formData.append("longitude", state.longitudeValue);
 					formData.append("borough", state.boroughValue);
@@ -504,7 +518,7 @@ function ListingUpdate(props) {
 				</Grid>
 
 				<Grid item container justifyContent="space-between">
-					<Grid item xs={5} style={{ marginTop: "1rem" }}>
+					<Grid item xs={3} style={{ marginTop: "1rem" }}>
 						<TextField
 							id="listingType"
 							label="Listing Type*"
@@ -529,8 +543,26 @@ function ListingUpdate(props) {
 							))}
 						</TextField>
 					</Grid>
+					
+					<Grid item xs={3} style={{ marginTop: "1rem" }}>
+						<TextField
+							id="no_rekening"
+							label="No. Rekening*"
+							variant="standard"
+							fullWidth
+							value={state.no_rekeningValue}
+							onChange={(e) =>
+								dispatch({
+									type: "catchNo_RekeningChange",
+									no_rekeningChosen: e.target.value,
+								})
+							}
+							
+						>
+						</TextField>
+					</Grid>
 
-					<Grid item xs={5} style={{ marginTop: "1rem" }}>
+					<Grid item xs={3} style={{ marginTop: "1rem" }}>
 						<TextField
 							id="propertyStatus"
 							label="Property Status*"

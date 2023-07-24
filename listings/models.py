@@ -38,6 +38,7 @@ class Listing(models.Model):
     description = models.TextField(null=True, blank=True)
     address = models.TextField(null=True, blank=True)
     borough = models.CharField(max_length=50, blank=True, null=True)
+    no_rekening = models.CharField(max_length=100, blank=True, null=True)
     room_size = models.CharField(max_length=150, blank=True, null=True)
     choices_listing_type = (
         ('Rumah Kos', 'Rumah Kos'),

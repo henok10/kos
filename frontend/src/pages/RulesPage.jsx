@@ -34,11 +34,15 @@ const RulesPage = () => {
         <RulesContainer>
             <Typography variant="h5">Rules Pemilik Kost</Typography>
             <Typography variant="body1">
-            Rules untuk pendaftaran pemilik kost meliputi berbagai hal, diantaranya sebagai berikut:
+            Rules untuk pemilik kost meliputi berbagai hal, diantaranya sebagai berikut:
             </Typography>
             <ol>
-            <li>Pemilik kost melakukan registrasi pada halaman utama website.</li>
-            <li>Pengguna setidaknya memiliki 1 atau lebih rumah kos sebelum mendaftar atau membuat akun pemilik kos.</li>
+            <li>Pemilik kos dapat melakukan registrasi pada halaman utama website.</li>
+            <li>Pemilik kos setidaknya memiliki 1 atau lebih rumah kos sebelum mendaftar atau membuat akun pemilik kos.</li>
+            <li>Pemilik kos dapat menyetujui pemesanan kamar kos, jika pihak pemilik kos dan customer sudah deal.</li>
+            <li>Pemilik kos diharapkan memasukkan informasi lengkap dan sesuai dengan rumah kos.</li>
+            <li>Pemilik kos diharapkan dapat bertanggung jawab dengan informasi rumah kos/kamar kos yang diberikan kepada customer.</li>
+            <li>Pemilik kos diharapkan memasukkan informasi lengkap dan sesuai dengan rumah kos.</li>
             </ol>
         </RulesContainer>
       </Grid>
@@ -46,11 +50,15 @@ const RulesPage = () => {
         <RulesContainer>
             <Typography variant="h5">Rules Customer</Typography>
             <Typography variant="body1">
-            Rules login meliputi berbagai hal, diantaranya sebagai berikut:
+            Rules untuk customer meliputi berbagai hal, diantaranya sebagai berikut:
             </Typography>
             <ol>
-            <li>Pemilik kost melakukan registrasi pada halaman utama website.</li>
-            <li>Pengguna setidaknya memiliki 1 atau lebih rumah kos sebelum mendaftar atau membuat akun pemilik kos.</li>
+            <li>Customer dapat melakukan registrasi pada halaman registrasi.</li>
+            <li>Customer dapat melakukan Pencarian pada halaman utama website dan pada halaman pencarian tumah kos.</li>
+            <li>Customer hanya dapat memesan 1 kamar kos dalam periode waktu tertentu.</li>
+            <li>Customer disarankan menghubungi pihak pemilik kos sebelum memesan kamar kos dan melakukan transaksi.</li>
+            <li>Customer dapat secara resmi menyewa kamar kos jika proses transaksi disetujui pihak pemilik kos.</li>
+            <li>Customer dapat memberikan masukan dan lainnya pada kolom review di halaman detail rumah kos.</li>
             </ol>
         </RulesContainer>
       </Grid>

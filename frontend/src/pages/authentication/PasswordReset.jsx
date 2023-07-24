@@ -49,7 +49,7 @@ console.log(resetSuccess)
           Password reset successful
         </Alert>
       )}
-        <Grid item container>
+        <Grid item container marginTop={'1rem'}>
           <TextField
              id="password"
              label="Password"
