@@ -38,7 +38,6 @@ function getTokenExpirationDate(token) {
 
 export const getCustomerUser=()=>(dispatch, getState)=>{
     const access_token = getState().auth.access_token
-    // const access_token = getState().auth.access_token
     const isCustomer= getState().auth.isCustomer
     console.log(isCustomer)
     console.log(access_token)
@@ -78,6 +77,7 @@ export const getOwnerUser = ()=>(dispatch, getState)=>{
         }
     }
     console.log(isOwner)
+    console.log(access_token)
     if(access_token && isOwner){
         config.headers['Authorization'] = `Bearer ${access_token}`;
     }

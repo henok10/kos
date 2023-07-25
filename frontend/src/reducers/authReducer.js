@@ -50,7 +50,7 @@ export const authReducer=(state=initialState, action)=>{
                 isAuthenticated:true,
                 isCustomer:action.payload.user.is_customer,
                 isOwner:action.payload.user.is_owner,
-                // isLoading:false
+                isLoading:false
             }
         case REGISTER_FUSER_SUCCESS:
             localStorage.setItem('token', action.payload.token);
@@ -61,7 +61,7 @@ export const authReducer=(state=initialState, action)=>{
                 isAuthenticated:true,
                 isCustomer:action.payload.user.is_customer,
                 isOwner:action.payload.user.is_owner,
-                // isLoading:false
+                isLoading:false
             }
         case CUSTOMER_USER_LOADED:
             return{

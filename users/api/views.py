@@ -30,6 +30,7 @@ class CustomerSignupView(generics.GenericAPIView):
         serializer.is_valid(raise_exception=True)
         user=serializer.save()
         token = get_tokens_for_user(user)
+        access_token = token['access']
         return Response({
             "user": UserSerializer(user, context=self.get_serializer_context()).data,
             "token": token,
@@ -43,6 +44,7 @@ class OwnerSignupView(generics.GenericAPIView):
         serializer.is_valid(raise_exception=True)
         user=serializer.save()
         token = get_tokens_for_user(user)
+        access_token = token['access']
         return Response({
             "user": UserSerializer(user, context=self.get_serializer_context()).data,
             "token": token,
