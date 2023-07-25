@@ -42,6 +42,16 @@ export const authReducer=(state=initialState, action)=>{
     switch(action.type){
        
         case REGISTER_CUSER_SUCCESS:
+            localStorage.setItem('token', action.payload.token);
+            localStorage.setItem('access_token', action.payload.access_token)
+            return {
+                ...state,
+                ...action.payload,
+                isAuthenticated:true,
+                isCustomer:action.payload.user.is_customer,
+                isOwner:action.payload.user.is_owner,
+                // isLoading:false
+            }
         case REGISTER_FUSER_SUCCESS:
             localStorage.setItem('token', action.payload.token);
             localStorage.setItem('access_token', action.payload.access_token)
@@ -101,7 +111,17 @@ export const authReducer=(state=initialState, action)=>{
         
         
         case REGISTER_CUSER_FAILED:
+            return {
+                ...state,
+                isLoading: false,
+                error: action.payload,
+            };
         case REGISTER_FUSER_FAILED:
+            return {
+                ...state,
+                isLoading: false,
+                error: action.payload,
+            };
         
 
         case CUSTOMER_USER_FAILED:

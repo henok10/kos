@@ -385,9 +385,9 @@ const handleWhatsApp = () => {
               }}
             >
               <Typography variant="h6" style={{fontSize: '16px'}}>No Rekening :</Typography>
-              {state.userProfileInfo.no_rekening ? (
+              {state.listingInfo.no_rekening ? (
               <Typography variant="body1" style={{fontSize: '15px'}}>
-                {state.userProfileInfo.no_rekening}
+                {state.listingInfo.no_rekening}
               </Typography>
                 ) : (
                 ""

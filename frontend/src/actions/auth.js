@@ -96,30 +96,43 @@ export const getOwnerUser = ()=>(dispatch, getState)=>{
 }
         
 
-export const create_customeruser=({username, email,password, password2, tc})=>(dispatch)=>{
-    const config={
-        headers:{
-            'Content-Type':'application/json'
+// actions/auth.js
+
+export const create_customeruser = ({ username, email, password, password2, tc }) => (dispatch) => {
+    const config = {
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    };
+    const body = JSON.stringify({ username, email, password, password2, tc });
+  
+    // Return the axios promise
+    return axios
+      .post('https://mykos2.onrender.com/api/signup/customer/', body, config)
+      .then((res) => {
+        dispatch({
+          type: REGISTER_CUSER_SUCCESS,
+          payload: res.data,
+        });
+        console.log(res.data);
+      }) 
+      .catch((err) => {
+        if (err.response && err.response.data && err.response.data.email) {
+          // The server sent an error message for the email field
+          dispatch({
+            type: REGISTER_CUSER_FAILED,
+            payload: err.response.data.email[0],
+          });
+        } else {
+          dispatch({
+            type: REGISTER_CUSER_FAILED,
+            payload: 'An error occurred during signup: ' + err.message,
+          });
         }
-    }
-    const body=JSON.stringify({username, email, password, password2, tc})
-
-    axios.post('https://mykos2.onrender.com/api/signup/customer/', body, config)
-    .then(res =>{
-        dispatch({
-            type:REGISTER_CUSER_SUCCESS,
-            payload:res.data
-        })
-        console.log(res.data)
-    }).catch(err =>{
-        dispatch({
-            type:REGISTER_CUSER_FAILED
-        })
-        console.log(err.response.data)
-    })
-
-    
-}
+        throw err; // Throw the error for the error case
+      });
+  };
+  
 
 
 export const create_owneruser=({username, email,password, password2, tc})=>(dispatch)=>{
@@ -165,22 +178,37 @@ export const login = ({ email, password }) => (dispatch) => {
         });
         // dispatch(getCustomerUser());
         })
+        // .catch((err) => {
+        //     if (err.response && err.response.status === 400) {
+        //       const errorMessage = err.response?.data?.non_field_errors[0] || 'An error occurred during login.';
+        //       dispatch(LoginError(errorMessage));
+        //     } else {
+        //       dispatch(LoginError('An error occurred during login.'));
+        //     }
+        //   });
         .catch((err) => {
-            if (err.response && err.response.status === 400) {
-              const errorMessage = err.response?.data?.non_field_errors[0] || 'An error occurred during login.';
-              dispatch(LoginError(errorMessage));
+            if (err.response && err.response.data && err.response.data.email) {
+                // The server sent an error message for the email field
+                dispatch({
+                type: LOGIN_FAILED,
+                payload: err.response.data.email[0],
+                });
             } else {
-              dispatch(LoginError('An error occurred during login.'));
+                dispatch({
+                type: LOGIN_FAILED,
+                payload:  err.response?.data?.non_field_errors[0],
+                });
             }
-          });
+            throw err; // Throw the error for the error case
+        });
           
     };
   
 
-export const LoginError = (error) => ({
-  type: LOGIN_FAILED,
-  payload: error
-});
+// export const LoginError = (error) => ({
+//   type: LOGIN_FAILED,
+//   payload: error
+// });
 
 console.log(LOGIN_SUCCESS)
 

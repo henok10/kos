@@ -619,13 +619,13 @@ function ListingAdd() {
 					<Grid item xs={3} style={{ marginTop: "1rem" }}>
 						<TextField
 							id="no_rekening"
-							label="No_Rekening*"
+							label="No. Rekening*"
 							variant="standard"
 							fullWidth
 							value={state.no_rekeningValue}
 							onChange={(e) =>
 								dispatch({
-									type: "catchNo_Rekeningchange",
+									type: "catchNo_RekeningChange",
 									no_rekeningChosen: e.target.value,
 								})
 							}
@@ -637,10 +637,9 @@ function ListingAdd() {
 							}
 							error={state.no_rekeningErrors.hasErrors ? true : false}
 							helperText={state.no_rekeningErrors.errorMessage}
-						>
-	
-						</TextField>
+						/>
 					</Grid>
+
 
 					<Grid item xs={3} style={{ marginTop: "1rem" }}>
 						<TextField
