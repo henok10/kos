@@ -42,8 +42,9 @@ export const authReducer=(state=initialState, action)=>{
     switch(action.type){
        
         case REGISTER_CUSER_SUCCESS:
-            localStorage.setItem('token', action.payload.token);
+            localStorage.setItem('token', action.payload.token)
             localStorage.setItem('access_token', action.payload.access_token)
+            localStorage.setItem('refresh_token', action.payload.refresh_token)
             return {
                 ...state,
                 ...action.payload,
@@ -53,8 +54,9 @@ export const authReducer=(state=initialState, action)=>{
                 isLoading:false
             }
         case REGISTER_FUSER_SUCCESS:
-            localStorage.setItem('token', action.payload.token);
+            localStorage.setItem('token', action.payload.token)
             localStorage.setItem('access_token', action.payload.access_token)
+            localStorage.setItem('refresh_token', action.payload.refresh_token)
             return {
                 ...state,
                 ...action.payload,

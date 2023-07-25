@@ -31,9 +31,12 @@ class CustomerSignupView(generics.GenericAPIView):
         user=serializer.save()
         token = get_tokens_for_user(user)
         access_token = token['access']
+        refresh_token = token['refresh']
         return Response({
             "user": UserSerializer(user, context=self.get_serializer_context()).data,
             "token": token,
+            'access_token':  access_token,
+            'refresh_token': refresh_token,
             "message": "account created successfully"
         }, status=status.HTTP_201_CREATED)
 
@@ -45,9 +48,12 @@ class OwnerSignupView(generics.GenericAPIView):
         user=serializer.save()
         token = get_tokens_for_user(user)
         access_token = token['access']
+        refresh_token = token['refresh']
         return Response({
             "user": UserSerializer(user, context=self.get_serializer_context()).data,
             "token": token,
+            'access_token':  access_token,
+            'refresh_token': refresh_token,
             "message": "account created successfully"
         }, status=status.HTTP_201_CREATED)
 
