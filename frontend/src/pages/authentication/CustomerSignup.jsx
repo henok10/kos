@@ -4,7 +4,7 @@ import  PropTypes from "prop-types"
 import { create_customeruser } from '../../actions/auth'
 import {Navigate, useNavigate} from "react-router-dom"
 import { clearErrors } from '../../actions/auth';
-import Validation from './validation';
+import {Validation} from './validation';
 
 // MUI
 import {
@@ -28,7 +28,7 @@ const CustomerSignup = ({create_customeruser, isAuthenticated, isCustomer}) => {
         email:'',
         password:'',
         password2:'',
-        tc:''
+        tc:'false'
 
     })
 
@@ -125,8 +125,7 @@ const CustomerSignup = ({create_customeruser, isAuthenticated, isCustomer}) => {
                                 onChange={(e)=>handleChange(e)} 
                             />
 				        </Grid>
-                       
-                        {errors.tc && <p style={{ color: 'red' }}>{errors.tc}</p>}
+                        
                         <FormControlLabel 
                             control={<Checkbox 
                                         value={true} 
@@ -138,6 +137,7 @@ const CustomerSignup = ({create_customeruser, isAuthenticated, isCustomer}) => {
                             // value={tc}
                             label="I agree to term and condition." 
                         />
+                        {errors.tc && <p style={{ color: 'red' }}>{errors.tc}</p>}
                         {/* <button type="submit" className="btn btn-primary">Signup</button> */}
                         <Grid
                             item

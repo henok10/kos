@@ -18,7 +18,8 @@ import {
     PASSWORD_RESET_CONFIRM_FAIL,
     PASSWORD_CHANGE_FAIL,
     PASSWORD_CHANGE_SUCCESS,
-    CLEAR_ERRORS
+    CLEAR_ERRORS,
+    CLEAR_SUCCESS
 } from "../actions/types"
 
 // Fungsi untuk mendapatkan waktu kedaluwarsa token dari token JWT
@@ -93,6 +94,7 @@ export const getOwnerUser = ()=>(dispatch, getState)=>{
                 type:OWNER_USER_FAILED
             })
         })
+        
 }
         
 
@@ -156,6 +158,22 @@ export const create_owneruser=({username, email,password, password2, tc})=>(disp
         })
         console.log(err.response.data)
     })
+    .catch((err) => {
+        if (err.response && err.response.data && err.response.data.email) {
+          // The server sent an error message for the email field
+          dispatch({
+            type: REGISTER_FUSER_FAILED,
+            payload: err.response.data.email[0],
+          });
+        } else {
+          dispatch({
+            type: REGISTER_FUSER_FAILED,
+            payload: 'An error occurred during signup: ' + err.message,
+          });
+        }
+        throw err; // Throw the error for the error case
+      });
+    
 
     
 }
@@ -178,14 +196,7 @@ export const login = ({ email, password }) => (dispatch) => {
         });
         // dispatch(getCustomerUser());
         })
-        // .catch((err) => {
-        //     if (err.response && err.response.status === 400) {
-        //       const errorMessage = err.response?.data?.non_field_errors[0] || 'An error occurred during login.';
-        //       dispatch(LoginError(errorMessage));
-        //     } else {
-        //       dispatch(LoginError('An error occurred during login.'));
-        //     }
-        //   });
+    
         .catch((err) => {
             if (err.response && err.response.data && err.response.data.email) {
                 // The server sent an error message for the email field
@@ -293,13 +304,31 @@ export const sendPasswordResetEmail = (email) => async dispatch => {
     try {
       await axios.post(`https://mykos2.onrender.com/api/changepassword/`, body, config);
             dispatch({
-                type: PASSWORD_CHANGE_SUCCESS
+                type: PASSWORD_CHANGE_SUCCESS,
+                payload: 'Password changed successfully!',
             });
-        } catch (err) {
-            dispatch({
-                type: PASSWORD_CHANGE_FAIL
-            });
-        }
+        } 
+     
+        catch (err) {
+            // Handle errors and dispatch appropriate actions
+        
+            if (err.response && err.response.data && err.response.data.password) {
+              // The server sent an error message for the email field
+              dispatch({
+                type: PASSWORD_CHANGE_FAIL,
+                payload: err.response.data.password[0],
+              });
+            } else {
+              // If there are other errors, check for 'non_field_errors'
+              dispatch({
+                type: PASSWORD_CHANGE_FAIL,
+                payload: err.response?.data?.non_field_errors[0] || 'An error occurred while changing the password.',
+              });
+            }
+        
+            // Re-throw the error for the error case
+            throw err;
+          }
       
   };
   
@@ -334,6 +363,12 @@ export const sendPasswordResetEmail = (email) => async dispatch => {
 export const clearErrors = () => {
     return {
       type: CLEAR_ERRORS
+    };
+};
+
+export const clearSuccess = () => {
+    return {
+      type: CLEAR_SUCCESS
     };
 };
   

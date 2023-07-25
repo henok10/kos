@@ -8,7 +8,7 @@ import { NavLink, Navigate, useNavigate } from 'react-router-dom';
 import { Grid, Typography, Button, TextField } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import { useSelector, useDispatch } from 'react-redux';
-import Validation from './validation';
+import {Validation} from './validation';
 
 const useStyles = makeStyles({
   formContainer: {
@@ -72,7 +72,7 @@ function Login({ login, isAuthenticated, isCustomer, isOwner, clearErrors }) {
   } else if (isAuthenticated && isOwner) {
     return <Navigate to="/owner/home" />;
   } else {
-
+// console.log(clearErrors())
     return (
       <div className={classes.formContainer}>
         <div className="row">

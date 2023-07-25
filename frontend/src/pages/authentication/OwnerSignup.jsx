@@ -1,10 +1,10 @@
 import React, {useState} from 'react'
-import {connect, useDispatch} from "react-redux"
+import { connect, useDispatch, useSelector } from 'react-redux'
 import PropTypes from "prop-types"
 import {create_owneruser} from "../../actions/auth"
 import {Navigate, useNavigate} from "react-router-dom"
 import { clearErrors } from '../../actions/auth';
-import Validation from './validation';
+import {Validation} from './validation';
 // MUI
 import {
 	Grid,
@@ -20,6 +20,7 @@ const OwnerSignup = ({create_owneruser, isAuthenticated, isOwner}) => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
     const [errors, setErrors] = useState({})
+    const regisError = useSelector((state) => state.auth.error);
     const [owner, setOwner]=useState({
         username:'',
         email:'',
@@ -64,6 +65,11 @@ const OwnerSignup = ({create_owneruser, isAuthenticated, isOwner}) => {
                 <div className='col-md-8 mx-auto'>
                     <form onSubmit={ e =>handleSubmit(e)}>
                         <Grid item container style={{ marginTop: "2rem" }}>
+                        {regisError && (
+                            <Typography variant="body1" color="error">
+                                {regisError}
+                            </Typography>
+                            )}
                         {errors.username && <p style={{ color: 'red' }}>{errors.username}</p>}
                             <TextField
                                 id="username"
@@ -127,6 +133,7 @@ const OwnerSignup = ({create_owneruser, isAuthenticated, isOwner}) => {
                             // value={tc}
                             label="I agree to term and condition." 
                         />
+                         {errors.tc && <p style={{ color: 'red' }}>{errors.tc}</p>}
                         {/* <button type="submit" className="btn btn-primary">Signup</button> */}
                         <Grid
                             item

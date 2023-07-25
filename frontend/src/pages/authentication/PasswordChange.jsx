@@ -1,10 +1,24 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Grid, TextField, Button, Alert, Typography } from '@mui/material';
-import { useDispatch, useSelector } from 'react-redux';
+import PropTypes from 'prop-types';
+import { useDispatch, useSelector, connect } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
+import { clearErrors, clearSuccess } from '../../actions/auth';
 import { change_user_password } from '../../actions/auth';
+import {Validation2} from './validation';
 
-const ChangePassword = () => {
+const ChangePassword = ({change_user_password, clearErrors, clearSuccess}) => {
+  useEffect(() => {
+    // Dispatch aksi CLEAR_ERRORS saat komponen dimuat ulang atau website direfresh
+    clearErrors();
+  }, []);
+
+  useEffect(() => {
+    // Dispatch aksi CLEAR_ERRORS saat komponen dimuat ulang atau website direfresh
+    clearSuccess();
+  }, []);
+
+
   const [formData, setFormData] = useState({
     password: '',
     password2: ''
@@ -12,9 +26,13 @@ const ChangePassword = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { id, token } = useParams();
+
   const [changeSuccess, setChangeSuccess] = useState(false); // State for reset success message
-  const error = useSelector((state) => state.auth.error); // Get the error state from Redux store
   const { password, password2 } = formData;
+  const [errors, setErrors] = useState({})
+  const changeError = useSelector((state) => state.auth.error);
+  const success = useSelector((state) => state.auth.success);
+ 
 
   const onChange = e => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -22,17 +40,24 @@ const ChangePassword = () => {
 
   const onSubmit = async e => {
     e.preventDefault();
-    try {
-      await dispatch(change_user_password(password, password2));
-      // Reset password success
-      setChangeSuccess(true); // Set reset success message
-    } catch (err) {
-      // Reset password error
-      setChangeSuccess(false); // Clear reset success message
-    }
+    setErrors({});
+    const validationErrors = Validation2({ formData });
+    setErrors(validationErrors);
+    if (Object.keys(errors).length === 0) {
+      try {
+        await dispatch(change_user_password(password, password2));
+        // Reset password success
+        setChangeSuccess(true); // Set reset success message
+      } catch (err) {
+        // Reset password error
+        setChangeSuccess(false); // Clear reset success message
+      }
+     }
+   
   };
 
-  console.log(error)
+  console.log(changeSuccess)
+  console.log(success)
   return (
     <Grid contained width={'40%'} margin='auto' height='100%'>
       <Typography variant='h5' marginTop={'2rem'} textAlign={'center'}>
@@ -40,17 +65,18 @@ const ChangePassword = () => {
       </Typography>
      
       <form onSubmit={onSubmit} style={{ marginTop: '2rem' }}>
-      {changeSuccess && (
+      {success && (
         <Alert severity="success" style={{ marginTop: '10px' }}>
           Password reset successful
         </Alert>
       )}
-      {error && (
-        <Alert severity="error" style={{ marginTop: '10px' }}>
-          {error}
-        </Alert>
-      )}
+       {changeError && (
+            <Typography variant="body1" color="error">
+                {changeError}
+            </Typography>
+            )}
         <Grid item container marginTop={'1rem'}>
+        {errors.password && <p style={{ color: 'red' }}>{errors.password}</p>}
           <TextField
             id="password"
             label="Password"
@@ -63,6 +89,7 @@ const ChangePassword = () => {
           />
         </Grid>
         <Grid item container marginTop={'0.5rem'}>
+        {errors.password2 && <p style={{ color: 'red' }}>{errors.password2}</p>}
           <TextField
             id="password2"
             label="Konfirmasi Password"
@@ -88,5 +115,18 @@ const ChangePassword = () => {
     </Grid>
   );
 };
+ChangePassword.propTypes = {
+  change_user_password: PropTypes.func.isRequired,
+  isAuthenticated: PropTypes.bool,
+  isCustomer: PropTypes.bool,
+  isOwner: PropTypes.bool,
+};
 
-export default ChangePassword;
+const mapStateToProps = (state) => ({
+  isAuthenticated: state.auth.isAuthenticated,
+  isCustomer: state.auth.isCustomer,
+  isOwner: state.auth.isOwner,
+});
+
+
+export default connect(mapStateToProps, { change_user_password, clearErrors, clearSuccess })(ChangePassword);
