@@ -140,7 +140,7 @@ const OwnerSignup = ({create_owneruser, isAuthenticated, isOwner}) => {
                                 fullWidth
                                 type="submit"
                                 // className={classes.loginBtn}
-                                // disabled={Object.keys(errors).length > 0} // Menonaktifkan tombol jika ada kesalahan
+                                disabled={Object.keys(errors).length > 0} // Menonaktifkan tombol jika ada kesalahan
                             >
                                 SIGN IN
                             </Button>
@@ -158,7 +158,7 @@ const OwnerSignup = ({create_owneruser, isAuthenticated, isOwner}) => {
                                 onClick={() => navigate("/login")}
                                 style={{ cursor: "pointer", color: "green" }}
                             >
-                                SIGN IN
+                                 SIGN UP
                             </span>
                         </Typography>
                     </Grid>

@@ -28,7 +28,7 @@ const CustomerSignup = ({create_customeruser, isAuthenticated, isCustomer}) => {
         email:'',
         password:'',
         password2:'',
-        tc:'false'
+        tc:''
 
     })
 
@@ -125,6 +125,8 @@ const CustomerSignup = ({create_customeruser, isAuthenticated, isCustomer}) => {
                                 onChange={(e)=>handleChange(e)} 
                             />
 				        </Grid>
+                       
+                        {errors.tc && <p style={{ color: 'red' }}>{errors.tc}</p>}
                         <FormControlLabel 
                             control={<Checkbox 
                                         value={true} 
@@ -151,7 +153,7 @@ const CustomerSignup = ({create_customeruser, isAuthenticated, isCustomer}) => {
                                 // className={classes.loginBtn}
                                 // disabled={state.disabledBtn}
                             >
-                                SIGN IN
+                                SIGN UP
                             </Button>
 				         </Grid>
 

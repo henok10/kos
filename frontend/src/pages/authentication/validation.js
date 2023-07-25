@@ -29,6 +29,9 @@ export default function Validation({ user }) {
     if (user.password !== user.password2) {
       errors.password2 = "Passwords do not match";
     }
+    if (!user.tc) {
+      errors.agree = "You must agree to the terms and conditions to proceed with registration.";
+    }
   
     return errors;
   }
