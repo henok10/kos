@@ -1,5 +1,5 @@
 
-import React, { useEffect, useCallback } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import Axios from "axios";
 import { useSelector } from "react-redux";
@@ -45,6 +45,8 @@ function Order() {
     const isCustomer = useSelector((state) => state.auth.isCustomer);
     const userId = useSelector(state => state.auth.userId)
     const customerId = useSelector(state => state.auth.customerId)
+    const [nameValue, setFullNameValue] = useState("");
+    const [phoneNumberValue, setPhoneNumberValue] = useState("");
     const params = useParams();
 
   useEffect(() => {
@@ -58,11 +60,10 @@ function Order() {
       navigate("/");
     }
   }, [isCustomer, navigate]);
-
+console.log(nameValue)
   const initialState = {
-    fullNameValue: "",
-    phoneNumberValue: "",
-    rentalFrequencyValue: "",
+    fullNameValue: nameValue,
+    phoneNumberValue: phoneNumberValue,
     buktiTransferValue: "",
     nominalValue: "",
     uploadedPicture: [],
@@ -78,6 +79,10 @@ function Order() {
             draft[action.name] = action.value;
         break;
 
+        // case "catchFullNameChange":
+        //     draft.fullNameValue = action.nameValue;
+        //     break;
+
         case "catchOrderInfo":
             draft.buktiTransferValue = action.profileOrder.buktiTransfer
             break;
@@ -88,6 +93,12 @@ function Order() {
         case "catchProfilePictureChange":
             draft.buktiTransferValue = action.buktiTransferChosen;
         break;
+
+        case "catchUserProfileInfo":
+            draft.userProfile.fullName = action.profileObject.full_name;
+            draft.userProfile.phoneNumber = action.profileObject.phone_number;
+            
+            break;
 
         case "openTheSnack":
           draft.openSnack = true;
@@ -145,6 +156,33 @@ function Order() {
       }
     }, [dispatch, state.fullNameValue, state.phoneNumberValue, state.rentalFrequencyValue, state.barangDipesanValue, state.buktiTransferValue, params.id, userId]);
     
+
+    	// request to get profile info
+	useEffect(() => {
+		async function GetProfileInfo() {
+			try {
+				const response = await Axios.get(
+					`https://mykos2.onrender.com/api/profiles/customer/${customerId}/`
+				);
+
+				dispatch({
+          type: "catchUserOrderInfo",
+          name: "fullNameValue",
+          value: response.data.full_name,
+        });
+
+        dispatch({
+          type: "catchUserOrderInfo",
+          name: "phoneNumberValue",
+          value: response.data.phone_number,
+        });
+				dispatch({ type: "loadingDone" });
+			} catch (e) {}
+		}
+		GetProfileInfo();
+	}, [state.customerInfo]);
+console.log(nameValue)
+
     useEffect(() => {
       if (state.openSnack) {
         setTimeout(() => {
@@ -170,6 +208,12 @@ return (
                 fullWidth
                 value={state.fullNameValue}
                 onChange={handleChange}
+                // onChange={(e) =>
+                //   dispatch({
+                //     type: "catchFullNameChange",
+                //     nameValue: e.target.value,
+                //   })
+                // }
                 name="fullNameValue"
               />
             </Grid>

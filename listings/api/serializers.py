@@ -39,6 +39,8 @@ class PoiSerializer(serializers.ModelSerializer):
         
 class TransactionSerializer(serializers.ModelSerializer):
     listing_title = serializers.ReadOnlyField(source='rumah.title')
+    fullName = serializers.ReadOnlyField(source='customer.full_name')
+    phoneNumber = serializers.ReadOnlyField(source='customer.phone_number')
     class Meta:
         model = Transaction
         fields = ['id', 'rumah', 'listing_title', 'customer', 'buktiTransfer', 'fullName', 'phoneNumber', 'rentalFrequency', 'date', 'barang_dipesan', 'barang_dibeli']

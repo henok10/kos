@@ -13,8 +13,10 @@ import {
 } from "@mui/material";
 
 function Kamar() {
+    const navigate = useNavigate();
     const params = useParams();
     const [allRoom, setAllRoom] = useState([]);
+    
 
     useEffect(() => {
         let isMounted = true; // Gunakan variabel untuk menandai apakah komponen masih mounted
@@ -65,13 +67,21 @@ function Kamar() {
                             <TableCell component="th" scope="row">
                                 {row.address_room}
                             </TableCell>
-                            <TableCell align="right">{row.picture_room}</TableCell>
-                            <TableCell align="right">{row.fat}</TableCell>
-                            <TableCell align="right">{row.room_size}</TableCell>
-                            <TableCell align="right">{row.price_day}</TableCell>
-                            <TableCell align="right">{row.price_month}</TableCell>
-                            <TableCell align="right">{row.price_year}</TableCell>
-                            <TableCell align="right"><Button>Order</Button></TableCell>
+                            <TableCell >
+                                {row.picture_room && <img src={row.picture_room} alt="Room Picture" style={{ maxWidth: "100px" }} />}
+                            </TableCell>
+                            <TableCell>{row.fat}</TableCell>
+                            <TableCell>{row.room_size}</TableCell>
+                            <TableCell>{row.price_day}</TableCell>
+                            <TableCell>{row.price_month}</TableCell>
+                            <TableCell>{row.price_year}</TableCell>
+                            <TableCell>
+                                <Button 
+                                    variant="contained"
+                                    onClick={() => navigate(`/order/${row.id}`)}
+                                    >
+                                    Order
+                                </Button></TableCell>
                         </TableRow>
                     ))}
                 </TableBody>
