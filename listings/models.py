@@ -112,16 +112,20 @@ class Transaction(models.Model):
     approve = models.BooleanField(default=False)
 
     def __str__(self):
-        return self.fullName
+        return self.customer.full_name
 
 class Review(models.Model):
-    rumah = models.ForeignKey(Rumah, on_delete=models.CASCADE,  blank=True, null=True, related_name='review')
+    rumah = models.ForeignKey(Rumah, on_delete=models.CASCADE, blank=True, null=True, related_name='review')
     customer = models.ForeignKey(Customer, on_delete=models.CASCADE, null=True)
     comment = models.TextField(max_length=500)
     rate = models.IntegerField(default=0)
     create_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return self.rumah.title
+        if self.rumah:  # Cek apakah objek 'rumah' tidak bernilai 'None'
+            return self.rumah.title
+        else:
+            return "Review without associated Rumah"  # Pesan alternatif jika objek 'rumah' bernilai 'None'
+
 
 
