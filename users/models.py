@@ -3,6 +3,8 @@ from django.conf import settings
 from django.dispatch import receiver
 from django.utils import timezone
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin, BaseUserManager
+import os
+import uuid
 
 def upload_to(instance, filename):
     # Dapatkan ekstensi berkas
