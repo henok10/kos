@@ -147,7 +147,7 @@ const OwnerSignup = ({create_owneruser, isAuthenticated, isOwner}) => {
                                 fullWidth
                                 type="submit"
                                 // className={classes.loginBtn}
-                                disabled={Object.keys(errors).length > 0} // Menonaktifkan tombol jika ada kesalahan
+                                // disabled={Object.keys(errors).length > 0} // Menonaktifkan tombol jika ada kesalahan
                             >
                                 SIGN IN
                             </Button>

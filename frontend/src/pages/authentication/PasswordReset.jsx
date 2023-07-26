@@ -6,7 +6,7 @@ import { Grid, Typography, TextField, Button, Alert } from '@mui/material';
 import PropTypes from 'prop-types';
 import {Validation2} from './validation';
 
-const ResetPassword = (reset_password, clearErrors, clearSuccess ) => {
+const ResetPassword = ({reset_password, clearErrors, clearSuccess}) => {
 
   const [formData, setFormData] = useState({
     password: '',

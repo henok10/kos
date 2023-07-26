@@ -160,6 +160,11 @@ export const authReducer=(state=initialState, action)=>{
                 error: action.payload,
             };
         case PASSWORD_RESET_CONFIRM_SUCCESS:
+            return {
+                ...state,
+                isLoading: false,
+                success: action.payload,    
+            };
         case PASSWORD_RESET_CONFIRM_FAIL:
             return {
                 ...state,

@@ -351,13 +351,30 @@ export const sendPasswordResetEmail = (email) => async dispatch => {
   
      
     dispatch({
-        type: PASSWORD_RESET_CONFIRM_SUCCESS
+        type: PASSWORD_RESET_CONFIRM_SUCCESS,
+        payload: 'Password changed successfully!',
     });
-} catch (err) {
-    dispatch({
-        type: PASSWORD_RESET_CONFIRM_FAIL
-    });
-}
+} 
+catch (err) {
+    // Handle errors and dispatch appropriate actions
+
+    if (err.response && err.response.data && err.response.data.password) {
+      // The server sent an error message for the email field
+      dispatch({
+        type: PASSWORD_RESET_CONFIRM_FAIL,
+        payload: err.response.data.password[0],
+      });
+    } else {
+      // If there are other errors, check for 'non_field_errors'
+      dispatch({
+        type: PASSWORD_RESET_CONFIRM_FAIL,
+        payload: err.response?.data?.non_field_errors[0] || 'An error occurred while changing the password.',
+      });
+    }
+
+    // Re-throw the error for the error case
+    throw err;
+  }
 };
  
 export const clearErrors = () => {
