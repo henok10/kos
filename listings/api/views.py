@@ -101,7 +101,7 @@ class KamarList(generics.ListAPIView):
     def get_queryset(self):
         rumah_id = self.kwargs['rumah']
         rumah = Rumah.objects.get(id=rumah_id)
-        queryset = Kamar.objects.filter(rumah=rumah).order_by('address_room')
+        queryset = Kamar.objects.filter(rumah=rumah).order_by('-address_room')
         return queryset
 
 class KamarUpdate(generics.UpdateAPIView):
