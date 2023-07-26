@@ -1,6 +1,6 @@
 from rest_framework import generics, permissions
-from .serializers import ListingSerializer, TransactionSerializer, ReviewSerializer
-from listings.models import Rumah, Transaction, Review
+from .serializers import ListingSerializer, TransactionSerializer, ReviewSerializer, KamarSerializer
+from listings.models import Rumah, Transaction, Review, Kamar
 from rest_framework import generics
 from rest_framework.permissions import IsAuthenticated
 from users.models import User, Customer, Owner
@@ -91,3 +91,19 @@ class ReviewList(generics.ListAPIView):
         rumah = Rumah.objects.get(id=rumah_id)
         queryset = Review.objects.filter(rumah=rumah).order_by('-create_at')
         return queryset
+
+class KamarCreate(generics.CreateAPIView):
+    serializer_class = ReviewSerializer
+    queryset = Kamar.objects.all()
+
+class KamarList(generics.ListAPIView):
+    serializer_class = ReviewSerializer
+    def get_queryset(self):
+        rumah_id = self.kwargs['rumah']
+        rumah = Rumah.objects.get(id=rumah_id)
+        queryset = Review.objects.filter(rumah=rumah).order_by('-create_at')
+        return queryset
+
+class KamarUpdate(generics.UpdateAPIView):
+    queryset = Kamar.objects.all()
+    serializer_class = KamarSerializer

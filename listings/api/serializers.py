@@ -48,3 +48,9 @@ class ReviewSerializer(serializers.ModelSerializer):
     class Meta:
         model = Review
         fields = ['customer', 'rumah', 'rate', 'comment', 'create_at', 'user_username']
+
+class KamarSerializer(serializers.ModelSerializer):
+    # user_username = serializers.ReadOnlyField(source='customer.user.username')
+    class Meta:
+        model = Review
+        fields = '__all__'
