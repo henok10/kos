@@ -52,5 +52,5 @@ class ReviewSerializer(serializers.ModelSerializer):
 class KamarSerializer(serializers.ModelSerializer):
     # user_username = serializers.ReadOnlyField(source='customer.user.username')
     class Meta:
-        model = Review
+        model = Kamar
         fields = '__all__'
