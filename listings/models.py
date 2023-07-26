@@ -122,10 +122,8 @@ class Review(models.Model):
     create_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        if self.rumah:  # Cek apakah objek 'rumah' tidak bernilai 'None'
-            return self.rumah.title
-        else:
-            return "Review without associated Rumah"  # Pesan alternatif jika objek 'rumah' bernilai 'None'
+        return self.rumah.title
+      
 
 
 

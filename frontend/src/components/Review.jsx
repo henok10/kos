@@ -83,7 +83,7 @@ function Review() {
     axios.post('https://mykos2.onrender.com/api/review/create', {
       comment: comment,
       rate: rate,
-      listing: params.id,
+      rumah: params.id,
       customer: customerId,
     }).then(response => {
       setSuccess(true);
