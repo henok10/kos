@@ -93,11 +93,11 @@ class ReviewList(generics.ListAPIView):
         return queryset
 
 class KamarCreate(generics.CreateAPIView):
-    serializer_class = ReviewSerializer
+    serializer_class = KamarSerializer
     queryset = Kamar.objects.all()
 
 class KamarList(generics.ListAPIView):
-    serializer_class = ReviewSerializer
+    serializer_class = KamarSerializer
     def get_queryset(self):
         rumah_id = self.kwargs['rumah']
         rumah = Rumah.objects.get(id=rumah_id)
