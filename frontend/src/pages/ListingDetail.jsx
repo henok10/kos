@@ -303,10 +303,11 @@ const handleWhatsApp = () => {
           <Button
             variant="contained"
             color="primary"
-            onClick={() => navigate(`/order/${state.listingInfo.id}`)}
+            // onClick={() => navigate(`/order/${state.listingInfo.id}`)}
+            onClick={() => navigate(`/pesan_kamar/${state.listingInfo.id}`)}
             style={{margin: '0.5rem', marginTop: '1rem', height: '2.5rem'}}
           >
-            Order
+            Pesan Kamar
           </Button>
           <Button 
             onClick={handleWhatsApp}
