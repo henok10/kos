@@ -115,7 +115,7 @@ class Transaction(models.Model):
         return self.fullName
 
 class Review(models.Model):
-    rumah = models.ForeignKey(Rumah, on_delete=models.CASCADE, related_name='review')
+    rumah = models.ForeignKey(Rumah, on_delete=models.CASCADE,  blank=True, null=True, related_name='review')
     customer = models.ForeignKey(Customer, on_delete=models.CASCADE, null=True)
     comment = models.TextField(max_length=500)
     rate = models.IntegerField(default=0)
