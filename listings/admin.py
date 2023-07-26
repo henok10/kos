@@ -1,5 +1,5 @@
 from django.contrib import admin
-from listings.models import Rumah
+from listings.models import Rumah, Kamar
 from listings.models import Poi, Transaction, Review
 from .forms import PoisForm
 
