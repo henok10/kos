@@ -4,6 +4,15 @@ from django.dispatch import receiver
 from django.utils import timezone
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin, BaseUserManager
 
+def upload_to(instance, filename):
+    # Dapatkan ekstensi berkas
+    ext = filename.split('.')[-1]
+    # Buat bagian unik dengan uuid
+    unique_filename = f"{uuid.uuid4().hex}.{ext}"
+    # Gabungkan nama unik dengan folder tujuan (misalnya "pictures/")
+    return os.path.join("pictures/", unique_filename)
+
+
 class UserAccountManager(BaseUserManager):
     def create_user(self, email, username, tc, password=None, password2=None):
         """
@@ -105,7 +114,7 @@ class Customer(models.Model):
     address = models.CharField(max_length=200, null=True, blank=True)
     date_of_birth = models.DateField(max_length=200, null=True, blank=True)
     profile_picture = models.ImageField(
-        upload_to='profile_pictures/%Y/%m/%d/', null=True, blank=True)
+        blank=True, null=True, upload_to=upload_to, max_length=455)
 
     def __str__(self):
         return self.user.username
@@ -117,7 +126,7 @@ class Owner(models.Model):
     address = models.CharField(max_length=200, null=True, blank=True)
     bio = models.TextField(null=True, blank=True)
     profile_picture = models.ImageField(
-        upload_to='profile_pictures/%Y/%m/%d/', null=True, blank=True)
+        blank=True, null=True, upload_to=upload_to, max_length=455)
 
     def __str__(self):
         return self.user.username
