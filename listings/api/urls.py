@@ -10,9 +10,9 @@ urlpatterns = [
          listings_api_views.ListingDelete.as_view()),
     path('listings/<int:pk>/update/',
          listings_api_views.ListingUpdate.as_view()),
-    path('transaction/<int:listing>/list', listings_api_views.TransactionList.as_view()),
+    path('transaction/<int:rumah>/list', listings_api_views.TransactionList.as_view()),
     path('transaction/<int:customer>/listu', listings_api_views.TransactionList.as_view()),
-    path('transaction/<int:listing>/user', listings_api_views.TransactionListUser.as_view()),
+    path('transaction/<int:rumah>/user', listings_api_views.TransactionListUser.as_view()),
     path('transaction/<int:customer>/userdetail', listings_api_views.TransactionUser.as_view()),
     path('transaction/<int:pk>/update', listings_api_views.TransactionUpdate.as_view()),
     path('transaction/create', listings_api_views.TransactionCreate.as_view()),
@@ -21,5 +21,5 @@ urlpatterns = [
          listings_api_views.TransactionDelete.as_view()),
      
      path('review/create', listings_api_views.ReviewCreate.as_view()),
-     path('review/<int:listing>/', listings_api_views.ReviewList.as_view()),    
+     path('review/<int:rumah>/', listings_api_views.ReviewList.as_view()),    
 ]

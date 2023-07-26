@@ -31,7 +31,7 @@ def upload_to(instance, filename):
     return os.path.join("pictures/", unique_filename)
 
 
-class Listing(models.Model):
+class Rumah(models.Model):
     owner = models.ForeignKey(
         Owner, on_delete=models.CASCADE, blank=True, null=True)
     title = models.CharField(max_length=150)
@@ -39,20 +39,6 @@ class Listing(models.Model):
     address = models.TextField(null=True, blank=True)
     borough = models.CharField(max_length=50, blank=True, null=True)
     no_rekening = models.CharField(max_length=100, blank=True, null=True)
-    room_size = models.CharField(max_length=150, blank=True, null=True)
-    choices_listing_type = (
-        ('Rumah Kos', 'Rumah Kos'),
-    )
-    listing_type = models.CharField(
-        max_length=20, choices=choices_listing_type)
-    choices_property_status = (
-        ('Rental', 'Rental'),
-    )
-    property_status = models.CharField(
-        max_length=20, blank=True, null=True, choices=choices_property_status)
-    price_per_day = models.DecimalField(max_digits=50, decimal_places=0, blank=True, null=True)
-    price_per_month = models.DecimalField(max_digits=50, decimal_places=0, blank=True, null=True)
-    price_per_year = models.DecimalField(max_digits=50, decimal_places=0, blank=True, null=True)
     rooms = models.IntegerField(blank=True, null=True)
     furnished = models.BooleanField(default=False)
     pool = models.BooleanField(default=False)
@@ -62,17 +48,6 @@ class Listing(models.Model):
     date_posted = models.DateTimeField(default=timezone.now)
     latitude = models.FloatField(blank=True, null=True)
     longitude = models.FloatField(blank=True, null=True)
-    # picture1 = models.ImageField(
-    #     blank=True, null=True, upload_to="pictures/%Y/%m/%d/", max_length=455)
-    # picture2 = models.ImageField(
-    #     blank=True, null=True, upload_to="pictures/%Y/%m/%d/", max_length=455)
-    # picture3 = models.ImageField(
-    #     blank=True, null=True, upload_to="pictures/%Y/%m/%d/", max_length=455)
-    # picture4 = models.ImageField(
-    #     blank=True, null=True, upload_to="pictures/%Y/%m/%d/", max_length=455)
-    # picture5 = models.ImageField(
-    #     blank=True, null=True, upload_to="pictures/%Y/%m/%d/", max_length=455)
-
     picture1 = models.ImageField(
         blank=True, null=True, upload_to=upload_to, max_length=455)
     picture2 = models.ImageField(
@@ -94,19 +69,15 @@ class Listing(models.Model):
     def __str__(self):
         return self.title
 
-    # def save(self, *args, **kwargs):
-    #     new_picture1 = compress(self.picture1)
-    #     self.picture1 = new_picture1
-    #     new_picture2 = compress(self.picture2)
-    #     self.picture2 = new_picture2
-    #     new_picture3 = compress(self.picture3)
-    #     self.picture3 = new_picture3
-    #     new_picture4 = compress(self.picture4)
-    #     self.picture4 = new_picture4
-    #     new_picture5 = compress(self.picture5)
-    #     self.picture5 = new_picture5
-    #     super().save(*args, **kwargs)
-
+class Kamar(models.Model):
+    rumah = models.ForeignKey(Rumah, on_delete=models.CASCADE, blank=True, null=True, related_name='kamar')
+    price_day = models.DecimalField(max_digits=50, decimal_places=0, blank=True, null=True)
+    price_month = models.DecimalField(max_digits=50, decimal_places=0, blank=True, null=True)
+    price_year = models.DecimalField(max_digits=50, decimal_places=0, blank=True, null=True)
+    picture_room = models.ImageField(
+            blank=True, null=True, upload_to=upload_to, max_length=455)
+    room_size = models.CharField(max_length=150, blank=True, null=True)
+    address_room = models.CharField(max_length=150, blank=True, null=True)
 
 class Poi(models.Model):
     name = models.CharField(max_length=120, blank=True, null=True)
@@ -122,11 +93,12 @@ class Poi(models.Model):
         return self.name
 
 class Transaction(models.Model):
-    listing = models.ForeignKey(Listing, on_delete=models.CASCADE, blank=True, null=True, related_name='transactions')
+    rumah = models.ForeignKey(Rumah, on_delete=models.CASCADE, blank=True, null=True, related_name='transactions')
     customer = models.ForeignKey(Customer, on_delete=models.CASCADE, blank=True, null=True)
-    buktiTransfer = models.ImageField(blank=True, null=True, upload_to="bukti/%Y/%m/%d/")
-    fullName = models.CharField(max_length=20, null=True, blank=True)
-    phoneNumber = models.CharField(max_length=20, null=True, blank=True)
+    buktiTransfer = models.ImageField(
+        blank=True, null=True, upload_to=upload_to, max_length=455)
+    # fullName = models.CharField(max_length=20, null=True, blank=True)
+    # phoneNumber = models.CharField(max_length=20, null=True, blank=True)
     nominal = models.DecimalField(max_digits=50, decimal_places=0, blank=True, null=True)
     choices_rental_frequency = (
         ('Year', 'Year'),
@@ -137,19 +109,19 @@ class Transaction(models.Model):
         max_length=20, blank=True, null=True, choices=choices_rental_frequency)
     date = models.DateTimeField(default=timezone.now)
     barang_dipesan = models.BooleanField(default=False)
-    barang_dibeli = models.BooleanField(default=False)
+    approve = models.BooleanField(default=False)
 
     def __str__(self):
         return self.fullName
 
 class Review(models.Model):
-    listing = models.ForeignKey(Listing, on_delete=models.CASCADE, related_name='review')
+    rumah = models.ForeignKey(Rumah, on_delete=models.CASCADE, related_name='review')
     customer = models.ForeignKey(Customer, on_delete=models.CASCADE, null=True)
     comment = models.TextField(max_length=500)
     rate = models.IntegerField(default=0)
     create_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return self.listing.title
+        return self.rumah.title
 
 

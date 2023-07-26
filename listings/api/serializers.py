@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from listings.models import Listing, Poi, Transaction, Review
+from listings.models import Rumah, Poi, Transaction, Review
 from django.contrib.gis.measure import D
 from django.contrib.gis.geos import Point
 
@@ -28,7 +28,7 @@ class ListingSerializer(serializers.ModelSerializer):
         return "Indonesia"
 
     class Meta:
-        model = Listing
+        model = Rumah
         fields = '__all__'
 
 
@@ -38,13 +38,13 @@ class PoiSerializer(serializers.ModelSerializer):
         fields = '__all__'
         
 class TransactionSerializer(serializers.ModelSerializer):
-    listing_title = serializers.ReadOnlyField(source='listing.title')
+    listing_title = serializers.ReadOnlyField(source='rumah.title')
     class Meta:
         model = Transaction
-        fields = ['id', 'listing', 'listing_title', 'customer', 'buktiTransfer', 'fullName', 'phoneNumber', 'rentalFrequency', 'date', 'barang_dipesan', 'barang_dibeli']
+        fields = ['id', 'rumah', 'listing_title', 'customer', 'buktiTransfer', 'fullName', 'phoneNumber', 'rentalFrequency', 'date', 'barang_dipesan', 'barang_dibeli']
 
 class ReviewSerializer(serializers.ModelSerializer):
     user_username = serializers.ReadOnlyField(source='customer.user.username')
     class Meta:
         model = Review
-        fields = ['customer', 'listing', 'rate', 'comment', 'create_at', 'user_username']
+        fields = ['customer', 'rumah', 'rate', 'comment', 'create_at', 'user_username']

@@ -3,7 +3,7 @@ from django.core.mail import send_mail
 from django.conf import settings
 
 from users.models import User, Customer, Owner
-from listings.models import Listing
+from listings.models import Rumah
 from listings.api.serializers import ListingSerializer
 from django.contrib.auth import authenticate
 from django.contrib.auth.tokens import PasswordResetTokenGenerator
