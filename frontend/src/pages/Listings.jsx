@@ -233,15 +233,10 @@ function Listings() {
                   <TheMapComponent />
 
                   {allListings.map((listing) => {
-                    function IconDisplay() {
-                      if (listing.listing_type === "Rumah Kos") {
-                        return houseIcon;
-                      }
-                    }
                     return (
                       <Marker
                         key={listing.id}
-                        icon={IconDisplay()}
+                        icon={houseIcon}
                         position={[listing.latitude, listing.longitude]}
                       >
                         <Popup>
