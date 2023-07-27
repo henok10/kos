@@ -79,10 +79,6 @@ console.log(nameValue)
             draft[action.name] = action.value;
         break;
 
-        // case "catchFullNameChange":
-        //     draft.fullNameValue = action.nameValue;
-        //     break;
-
         case "catchOrderInfo":
             draft.buktiTransferValue = action.profileOrder.buktiTransfer
             break;
@@ -138,9 +134,10 @@ console.log(nameValue)
       formData.append("phoneNumber", state.phoneNumberValue);
       formData.append("rentalFrequency", state.rentalFrequencyValue);
       formData.append("barang_dipesan", state.barangDipesanValue);
+      formData.append("nominal", state.nominalValue);
       formData.append("buktiTransfer", state.buktiTransferValue);
       formData.append("nominal", state.nominalValue);
-      formData.append("listing", params.id);
+      formData.append("rumah", params.id);
       formData.append("customer", customerId);
   
       try {
@@ -154,7 +151,7 @@ console.log(nameValue)
         console.error(error);
         dispatch({ type: "requestSent" });
       }
-    }, [dispatch, state.fullNameValue, state.phoneNumberValue, state.rentalFrequencyValue, state.barangDipesanValue, state.buktiTransferValue, params.id, userId]);
+    }, [dispatch, state.fullNameValue, state.phoneNumberValue, state.rentalFrequencyValue, state.barangDipesanValue, state.buktiTransferValue, params.id, customerId]);
     
 
     	// request to get profile info
@@ -176,11 +173,11 @@ console.log(nameValue)
           name: "phoneNumberValue",
           value: response.data.phone_number,
         });
-				dispatch({ type: "loadingDone" });
 			} catch (e) {}
 		}
 		GetProfileInfo();
-	}, [state.customerInfo]);
+	}, []);
+
 console.log(nameValue)
 
     useEffect(() => {
