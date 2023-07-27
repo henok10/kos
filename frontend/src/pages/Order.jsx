@@ -133,7 +133,7 @@ console.log(params.id)
       formData.append("fullName", state.fullNameValue);
       formData.append("phoneNumber", state.phoneNumberValue);
       formData.append("rentalFrequency", state.rentalFrequencyValue);
-      formData.append("barang_dipesan", state.barangDipesanValue);
+      formData.append("barangDipesan", state.barangDipesanValue);
       formData.append("nominal", state.nominalValue);
       formData.append("buktiTransfer", state.buktiTransferValue);
       formData.append("kamar", params.id);
@@ -146,6 +146,7 @@ console.log(params.id)
         );
         console.log(response.data);
         dispatch({ type: "openTheSnack" });
+      
       } catch (error) {
         console.error(error);
         dispatch({ type: "requestSent" });
@@ -182,7 +183,7 @@ console.log(nameValue)
     useEffect(() => {
       if (state.openSnack) {
         setTimeout(() => {
-          navigate(`/listings/${params.id}`);
+          navigate(`/riwayatTransaksi`);
         }, 1500);
       }
     }, [state.openSnack]);

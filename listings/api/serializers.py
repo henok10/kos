@@ -42,13 +42,13 @@ class TransactionSerializer(serializers.ModelSerializer):
     listing_title = serializers.ReadOnlyField(source='kamar.rumah.title')
     addressRoom = serializers.ReadOnlyField(source='kamar.address_room')
     rumah = serializers.ReadOnlyField(source='kamar.rumah.id')
-    barang_dipesan = serializers.ReadOnlyField(source='kamar.barang_dipesan')
+    barangDipesan = serializers.ReadOnlyField(source='kamar.barang_dipesan')
     fullName = serializers.ReadOnlyField(source='customer.full_name')
     phoneNumber = serializers.ReadOnlyField(source='customer.phone_number')
     
     class Meta:
         model = Transaction
-        fields = ['id', 'kamar', 'rumah', 'listing_title', 'addressRoom', 'customer', 'buktiTransfer', 'fullName', 'phoneNumber', 'rentalFrequency', 'nominal', 'date', 'barang_dipesan', 'approve']
+        fields = ['id', 'kamar', 'rumah', 'listing_title', 'addressRoom', 'customer', 'buktiTransfer', 'fullName', 'phoneNumber', 'rentalFrequency', 'nominal', 'date', 'barangDipesan', 'approve']
 
 class ReviewSerializer(serializers.ModelSerializer):
     user_username = serializers.ReadOnlyField(source='customer.user.username')
