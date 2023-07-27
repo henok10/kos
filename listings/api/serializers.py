@@ -39,13 +39,13 @@ class PoiSerializer(serializers.ModelSerializer):
         fields = '__all__'
         
 class TransactionSerializer(serializers.ModelSerializer):
-    listing_title = serializers.ReadOnlyField(source='rumah.title')
+    listing_title = serializers.ReadOnlyField(source='kamar.rumah.title')
     fullName = serializers.ReadOnlyField(source='customer.full_name')
     phoneNumber = serializers.ReadOnlyField(source='customer.phone_number')
     
     class Meta:
         model = Transaction
-        fields = ['id', 'rumah', 'listing_title', 'customer', 'buktiTransfer', 'fullName', 'phoneNumber', 'rentalFrequency', 'nominal', 'date', 'barang_dipesan', 'approve']
+        fields = ['id', 'kamar', 'listing_title', 'customer', 'buktiTransfer', 'fullName', 'phoneNumber', 'rentalFrequency', 'nominal', 'date', 'barang_dipesan', 'approve']
 
 class ReviewSerializer(serializers.ModelSerializer):
     user_username = serializers.ReadOnlyField(source='customer.user.username')

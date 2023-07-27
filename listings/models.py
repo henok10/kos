@@ -40,6 +40,7 @@ class Rumah(models.Model):
     borough = models.CharField(max_length=50, blank=True, null=True)
     no_rekening = models.CharField(max_length=100, blank=True, null=True)
     # rooms = models.IntegerField(blank=True, null=True)
+    price_per_year = models.DecimalField(max_digits=50, decimal_places=0, blank=True, null=True)
     furnished = models.BooleanField(default=False)
     pool = models.BooleanField(default=False)
     elevator = models.BooleanField(default=False)
@@ -96,7 +97,7 @@ class Poi(models.Model):
         return self.name
 
 class Transaction(models.Model):
-    rumah = models.ForeignKey(Rumah, on_delete=models.CASCADE, blank=True, null=True, related_name='transactions')
+    kamar = models.ForeignKey(Kamar, on_delete=models.CASCADE, blank=True, null=True, related_name='transactions')
     customer = models.ForeignKey(Customer, on_delete=models.CASCADE, blank=True, null=True)
     buktiTransfer = models.ImageField(
         blank=True, null=True, upload_to=upload_to, max_length=455)
