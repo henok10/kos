@@ -55,11 +55,11 @@ class TransactionUpdate(generics.UpdateAPIView):
 class TransactionListUser(generics.ListAPIView):
     serializer_class = TransactionSerializer
     def get_queryset(self):
-        rumah_id = self.kwargs['rumah']
+        rumah_id = self.kwargs['rumahId']
         rumah = Rumah.objects.get(id=rumah_id)
-        queryset = Transaction.objects.filter(rumah=rumah, barang_dibeli=True).order_by('-date')
+        queryset = Transaction.objects.filter(kamar__rumah=rumah, barang_dibeli=True).order_by('-date')
         return queryset
-
+        
 class TransactionUser(generics.ListAPIView):
     serializer_class = TransactionSerializer
     def get_queryset(self):
