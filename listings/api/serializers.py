@@ -40,7 +40,7 @@ class PoiSerializer(serializers.ModelSerializer):
         
 class TransactionSerializer(serializers.ModelSerializer):
     listing_title = serializers.ReadOnlyField(source='kamar.rumah.title')
-    rumahId = serializers.ReadOnlyField(source='kamar.rumah')
+    rumahId = serializers.ReadOnlyField(source='kamar.rumah.id')
     fullName = serializers.ReadOnlyField(source='customer.full_name')
     phoneNumber = serializers.ReadOnlyField(source='customer.phone_number')
     
