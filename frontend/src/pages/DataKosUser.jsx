@@ -70,7 +70,8 @@ export default function DataTableUser() {
 
 
   const columns = [
-    { field: 'fullName', headerName: 'Name', width: 290,},   
+    { field: 'fullName', headerName: 'Name', width: 290,}, 
+    { field: 'address_room', headerName: 'No. Kamar', width: 220 },  
     { field: 'phoneNumber', headerName: 'No. Telp', width: 220 },
     { field: 'rentalFrequency', headerName: 'Frequensi Sewa', width: 150 },
     { field: 'nominal', headerName: 'Jumlah Pembayaran', width: 100 },
