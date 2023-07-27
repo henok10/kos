@@ -67,13 +67,13 @@ export default function DataTableApprove() {
     }
   }
   
-  async function updateBarangDibeli(id, newValue) {
+  async function updateApprove(id, newValue) {
     try {
-        const response = await Axios.patch(`https://mykos2.onrender.com/api/transaction/${id}/update`, {barang_dibeli: newValue});
+        const response = await Axios.patch(`https://mykos2.onrender.com/api/transaction/${id}/update`, {approve: newValue});
     
         const updatedKos = {
           ...response.data,
-          barang_dibeli: newValue,
+          approve: newValue,
         };
         window.location.reload();
       } catch (error) {
@@ -112,7 +112,7 @@ export default function DataTableApprove() {
     { field: 'nominal', headerName: 'Jumlah Pembayaran', width: 120 },
     { field: 'date', headerName: 'Date', width: 180 },
     {
-        field: 'barang_dibeli',
+        field: 'approve',
         headerName: 'Aksi',
         width: 195,
         renderCell: (params) => {
@@ -134,7 +134,7 @@ export default function DataTableApprove() {
                 <Button 
                   variant="contained" 
                   color="primary"
-                  onClick={() => updateBarangDibeli(params.id, true)} 
+                  onClick={() => updateApprove(params.id, true)} 
                 >
                   Setuju
                 </Button>
