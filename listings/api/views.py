@@ -71,6 +71,14 @@ class TransactionUser(generics.ListAPIView):
 class TransactionCreate(generics.CreateAPIView):
     serializer_class = TransactionSerializer
     queryset = Transaction.objects.all()
+    def perform_create(self, serializer):
+        # Dapatkan nilai `barang_dipesan` dari objek Kamar yang terkait dengan transaksi ini
+        kamar_id = self.request.data.get('kamar')
+        kamar = Kamar.objects.get(pk=kamar_id)
+        barang_dipesan = kamar.barang_dipesan
+
+        # Tambahkan nilai `barangDipesan` ke data transaksi sebelum menyimpannya
+        serializer.save(barangDipesan=barang_dipesan)
 
 class TransactionDetail(generics.RetrieveAPIView):
     serializer_class = TransactionSerializer
