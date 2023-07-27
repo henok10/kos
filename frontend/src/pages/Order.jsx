@@ -136,7 +136,6 @@ console.log(nameValue)
       formData.append("barang_dipesan", state.barangDipesanValue);
       formData.append("nominal", state.nominalValue);
       formData.append("buktiTransfer", state.buktiTransferValue);
-      formData.append("nominal", state.nominalValue);
       formData.append("rumah", params.id);
       formData.append("customer", customerId);
   
@@ -151,7 +150,7 @@ console.log(nameValue)
         console.error(error);
         dispatch({ type: "requestSent" });
       }
-    }, [dispatch, state.fullNameValue, state.phoneNumberValue, state.rentalFrequencyValue, state.barangDipesanValue, state.buktiTransferValue, params.id, customerId]);
+    }, [dispatch, state.fullNameValue, state.phoneNumberValue, state.rentalFrequencyValue, state.nominalValue, state.barangDipesanValue, state.buktiTransferValue, params.id, customerId]);
     
 
     	// request to get profile info

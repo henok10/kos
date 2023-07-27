@@ -78,8 +78,9 @@ class Kamar(models.Model):
             blank=True, null=True, upload_to=upload_to, max_length=455)
     room_size = models.CharField(max_length=150, blank=True, null=True)
     address_room = models.CharField(max_length=150, blank=True, null=True)
+    
     def __str__(self):
-        return self.name
+        return self.address_room
 
 class Poi(models.Model):
     name = models.CharField(max_length=120, blank=True, null=True)
