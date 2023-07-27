@@ -79,6 +79,7 @@ class Kamar(models.Model):
             blank=True, null=True, upload_to=upload_to, max_length=455)
     room_size = models.CharField(max_length=150, blank=True, null=True)
     address_room = models.CharField(max_length=150, blank=True, null=True)
+    barang_dipesan = models.BooleanField(default=False)
     
     def __str__(self):
         return self.address_room
@@ -112,7 +113,6 @@ class Transaction(models.Model):
     rentalFrequency = models.CharField(
         max_length=20, blank=True, null=True, choices=choices_rental_frequency)
     date = models.DateTimeField(auto_now_add=True)
-    barang_dipesan = models.BooleanField(default=False)
     approve = models.BooleanField(default=False)
 
     def __str__(self):

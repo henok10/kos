@@ -42,6 +42,7 @@ class TransactionSerializer(serializers.ModelSerializer):
     listing_title = serializers.ReadOnlyField(source='kamar.rumah.title')
     addressRoom = serializers.ReadOnlyField(source='kamar.address_room')
     rumah = serializers.ReadOnlyField(source='kamar.rumah.id')
+    barang_dipesan = serializers.ReadOnlyField(source='kamar.barang_dipesan')
     fullName = serializers.ReadOnlyField(source='customer.full_name')
     phoneNumber = serializers.ReadOnlyField(source='customer.phone_number')
     
@@ -56,7 +57,6 @@ class ReviewSerializer(serializers.ModelSerializer):
         fields = ['customer', 'rumah', 'rate', 'comment', 'create_at', 'user_username']
 
 class KamarSerializer(serializers.ModelSerializer):
-    # user_username = serializers.ReadOnlyField(source='customer.user.username')
     class Meta:
         model = Kamar
-        fields = '__all__'
+        fields = ['rumah', 'price_day', 'price_month', 'price_year', 'picture_room', 'room_size', 'address_room', 'barang_dipesan']

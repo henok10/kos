@@ -48,14 +48,14 @@ function Kamar() {
             <Table sx={{ minWidth: 650 }} aria-label="simple table">
                 <TableHead>
                     <TableRow>
-                        <TableCell>address room</TableCell>
-                        <TableCell>picture room</TableCell>
-                        <TableCell>type</TableCell>
-                        <TableCell>room size</TableCell>
-                        <TableCell>price(day)</TableCell>
-                        <TableCell>price(month)</TableCell>
-                        <TableCell>price(year)</TableCell>
-                        <TableCell>order</TableCell>
+                        <TableCell>Address room</TableCell>
+                        <TableCell>Picture room</TableCell>
+                        <TableCell>Status</TableCell>
+                        <TableCell>Room size</TableCell>
+                        <TableCell>Price(day)</TableCell>
+                        <TableCell>Price(month)</TableCell>
+                        <TableCell>Price(year)</TableCell>
+                        <TableCell>Order</TableCell>
                     </TableRow>
                 </TableHead>
                 <TableBody>

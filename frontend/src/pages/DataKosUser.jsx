@@ -68,14 +68,14 @@ export default function DataTableUser() {
     }
   }
 
-
+console.log(allKos)
   const columns = [
-    { field: 'fullName', headerName: 'Name', width: 290,}, 
-    { field: 'address_room', headerName: 'No. Kamar', width: 220 },  
-    { field: 'phoneNumber', headerName: 'No. Telp', width: 220 },
-    { field: 'rentalFrequency', headerName: 'Frequensi Sewa', width: 150 },
+    { field: 'fullName', headerName: 'Name', width: 200,}, 
+    { field: 'addressRoom', headerName: 'No. Kamar', width: 100 },  
+    { field: 'phoneNumber', headerName: 'No. Telp', width: 120 },
+    { field: 'rentalFrequency', headerName: 'Frequensi Sewa', width: 120 },
     { field: 'nominal', headerName: 'Jumlah Pembayaran', width: 100 },
-    { field: 'date', headerName: 'Date', width: 250 },
+    { field: 'date', headerName: 'Date', width: 260 },
     {
         field: 'barang_dibeli',
         headerName: 'Aksi',
