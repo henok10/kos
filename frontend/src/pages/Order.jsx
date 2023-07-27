@@ -124,7 +124,7 @@ console.log(nameValue)
         const { name, value } = e.target;
         dispatch({ type: "catchUserOrderInfo", name, value });
     }, [dispatch]);
-
+console.log(params.id)
     const handleSubmit = useCallback(async (e) => {
         e.preventDefault();
         dispatch({ type: "sendRequest" });

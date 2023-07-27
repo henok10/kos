@@ -59,4 +59,4 @@ class ReviewSerializer(serializers.ModelSerializer):
 class KamarSerializer(serializers.ModelSerializer):
     class Meta:
         model = Kamar
-        fields = ['rumah', 'price_day', 'price_month', 'price_year', 'picture_room', 'room_size', 'address_room', 'barang_dipesan']
+        fields = ['id', 'rumah', 'price_day', 'price_month', 'price_year', 'picture_room', 'room_size', 'address_room', 'barang_dipesan']
