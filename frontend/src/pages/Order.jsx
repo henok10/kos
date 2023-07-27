@@ -136,7 +136,7 @@ console.log(nameValue)
       formData.append("barang_dipesan", state.barangDipesanValue);
       formData.append("nominal", state.nominalValue);
       formData.append("buktiTransfer", state.buktiTransferValue);
-      formData.append("rumah", params.id);
+      formData.append("kamar", params.id);
       formData.append("customer", customerId);
   
       try {

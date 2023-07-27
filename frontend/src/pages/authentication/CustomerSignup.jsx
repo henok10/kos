@@ -152,6 +152,7 @@ const CustomerSignup = ({create_customeruser, isAuthenticated, isCustomer}) => {
                                 type="submit"
                                 // className={classes.loginBtn}
                                 // disabled={state.disabledBtn}
+                                disabled={Object.keys(errors).length > 0} // Menonaktifkan tombol jika ada kesalahan
                             >
                                 SIGN UP
                             </Button>

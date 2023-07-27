@@ -117,6 +117,7 @@ function Login({ login, isAuthenticated, isCustomer, isOwner, clearErrors }) {
                 container
                 xs={8}
                 style={{ marginTop: '1rem', marginLeft: 'auto', marginRight: 'auto' }}
+                disabled={Object.keys(errors).length > 0} // Menonaktifkan tombol jika ada kesalahan
               >
                 <Button variant="contained" fullWidth type="submit">
                   SIGN IN

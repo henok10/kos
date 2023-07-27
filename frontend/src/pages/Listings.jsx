@@ -4,6 +4,7 @@ import { useImmerReducer } from "use-immer";
 import { useNavigate } from "react-router-dom";
 // React leaflet
 import { MapContainer, TileLayer, Marker, Popup, useMap } from "react-leaflet";
+import { TextField } from "@mui/material";
 import { Icon } from "leaflet";
 // MUI
 import {
@@ -142,7 +143,7 @@ function Listings() {
     <>
       <Grid container paddingTop={'0.5rem'}>
         <Grid item lg={5.5} md={5.5} sm={12}>
-        <Grid item xs={6} padding="0.5rem">
+        <Grid item xs={12} padding="0.5rem">
             <Paper 
             component="form"
             sx={{display: 'flex', alignItems: 'center', paddingLeft: '0.8rem'}}
@@ -151,7 +152,7 @@ function Listings() {
             <InputBase
                 style={{height: '100%'}}
                 id="outlined-basic"
-                label="Silakan Cari Di Sini..."
+                placeholder="Silakan Cari Di Sini..."
                 size="small"
                 fullWidth
                 value={searchTerm}
