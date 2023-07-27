@@ -42,7 +42,7 @@ class TransactionSerializer(serializers.ModelSerializer):
     listing_title = serializers.ReadOnlyField(source='kamar.rumah.title')
     addressRoom = serializers.ReadOnlyField(source='kamar.address_room')
     rumah = serializers.ReadOnlyField(source='kamar.rumah.id')
-    barangDipesan = serializers.ReadOnlyField(source='kamar.barang_dipesan')
+    # barangDipesan = serializers.ReadOnlyField(source='kamar.barang_dipesan')
     fullName = serializers.ReadOnlyField(source='customer.full_name')
     phoneNumber = serializers.ReadOnlyField(source='customer.phone_number')
     
