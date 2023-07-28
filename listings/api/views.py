@@ -71,14 +71,28 @@ class TransactionUser(generics.ListAPIView):
 class TransactionCreate(generics.CreateAPIView):
     serializer_class = TransactionSerializer
     queryset = Transaction.objects.all()
+
     def perform_create(self, serializer):
-        # Dapatkan nilai `barang_dipesan` dari objek Kamar yang terkait dengan transaksi ini
+        # Dapatkan nilai `kamar_id` dari data permintaan (request data)
         kamar_id = self.request.data.get('kamar')
-        kamar = Kamar.objects.get(pk=kamar_id)
-        barang_dipesan = kamar.barang_dipesan
+
+        # Pastikan kamar dengan kamar_id ada, jika tidak raise error
+        try:
+            kamar = Kamar.objects.get(pk=kamar_id)
+        except Kamar.DoesNotExist:
+            raise serializers.ValidationError("Kamar dengan ID tersebut tidak ditemukan.")
+
+        # Pastikan kamar belum dipesan (barang_dipesan == False) sebelum membuat transaksi
+        if kamar.barang_dipesan:
+            raise serializers.ValidationError("Kamar sudah dipesan sebelumnya.")
+
+        # Cek apakah `barangDipesan` bernilai True di serializer, jika iya, ubah nilai `barang_dipesan` di Kamar menjadi True
+        if serializer.validated_data.get('barangDipesan'):
+            kamar.barang_dipesan = True
+            kamar.save()
 
         # Tambahkan nilai `barangDipesan` ke data transaksi sebelum menyimpannya
-        serializer.save(barangDipesan=barang_dipesan)
+        serializer.save(barangDipesan=kamar.barang_dipesan)
 
 class TransactionDetail(generics.RetrieveAPIView):
     serializer_class = TransactionSerializer
