@@ -67,7 +67,6 @@ console.log(nameValue)
     buktiTransferValue: "",
     nominalValue: "",
     uploadedPicture: [],
-    barangDipesanValue: true,
     openSnack: false,
   }
   const [state, dispatch] = useImmerReducer(ReducerFuction, initialState);
@@ -133,7 +132,6 @@ console.log(params.id)
       formData.append("fullName", state.fullNameValue);
       formData.append("phoneNumber", state.phoneNumberValue);
       formData.append("rentalFrequency", state.rentalFrequencyValue);
-      formData.append("barangDipesan", state.barangDipesanValue);
       formData.append("nominal", state.nominalValue);
       formData.append("buktiTransfer", state.buktiTransferValue);
       formData.append("kamar", params.id);
@@ -151,7 +149,7 @@ console.log(params.id)
         console.error(error);
         dispatch({ type: "requestSent" });
       }
-    }, [dispatch, state.fullNameValue, state.phoneNumberValue, state.rentalFrequencyValue, state.nominalValue, state.barangDipesanValue, state.buktiTransferValue, params.id, customerId]);
+    }, [dispatch, state.fullNameValue, state.phoneNumberValue, state.nominalValue, state.barangDipesanValue, state.buktiTransferValue, params.id, customerId]);
     
 
     	// request to get profile info
