@@ -32,8 +32,8 @@ def upload_to(instance, filename):
 
 
 class Rumah(models.Model):
-    owner = models.ForeignKey(
-        Owner, on_delete=models.CASCADE, blank=True, null=True)
+    user = models.ForeignKey(
+        User, on_delete=models.CASCADE, blank=True, null=True)
     title = models.CharField(max_length=150)
     description = models.TextField(null=True, blank=True)
     address = models.TextField(null=True, blank=True)
@@ -99,7 +99,7 @@ class Poi(models.Model):
 
 class Transaction(models.Model):
     kamar = models.ForeignKey(Kamar, on_delete=models.CASCADE, blank=True, null=True, related_name='transactions')
-    customer = models.ForeignKey(Customer, on_delete=models.CASCADE, blank=True, null=True)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, blank=True, null=True)
     buktiTransfer = models.ImageField(
         blank=True, null=True, upload_to=upload_to, max_length=455)
     # fullName = models.CharField(max_length=20, null=True, blank=True)
@@ -120,7 +120,7 @@ class Transaction(models.Model):
 
 class Review(models.Model):
     rumah = models.ForeignKey(Rumah, on_delete=models.CASCADE, blank=True, null=True, related_name='review')
-    customer = models.ForeignKey(Customer, on_delete=models.CASCADE, null=True)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
     comment = models.TextField(max_length=500)
     rate = models.IntegerField(default=0)
     create_at = models.DateTimeField(auto_now_add=True)
@@ -128,6 +128,16 @@ class Review(models.Model):
     def __str__(self):
         return self.rumah.title
       
+class Fasilitas(models.Model):
+    kamar = models.ForeignKey(Kamar, on_delete=models.CASCADE, blank=True, null=True, related_name='fasilitas')
+    name = models.CharField(max_length=100)
+    description = models.TextField(max_length=500)
+
+    def __str__(self):
+        return self.rumah.title
+
+
+    
 
 
 

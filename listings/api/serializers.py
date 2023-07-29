@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from listings.models import Rumah, Poi, Transaction, Review, Kamar
-from users.models import Customer
+from users.models import Customer, User
 from django.contrib.gis.measure import D
 from django.contrib.gis.geos import Point
 
@@ -22,7 +22,7 @@ class ListingSerializer(serializers.ModelSerializer):
     #     return obj.user.agency_name
 
     def get_user_username(self, obj):
-        return obj.owner.user.username
+        return obj.user.username
 
 
     def get_country(self, obj):
@@ -42,21 +42,21 @@ class TransactionSerializer(serializers.ModelSerializer):
     listing_title = serializers.ReadOnlyField(source='kamar.rumah.title')
     addressRoom = serializers.ReadOnlyField(source='kamar.address_room')
     rumah = serializers.ReadOnlyField(source='kamar.rumah.id')
-    fullName = serializers.ReadOnlyField(source='customer.full_name')
-    phoneNumber = serializers.ReadOnlyField(source='customer.phone_number')
+    fullName = serializers.ReadOnlyField(source='user.customer.full_name')
+    phoneNumber = serializers.ReadOnlyField(source='user.customer.phone_number')
     barangDipesan = serializers.BooleanField(write_only=True)  # Tambahkan field baru sebagai write_only
 
     class Meta:
         model = Transaction
-        fields = ['id', 'kamar', 'rumah', 'listing_title', 'addressRoom', 'customer', 'buktiTransfer', 'fullName', 'phoneNumber', 'rentalFrequency', 'nominal', 'date', 'barangDipesan', 'approve']
+        fields = ['id', 'kamar', 'rumah', 'listing_title', 'addressRoom', 'user', 'buktiTransfer', 'fullName', 'phoneNumber', 'rentalFrequency', 'nominal', 'date', 'barangDipesan', 'approve']
 
 
 
 class ReviewSerializer(serializers.ModelSerializer):
-    user_username = serializers.ReadOnlyField(source='customer.user.username')
+    user_username = serializers.ReadOnlyField(source='user.username')
     class Meta:
         model = Review
-        fields = ['customer', 'rumah', 'rate', 'comment', 'create_at', 'user_username']
+        fields = ['user', 'rumah', 'rate', 'comment', 'create_at', 'user_username']
 
 class KamarSerializer(serializers.ModelSerializer):
     class Meta:

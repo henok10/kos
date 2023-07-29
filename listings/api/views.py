@@ -13,11 +13,11 @@ class ListingUserList(generics.ListAPIView):
     serializer_class = ListingSerializer
 
     def get_queryset(self):
-        owner_id = self.kwargs['owner']
+        user_id = self.kwargs['user']
         try:
-            owner = Owner.objects.get(id=owner_id)
-            queryset = Rumah.objects.filter(owner=owner).order_by('-date_posted')
-        except Owner.DoesNotExist:
+            user = User.objects.get(id=user_id)
+            queryset = Rumah.objects.filter(user=user).order_by('-date_posted')
+        except User.DoesNotExist:
             queryset = Rumah.objects.none()  # Mengembalikan queryset kosong jika Owner tidak ditemukan
         return queryset
 
@@ -63,36 +63,14 @@ class TransactionListUser(generics.ListAPIView):
 class TransactionUser(generics.ListAPIView):
     serializer_class = TransactionSerializer
     def get_queryset(self):
-        customer_id = self.kwargs['customer']
-        customer = Customer.objects.get(id=customer_id)
-        queryset = Transaction.objects.filter(customer=customer).order_by('-date')
+        user_id = self.kwargs['user']
+        user = Customer.objects.get(id=user_id)
+        queryset = Transaction.objects.filter(user=user).order_by('-date')
         return queryset
     
 class TransactionCreate(generics.CreateAPIView):
     serializer_class = TransactionSerializer
     queryset = Transaction.objects.all()
-
-    def perform_create(self, serializer):
-        # Dapatkan nilai `kamar_id` dari data permintaan (request data)
-        kamar_id = self.request.data.get('kamar')
-
-        # Pastikan kamar dengan kamar_id ada, jika tidak raise error
-        try:
-            kamar = Kamar.objects.get(pk=kamar_id)
-        except Kamar.DoesNotExist:
-            raise serializers.ValidationError("Kamar dengan ID tersebut tidak ditemukan.")
-
-        # Pastikan kamar belum dipesan (barang_dipesan == False) sebelum membuat transaksi
-        if kamar.barang_dipesan:
-            raise serializers.ValidationError("Kamar sudah dipesan sebelumnya.")
-
-        # Cek apakah `barangDipesan` bernilai True di serializer, jika iya, ubah nilai `barang_dipesan` di Kamar menjadi True
-        if serializer.validated_data.get('barangDipesan'):
-            kamar.barang_dipesan = True
-            kamar.save()
-
-        # Tambahkan nilai `barangDipesan` ke data transaksi sebelum menyimpannya
-        serializer.save(barangDipesan=kamar.barang_dipesan)
 
 class TransactionDetail(generics.RetrieveAPIView):
     serializer_class = TransactionSerializer

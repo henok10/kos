@@ -178,6 +178,20 @@ console.log(params.id)
 		GetProfileInfo();
 	}, []);
 
+  async function updateApprove(id, newValue) {
+    try {
+        const response = await Axios.patch(`https://mykos2.onrender.com/api/kamar/${id}/update/`, {approve: newValue});
+    
+        const updatedKos = {
+          ...response.data,
+          approve: newValue,
+        };
+        window.location.reload();
+      } catch (error) {
+        console.error(error);
+      }
+  }
+
 console.log(nameValue)
 
     useEffect(() => {
