@@ -44,7 +44,7 @@ class TransactionSerializer(serializers.ModelSerializer):
     rumah = serializers.ReadOnlyField(source='kamar.rumah.id')
     fullName = serializers.ReadOnlyField(source='user.customer.full_name')
     phoneNumber = serializers.ReadOnlyField(source='user.customer.phone_number')
-    barangDipesan = serializers.BooleanField(write_only=True)  # Tambahkan field baru sebagai write_only
+    barangDipesan = serializers.ReadOnlyField(source='kamar.barang_dipesan') 
 
     class Meta:
         model = Transaction
