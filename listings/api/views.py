@@ -64,9 +64,11 @@ class TransactionUser(generics.ListAPIView):
     serializer_class = TransactionSerializer
     def get_queryset(self):
         user_id = self.kwargs['user']
-        user = Customer.objects.get(id=user_id)
+        user = User.objects.get(pk=user_id)  # Fetch the User instance
+        # customer = Customer.objects.get(user=user)  # Get the associated Customer instance
         queryset = Transaction.objects.filter(user=user).order_by('-date')
         return queryset
+
     
 class TransactionCreate(generics.CreateAPIView):
     serializer_class = TransactionSerializer

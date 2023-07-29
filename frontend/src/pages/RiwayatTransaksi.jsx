@@ -46,7 +46,7 @@ export default function RiwayatTransaksi() {
 		async function GetAllKos() {
 			try {
 				const response = await Axios.get(
-					`https://mykos2.onrender.com/api/transaction/${customerId}/userdetail`
+					`https://mykos2.onrender.com/api/transaction/${userId}/userdetail`
 				);
                 
 				setAllKos(response.data);
