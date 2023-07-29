@@ -140,7 +140,7 @@ function ProfileUpdate(props) {
 
 				try {
 					const response = await Axios.patch(
-						`https://mykos2.onrender.com/api/profiles/owner/${ownerId}/update/`,
+						`https://mykos2.onrender.com/api/profiles/owner/${userId}/update/`,
 						formData
 					);
 

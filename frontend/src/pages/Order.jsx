@@ -159,7 +159,7 @@ console.log(params.id)
 		async function GetProfileInfo() {
 			try {
 				const response = await Axios.get(
-					`https://mykos2.onrender.com/api/profiles/customer/${customerId}/`
+					`https://mykos2.onrender.com/api/profiles/customer/${userId}/`
 				);
 
 				dispatch({
