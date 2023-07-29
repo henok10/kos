@@ -175,7 +175,7 @@ class OwnerUpdate(generics.UpdateAPIView):
         user_id = self.kwargs['user']
         user = User.objects.get(id=user_id)
         queryset = Owner.objects.all()
-        return user
+        return owner
 
 class CustomerDetail(generics.RetrieveAPIView):
     serializer_class = CustomerSerializer
@@ -194,7 +194,7 @@ class CustomerUpdate(generics.UpdateAPIView):
         user_id = self.kwargs['user']
         user = User.objects.get(id=user_id)
         queryset = Customer.objects.all()
-        return user
+        return customer
 
 
 
