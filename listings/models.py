@@ -100,6 +100,7 @@ class Poi(models.Model):
 class Transaction(models.Model):
     kamar = models.ForeignKey(Kamar, on_delete=models.CASCADE, blank=True, null=True, related_name='transactions')
     user = models.ForeignKey(User, on_delete=models.CASCADE, blank=True, null=True)
+    customer = models.ForeignKey(Customer, on_delete=models.CASCADE, blank=True, null=True)
     buktiTransfer = models.ImageField(
         blank=True, null=True, upload_to=upload_to, max_length=455)
     # fullName = models.CharField(max_length=20, null=True, blank=True)
@@ -116,7 +117,7 @@ class Transaction(models.Model):
     approve = models.BooleanField(default=False)
 
     def __str__(self):
-        return self.user.customer.full_name
+        return self.customer.full_name
 
 class Review(models.Model):
     rumah = models.ForeignKey(Rumah, on_delete=models.CASCADE, blank=True, null=True, related_name='review')
