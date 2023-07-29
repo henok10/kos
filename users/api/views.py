@@ -159,12 +159,12 @@ class CustomerList(generics.ListAPIView):
 class OwnerDetail(generics.RetrieveAPIView):
     serializer_class = OwnerSerializer
     lookup_field = 'user'
+
     def get_object(self):
         user_id = self.kwargs['user']
-        owner = Owner.objects.get(user__id=user_id)
-        # queryset = Owner.objects.all()
+        user = User.objects.get(id=user_id)
+        owner = Owner.objects.get(user=user)
         return owner
- 
 
 
 class OwnerUpdate(generics.UpdateAPIView):
@@ -173,8 +173,8 @@ class OwnerUpdate(generics.UpdateAPIView):
     lookup_field = 'user'
     def get_object(self):
         user_id = self.kwargs['user']
-        user = User.objects.get(id=user_id)
-        queryset = Owner.objects.all()
+        owner = Owner.objects.get(user=user_id)
+        # queryset = Owner.objects.all()
         return owner
 
 class CustomerDetail(generics.RetrieveAPIView):
@@ -183,7 +183,7 @@ class CustomerDetail(generics.RetrieveAPIView):
 
     def get_object(self):
         user_id = self.kwargs['user']
-        customer = Customer.objects.get(user__id=user_id)
+        customer = Customer.objects.get(user=user_id)
         return customer
 
 class CustomerUpdate(generics.UpdateAPIView):

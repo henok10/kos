@@ -108,7 +108,7 @@ class OwnerSerializer(serializers.ModelSerializer):
     user_listings = serializers.SerializerMethodField()
 
     def get_user_listings(self, obj):
-        query = Rumah.objects.filter(owner=obj)
+        query = Rumah.objects.filter(user=obj.user)
         listings_serialized = ListingSerializer(query, many=True)
         return listings_serialized.data
 

@@ -171,7 +171,7 @@ function ListingDetail() {
       async function GetProfileInfo() {
         try {
           const response = await Axios.get(
-            `https://mykos2.onrender.com/api/profiles/owner/${state.listingInfo.owner}/`
+            `https://mykos2.onrender.com/api/profiles/owner/${state.listingInfo.user}/`
           );
 
           dispatch({
