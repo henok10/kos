@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from listings.models import Rumah, Poi, Transaction, Review, Kamar
-from users.models import Customer, User
+from users.models import Customer
 from django.contrib.gis.measure import D
 from django.contrib.gis.geos import Point
 
