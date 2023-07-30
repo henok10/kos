@@ -15,7 +15,7 @@ urlpatterns = [
     path('transaction/<int:rumah>/user', listings_api_views.TransactionListUser.as_view()),
     path('transaction/<int:user>/userdetail', listings_api_views.TransactionUser.as_view()),
     path('transaction/<int:pk>/update', listings_api_views.TransactionUpdate.as_view()),
-    path('transaction/<int:pk>/kamar-update', listings_api_views.TransactionUpdate.as_view()),
+    path('transaction/<int:kamar>/kamar-update', listings_api_views.TransactionUpdate.as_view()),
     path('transaction/create', listings_api_views.TransactionCreate.as_view()),
     path('transaction/<int:user>/detail', listings_api_views.TransactionDetail.as_view()), 
     path('transaction/<int:pk>/delete/',
