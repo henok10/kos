@@ -51,7 +51,11 @@ class TransactionList(generics.ListAPIView):
 class TransactionUpdate(generics.UpdateAPIView):
     serializer_class = TransactionSerializer
     queryset = Transaction.objects.all()
-
+class TransactionKamarUpdate(generics.UpdateAPIView):
+    serializer_class = TransactionSerializer
+    queryset = Transaction.objects.all()
+    lookup_field = 'kamar'
+    
 class TransactionListUser(generics.ListAPIView):
     serializer_class = TransactionSerializer
     def get_queryset(self):
