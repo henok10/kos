@@ -17,7 +17,7 @@ function DataKamar() {
                 );
                 const data = response.data;
                     setAllRoom(data);
-                
+                   
             } catch (error) {
                 // Tangani error jika diperlukan
                 console.error('Error:', error);
@@ -28,12 +28,12 @@ function DataKamar() {
 
         
     }, []); // Tambah
-console.log(allRoom.kamar_transaksi.approve)
+    console.log(allRoom.address_room)
     useEffect((approves) => {
         async function GetTransaksi() {
             try {
                 const response = await Axios.get(
-                    `https://mykos2.onrender.com/api/transaction/${params.id}/user/`, {approve: approves}
+                    `https://mykos2.onrender.com/api/transaction/${params.id}/user`, {approve: approves}
                 );
                 // const data = response.data;
                 //     setAllRoom(data);
@@ -49,22 +49,35 @@ console.log(allRoom.kamar_transaksi.approve)
         
     }, []); // Tambah
 
-
     async function updateApprove(id, newValue) {
         try {
-            const response = await Axios.patch(`https://mykos2.onrender.com/api/kamar/${id}/update/`, {barang_dipesan: newValue});
+          const response = await Axios.patch(`https://mykos2.onrender.com/api/kamar/${params.id}/update/`, {
+            barang_dipesan: newValue,
+            kamar_transaks_approve: newValue,
+          });
+    
+
+         
+        } catch (error) {
+          console.error(error);
+        }
+
+        try {
+            const response = await Axios.patch(`https://mykos2.onrender.com/api/transaction/${id}/kamar-update`, {
+                approve: newValue,
+            });
+    
+
         
-            // const updatedKos = {
-            //   ...response.data,
-            //   barang_dipesan: newValue,
-
-            // };
-            window.location.reload();
-          } catch (error) {
-            console.error(error);
-          }
+        } catch (error) {
+        console.error(error);
+        }
       }
-
+      
+      
+      
+      
+      
 
     const columns = [
         { 
@@ -124,6 +137,38 @@ console.log(allRoom.kamar_transaksi.approve)
             headerName: 'Ukuran Kamar', 
             width: 110,
         },
+        {
+            field: 'kamar_transaksi_approve',
+            headerName: 'Status Approve',
+            width: 120,
+            renderCell: (params) => {
+              const approveStatus = params.row.kamar_transaksi && params.row.kamar_transaksi.length > 0
+                ? params.row.kamar_transaksi[0].approve
+                : false;
+          
+              return (
+                <div
+                  style={{
+                    padding: '4px 8px',
+                    borderRadius: '4px',
+                    color: 'white',
+                    fontWeight: 'bold',
+                    textAlign: 'center',
+                    backgroundColor: approveStatus ? 'green' : 'grey', // Use 'grey' instead of 'gray'
+                  }}
+                >
+                  {approveStatus !== undefined
+                    ? approveStatus
+                      ? "Approved"
+                      : "Not Approved"
+                    : "Data not available"}
+                </div>
+              );
+            },
+          },
+          
+          
+          
     
         {
           field: 'data kamar',

@@ -117,8 +117,7 @@ class Transaction(models.Model):
     approve = models.BooleanField(default=False)
 
     def __str__(self):
-        return self.customer.full_name
-
+        return self.kamar.address_room
 class Review(models.Model):
     rumah = models.ForeignKey(Rumah, on_delete=models.CASCADE, blank=True, null=True, related_name='review')
     user = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
