@@ -24,7 +24,7 @@ function Topbar() {
   );
 
   return (
-    <AppBar position="static" color="transparent" elevation={0}>
+    <AppBar position="flex" color="transparent" elevation={0}>
     <Toolbar style={{display: 'flex', justifyContent: 'space-between'}}>
       <Box style={{display: 'flex', justifyContent: 'space-between', width: '85%'}}>
         <Button color="inherit" onClick={() => navigate("/")}>

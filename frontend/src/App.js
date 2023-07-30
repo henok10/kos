@@ -30,6 +30,8 @@ import SendPasswordResetEmail from "./pages/authentication/SendPasswordResetEmai
 import ChangePassword from "./pages/authentication/PasswordChange";
 import RulesPage from "./pages/RulesPage";
 import Kamar from "./pages/Kamar";
+import DataKamar from "./pages/DataKamar";
+import KamarUpdate from "./pages/KamarUpdate";
 
 
 function App() {
@@ -47,7 +49,9 @@ function App() {
                   <Route path="/owner/home" element={<OwnerHome />} />
                   <Route path="/login" element={<Login />} />
                   <Route path="/syarat_ketentuan" element={<RulesPage />} /> 
-                  <Route path="/pesan_kamar/:id" element={<Kamar />} />              
+                  <Route path="/pesan_kamar/:id" element={<Kamar />} /> 
+                  <Route path="/data-kamar/:id" element={<DataKamar />} />   
+                  <Route path="/kamar-update/:id" element={<KamarUpdate />} />              
 
                   <Route path="api/user/reset/:id/:token" element={<ResetPassword />} />
                   <Route path="/sendpasswordresetemail" element={<SendPasswordResetEmail />} />
@@ -61,7 +65,7 @@ function App() {
                   <Route path="/profileCustomer" element={<ProfileCustomer />} />
                   <Route path="/listings/:id" element={<ListingDetail />} />
                   <Route path="/listingadd" element={<ListingAdd />} />
-                  <Route path="/listingupdate" element={<ListingUpdate />} />
+                  <Route path="/listingupdate/:id" element={<ListingUpdate />} />
                   <Route path="/listingsOwner/:id" element={<ListingOwnerDetail />} />
                   <Route path="/datakos" element={<DataTable />} />
                   <Route path="/datakosApprove/:id" element={<DataTableApprove />} />

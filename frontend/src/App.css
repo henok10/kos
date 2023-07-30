@@ -13,6 +13,20 @@
   }
 }
 
+/* Responsiveness for the table */
+/* CSS dalam file eksternal atau di bagian <style> dalam <head> */
+.responsive-table {
+  /* Default width for screens with width 769px or larger */
+  width: 100%;
+}
+
+@media (max-width: 768px) {
+  /* Width for screens with max width of 768px or smaller */
+  .responsive-table {
+    width: 100%;
+  }
+}
+
 .App-header {
   background-color: #282c34;
   min-height: 100vh;
@@ -36,3 +50,4 @@
     transform: rotate(360deg);
   }
 }
+

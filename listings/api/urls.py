@@ -25,6 +25,7 @@ urlpatterns = [
 
      path('kamar/create', listings_api_views.KamarCreate.as_view()),
      path('kamar/<int:rumah>/', listings_api_views.KamarList.as_view()), 
-      path('kamar/<int:pk>/update/',
-         listings_api_views.KamarUpdate.as_view()),   
+     path('kamar/<int:pk>/update/',
+         listings_api_views.KamarUpdate.as_view()),  
+     # path('kamar/<int:rumah>/detail/', listings_api_views.KamarDetail.as_view()),  
 ]

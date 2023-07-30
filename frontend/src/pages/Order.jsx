@@ -126,8 +126,9 @@ console.log(nameValue)
 console.log(params.id)
     const handleSubmit = useCallback(async (e) => {
         e.preventDefault();
+
         dispatch({ type: "sendRequest" });
-  
+        updateKamar(params.id, true);
       const formData = new FormData();
       formData.append("fullName", state.fullNameValue);
       formData.append("phoneNumber", state.phoneNumberValue);
@@ -136,6 +137,7 @@ console.log(params.id)
       formData.append("buktiTransfer", state.buktiTransferValue);
       formData.append("kamar", params.id);
       formData.append("customer", customerId);
+      formData.append("user", userId);
   
       try {
         const response = await Axios.post(
@@ -144,6 +146,7 @@ console.log(params.id)
         );
         console.log(response.data);
         dispatch({ type: "openTheSnack" });
+       
       
       } catch (error) {
         console.error(error);
@@ -176,15 +179,15 @@ console.log(params.id)
 		GetProfileInfo();
 	}, []);
 
-  async function updateApprove(id, newValue) {
+  async function updateKamar(id, newValue) {
     try {
-        const response = await Axios.patch(`https://mykos2.onrender.com/api/kamar/${id}/update/`, {approve: newValue});
+        const response = await Axios.patch(`https://mykos2.onrender.com/api/kamar/${id}/update/`, {barang_dipesan: newValue});
     
-        const updatedKos = {
+        const updatedKamar = {
           ...response.data,
-          approve: newValue,
+          barang_dipesan: newValue
         };
-        window.location.reload();
+        // window.location.reload();
       } catch (error) {
         console.error(error);
       }

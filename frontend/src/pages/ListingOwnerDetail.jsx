@@ -27,7 +27,7 @@ import ArrowCircleRightIcon from "@mui/icons-material/ArrowCircleRight";
 import RoomIcon from "@mui/icons-material/Room";
 import CheckBoxIcon from "@mui/icons-material/CheckBox";
 import ListingUpdate from "./ListingUpdate";
-
+import TheMapComponent from "../components/TheMapComponent";
 import { makeStyles } from "@mui/styles";
 
 const useStyles = makeStyles({
@@ -164,7 +164,7 @@ function ListingOwnerDetail() {
       async function GetProfileInfo() {
         try {
           const response = await Axios.get(
-            `https://mykos2.onrender.com/api/profiles/owner/${state.listingInfo.owner}/`
+            `https://mykos2.onrender.com/api/profiles/owner/${state.listingInfo.user}/`
           );
 
           dispatch({
@@ -227,69 +227,6 @@ function ListingOwnerDetail() {
     date.getMonth() + 1
   }/${date.getDate()}/${date.getFullYear()}`;
 
-// routing map
-  function TheMapComponent() {
-    const map = useMap();
-    const routingControlRef = useRef(null);
-    const [userLocation, setUserLocation] = useState(null);
-
-    useEffect(() => {
-      if (map) {
-        // Meminta lokasi terkini dan akurat dari pengguna
-        navigator.geolocation.getCurrentPosition(
-          position => {
-            const { latitude, longitude } = position.coords;
-            setUserLocation({ lat: latitude, lng: longitude });
-          },
-          error => {
-            console.error(error);
-          },
-          {
-            enableHighAccuracy: true,
-            timeout: 5000,
-            maximumAge: 0
-          }
-        );
-      }
-    }, [map]);
-
-  useEffect(() => {
-    if (map && userLocation) {
-      // Hapus routingControl lama dari map jika ada
-      // if (routingControlRef.current !== null) {
-      //   map.removeControl(routingControlRef.current);
-      // }     
-      const routingControl = L.Routing.control({
-        waypoints: [
-          L.latLng(userLocation.lat, userLocation.lng),
-          L.latLng(state.listingInfo.latitude, state.listingInfo.longitude)
-        ],
-        lineOptions: {
-          styles: [{ color: "#6FA1EC", weight: 5 }]
-        },
-        routeWhileDragging: true,
-        draggableWaypoints: true,
-        fitSelectedRoutes: true,
-        showAlternatives: false,
-        geocoder: L.Control.Geocoder.nominatim()
-      }).addTo(map);
-      routingControlRef.current = routingControl;  
-      // return () => map.removeControl(routingControl);
-      // return map.removeControl(routingControlRef.current);
-      // Hapus routingControl dari map ketika komponen di-unmount
-      // return () => {
-      //   if (routingControlRef.current !== null) {
-      //     if (routingControlRef.current == null) {
-      //     map.removeControl(routingControlRef.current);
-      //   }
-      //   }  
-      // };
-    }
-    
-  }, [map, userLocation]);
-  
- return null
-}
 
 
   useEffect(() => {
@@ -327,36 +264,6 @@ function ListingOwnerDetail() {
       style={{ marginLeft: "2rem", marginRight: "2rem", marginBottom: "2rem" }}
     >
      
-      {ownerId == state.listingInfo.owner ? (
-					<Grid item container  marginTop={'1rem'}>
-						<Button
-							variant="contained"
-							color="primary"
-							onClick={handleClickOpen}
-              style={{margin: '0.5rem'}}
-						>
-							Update
-						</Button>
-						<Button
-							variant="contained"
-							color="error"
-              style={{margin: '0.5rem'}}
-							onClick={DeleteHandler}
-							disabled={state.disabledBtn}
-						>
-							Delete
-						</Button>
-						<Dialog open={open} onClose={handleClose} fullScreen>
-							<ListingUpdate
-								listingData={state.listingInfo}
-								closeDialog={handleClose}
-							/>
-						</Dialog>
-					</Grid>
-				) : (
-					""
-				)}
-      {/* information */}
       <Grid container>
         <Grid item xs={6} columns={{ xs: 6, sm: 6, md: 12 }}>
           <Grid

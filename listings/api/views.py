@@ -109,3 +109,8 @@ class KamarList(generics.ListAPIView):
 class KamarUpdate(generics.UpdateAPIView):
     queryset = Kamar.objects.all()
     serializer_class = KamarSerializer
+
+# class KamarDetail(generics.RetrieveAPIView):
+#     serializer_class = KamarSerializer
+#     queryset = Kamar.objects.all()
+#     lookup_field = 'rumah'

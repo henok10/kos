@@ -103,7 +103,7 @@ console.log(allKos)
     <Grid height={'100vh'}>
       <Grid marginTop={'2rem'}>
         <Button 
-          color='success' 
+          color='primary' 
           variant='contained'  
           onClick={() => navigate("/datakos")
                             }>

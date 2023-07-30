@@ -58,6 +58,13 @@ class ReviewSerializer(serializers.ModelSerializer):
         fields = ['user', 'rumah', 'rate', 'comment', 'create_at', 'user_username']
 
 class KamarSerializer(serializers.ModelSerializer):
+    kamar_transaksi = serializers.SerializerMethodField()
+
+    def get_kamar_transaksi(self, obj):
+        query = Transaction.objects.filter(kamar=obj)  # Menggunakan obj yang merupakan objek Kamar
+        transaction_serialized = TransactionSerializer(query, many=True)
+        return transaction_serialized.data
+
     class Meta:
         model = Kamar
-        fields = ['id', 'rumah', 'price_day', 'price_month', 'price_year', 'picture_room', 'room_size', 'address_room', 'barang_dipesan']
+        fields = '__all__'

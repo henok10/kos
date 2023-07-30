@@ -45,7 +45,7 @@ const Sidebar = () => {
           left: 0,
           height: "100%",
           overflow: "auto",
-          // width: '100%',
+          width: '100%',
 
         },
         "& .pro-icon-wrapper": {

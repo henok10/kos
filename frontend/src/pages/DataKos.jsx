@@ -39,7 +39,7 @@ export default function DataTable() {
 		async function GetAllKos() {
 			try {
 				const response = await Axios.get(
-					`https://mykos2.onrender.com/api/listings/${ownerId}/list`
+					`https://mykos2.onrender.com/api/listings/${userId}/list`
 				);
         const data = response.data;
         const listingIds = data.map(listing => parseInt(listing.id));
@@ -78,7 +78,22 @@ export default function DataTable() {
     };
   }, [listingIds]);
   
-  
+  async function DeleteHandler() {
+		const confirmDelete = window.confirm(
+			"Are you sure you want to delete this listing?"
+		);
+		if (confirmDelete) {
+			try {
+				const response = await Axios.delete(
+					`https://mykos2.onrender.com/api/listings/${params.id}/delete/`
+				);
+
+	
+			} catch (error) {}
+		}
+	}
+
+
 
   if (dataIsLoading === true) {
     return (
@@ -97,7 +112,7 @@ export default function DataTable() {
     { 
       field: 'title', 
       headerName: 'Name', 
-      width: 250,
+      width: 180,
       renderCell: (params) => (
         <Link to={`/listingsOwner/${params.row.id}`}>{params.value}</Link>
       ),
@@ -105,17 +120,17 @@ export default function DataTable() {
     { 
       field: 'address', 
       headerName: 'Alamat', 
-      width: 290 
+      width: 180 
     },
     { 
       field: 'rooms', 
       headerName: 'Rooms', 
-      width: 100 
+      width: 60 
     },
     { 
       field: 'available_rooms', 
       headerName: 'Rooms Kosong', 
-      width: 120, 
+      width: 110, 
       renderCell: (params) => {
         const numItemsBoughts = numItemsBoughtByListingId[params.row.id];
         return(
@@ -127,40 +142,58 @@ export default function DataTable() {
     { 
       field: 'borough', 
       headerName: 'Borough', 
-      width: 150 
+      width: 120 
     },
     {
-      field: 'Kunjungi',
-      headerName: 'Data Pengguna',
-      width: 250,
+      field: 'data kamar',
+      headerName: 'Data Kamar',
+      width: 100,
       renderCell: (params) => (
         <div style={{ display: 'flex', justifyContent: 'space-between', width: '95%' }}>
-          <Button variant="contained" color="primary" onClick={() => navigate(`/datakosApprove/${params.row.id}`)}>
-            Pesan
+          <Button variant="contained" color="primary" onClick={() => navigate(`/data-kamar/${params.row.id}`)}>
+            Detail
           </Button>
-          <Button variant="contained" color="success" onClick={() => navigate(`/datakosUser/${params.row.id}`)}>
+          {/* <Button variant="contained" color="success" onClick={() => navigate(`/datakosUser/${params.row.id}`)}>
             Penghuni Kos
+          </Button> */}
+        </div>
+        
+        
+      ),
+    },
+    {
+      field: 'aksi',
+      headerName: 'Aksi',
+      width: 200,
+      renderCell: (params) => (
+        <div style={{ display: 'flex', justifyContent: 'space-between', width: '95%' }}>
+          <Button variant="contained" color="primary" onClick={() => navigate(`/listingupdate/${params.row.id}`)}>
+            Update
+          </Button>
+          <Button variant="contained" color="error" onClick={DeleteHandler}>
+            Hapus
           </Button>
         </div>
         
         
       ),
     }
+    
   ];
   
   return (
     <>
-   <Grid container style={{ width: '100%', height: '60%', marginLeft: '3rem'}}>
+   <Grid container style={{position: 'absolute', height: '60%', width: '85%'}}>
     <Grid item xs={12} style={{ marginTop: '2rem' }}>
       <Button 
-        color='success' 
+        color='primary' 
         variant='contained'  
         onClick={() => navigate("/listingadd")}
       >
         Tambahkan Kos
       </Button>
     </Grid>
-    <div style={{ height: 480, marginTop:'2rem', width: '95%'}}>
+    <div  className="responsive-table" style={{ height: 480, marginTop:'0.5rem'}}>
       <DataGrid
         rows={allKos}
         columns={columns}

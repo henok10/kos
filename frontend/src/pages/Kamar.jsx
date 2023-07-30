@@ -12,7 +12,31 @@ import {
     Button,
 } from "@mui/material";
 
+import { makeStyles } from "@mui/styles";
+
+const useStyles = makeStyles((theme) => ({
+  buttonCell: {
+    width: "100px",
+    height: "30px",
+    borderRadius: "5px",
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    fontWeight: "bold",
+    cursor: "pointer",
+  },
+  greenButton: {
+    backgroundColor: "green",
+    color: "white",
+  },
+  yellowButton: {
+    backgroundColor: "yellow",
+    color: "black",
+  },
+}));
+
 function Kamar() {
+    const classes = useStyles();
     const navigate = useNavigate();
     const params = useParams();
     const [allRoom, setAllRoom] = useState([]);
@@ -67,7 +91,13 @@ console.log()
                                 {row.picture_room && <img src={row.picture_room} alt="Room Picture" style={{ maxWidth: "100px" }} />}
                             </TableCell>
                             <TableCell>
+                                <div
+                                className={`${classes.buttonCell} ${
+                                    row.barang_dipesan ? classes.yellowButton : classes.greenButton
+                                }`}
+                                >
                                 {row.barang_dipesan ? "Sudah Dipesan" : "Belum Dipesan"}
+                                </div>
                             </TableCell>
                             <TableCell>{row.room_size}</TableCell>
                             <TableCell>{row.price_day}</TableCell>
