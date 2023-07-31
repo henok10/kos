@@ -76,22 +76,9 @@ function DataKamar() {
       async function deleteKos(id) {
         try {
           await Axios.delete(`https://mykos2.onrender.com/api/transaction/${id}/delete`);
-          
-          // Jika penghapusan berhasil, Anda dapat melakukan beberapa tindakan tambahan, seperti:
-          // - Memperbarui tampilan dengan memuat ulang data
-          // - Menampilkan pesan konfirmasi bahwa penghapusan berhasil
-          // - Menghapus entri dari daftar secara lokal tanpa harus memuat ulang data
-          // ... tambahkan kode yang sesuai dengan kebutuhan Anda
-          
+
         } catch (error) {
-          // Tangani pesan error "Not found" di sini
-          if (error.response && error.response.status === 404) {
-            console.error('Data not found:', error.response.data.detail);
-            // Tampilkan pesan kepada pengguna bahwa data yang ingin dihapus tidak ditemukan
-          } else {
             console.error('Error deleting data:', error);
-            // Tangani pesan error lain yang mungkin terjadi selain "Not found"
-          }
         }
       }
       

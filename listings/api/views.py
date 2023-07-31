@@ -85,6 +85,11 @@ class TransactionDetail(generics.RetrieveAPIView):
 class TransactionDelete(generics.DestroyAPIView):
     queryset = Transaction.objects.all()
     serializer_class = TransactionSerializer
+
+
+class TransactionDeleteKamar(generics.DestroyAPIView):
+    queryset = Transaction.objects.all()
+    serializer_class = TransactionSerializer
     lookup_field = 'kamar'
 
 class ReviewCreate(generics.CreateAPIView):
