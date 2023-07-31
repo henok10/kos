@@ -556,7 +556,9 @@ function ListingAdd() {
 				<Grid item container justifyContent="center">
 					<Typography variant="h4">Tambahkan Rumah Kos</Typography>
 				</Grid>
-
+				<Grid>
+					<Typography>Informasih Rumah</Typography>
+				</Grid>
 				<Grid item container style={{ marginTop: "1rem" }}>
 					<TextField
 						id="title"

@@ -82,13 +82,13 @@ export default function RiwayatTransaksi() {
                   color: 'white',
                   fontWeight: 'bold',
                   textAlign: 'center',
-                  backgroundColor: params.row.approve ? 'orange' : 'gray',
+                  backgroundColor: params.row.approve ? 'green' : 'orange',
                 }}
               >
                 {params.row.approve !== undefined
                   ? params.row.approve
-                    ? "Dipesan"
-                    : "Belum Dipesan"
+                    ? "Approve"
+                    : "Proses"
                   : "Data not available"}
               </div>
       )
