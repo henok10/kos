@@ -20,6 +20,8 @@ urlpatterns = [
     path('transaction/<int:user>/detail', listings_api_views.TransactionDetail.as_view()), 
     path('transaction/<int:pk>/delete/',
          listings_api_views.TransactionDelete.as_view()),
+     path('transaction/<int:kamar>/delete/',
+         listings_api_views.TransactionDelete.as_view()),
      
      path('review/create', listings_api_views.ReviewCreate.as_view()),
      path('review/<int:rumah>/', listings_api_views.ReviewList.as_view()), 
