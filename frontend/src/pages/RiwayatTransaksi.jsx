@@ -70,16 +70,34 @@ export default function RiwayatTransaksi() {
     { field: 'nominal', headerName: 'Total', width: 100 },
     { field: 'date', headerName: 'Date', width: 250 },
     {
-      field: 'barang_dibeli',
+      field: 'approve',
       headerName: 'Status',
-      width: 70,
-      valueGetter: (params) => params.row.barang_dibeli ? 'Sukses' : 'Proses',
-      cellClassName: (params) => params.row.barang_dibeli ? classes.cellSuccess : classes.cellProcess,
+      width: 130,
+      // valueGetter: (params) => params.row.approve ? 'Sukses' : 'Proses',
+      renderCell: (params) => (
+        <div
+                style={{
+                  padding: '4px 8px',
+                  borderRadius: '4px',
+                  color: 'white',
+                  fontWeight: 'bold',
+                  textAlign: 'center',
+                  backgroundColor: params.row.approve ? 'orange' : 'gray',
+                }}
+              >
+                {params.row.approve !== undefined
+                  ? params.row.approve
+                    ? "Dipesan"
+                    : "Belum Dipesan"
+                  : "Data not available"}
+              </div>
+      )
+      // params.row.barang_dibeli ? classes.cellSuccess : classes.cellProcess,
     },
   ];
   return (
     <>
-    <Grid container style={{ width: '100%', height: '60%', marginLeft: '3rem'}}>
+    <Grid container style={{ position: 'absolute', width: '100%', height: '60%', marginLeft: '3rem'}}>
       <Grid container alignItems="center" justifyContent="center" marginTop="2rem">
         <Typography variant="h4" align="center">
           Pemesanan Kamar Kos

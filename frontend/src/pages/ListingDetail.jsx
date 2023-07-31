@@ -299,37 +299,20 @@ const handleWhatsApp = () => {
           </Typography>
         </Breadcrumbs>
       </Grid>  
-        <Grid item container  marginTop={'1rem'}>
-          <Button
-            variant="contained"
-            color="primary"
-            // onClick={() => navigate(`/order/${state.listingInfo.id}`)}
-            onClick={() => navigate(`/pesan_kamar/${state.listingInfo.id}`)}
-            style={{margin: '0.5rem', marginTop: '1rem', height: '2.5rem'}}
-          >
-            Pesan Kamar
-          </Button>
-          <Button 
-            onClick={handleWhatsApp}
-            style={{height: '2.5rem', marginTop: '1rem', backgroundColor: '#4CAF50', color: 'white', padding: '5px', border: 'none', borderRadius: '5px'}}
-          >
-            Chat via WhatsApp
-          </Button>
-        </Grid>
       {/* information */}
       <Grid container>
-        <Grid item lg={6.5} md={6.5} sm={12} xs={12} width={'100%'}>
+        <Grid item lg={7.5} md={7.5} sm={12} xs={12} width={'100%'}>
           <Grid
             item
             container
             style={{
               padding: "1rem",
-              borderBottom: "1px solid black",
+              borderBottom: "1px solid gray",
               // marginTop: "1rem",
               width: "100%",
             }}
           >
-            <Grid item container xs={7} direction="column" spacing={1}>
+            <Grid item container xs={12} direction="column" spacing={1}>
               <Grid item>
                 <Typography variant="h6" >{state.listingInfo.title}</Typography>
               </Grid>
@@ -343,17 +326,6 @@ const handleWhatsApp = () => {
                 <Typography varaiant="subtitle1">{formattedDate}</Typography>
               </Grid>
             </Grid>
-            <Grid item container xs={5} alignItems="center">
-              <Typography
-                variant="h6"
-                style={{ fontWeight: "bolder", color: "black", fontSize:'17px'}}
-              >
-                {state.listingInfo.listing_type} |
-                Rp{state.listingInfo.price_per_year}/Year
-                Rp{state.listingInfo.price_per_month}/Month
-                Rp{state.listingInfo.price_per_day}/Day
-              </Typography>
-            </Grid>
           </Grid>
 
           {/* Alamat */}
@@ -363,7 +335,7 @@ const handleWhatsApp = () => {
               item
               style={{
                 padding: "1rem",
-                borderBottom: "1px solid black",
+                borderBottom: "1px solid gray",
                 marginTop: "0.3rem",
               }}
             >
@@ -381,7 +353,7 @@ const handleWhatsApp = () => {
               item
               style={{
                 padding: "1rem",
-                borderBottom: "1px solid black",
+                borderBottom: "1px solid gray",
                 marginTop: "0.3rem",
               }}
             >
@@ -401,7 +373,7 @@ const handleWhatsApp = () => {
             justifyContent="flex-start"
             style={{
               padding: "1rem",
-              borderBottom: "1px solid black",
+              borderBottom: "1px solid gray",
               marginTop: "0.3rem",
             }}
           >
@@ -494,7 +466,7 @@ const handleWhatsApp = () => {
               container
               style={{
                 padding: "1rem",
-                borderBottom: "1px solid black",
+                borderBottom: "1px solid gray",
                 marginTop: "0.3rem",
                 width: "100%",
               }}
@@ -527,49 +499,87 @@ const handleWhatsApp = () => {
         </Grid>
 
 
-        <Grid item lg={5.5} md={5.5} sm={12} xs={12} width={'100%'} style={{ marginTop: "2rem", paddingLeft: '0.5rem'}}>
+        <Grid item lg={4.5} md={4.5} sm={12} xs={12} width={'100%'} style={{ marginTop: "2rem", paddingLeft: '0.5rem'}}>
           {/* Image slider */}
-          <Paper style={{border: '2px solid white'}}>
-              {listingPictures.length > 0 ? (
-                <Box
+          <Box position="sticky" top= '0' >
+          <Paper style={{ border: '2px solid white' }}>
+            {listingPictures.length > 0 ? (
+              <Box>
+                <Grid
+                  item
+                  container
+                  justifyContent="center"
+                  className={classes.sliderContainer}
                 >
-                  <Grid
-                    item
-                    container
-                    justifyContent="center"
-                    className={classes.sliderContainer}
-                  >
-                    {listingPictures.map((picture, index) => {
-                      return (
-                        <div key={index}>
-                          {index === currentPicture ? (
-                            <img
-                              src={picture}
-                              style={{ width: "100%"}}
-                            />
-                          ) : (
-                            ""
-                          )}
-                        </div>
-                      );
-                    })}
-                    <ArrowCircleLeftIcon
-                      onClick={PreviousPicture}
-                      className={classes.leftArrow}
-                    />
-                    <ArrowCircleRightIcon
-                      onClick={NextPicture}
-                      className={classes.rightArrow}
-                    />
-                  </Grid>
-                </Box>
-              ) : (
-                ""
-              )}
+                  {listingPictures.map((picture, index) => {
+                    return (
+                      <div key={index}>
+                        {index === currentPicture ? (
+                          <img
+                            src={picture}
+                            style={{
+                              width: "100%",
+                              height: "100%",
+                              objectFit: "cover", // Adjusts image to cover the container while maintaining aspect ratio
+                            }}
+                          />
+                        ) : (
+                          ""
+                        )}
+                      </div>
+                    );
+                  })}
+                  <ArrowCircleLeftIcon
+                    onClick={PreviousPicture}
+                    className={classes.leftArrow}
+                  />
+                  <ArrowCircleRightIcon
+                    onClick={NextPicture}
+                    className={classes.rightArrow}
+                  />
+                </Grid>
+              </Box>
+            ) : (
+              ""
+            )}
           </Paper>
-          
-          
-          
+          <Paper style={{ width: '100%', marginTop: '0.5rem', padding: '0.5rem' }}>
+            <Grid item container xs={12} alignItems="center">
+              <Typography
+                variant="h6"
+                style={{ fontWeight: "bolder", color: "black", fontSize:'14px'}}
+              >Harga 
+                Rp{state.listingInfo.price_per_year}/tahun
+                {/* Rp{state.listingInfo.price_per_month}/Month
+                Rp{state.listingInfo.price_per_day}/Day */}
+              </Typography>
+            </Grid>
+             <Grid item container marginTop={'1rem'}>
+                <Button
+                  variant="outlined"
+                  color="primary"
+                  size="small"
+                  // onClick={() => navigate(`/order/${state.listingInfo.id}`)}
+                  onClick={() => navigate(`/pesan_kamar/${state.listingInfo.id}`)}
+                  style={{}}
+                >
+                  Pesan Kamar
+                </Button>
+                <Button 
+                  onClick={handleWhatsApp}
+                  variant="outlined"
+                  color="success"
+                  size="small"
+                  style={{marginLeft: '0.5rem'}}
+                >
+                  Chat Pemilik Kos
+                </Button>
+              </Grid>
+          </Paper>
+
+
+
+          </Box>
         </Grid>
       </Grid>
 

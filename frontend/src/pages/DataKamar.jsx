@@ -51,9 +51,8 @@ function DataKamar() {
 
     async function updateApprove(id, newValue) {
         try {
-          const response = await Axios.patch(`https://mykos2.onrender.com/api/kamar/${params.id}/update/`, {
+          const response = await Axios.patch(`https://mykos2.onrender.com/api/kamar/${id}/update/`, {
             barang_dipesan: newValue,
-            kamar_transaks_approve: newValue,
           });
     
 
@@ -72,6 +71,7 @@ function DataKamar() {
         } catch (error) {
         console.error(error);
         }
+        window.location.reload();
       }
       
       
@@ -190,7 +190,7 @@ function DataKamar() {
           width: 200,
           renderCell: (params) => (
             <div style={{ display: 'flex', justifyContent: 'space-between', width: '95%' }}>
-              <Button variant="contained" color="error" onClick={() => updateApprove(params.id, false)} >
+              <Button variant="contained" color="warning" onClick={() => updateApprove(params.id, false)} >
                 Cancel
               </Button>
 

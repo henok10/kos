@@ -74,6 +74,7 @@ console.log()
                         <TableCell>Price(day)</TableCell>
                         <TableCell>Price(month)</TableCell>
                         <TableCell>Price(year)</TableCell>
+                        <TableCell>Detail</TableCell>
                         <TableCell>Order</TableCell>
                     </TableRow>
                 </TableHead>
@@ -103,6 +104,14 @@ console.log()
                             <TableCell>{row.price_day}</TableCell>
                             <TableCell>{row.price_month}</TableCell>
                             <TableCell>{row.price_year}</TableCell>
+                            <TableCell>{
+                                <Button
+                                    variant="outlined"
+                                    onClick={'w'}
+                                >
+                                    Detail
+                                </Button>}
+                            </TableCell>
                             <TableCell>
                                 {/* Tambahkan kondisi untuk menonaktifkan tombol "Order" */}
                                 {row.barang_dipesan ? (

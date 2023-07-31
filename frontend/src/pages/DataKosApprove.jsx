@@ -107,8 +107,8 @@ export default function DataTableApprove() {
       width: 240,
     },
       
-    { field: 'phoneNumber', headerName: 'No. Telp', width: 150 },
-    { field: 'rentalFrequency', headerName: 'Frequensi Sewa', width: 150 },
+    { field: 'phoneNumber', headerName: 'No. Telp', width: 120 },
+    { field: 'rentalFrequency', headerName: 'Frequensi Sewa', width: 115 },
     { field: 'nominal', headerName: 'Jumlah Pembayaran', width: 120 },
     { field: 'date', headerName: 'Date', width: 180 },
     {
@@ -136,7 +136,7 @@ export default function DataTableApprove() {
                   color="primary"
                   onClick={() => updateApprove(params.id, true)} 
                 >
-                  Setuju
+                  Approve
                 </Button>
                 <Button 
                   variant="contained" 

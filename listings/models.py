@@ -128,10 +128,23 @@ class Review(models.Model):
     def __str__(self):
         return self.rumah.title
       
-class Fasilitas(models.Model):
-    kamar = models.ForeignKey(Kamar, on_delete=models.CASCADE, blank=True, null=True, related_name='fasilitas')
+class FasilitasKamar(models.Model):
+    kamar = models.ForeignKey(Kamar, on_delete=models.CASCADE, blank=True, null=True, related_name='fasilitaskamar')
     name = models.CharField(max_length=100)
-    description = models.TextField(max_length=500)
+
+    def __str__(self):
+        return self.kamar.title
+
+class FasilitasRumah(models.Model):
+    rumah = models.ForeignKey(Rumah, on_delete=models.CASCADE, blank=True, null=True, related_name='fasilitasrumah')
+    nama_fasilitas = models.CharField(max_length=100)
+
+    def __str__(self):
+        return self.rumah.title
+
+class Rule(models.Model):
+    rumah = models.ForeignKey(Rumah, on_delete=models.CASCADE, blank=True, null=True, related_name='rule')
+    aturan = models.CharField(max_length=100)
 
     def __str__(self):
         return self.rumah.title
