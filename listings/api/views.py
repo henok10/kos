@@ -55,7 +55,7 @@ class TransactionKamarUpdate(generics.UpdateAPIView):
     serializer_class = TransactionSerializer
     queryset = Transaction.objects.all()
     lookup_field = 'kamar'
-    
+
 class TransactionListUser(generics.ListAPIView):
     serializer_class = TransactionSerializer
     def get_queryset(self):
@@ -114,7 +114,7 @@ class KamarUpdate(generics.UpdateAPIView):
     queryset = Kamar.objects.all()
     serializer_class = KamarSerializer
 
-# class KamarDetail(generics.RetrieveAPIView):
-#     serializer_class = KamarSerializer
-#     queryset = Kamar.objects.all()
-#     lookup_field = 'rumah'
+class KamarDetail(generics.RetrieveAPIView):
+    serializer_class = KamarSerializer
+    queryset = Kamar.objects.all()
+  

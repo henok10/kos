@@ -32,6 +32,7 @@ import RulesPage from "./pages/RulesPage";
 import Kamar from "./pages/Kamar";
 import DataKamar from "./pages/DataKamar";
 import KamarUpdate from "./pages/KamarUpdate";
+import KamarDetail from "./pages/KamarDetail";
 
 
 function App() {
@@ -51,7 +52,8 @@ function App() {
                   <Route path="/syarat_ketentuan" element={<RulesPage />} /> 
                   <Route path="/pesan_kamar/:id" element={<Kamar />} /> 
                   <Route path="/data-kamar/:id" element={<DataKamar />} />   
-                  <Route path="/kamar-update/:id" element={<KamarUpdate />} />              
+                  <Route path="/kamar-update/:id" element={<KamarUpdate />} />     
+                  <Route path="/kamar-detail/:id" element={<KamarDetail />} />              
 
                   <Route path="api/user/reset/:id/:token" element={<ResetPassword />} />
                   <Route path="/sendpasswordresetemail" element={<SendPasswordResetEmail />} />

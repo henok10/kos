@@ -25,8 +25,8 @@ const useStyles = makeStyles((theme) => ({
     fontWeight: "bold",
     cursor: "pointer",
   },
-  greenButton: {
-    backgroundColor: "green",
+  greyButton: {
+    backgroundColor: "grey",
     color: "white",
   },
   yellowButton: {
@@ -94,7 +94,7 @@ console.log()
                             <TableCell>
                                 <div
                                 className={`${classes.buttonCell} ${
-                                    row.barang_dipesan ? classes.yellowButton : classes.greenButton
+                                    row.barang_dipesan ? classes.yellowButton : classes.greyButton
                                 }`}
                                 >
                                 {row.barang_dipesan ? "Sudah Dipesan" : "Belum Dipesan"}
@@ -107,7 +107,7 @@ console.log()
                             <TableCell>{
                                 <Button
                                     variant="outlined"
-                                    onClick={'w'}
+                                    onClick={() => navigate(`/kamar-detail/${row.id}`)}
                                 >
                                     Detail
                                 </Button>}
