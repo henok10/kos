@@ -296,7 +296,7 @@ function ListingOwnerDetail() {
             container
             style={{
               padding: "1rem",
-              borderBottom: "1px solid black",
+              borderBottom: "1px solid grey",
               marginTop: "1rem",
               width: "100%",
             }}
@@ -320,10 +320,7 @@ function ListingOwnerDetail() {
                 variant="h6"
                 style={{fontWeight: "bolder", color: "black", fontSize:'18px' }}
               >
-                 {state.listingInfo.listing_type} |
-                Rp{state.listingInfo.price_per_year}/Year |
-                Rp{state.listingInfo.price_per_month}/Month |
-                Rp{state.listingInfo.price_per_day}/Day |
+                Rp{state.listingInfo.price_per_month}/Month 
               </Typography>
             </Grid>
           </Grid>
@@ -335,7 +332,7 @@ function ListingOwnerDetail() {
               item
               style={{
                 padding: "1rem",
-                borderBottom: "1px solid black",
+                borderBottom: "1px solid grey",
                 marginTop: "0.3rem",
               }}
             >
@@ -348,43 +345,43 @@ function ListingOwnerDetail() {
             ""
           )}
 
-          <Grid
-            item
-            container
-            justifyContent="flex-start"
-            style={{
-              padding: "1rem",
-              borderBottom: "1px solid black",
-              marginTop: "0.3rem",
+     
+<Grid container style={{ padding: "1rem", borderBottom: "1px solid grey" }}>
+<Typography variant="h6" style={{ fontSize: "16px" }}>Fasilitas Kamar:</Typography>
+<Button variant="outlined" style={{marginLeft: '20px'}} onClick={() => navigate(`/listingupdate/${params.row.id}`)}>
+    Tambahkan Fasilitas
+</Button>  
+<Grid container marginTop={'1rem'}>
+    <Grid item xs={12} md={6} style={{ paddingRight: "1rem" }}>
+      {loadingFasilitas ? (
+        <CircularProgress />
+      ) : errorFasilitas ? (
+        <Typography variant="body1" color="error">
+          {errorFasilitas}
+        </Typography>
+      ) : allFasilitas.length === 0 ? (
+        <Typography variant="body1">No facilities available.</Typography>
+      ) : (
+        allFasilitas.slice(0, 4).map((listing, index) => (
+          <Typography key={index} variant="body1" style={{ fontSize: "15px" }}>
+            {listing.nama_fasilitas}
+          </Typography>
+        ))
+      )}
+    </Grid>
+    <Grid item xs={12} md={6} style={{ display: "flex", flexDirection: "column", justifyContent: "flex-start" }}>
+      {/* Baris-baris selanjutnya ditampilkan di samping kanan */}
+      {allFasilitas.slice(4).map((listing, index) => (
+        <Typography key={index} variant="body1" style={{ fontSize: "15px" }}>
+          {listing.nama_fasilitas}
+        </Typography>
+      ))}
+    </Grid>
+</Grid>
+ 
+</Grid>
 
-              // width: "50%",
-            }}
-          >  
-            <Typography variant="h6" style={{fontSize: "16px"}}>Fasilitas Kamar:</Typography>
 
-              {loadingFasilitas ? (
-                      <CircularProgress />
-                    ) : errorFasilitas ? (
-                      <Typography variant="body1" color="error">
-                        {errorFasilitas}
-                      </Typography>
-                    ) : allFasilitas.length === 0 ? (
-                      <Typography variant="body1">No facilities available.</Typography>
-                    ) : (
-                      allFasilitas.map((listing, index) => (
-                        <Grid
-                          item
-                          key={index}
-                          
-                        >
-                          
-                          <Typography variant="body1" style={{ fontSize: "15px" }}>
-                            {listing.nama_fasilitas}
-                          </Typography>
-                        </Grid>
-                      ))
-                )}
-          </Grid>
           <Grid>
             {/* <Grid item xs={6} columns={{ xs: 6, sm: 6, md: 12 }}> */}
             <Grid
@@ -392,7 +389,7 @@ function ListingOwnerDetail() {
               container
               style={{
                 padding: "1rem",
-                borderBottom: "1px solid black",
+                borderBottom: "1px solid grey",
                 marginTop: "0.3rem",
                 width: "100%",
               }}
@@ -410,7 +407,7 @@ function ListingOwnerDetail() {
                 item
                 style={{
                   padding: "1rem",
-                  borderBottom: "1px solid black",
+                  borderBottom: "1px solid grey",
                   marginTop: "0.3rem",
                 }}
               >

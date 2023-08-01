@@ -234,31 +234,36 @@ function KamarDetail() {
         
 
 
-<Grid item style={{ padding: "1rem", marginTop: "0.3rem"}}>
-    <Typography variant="h6" style={{ fontSize: "16px" }}>Fasilitas Kamar:</Typography>
-
-    {loadingFasilitas ? (
-            <CircularProgress />
-          ) : errorFasilitas ? (
-            <Typography variant="body1" color="error">
-              {errorFasilitas}
-            </Typography>
-          ) : allFasilitas.length === 0 ? (
-            <Typography variant="body1">No facilities available.</Typography>
-          ) : (
-            allFasilitas.map((listing, index) => (
-              <Grid
-                item
-                key={index}
-                
-              >
-                
-                <Typography variant="body1" style={{ fontSize: "15px" }}>
-                  {listing.name}
-                </Typography>
-              </Grid>
-            ))
-          )}
+        <Grid container style={{ padding: "1rem", borderBottom: "1px solid grey" }}>
+<Typography variant="h6" style={{ fontSize: "16px" }}>Fasilitas Kamar:</Typography>  
+<Grid container>
+    <Grid item xs={12} md={6} style={{ paddingRight: "1rem" }}>
+      {loadingFasilitas ? (
+        <CircularProgress />
+      ) : errorFasilitas ? (
+        <Typography variant="body1" color="error">
+          {errorFasilitas}
+        </Typography>
+      ) : allFasilitas.length === 0 ? (
+        <Typography variant="body1">No facilities available.</Typography>
+      ) : (
+        allFasilitas.slice(0, 4).map((listing, index) => (
+          <Typography key={index} variant="body1" style={{ fontSize: "15px" }}>
+            {listing.name}
+          </Typography>
+        ))
+      )}
+    </Grid>
+    <Grid item xs={12} md={6} style={{ display: "flex", flexDirection: "column", justifyContent: "flex-start" }}>
+      {/* Baris-baris selanjutnya ditampilkan di samping kanan */}
+      {allFasilitas.slice(4).map((listing, index) => (
+        <Typography key={index} variant="body1" style={{ fontSize: "15px" }}>
+          {listing.name}
+        </Typography>
+      ))}
+    </Grid>
+</Grid>
+ 
 </Grid>
 
        

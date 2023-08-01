@@ -33,6 +33,7 @@ import Kamar from "./pages/Kamar";
 import DataKamar from "./pages/DataKamar";
 import KamarUpdate from "./pages/KamarUpdate";
 import KamarDetail from "./pages/KamarDetail";
+import KamarAdd from "./pages/KamarAdd";
 
 
 function App() {
@@ -53,7 +54,8 @@ function App() {
                   <Route path="/pesan_kamar/:id" element={<Kamar />} /> 
                   <Route path="/data-kamar/:id" element={<DataKamar />} />   
                   <Route path="/kamar-update/:id" element={<KamarUpdate />} />     
-                  <Route path="/kamar-detail/:id" element={<KamarDetail />} />              
+                  <Route path="/kamar-detail/:id" element={<KamarDetail />} /> 
+                  <Route path="/kamar-add/:id" element={<KamarAdd />} />              
 
                   <Route path="api/user/reset/:id/:token" element={<ResetPassword />} />
                   <Route path="/sendpasswordresetemail" element={<SendPasswordResetEmail />} />

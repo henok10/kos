@@ -27,6 +27,8 @@ urlpatterns = [
      path('review/<int:rumah>/', listings_api_views.ReviewList.as_view()), 
 
      path('kamar/create', listings_api_views.KamarCreate.as_view()),
+     path('kamar/<int:pk>/delete/',
+         listings_api_views.KamarDelete.as_view()),
      path('kamar/<int:rumah>/', listings_api_views.KamarList.as_view()), 
      path('kamar/<int:pk>/update/',
          listings_api_views.KamarUpdate.as_view()),  

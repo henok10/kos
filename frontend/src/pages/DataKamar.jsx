@@ -63,9 +63,19 @@ function DataKamar() {
 
         window.location.reload();
       }
-      async function deleteKos(id) {
+      async function deleteTransaksi(id) {
         try {
           await Axios.delete(`https://mykos2.onrender.com/api/transaction/${id}/delete/kamar`);
+
+        } catch (error) {
+            console.error('Error deleting data:', error);
+        }
+        window.location.reload();
+      }
+
+      async function deleteKamar(id) {
+        try {
+          await Axios.delete(`https://mykos2.onrender.com/api/kamar/${id}/delete/`);
 
         } catch (error) {
             console.error('Error deleting data:', error);
@@ -190,11 +200,11 @@ function DataKamar() {
           width: 200,
           renderCell: (params) => (
             <div style={{ display: 'flex', justifyContent: 'space-between', width: '95%' }}>
-              <Button variant="contained" color="warning" onClick={() =>  deleteKos(params.id)} >
+              <Button variant="contained" color="warning" onClick={() =>  deleteTransaksi(params.id)} >
                 Cancel
               </Button>
 
-              <Button variant="contained" color="error" onClick={() => updateApprove(params.id, false)} >
+              <Button variant="contained" color="error" onClick={() => deleteKamar(params.id)} >
                 Hapus
               </Button>
             </div>
@@ -211,7 +221,7 @@ function DataKamar() {
       <Button 
         color='primary' 
         variant='contained'  
-        onClick={() => navigate("/listingadd")}
+        onClick={() => navigate(`/kamar-add/${params.id}`)}
       >
         Tambah Kamar
       </Button>
