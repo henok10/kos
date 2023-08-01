@@ -129,6 +129,7 @@ function KamarDetail() {
           GetFasilitasInfo();
         }
       }, [state.kamarInfo]);
+      console.log(state.kamarInfo)
 
       const kamarPictures = [
         state.kamarInfo.picture_room,
