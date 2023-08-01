@@ -205,7 +205,7 @@ function Listings() {
                     <CardActions style={{ position: 'absolute', bottom: '0', width: '100%' }}>
                       <Box width='100%' style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '2px' }}>
                           <Typography className={classes.priceLabel} component="span">
-                            Rp{listing.price_per_year}/year
+                            Rp{listing.price_per_month}/bulan
                           </Typography>     
                           <Button variant="contained" color="primary" size='small' onClick={() => navigate(`/listings/${listing.id}`)}>
                             Details

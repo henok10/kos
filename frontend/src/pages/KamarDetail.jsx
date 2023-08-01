@@ -231,7 +231,13 @@ function KamarDetail() {
             )}
         </Grid>
 
-        {loadingFasilitas ? (
+        
+
+
+<Grid item style={{ padding: "1rem", marginTop: "0.3rem"}}>
+    <Typography variant="h6" style={{ fontSize: "16px" }}>Fasilitas Kamar:</Typography>
+
+    {loadingFasilitas ? (
             <CircularProgress />
           ) : errorFasilitas ? (
             <Typography variant="body1" color="error">
@@ -244,22 +250,16 @@ function KamarDetail() {
               <Grid
                 item
                 key={index}
-                style={{
-                  padding: "1rem",
-                  borderBottom: "1px solid gray",
-                  marginTop: "0.3rem",
-                }}
+                
               >
-                <Typography variant="h6" style={{ fontSize: "16px" }}>
-                  Fasilitas Kamar:
-                </Typography>
+                
                 <Typography variant="body1" style={{ fontSize: "15px" }}>
                   {listing.name}
                 </Typography>
               </Grid>
             ))
           )}
-
+</Grid>
 
        
 

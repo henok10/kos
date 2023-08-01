@@ -549,7 +549,7 @@ const handleWhatsApp = () => {
                 variant="h6"
                 style={{ fontWeight: "bolder", color: "black", fontSize:'14px'}}
               >Harga 
-                Rp{state.listingInfo.price_per_year}/tahun
+                Rp{state.listingInfo.price_per_month}/tahun
                 {/* Rp{state.listingInfo.price_per_month}/Month
                 Rp{state.listingInfo.price_per_day}/Day */}
               </Typography>

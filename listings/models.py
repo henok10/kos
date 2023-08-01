@@ -40,7 +40,7 @@ class Rumah(models.Model):
     borough = models.CharField(max_length=50, blank=True, null=True)
     no_rekening = models.CharField(max_length=100, blank=True, null=True)
     # rooms = models.IntegerField(blank=True, null=True)
-    price_per_year = models.DecimalField(max_digits=50, decimal_places=0, blank=True, null=True)
+    price_per_month = models.DecimalField(max_digits=50, decimal_places=0, blank=True, null=True)
     furnished = models.BooleanField(default=False)
     pool = models.BooleanField(default=False)
     elevator = models.BooleanField(default=False)
