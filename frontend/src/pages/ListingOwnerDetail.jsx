@@ -196,6 +196,31 @@ function ListingOwnerDetail() {
 		}
 	}
 
+  const [allFasilitas, setAllFasilitas] = useState([]);
+  const [loadingFasilitas, setLoadingFasilitas] = useState(true);
+  const [errorFasilitas, setErrorFasilitas] = useState(null);
+
+  useEffect(() => {
+    if (state.listingInfo) {
+      async function GetFasilitasInfo() {
+        try {
+          const response = await Axios.get(
+            `https://mykos2.onrender.com/api/fasilitas-rumah/${state.listingInfo.id}/`
+          );
+
+          const data = response.data;
+          setAllFasilitas(data);
+          setLoadingFasilitas(false);
+        } catch (e) {
+          setErrorFasilitas("Error fetching facilities information.");
+          setLoadingFasilitas(false);
+        }
+      }
+      GetFasilitasInfo();
+    }
+  }, [state.listingInfo]);
+  console.log(state.listingInfo)
+
   const listingPictures = [
     state.listingInfo.picture1,
     state.listingInfo.picture2,
@@ -334,78 +359,31 @@ function ListingOwnerDetail() {
 
               // width: "50%",
             }}
-          >
-            <Grid>
-              <div>
-                <Typography variant="h6" style={{fontSize: '16px'}}>Fasilitas :</Typography>
-              </div>
-              <Stack direction="row" spacing={2}>
-                {state.listingInfo.rooms ? (
-                  <Grid item xs={8} style={{ display: "flex" }}>
-                    <Typography variant="body1" style={{fontSize: '15px'}}>
-                      {state.listingInfo.rooms} Rooms
-                    </Typography>
-                  </Grid>
-                ) : (
-                  ""
-                )}
+          >  
+            <Typography variant="h6" style={{fontSize: "16px"}}>Fasilitas Kamar:</Typography>
 
-                {state.listingInfo.furnished ? (
-                  <Grid item xs={6} style={{ display: "flex" }}>
-                    <CheckBoxIcon
-                      style={{ color: "green", fontSize: "1.5rem" }}
-                    />{" "}
-                    <Typography variant="body1" style={{fontSize: '15px'}}>Furnished</Typography>
-                  </Grid>
-                ) : (
-                  ""
+              {loadingFasilitas ? (
+                      <CircularProgress />
+                    ) : errorFasilitas ? (
+                      <Typography variant="body1" color="error">
+                        {errorFasilitas}
+                      </Typography>
+                    ) : allFasilitas.length === 0 ? (
+                      <Typography variant="body1">No facilities available.</Typography>
+                    ) : (
+                      allFasilitas.map((listing, index) => (
+                        <Grid
+                          item
+                          key={index}
+                          
+                        >
+                          
+                          <Typography variant="body1" style={{ fontSize: "15px" }}>
+                            {listing.nama_fasilitas}
+                          </Typography>
+                        </Grid>
+                      ))
                 )}
-
-                {state.listingInfo.pool ? (
-                  <Grid item xs={6} style={{ display: "flex" }}>
-                    <CheckBoxIcon
-                      style={{ color: "green", fontSize: "1.5rem" }}
-                    />{" "}
-                    <Typography variant="body1" style={{fontSize: '15px'}}>Pool</Typography>
-                  </Grid>
-                ) : (
-                  ""
-                )}
-
-                {state.listingInfo.elevator ? (
-                  <Grid item xs={6} style={{ display: "flex" }}>
-                    <CheckBoxIcon
-                      style={{ color: "green", fontSize: "1.5rem" }}
-                    />{" "}
-                    <Typography variant="body1" style={{fontSize: '15px'}}>Elevator</Typography>
-                  </Grid>
-                ) : (
-                  ""
-                )}
-
-                {state.listingInfo.cctv ? (
-                  <Grid item xs={6} style={{ display: "flex" }}>
-                    <CheckBoxIcon
-                      style={{ color: "green", fontSize: "1.5rem" }}
-                    />{" "}
-                    <Typography variant="body1" style={{fontSize: '15px'}}>Cctv</Typography>
-                  </Grid>
-                ) : (
-                  ""
-                )}
-
-                {state.listingInfo.parking ? (
-                  <Grid item xs={6} style={{ display: "flex" }}>
-                    <CheckBoxIcon
-                      style={{ color: "green", fontSize: "1.5rem" }}
-                    />{" "}
-                    <Typography variant="body1" style={{fontSize: '15px'}}>Parking</Typography>
-                  </Grid>
-                ) : (
-                  ""
-                )}
-              </Stack>
-            </Grid>
           </Grid>
           <Grid>
             {/* <Grid item xs={6} columns={{ xs: 6, sm: 6, md: 12 }}> */}

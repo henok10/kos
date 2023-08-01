@@ -1,15 +1,7 @@
-import React, { useEffect, useRef, useMemo } from "react";
+import React, { useEffect} from "react";
 import { useNavigate } from "react-router-dom";
 import Axios from "axios";
 import { useImmerReducer } from "use-immer";
-
-// React Leaflet
-import {
-	MapContainer,
-	TileLayer,
-	Marker,
-	useMap,
-} from "react-leaflet";
 
 // MUI
 import {
@@ -17,8 +9,6 @@ import {
 	Typography,
 	Button,
 	TextField,
-	FormControlLabel,
-	Checkbox,
 	Snackbar,
 } from "@mui/material";
 import { makeStyles } from "@mui/styles";
@@ -52,29 +42,6 @@ const useStyles = makeStyles({
 	},
 });
 
-const listingTypeOptions = [
-	{
-		value: "",
-		label: "",
-	},
-	{
-		value: "Rumah Kos",
-		label: "Rumah Kos",
-	},
-
-];
-
-const propertyStatusOptions = [
-	{
-		value: "",
-		label: "",
-	},
-	{
-		value: "Rental",
-		label: "Rental",
-	},
-];
-
 
 function ListingAdd() {
 	const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
@@ -98,32 +65,17 @@ function ListingAdd() {
 
 	const initialState = {
 		titleValue: "",
-		listingTypeValue: "",
 		descriptionValue: "",
 		addressValue: "",
 		boroughValue: "",
 		latitudeValue: "",
 		longitudeValue: "",
-		propertyStatusValue: "",
 		priceMonthValue: "",
-		priceDayValue: "",
-		priceYearValue: "",
-		roomsValue: "",
 		no_rekeningValue: "",
-		furnishedValue: false,
-		poolValue: false,
-		elevatorValue: false,
-		cctvValue: false,
-		parkingValue: false,
 		picture1Value: [],
 		picture2Value: [],
 		picture3Value: [],
 		picture4Value: [],
-		mapInstance: null,
-		markerPosition: {
-			lat: "-5.133746047427556",
-			lng: "119.4875580004916",
-		},
 		sendRequest: 0,
 		userProfile: {
 			agencyName: "",
@@ -135,18 +87,7 @@ function ListingAdd() {
 			hasErrors: false,
 			errorMessage: "",
 		},
-		listingTypeErrors: {
-			hasErrors: false,
-			errorMessage: "",
-		},
-		propertyStatusErrors: {
-			hasErrors: false,
-			errorMessage: "",
-		},
-		priceDayErrors: {
-			hasErrors: false,
-			errorMessage: "",
-		},
+		
 		priceMonthErrors: {
 			hasErrors: false,
 			errorMessage: "",
@@ -155,11 +96,15 @@ function ListingAdd() {
 			hasErrors: false,
 			errorMessage: "",
 		},
-		priceYearErrors: {
+		boroughErrors: {
 			hasErrors: false,
 			errorMessage: "",
 		},
-		boroughErrors: {
+		addressErrors: {
+			hasErrors: false,
+			errorMessage: "",
+		},
+		descriptionErrors: {
 			hasErrors: false,
 			errorMessage: "",
 		},
@@ -173,18 +118,16 @@ function ListingAdd() {
 				draft.titleErrors.errorMessage = "";
 				break;
 
-			case "catchListingTypeChange":
-				draft.listingTypeValue = action.listingTypeChosen;
-				draft.listingTypeErrors.hasErrors = false;
-				draft.listingTypeErrors.errorMessage = "";
-				break;
-
 			case "catchDescriptionChange":
 				draft.descriptionValue = action.descriptionChosen;
+				draft.descriptionErrors.hasErrors = false;
+				draft.descriptionErrors.errorMessage = "";
 				break;
 			
 			case "catchAddressChange":
 				draft.addressValue = action.addressChosen;
+				draft.addressErrors.hasErrors = false;
+				draft.addressErrors.errorMessage = "";
 				break;
 			
 			case "catchNo_RekeningChange":
@@ -196,6 +139,8 @@ function ListingAdd() {
 
 			case "catchBoroughChange":
 				draft.boroughValue = action.boroughChosen;
+				draft.boroughErrors.hasErrors = false;
+				draft.boroughErrors.errorMessage = "";
 				break;
 
 
@@ -207,62 +152,10 @@ function ListingAdd() {
 				draft.longitudeValue = action.longitudeChosen;
 				break;
 
-			case "catchPropertyStatusChange":
-				draft.propertyStatusValue = action.propertyStatusChosen;
-				draft.propertyStatusErrors.hasErrors = false;
-				draft.propertyStatusErrors.errorMessage = "";
-				break;
-
-			case "catchPriceDayChange":
-				draft.priceDayErrors.hasErrors = false;
-				draft.priceDayErrors.errorMessage = "";
-				draft.priceDayValue = action.priceDayChosen;
-				break;
 			case "catchPriceMonthChange":
 				draft.priceMonthErrors.hasErrors = false;
 				draft.priceMonthErrors.errorMessage = "";
 				draft.priceMonthValue = action.priceMonthChosen;
-				break;
-
-			case "catchPriceYearChange":
-				draft.priceYearErrors.hasErrors = false;
-				draft.priceYearErrors.errorMessage = "";
-				draft.priceYearValue = action.priceYearChosen;
-				break;
-
-			case "catchRoomsChange":
-				draft.roomsValue = action.roomsChosen;
-				break;
-
-			case "catchFurnishedChange":
-				draft.furnishedValue = action.furnishedChosen;
-				break;
-
-			case "catchPoolChange":
-				draft.poolValue = action.poolChosen;
-				break;
-
-			case "catchElevatorChange":
-				draft.elevatorValue = action.elevatorChosen;
-				break;
-
-			case "catchCctvChange":
-				draft.cctvValue = action.cctvChosen;
-				break;
-
-			case "catchParkingChange":
-				draft.parkingValue = action.parkingChosen;
-				break;
-
-			case "getMap":
-				draft.mapInstance = action.mapData;
-				break;
-
-			case "changeMarkerPosition":
-				draft.markerPosition.lat = action.changeLatitude;
-				draft.markerPosition.lng = action.changeLongitude;
-				draft.latitudeValue = "";
-				draft.longitudeValue = "";
 				break;
 
 			case "catchUploadedPicture1":
@@ -309,28 +202,27 @@ function ListingAdd() {
 				}
 				break;
 
-			case "catchListingTypeErrors":
-				if (action.listingTypeChosen.length === 0) {
-					draft.listingTypeErrors.hasErrors = true;
-					draft.listingTypeErrors.errorMessage = "This field must not be empty";
+			case "catchBoroughErrors":
+				if (action.boroughChosen.length === 0) {
+					draft.boroughErrors.hasErrors = true;
+					draft.boroughErrors.errorMessage = "This field must not be empty";
 				}
 				break;
 
-			case "catchPropertyStatusErrors":
-				if (action.propertyStatusChosen.length === 0) {
-					draft.propertyStatusErrors.hasErrors = true;
-					draft.propertyStatusErrors.errorMessage =
-						"This field must not be empty";
+			case "catchDescriptionErrors":
+				if (action.descriptionChosen.length === 0) {
+					draft.descriptionErrors.hasErrors = true;
+					draft.descriptionErrors.errorMessage = "This field must not be empty";
 				}
 				break;
 
-			case "catchPriceDayErrors":
-				if (action.priceDayChosen.length === 0) {
-					draft.priceDayErrors.hasErrors = true;
-					draft.priceDayErrors.errorMessage = "This field must not be empty";
+			case "catchAddressErrors":
+				if (action.addressChosen.length === 0) {
+					draft.addressErrors.hasErrors = true;
+					draft.addressErrors.errorMessage = "This field must not be empty";
 				}
 				break;
-				
+
 			case "catchNo_RekeningErrors":
 				if (action.no_rekeningChosen.length === 0) {
 					draft.no_rekeningErrors.hasErrors = true;
@@ -345,12 +237,6 @@ function ListingAdd() {
 				}
 				break;
 
-			case "catchPriceYearErrors":
-				if (action.priceYearChosen.length === 0) {
-					draft.priceYearErrors.hasErrors = true;
-					draft.priceYearErrors.errorMessage = "This field must not be empty";
-				}
-				break;
 
 
 			case "emptyTitle":
@@ -358,9 +244,14 @@ function ListingAdd() {
 				draft.titleErrors.errorMessage = "This field must not be empty";
 				break;
 
-			case "emptyListingType":
-				draft.listingTypeErrors.hasErrors = true;
-				draft.listingTypeErrors.errorMessage = "This field must not be empty";
+			case "emptyBorough":
+				draft.boroughErrors.hasErrors = true;
+				draft.boroughErrors.errorMessage = "This field must not be empty";
+				break;
+
+			case "emptyDescription":
+				draft.descriptionErrors.hasErrors = true;
+				draft.descriptionErrors.errorMessage = "This field must not be empty";
 				break;
 
 			case "emptyNo_Rekening":
@@ -368,21 +259,17 @@ function ListingAdd() {
 				draft.no_rekeningErrors.errorMessage = "This field must not be empty";
 				break;
 
-			case "emptyPropertyStatus":
-				draft.propertyStatusErrors.hasErrors = true;
-				draft.propertyStatusErrors.errorMessage =
+			case "emptyAddressStatus":
+				draft.addressErrors.hasErrors = true;
+				draft.addressErrors.errorMessage =
 					"This field must not be empty";
 				break;
 
-			case "emptyPrice":
-				draft.priceErrors.hasErrors = true;
-				draft.priceErrors.errorMessage = "This field must not be empty";
+			case "emptyPriceMonth":
+				draft.priceMonthErrors.hasErrors = true;
+				draft.priceMonthErrors.errorMessage = "This field must not be empty";
 				break;
 
-			case "emptyBoroug":
-				draft.borougErrors.hasErrors = true;
-				draft.borougErrors.errorMessage = "This field must not be empty";
-				break;
 		}
 	}
 
@@ -393,7 +280,7 @@ function ListingAdd() {
 		async function GetProfileInfo() {
 			try {
 				const response = await Axios.get(
-					`https://mykos2.onrender.com/api/profiles/owner/${ownerId}/`
+					`https://mykos2.onrender.com/api/profiles/owner/${userId}/`
 				);
 
 				dispatch({
@@ -410,13 +297,12 @@ function ListingAdd() {
 
 		if (
 			!state.titleErrors.hasErrors &&
-			!state.listingTypeErrors.hasErrors &&
-			!state.propertyStatusErrors.hasErrors &&
-			!state.priceDayErrors.hasErrors &&
+			!state.boroughErrors.hasErrors &&
+			!state.addressErrors.hasErrors &&
 			!state.no_rekeningErrors.hasErrors &&
 			!state.priceMonthErrors.hasErrors &&
-			!state.priceYearErrors.hasErrors &&
 			!state.boroughErrors.hasErrors &&
+			!state.descriptionErrors.hasErrors &&
 			state.latitudeValue &&
 			state.longitudeValue
 		) {
@@ -425,26 +311,20 @@ function ListingAdd() {
 		} else if (state.titleValue === "") {
 			dispatch({ type: "emptyTitle" });
 			window.scrollTo(0, 0);
-		} else if (state.listingTypeValue === "") {
-			dispatch({ type: "emptyListingType" });
-			window.scrollTo(0, 0);
-		} else if (state.propertyStatusValue === "") {
-			dispatch({ type: "emptyPropertyStatus" });
+		} else if (state.addressValue === "") {
+			dispatch({ type: "emptyAddress" });
 			window.scrollTo(0, 0);
 		} else if (state.no_rekeningValue === "") {
 			dispatch({ type: "emptyNo_Rekening" });
 			window.scrollTo(0, 0);
-		} else if (state.priceDayValue === "") {
-			dispatch({ type: "emptyPriceDay" });
-			window.scrollTo(0, 0);
 		} else if (state.priceMonthValue === "") {
 			dispatch({ type: "emptyPriceMonth" });
 			window.scrollTo(0, 0);
-		} else if (state.priceYearValue === "") {
-			dispatch({ type: "emptyPriceYear" });
-			window.scrollTo(0, 0);
 		} else if (state.boroughValue === "") {
 			dispatch({ type: "emptyBorough" });
+			window.scrollTo(0, 0);
+		} else if (state.descriptionValue === "") {
+			dispatch({ type: "emptyDescription" });
 			window.scrollTo(0, 0);
 		}
 	}
@@ -457,25 +337,15 @@ function ListingAdd() {
 				formData.append("description", state.descriptionValue);
 				formData.append("address", state.addressValue);
 				formData.append("borough", state.boroughValue);
-				formData.append("listing_type", state.listingTypeValue);
 				formData.append("no_rekening", state.no_rekeningValue);
-				formData.append("property_status", state.propertyStatusValue);
-				formData.append("price_per_day", state.priceDayValue);
 				formData.append("price_per_month", state.priceMonthValue);
-				formData.append("price_per_year", state.priceYearValue);
-				formData.append("rooms", state.roomsValue);
-				formData.append("furnished", state.furnishedValue);
-				formData.append("pool", state.poolValue);
-				formData.append("elevator", state.elevatorValue);
-				formData.append("cctv", state.cctvValue);
-				formData.append("parking", state.parkingValue);
 				formData.append("latitude", state.latitudeValue);
 				formData.append("longitude", state.longitudeValue);
 				formData.append("picture1", state.picture1Value);
 				formData.append("picture2", state.picture2Value);
 				formData.append("picture3", state.picture3Value);
 				formData.append("picture4", state.picture4Value);
-				formData.append("owner", ownerId);
+				formData.append("user", userId);
 
 				try {
 					const response = await Axios.post(
@@ -556,9 +426,7 @@ function ListingAdd() {
 				<Grid item container justifyContent="center">
 					<Typography variant="h4">Tambahkan Rumah Kos</Typography>
 				</Grid>
-				<Grid>
-					<Typography>Informasih Rumah</Typography>
-				</Grid>
+
 				<Grid item container style={{ marginTop: "1rem" }}>
 					<TextField
 						id="title"
@@ -584,41 +452,8 @@ function ListingAdd() {
 				</Grid>
 
 				<Grid item container justifyContent="space-between">
-					<Grid item xs={3} style={{ marginTop: "1rem" }}>
-						<TextField
-							id="listingType"
-							label="Listing Type*"
-							variant="standard"
-							fullWidth
-							value={state.listingTypeValue}
-							onChange={(e) =>
-								dispatch({
-									type: "catchListingTypeChange",
-									listingTypeChosen: e.target.value,
-								})
-							}
-							onBlur={(e) =>
-								dispatch({
-									type: "catchListingTypeErrors",
-									listingTypeChosen: e.target.value,
-								})
-							}
-							error={state.listingTypeErrors.hasErrors ? true : false}
-							helperText={state.listingTypeErrors.errorMessage}
-							select
-							SelectProps={{
-								native: true,
-							}}
-						>
-							{listingTypeOptions.map((option) => (
-								<option key={option.value} value={option.value}>
-									{option.label}
-								</option>
-							))}
-						</TextField>
-					</Grid>
 
-					<Grid item xs={3} style={{ marginTop: "1rem" }}>
+					<Grid item xs={5} style={{ marginTop: "1rem" }}>
 						<TextField
 							id="no_rekening"
 							label="No. Rekening*"
@@ -641,86 +476,7 @@ function ListingAdd() {
 							helperText={state.no_rekeningErrors.errorMessage}
 						/>
 					</Grid>
-
-
-					<Grid item xs={3} style={{ marginTop: "1rem" }}>
-						<TextField
-							id="propertyStatus"
-							label="Property Status*"
-							variant="standard"
-							fullWidth
-							value={state.propertyStatusValue}
-							onChange={(e) =>
-								dispatch({
-									type: "catchPropertyStatusChange",
-									propertyStatusChosen: e.target.value,
-								})
-							}
-							onBlur={(e) =>
-								dispatch({
-									type: "catchPropertyStatusErrors",
-									propertyStatusChosen: e.target.value,
-								})
-							}
-							error={state.propertyStatusErrors.hasErrors ? true : false}
-							helperText={state.propertyStatusErrors.errorMessage}
-							select
-							SelectProps={{
-								native: true,
-							}}
-						>
-							{propertyStatusOptions.map((option) => (
-								<option key={option.value} value={option.value}>
-									{option.label}
-								</option>
-							))}
-						</TextField>
-					</Grid>
-				</Grid>
-				<Grid item container>
-					<Grid item xs={12} style={{ marginTop: "1rem" }}>
-						<TextField
-							id="alamat"
-							label="Address*"
-							variant="standard"
-							fullWidth
-							value={state.addressValue}
-							onChange={(e) =>
-								dispatch({
-									type: "catchAddressChange",
-									addressChosen: e.target.value,
-								})
-							}
-						/>
-					</Grid>
-				</Grid>
-				<Grid item xs={12} container justifyContent="space-between">
-
-					<Grid item xs={3} style={{ marginTop: "1rem" }}>
-						<TextField
-							id="priceDay"
-							type="number"
-							label="Harga per Hari"
-							variant="standard"
-							fullWidth
-							value={state.priceDayValue}
-							onChange={(e) =>
-								dispatch({
-									type: "catchPriceDayChange",
-									priceDayChosen: e.target.value,
-								})
-							}
-							onBlur={(e) =>
-								dispatch({
-									type: "catchPriceDayErrors",
-									priceDayChosen: e.target.value,
-								})
-							}
-							error={state.priceDayErrors.hasErrors ? true : false}
-							helperText={state.priceDayErrors.errorMessage}
-						/>
-					</Grid>
-					<Grid item xs={3} style={{ marginTop: "1rem" }}>
+					<Grid item xs={5} style={{ marginTop: "1rem" }}>
 						<TextField
 							id="price"
 							type="number"
@@ -744,28 +500,29 @@ function ListingAdd() {
 							helperText={state.priceMonthErrors.errorMessage}
 						/>
 					</Grid>
-					<Grid item xs={3} style={{ marginTop: "1rem" }}>
+				</Grid>
+				<Grid item container>
+					<Grid item xs={12} style={{ marginTop: "1rem" }}>
 						<TextField
-							id="price"
-							type="number"
-							label="Harga per Tahun"
+							id="alamat"
+							label="Address*"
 							variant="standard"
 							fullWidth
-							value={state.priceYearValue}
+							value={state.addressValue}
 							onChange={(e) =>
 								dispatch({
-									type: "catchPriceYearChange",
-									priceYearChosen: e.target.value,
+									type: "catchAddressChange",
+									addressChosen: e.target.value,
 								})
 							}
 							onBlur={(e) =>
 								dispatch({
-									type: "catchPriceYearErrors",
-									priceYearChosen: e.target.value,
+									type: "catchAddressErrors",
+									addressChosen: e.target.value,
 								})
 							}
-							error={state.priceYearErrors.hasErrors ? true : false}
-							helperText={state.priceYearErrors.errorMessage}
+							error={state.addressErrors.hasErrors ? true : false}
+							helperText={state.addressErrors.errorMessage}
 						/>
 					</Grid>
 				</Grid>
@@ -785,25 +542,17 @@ function ListingAdd() {
 								descriptionChosen: e.target.value,
 							})
 						}
+						onBlur={(e) =>
+							dispatch({
+								type: "catchDescriptionErrors",
+								descriptionChosen: e.target.value,
+							})
+						}
+						error={state.descriptionErrors.hasErrors ? true : false}
+						helperText={state.descriptionErrors.errorMessage}
 					/>
 				</Grid>
-				<Grid item container justifyContent="space-between">
-					<Grid item xs={5} container style={{ marginTop: "1rem" }}>
-						<TextField
-							id="rooms"
-							label="Rooms"
-							type="number"
-							variant="standard"
-							fullWidth
-							value={state.roomsValue}
-							onChange={(e) =>
-								dispatch({
-									type: "catchRoomsChange",
-									roomsChosen: e.target.value,
-								})
-							}
-						/>
-					</Grid>
+				<Grid item container justifyContent="center">
 				
 				
 					<Grid item xs={5} style={{ marginTop: "1rem" }}>
@@ -819,98 +568,19 @@ function ListingAdd() {
 									boroughChosen: e.target.value,
 								})
 							}
+							onBlur={(e) =>
+								dispatch({
+									type: "catchBoroughErrors",
+									boroughChosen: e.target.value,
+								})
+							}
+							error={state.boroughErrors.hasErrors ? true : false}
+							helperText={state.boroughErrors.errorMessage}
 						>
 						</TextField>
 					</Grid>
 				</Grid>
 				
-
-				<Grid item container justifyContent="space-between">
-					<Grid item xs={2} style={{ marginTop: "1rem" }}>
-						<FormControlLabel
-							control={
-								<Checkbox
-									checked={state.furnishedValue}
-									onChange={(e) =>
-										dispatch({
-											type: "catchFurnishedChange",
-											furnishedChosen: e.target.checked,
-										})
-									}
-								/>
-							}
-							label="Furnished"
-						/>
-					</Grid>
-
-					<Grid item xs={2} style={{ marginTop: "1rem" }}>
-						<FormControlLabel
-							control={
-								<Checkbox
-									checked={state.poolValue}
-									onChange={(e) =>
-										dispatch({
-											type: "catchPoolChange",
-											poolChosen: e.target.checked,
-										})
-									}
-								/>
-							}
-							label="Pool"
-						/>
-					</Grid>
-
-					<Grid item xs={2} style={{ marginTop: "1rem" }}>
-						<FormControlLabel
-							control={
-								<Checkbox
-									checked={state.elevatorValue}
-									onChange={(e) =>
-										dispatch({
-											type: "catchElevatorChange",
-											elevatorChosen: e.target.checked,
-										})
-									}
-								/>
-							}
-							label="Elevator"
-						/>
-					</Grid>
-
-					<Grid item xs={2} style={{ marginTop: "1rem" }}>
-						<FormControlLabel
-							control={
-								<Checkbox
-									checked={state.cctvValue}
-									onChange={(e) =>
-										dispatch({
-											type: "catchCctvChange",
-											cctvChosen: e.target.checked,
-										})
-									}
-								/>
-							}
-							label="Cctv"
-						/>
-					</Grid>
-
-					<Grid item xs={2} style={{ marginTop: "1rem" }}>
-						<FormControlLabel
-							control={
-								<Checkbox
-									checked={state.parkingValue}
-									onChange={(e) =>
-										dispatch({
-											type: "catchParkingChange",
-											parkingChosen: e.target.checked,
-										})
-									}
-								/>
-							}
-							label="Parking"
-						/>
-					</Grid>
-				</Grid>
 
 				{/* Map */}
 				<Grid item container justifyContent="space-between" style={{ marginTop: "1rem" }}>					

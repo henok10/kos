@@ -73,3 +73,8 @@ class FasilitasKamarSerializer(serializers.ModelSerializer):
     class Meta:
         model = FasilitasKamar
         fields = ['id', 'kamar', 'name' ]
+
+class FasilitasRumahSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = FasilitasRumah
+        fields = '__all__'
