@@ -77,6 +77,8 @@ export default function DataTable() {
       source.cancel();
     };
   }, [listingIds]);
+
+  
   
   async function DeleteHandler() {
 		const confirmDelete = window.confirm(

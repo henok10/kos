@@ -98,8 +98,6 @@ class Transaction(models.Model):
     customer = models.ForeignKey(Customer, on_delete=models.CASCADE, blank=True, null=True)
     buktiTransfer = models.ImageField(
         blank=True, null=True, upload_to=upload_to, max_length=455)
-    # fullName = models.CharField(max_length=20, null=True, blank=True)
-    # phoneNumber = models.CharField(max_length=20, null=True, blank=True)
     nominal = models.DecimalField(max_digits=50, decimal_places=0, blank=True, null=True)
     choices_rental_frequency = (
         ('Year', 'Year'),

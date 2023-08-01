@@ -59,11 +59,18 @@ class ReviewSerializer(serializers.ModelSerializer):
 
 class KamarSerializer(serializers.ModelSerializer):
     kamar_transaksi = serializers.SerializerMethodField()
+    Fasilitas_kamar = serializers.SerializerMethodField()
 
     def get_kamar_transaksi(self, obj):
         query = Transaction.objects.filter(kamar=obj)  # Menggunakan obj yang merupakan objek Kamar
         transaction_serialized = TransactionSerializer(query, many=True)
         return transaction_serialized.data
+
+    def get_fasilitas_kamar(self, obj):
+        query = FasilitasKamar.objects.filter(kamar=obj)  # Menggunakan obj yang merupakan objek Kamar
+        Fasilitaskamar_serialized = FasilitasKamarSerializer(query, many=True)
+        return Fasilitaskamar_serialized.data
+
 
     class Meta:
         model = Kamar
