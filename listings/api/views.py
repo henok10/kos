@@ -6,7 +6,7 @@ from rest_framework.permissions import IsAuthenticated
 from users.models import User, Customer, Owner
 
 class ListingList(generics.ListAPIView):
-    queryset = Rumah.objects.all().order_by('-date_posted')
+    queryset = Rumah.objects.all().order_by('date_posted')
     serializer_class = ListingSerializer
 
 class ListingUserList(generics.ListAPIView):
@@ -16,7 +16,7 @@ class ListingUserList(generics.ListAPIView):
         user_id = self.kwargs['user']
         try:
             user = User.objects.get(id=user_id)
-            queryset = Rumah.objects.filter(user=user).order_by('-date_posted')
+            queryset = Rumah.objects.filter(user=user).order_by('date_posted')
         except User.DoesNotExist:
             queryset = Rumah.objects.none()  # Mengembalikan queryset kosong jika Owner tidak ditemukan
         return queryset
@@ -117,7 +117,7 @@ class KamarList(generics.ListAPIView):
     def get_queryset(self):
         rumah_id = self.kwargs['rumah']
         rumah = Rumah.objects.get(id=rumah_id)
-        queryset = Kamar.objects.filter(rumah=rumah).order_by('-address_room')
+        queryset = Kamar.objects.filter(rumah=rumah).order_by('address_room')
         return queryset
 
 class KamarUpdate(generics.UpdateAPIView):

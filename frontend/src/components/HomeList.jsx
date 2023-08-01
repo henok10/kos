@@ -42,8 +42,8 @@ function HouseList() {
         }
   
         if (Array.isArray(searchResults.priceRange)) {
-          const price_per_year = parseInt(listing.price_per_year);
-          if (price_per_year < searchResults.priceRange[0] || price_per_year > searchResults.priceRange[1]) {
+          const price_per_month = parseInt(listing.price_per_month);
+          if (price_per_month < searchResults.priceRange[0] || price_per_month > searchResults.priceRange[1]) {
             return false;
           }
         }

@@ -120,7 +120,7 @@ function Listings() {
   const filteredListings = allListings.filter((listing) => {
     return (
       listing.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      listing.price_per_year.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      listing.price_per_month.toLowerCase().includes(searchTerm.toLowerCase()) ||
       listing.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
       listing.borough.toLowerCase().includes(searchTerm.toLowerCase())
     );

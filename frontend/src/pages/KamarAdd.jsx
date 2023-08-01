@@ -456,6 +456,7 @@ function KamarAdd() {
               variant="contained"
               fullWidth
               type="submit"
+              style={{ marginTop: "4rem", marginLeft: "auto", marginRight: "auto" }}
               className={classes.registerBtn}
               disabled={state.disabledBtn}
             >
