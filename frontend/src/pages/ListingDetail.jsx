@@ -150,7 +150,7 @@ function ListingDetail() {
   
   const [state, dispatch] = useImmerReducer(ReducerFuction, initialState);
   useEffect(() => {
-    async function GetListingInfo() {
+    async function GetKamarInfo() {
       try {
         const response = await Axios.get(
           `https://mykos2.onrender.com/api/listings/${params.id}/`
@@ -162,13 +162,13 @@ function ListingDetail() {
         });
       } catch (e) {}
     }
-    GetListingInfo();
+    GetKamarInfo();
   }, []);
 
   // request to get profile info
   useEffect(() => {
     if (state.listingInfo) {
-      async function GetProfileInfo() {
+      async function GetListingInfo() {
         try {
           const response = await Axios.get(
             `https://mykos2.onrender.com/api/profiles/owner/${state.listingInfo.user}/`
@@ -181,7 +181,7 @@ function ListingDetail() {
           dispatch({ type: "loadingDone" });
         } catch (e) {}
       }
-      GetProfileInfo();
+      GetListingInfo();
     }
   }, [state.listingInfo]);
 

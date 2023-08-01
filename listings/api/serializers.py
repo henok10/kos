@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from listings.models import Rumah, Poi, Transaction, Review, Kamar
+from listings.models import Rumah, Poi, Transaction, Review, Kamar, FasilitasKamar, FasilitasRumah
 from users.models import Customer
 from django.contrib.gis.measure import D
 from django.contrib.gis.geos import Point
@@ -67,4 +67,9 @@ class KamarSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Kamar
+        fields = '__all__'
+
+class FasilitasKamarSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = FasilitasKamar
         fields = '__all__'

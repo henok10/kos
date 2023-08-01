@@ -61,25 +61,16 @@ function DataKamar() {
           console.error(error);
         }
 
-        try {
-            const response = await Axios.patch(`https://mykos2.onrender.com/api/transaction/${id}/kamar-update`, {
-                approve: newValue,
-            });
-    
-
-        
-        } catch (error) {
-        console.error(error);
-        }
         window.location.reload();
       }
       async function deleteKos(id) {
         try {
-          await Axios.delete(`https://mykos2.onrender.com/api/transaction/${id}/delete`);
+          await Axios.delete(`https://mykos2.onrender.com/api/transaction/${id}/delete/kamar`);
 
         } catch (error) {
             console.error('Error deleting data:', error);
         }
+        window.location.reload();
       }
       
       

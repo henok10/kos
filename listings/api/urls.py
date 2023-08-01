@@ -31,4 +31,5 @@ urlpatterns = [
      path('kamar/<int:pk>/update/',
          listings_api_views.KamarUpdate.as_view()),  
      path('kamar/<int:pk>/detail/', listings_api_views.KamarDetail.as_view()),  
+     path('fasilitas-kamar/<int:kamar>/', listings_api_views.FasilitasKamarList.as_view()),
 ]

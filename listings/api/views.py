@@ -1,6 +1,6 @@
 from rest_framework import generics, permissions
-from .serializers import ListingSerializer, TransactionSerializer, ReviewSerializer, KamarSerializer
-from listings.models import Rumah, Transaction, Review, Kamar
+from .serializers import ListingSerializer, TransactionSerializer, ReviewSerializer, KamarSerializer, FasilitasKamarSerializer
+from listings.models import Rumah, Transaction, Review, Kamar, FasilitasKamar
 from rest_framework import generics
 from rest_framework.permissions import IsAuthenticated
 from users.models import User, Customer, Owner
@@ -123,4 +123,12 @@ class KamarUpdate(generics.UpdateAPIView):
 class KamarDetail(generics.RetrieveAPIView):
     serializer_class = KamarSerializer
     queryset = Kamar.objects.all()
+
+class FasilitasKamarList(generics.ListAPIView):
+    serializer_class = FasilitasKamarSerializer
+    def get_queryset(self):
+        kamar_id = self.kwargs['kamar']
+        kamar = Kamar.objects.get(id=kamar_id)
+        queryset = FasilitasKamar.objects.filter(kamar=kamar).order_by('name')
+        return queryset
   
