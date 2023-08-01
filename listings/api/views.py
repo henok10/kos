@@ -136,7 +136,7 @@ class FasilitasRumahList(generics.ListAPIView):
     serializer_class = FasilitasRumahSerializer
     def get_queryset(self):
         rumah_id = self.kwargs['rumah']
-        rumah = Kamar.objects.get(id=rumah_id)
+        rumah = Rumah.objects.get(id=rumah_id)
         queryset = FasilitasRumah.objects.filter(rumah=rumah).order_by('nama_fasilitas')
         return queryset
 
