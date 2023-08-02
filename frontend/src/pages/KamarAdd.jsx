@@ -1,4 +1,4 @@
-import React, { useEffect} from "react";
+import React, { useEffect, useState} from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import Axios from "axios";
 import { useImmerReducer } from "use-immer";
@@ -69,6 +69,7 @@ function KamarAdd() {
 		priceYearValue: "",
     	roomSizeValue: "",
 		facilities: [],
+		fasilitaskamar_set: [],
 		newFacility: "", // State untuk menyimpan fasilitas baru yang akan dimasukkan
 		pictureRoomValue: [],
 		sendRequest: 0,
@@ -97,6 +98,9 @@ function KamarAdd() {
 			errorMessage: "",
 		},
 	};
+
+	const [state, dispatch] = useImmerReducer(ReducerFuction, initialState);
+	const [selectedFacilities, setSelectedFacilities] = useState([]);
 
 	function ReducerFuction(draft, action) {
 		switch (action.type) {
@@ -135,15 +139,17 @@ function KamarAdd() {
 			case "catchUploadedPicture":
 				draft.pictureRoomValue = action.pictureRoomChosen;
 				break;
-			
+		
 			case "catchNewFacility":
 				draft.newFacility = action.newFacilityChosen;
 				break;
-		
+			
 			case "addFacility":
-				draft.facilities.push(action.newFacility);
+				if (action.newFacilityChosen.trim()) {
+					draft.facilities.push(action.newFacilityChosen.trim());
+					draft.newFacility = ""; // Reset the newFacility state after adding to facilities
+				}
 				break;
-	
 			case "changeSendRequest":
 				draft.sendRequest = draft.sendRequest + 1;
 				break;
@@ -225,9 +231,23 @@ function KamarAdd() {
 		}
 	}
 
-	const [state, dispatch] = useImmerReducer(ReducerFuction, initialState);
-
-
+	
+	
+	function handleFacilityChange(event) {
+		dispatch({
+		  type: "catchNewFacility",
+		  newFacilityChosen: event.target.value,
+		});
+	  }
+	
+	  const handleAddFacility = () => {
+		if (state.newFacility && state.newFacility.trim()) {
+		  dispatch({ type: "addFacility", newFacilityChosen: state.newFacility });
+		  dispatch({ type: "catchNewFacility", newFacilityChosen: "" });
+		}
+	  };
+	  
+	  
 
 	function FormSubmit(e) {
 		e.preventDefault();
@@ -271,7 +291,13 @@ function KamarAdd() {
 				formData.append("picture_room", state.pictureRoomValue);
 				formData.append("room_size", state.roomSizeValue);
 				formData.append("rumah", params.id);
+				// formData.append("fasilitaskamar_set", JSON.stringify(state.facilities)); // Convert the array to a JSON string
 
+
+
+				 // Mengirim daftar fasilitas yang telah dipilih ke API
+				const facilitiesArray = state.facilities.map((facility) => ({ name: facility }));
+				formData.append("fasilitaskamar_set", JSON.stringify(facilitiesArray));
 				try {
 					const response = await Axios.post(
 						"https://mykos2.onrender.com/api/fasilitas-kamar/create",
@@ -288,20 +314,7 @@ function KamarAdd() {
 	}, [state.sendRequest]);
 
 
-	const handleFacilityChange = (e) => {
-		dispatch({
-		  type: "catchNewFacility",
-		  newFacilityChosen: e.target.value,
-		});
-	  };
-	  
-	
-	  const handleAddFacility = () => {
-	if (state.newFacility.trim()) {
-		dispatch({ type: "addFacility", newFacility: state.newFacility.trim() });
-		dispatch({ type: "catchNewFacility", newFacilityChosen: "" });
-	}
-	};
+
 	  
 	useEffect(() => {
 		if (state.openSnack) {

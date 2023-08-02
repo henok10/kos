@@ -110,14 +110,8 @@ class ReviewList(generics.ListAPIView):
 #     queryset = Kamar.objects.all()
 
 class KamarCreate(generics.CreateAPIView):
-    def post(self, request, format=None):
-        serializer = KamarSerializer(data=request.data)
-
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    serializer_class = KamarSerializer
+    queryset = Kamar.objects.all()
 
 class KamarDelete(generics.DestroyAPIView):
     queryset = Kamar.objects.all()
