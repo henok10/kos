@@ -48,13 +48,13 @@ urlpatterns = [
     path('sendpasswordresetemail/', TemplateView.as_view(template_name='index.html')),
     path('changePassword/', TemplateView.as_view(template_name='index.html')),
     
-    path('/kamar-add/<int:id>/', TemplateView.as_view(template_name='index.html')),
-    path('/kamar-detail/<int:id>/', TemplateView.as_view(template_name='index.html')),
-    path('/kamar-update/<int:id>/', TemplateView.as_view(template_name='index.html')),
-    path('/data-kamar/<int:id>/', TemplateView.as_view(template_name='index.html')),
-    path('/pesan_kamar/<int:id>/', TemplateView.as_view(template_name='index.html')),
-    path('/syarat_ketentuan/', TemplateView.as_view(template_name='index.html')),
-    path('/data-kamar/<int:id>/', TemplateView.as_view(template_name='index.html')),
+    path('kamar-add/<int:id>/', TemplateView.as_view(template_name='index.html')),
+    path('kamar-detail/<int:id>/', TemplateView.as_view(template_name='index.html')),
+    path('kamar-update/<int:id>/', TemplateView.as_view(template_name='index.html')),
+    path('data-kamar/<int:id>/', TemplateView.as_view(template_name='index.html')),
+    path('pesan_kamar/<int:id>/', TemplateView.as_view(template_name='index.html')),
+    path('syarat_ketentuan/', TemplateView.as_view(template_name='index.html')),
+    path('data-kamar/<int:id>/', TemplateView.as_view(template_name='index.html')),
 
     
 ] 
