@@ -4,6 +4,7 @@ from listings.models import Rumah, Transaction, Review, Kamar, FasilitasKamar, F
 from rest_framework import generics
 from rest_framework.permissions import IsAuthenticated
 from users.models import User, Customer, Owner
+from rest_framework.response import Response
 
 class ListingList(generics.ListAPIView):
     queryset = Rumah.objects.all().order_by('date_posted')
