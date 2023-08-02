@@ -57,24 +57,26 @@ class ReviewSerializer(serializers.ModelSerializer):
         model = Review
         fields = ['user', 'rumah', 'rate', 'comment', 'create_at', 'user_username']
 
-class KamarSerializer(serializers.ModelSerializer):
-    kamar_transaksi = serializers.SerializerMethodField()
-    Fasilitas_kamar = serializers.SerializerMethodField()
+# class KamarSerializer(serializers.ModelSerializer):
+#     kamar_transaksi = serializers.SerializerMethodField()
+#     Fasilitas_kamar = serializers.SerializerMethodField()
 
-    def get_kamar_transaksi(self, obj):
-        query = Transaction.objects.filter(kamar=obj)  # Menggunakan obj yang merupakan objek Kamar
-        transaction_serialized = TransactionSerializer(query, many=True)
-        return transaction_serialized.data
+#     def get_kamar_transaksi(self, obj):
+#         query = Transaction.objects.filter(kamar=obj)  # Menggunakan obj yang merupakan objek Kamar
+#         transaction_serialized = TransactionSerializer(query, many=True)
+#         return transaction_serialized.data
 
-    def get_fasilitas_kamar(self, obj):
-        query = FasilitasKamar.objects.filter(kamar=obj)  # Menggunakan obj yang merupakan objek Kamar
-        Fasilitaskamar_serialized = FasilitasKamarSerializer(query, many=True)
-        return Fasilitaskamar_serialized.data
+#     def get_fasilitas_kamar(self, obj):
+#         query = FasilitasKamar.objects.filter(kamar=obj)  # Menggunakan obj yang merupakan objek Kamar
+#         Fasilitaskamar_serialized = FasilitasKamarSerializer(query, many=True)
+#         return Fasilitaskamar_serialized.data
 
 
-    class Meta:
-        model = Kamar
-        fields = '__all__'
+#     class Meta:
+#         model = Kamar
+#         fields = '__all__'
+
+
 
 class FasilitasKamarSerializer(serializers.ModelSerializer):
     class Meta:
@@ -85,3 +87,19 @@ class FasilitasRumahSerializer(serializers.ModelSerializer):
     class Meta:
         model = FasilitasRumah
         fields = '__all__'
+
+class KamarSerializer(serializers.ModelSerializer):
+    fasilitaskamar_set = FasilitasKamarSerializer(many=True)
+
+    class Meta:
+        model = Kamar
+        fields = '__all__'
+
+    def create(self, validated_data):
+        fasilitaskamar_data = validated_data.pop('fasilitaskamar_set')
+        kamar = Kamar.objects.create(**validated_data)
+
+        for fasilitas_data in fasilitaskamar_data:
+            FasilitasKamar.objects.create(kamar=kamar, **fasilitas_data)
+
+        return kamar

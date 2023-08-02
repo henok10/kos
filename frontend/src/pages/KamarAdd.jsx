@@ -67,7 +67,9 @@ function KamarAdd() {
 		priceDayValue: "",
 		priceMonthValue: "",
 		priceYearValue: "",
-    roomSizeValue: "",
+    	roomSizeValue: "",
+		facilities: [],
+		newFacility: "", // State untuk menyimpan fasilitas baru yang akan dimasukkan
 		pictureRoomValue: [],
 		sendRequest: 0,
 		openSnack: false,
@@ -134,6 +136,13 @@ function KamarAdd() {
 				draft.pictureRoomValue = action.pictureRoomChosen;
 				break;
 			
+			case "catchNewFacility":
+				draft.newFacility = action.newFacilityChosen;
+				break;
+		
+			case "addFacility":
+				draft.facilities.push(action.newFacility);
+				break;
 	
 			case "changeSendRequest":
 				draft.sendRequest = draft.sendRequest + 1;
@@ -228,7 +237,8 @@ function KamarAdd() {
 			!state.priceDayErrors.hasErrors &&
 			!state.priceMonthErrors.hasErrors &&
 			!state.roomSizeErrors.hasErrors &&
-			!state.priceYearErrors.hasErrors 
+			!state.priceYearErrors.hasErrors &&
+			state.facilities.length > 0 // Memastikan ada fasilitas yang dipilih
 		) {
 			dispatch({ type: "changeSendRequest" });
 			dispatch({ type: "disableTheButton" });
@@ -264,7 +274,7 @@ function KamarAdd() {
 
 				try {
 					const response = await Axios.post(
-						"https://mykos2.onrender.com/api/kamar/create",
+						"https://mykos2.onrender.com/api/fasilitas-kamar/create",
 						formData
 					);
 
@@ -278,6 +288,21 @@ function KamarAdd() {
 	}, [state.sendRequest]);
 
 
+	const handleFacilityChange = (e) => {
+		dispatch({
+		  type: "catchNewFacility",
+		  newFacilityChosen: e.target.value,
+		});
+	  };
+	  
+	
+	  const handleAddFacility = () => {
+	if (state.newFacility.trim()) {
+		dispatch({ type: "addFacility", newFacility: state.newFacility.trim() });
+		dispatch({ type: "catchNewFacility", newFacilityChosen: "" });
+	}
+	};
+	  
 	useEffect(() => {
 		if (state.openSnack) {
 			setTimeout(() => {
@@ -415,7 +440,33 @@ function KamarAdd() {
           helperText={state.roomSizeErrors.errorMessage}
         />
       </Grid>
-    
+	  <Grid item container xs={6}>
+          <TextField
+            id="newFacility"
+            label="Fasilitas Baru"
+            variant="standard"
+            fullWidth
+            value={state.newFacility}
+            onChange={handleFacilityChange}
+          />
+          <Button
+            variant="contained"
+            color="primary"
+            fullWidth
+            onClick={handleAddFacility}
+            disabled={!state.newFacility.trim()}
+          >
+            Tambahkan Fasilitas
+          </Button>
+        </Grid>
+
+        <Grid item container>
+          {state.facilities.map((facility, index) => (
+            <Grid item xs={3} key={index}>
+              <Typography>{facility}</Typography>
+            </Grid>
+          ))}
+        </Grid>
 
       <Grid item container>
         
