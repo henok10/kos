@@ -152,4 +152,6 @@ class FasilitasRumahList(generics.ListAPIView):
 class FasilitasRumahCreate(generics.CreateAPIView):
     serializer_class = FasilitasRumahSerializer
     queryset = FasilitasRumah.objects.all()
+
+
   

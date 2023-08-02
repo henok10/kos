@@ -144,7 +144,7 @@ function KamarAdd() {
 				draft.newFacility = action.newFacilityChosen;
 				break;
 			
-			case "addFacility":
+				case "addFacility":
 				if (action.newFacilityChosen.trim()) {
 					draft.facilities.push(action.newFacilityChosen.trim());
 					draft.newFacility = ""; // Reset the newFacility state after adding to facilities
@@ -296,11 +296,15 @@ function KamarAdd() {
 
 
 				 // Mengirim daftar fasilitas yang telah dipilih ke API
+			// ...
+ // Convert the facilities array into the appropriate format
 				const facilitiesArray = state.facilities.map((facility) => ({ name: facility }));
 				formData.append("fasilitaskamar_set", JSON.stringify(facilitiesArray));
+				// ...
+
 				try {
 					const response = await Axios.post(
-						"https://mykos2.onrender.com/api/fasilitas-kamar/create",
+						"https://mykos2.onrender.com/api/kamar/create",
 						formData
 					);
 

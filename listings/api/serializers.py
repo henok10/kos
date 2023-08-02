@@ -89,14 +89,14 @@ class FasilitasRumahSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 class KamarSerializer(serializers.ModelSerializer):
-    fasilitaskamar_set = FasilitasKamarSerializer(many=True)
+    fasilitaskamar_set = FasilitasKamarSerializer(many=True, required=False)
 
     class Meta:
         model = Kamar
         fields = '__all__'
 
     def create(self, validated_data):
-        fasilitaskamar_data = validated_data.pop('fasilitaskamar_set')
+        fasilitaskamar_data = validated_data.pop('fasilitaskamar_set', [])
         kamar = Kamar.objects.create(**validated_data)
 
         for fasilitas_data in fasilitaskamar_data:
