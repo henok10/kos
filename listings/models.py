@@ -130,7 +130,7 @@ class FasilitasKamar(models.Model):
 
 class FasilitasRumah(models.Model):
     rumah = models.ForeignKey(Rumah, on_delete=models.CASCADE, blank=True, null=True, related_name='fasilitasrumah')
-    nama_fasilitas = models.CharField(max_length=100)
+    name = models.CharField(max_length=100)
 
     def __str__(self):
         return self.rumah.title

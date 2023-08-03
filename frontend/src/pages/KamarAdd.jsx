@@ -24,7 +24,6 @@ const useStyles = makeStyles({
 	},
 
 	registerBtn: {
-		backgroundColor: "green",
 		color: "white",
 		fontSize: "1.1rem",
 		marginLeft: "1rem",
@@ -38,7 +37,6 @@ const useStyles = makeStyles({
 		color: "white",
 		fontSize: "0.8rem",
 		textAlign: "center",
-		marginLeft: "1rem",
 	},
 });
 function KamarAdd() {
@@ -69,7 +67,6 @@ function KamarAdd() {
 		priceYearValue: "",
     	roomSizeValue: "",
 		facilities: [],
-		fasilitaskamar_set: [],
 		newFacility: "", // State untuk menyimpan fasilitas baru yang akan dimasukkan
 		pictureRoomValue: [],
 		sendRequest: 0,
@@ -144,7 +141,7 @@ function KamarAdd() {
 				draft.newFacility = action.newFacilityChosen;
 				break;
 			
-				case "addFacility":
+			case "addFacility":
 				if (action.newFacilityChosen.trim()) {
 					draft.facilities.push(action.newFacilityChosen.trim());
 					draft.newFacility = ""; // Reset the newFacility state after adding to facilities
@@ -294,7 +291,7 @@ function KamarAdd() {
 			  
 				// Convert the facilities array into the appropriate format
 				const facilitiesArray = state.facilities.map((facility) => ({ name: facility }));
-				formData.append("fasilitaskamar_set", JSON.stringify(facilitiesArray));
+				// formData.append("fasilitaskamar_set", JSON.stringify(facilitiesArray));
 			  
 				try {
 				  // First, create the Kamar instance
@@ -477,6 +474,7 @@ function KamarAdd() {
             color="primary"
             fullWidth
             onClick={handleAddFacility}
+			style={{marginTop: '5px'}}
             disabled={!state.newFacility.trim()}
           >
             Tambahkan Fasilitas

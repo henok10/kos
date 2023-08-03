@@ -72,6 +72,8 @@ function ListingAdd() {
 		longitudeValue: "",
 		priceMonthValue: "",
 		no_rekeningValue: "",
+		facilities: [],
+		newFacility: "", // State untuk menyimpan fasilitas baru yang akan dimasukkan
 		picture1Value: [],
 		picture2Value: [],
 		picture3Value: [],
@@ -142,7 +144,16 @@ function ListingAdd() {
 				draft.boroughErrors.hasErrors = false;
 				draft.boroughErrors.errorMessage = "";
 				break;
-
+			case "catchNewFacility":
+				draft.newFacility = action.newFacilityChosen;
+				break;
+			
+			case "addFacility":
+				if (action.newFacilityChosen.trim()) {
+					draft.facilities.push(action.newFacilityChosen.trim());
+					draft.newFacility = ""; // Reset the newFacility state after adding to facilities
+				}
+				break;
 
 			case "catchLatitudeChange":
 				draft.latitudeValue = action.latitudeChosen;
@@ -275,6 +286,7 @@ function ListingAdd() {
 
 	const [state, dispatch] = useImmerReducer(ReducerFuction, initialState);
 
+
 	// request to get profile info
 	useEffect(() => {
 		async function GetProfileInfo() {
@@ -291,7 +303,20 @@ function ListingAdd() {
 		}
 		GetProfileInfo();
 	}, []);
-
+	function handleFacilityChange(event) {
+			dispatch({
+			type: "catchNewFacility",
+			newFacilityChosen: event.target.value,
+			});
+		}
+	
+	const handleAddFacility = () => {
+	if (state.newFacility && state.newFacility.trim()) {
+		dispatch({ type: "addFacility", newFacilityChosen: state.newFacility });
+		dispatch({ type: "catchNewFacility", newFacilityChosen: "" });
+	}
+	};
+	  
 	function FormSubmit(e) {
 		e.preventDefault();
 
@@ -304,7 +329,8 @@ function ListingAdd() {
 			!state.boroughErrors.hasErrors &&
 			!state.descriptionErrors.hasErrors &&
 			state.latitudeValue &&
-			state.longitudeValue
+			state.longitudeValue &&
+			state.facilities.length > 0
 		) {
 			dispatch({ type: "changeSendRequest" });
 			dispatch({ type: "disableTheButton" });
@@ -347,11 +373,22 @@ function ListingAdd() {
 				formData.append("picture4", state.picture4Value);
 				formData.append("user", userId);
 
+				const facilitiesArray = state.facilities.map((facility) => ({ name: facility }));
+
 				try {
-					const response = await Axios.post(
+					const kamarResponse = await Axios.post(
 						"https://mykos2.onrender.com/api/listings/create/",
 						formData
 					);
+
+					const kamarId = kamarResponse.data.id;
+			  
+					for (const facility of facilitiesArray) {
+					  await Axios.post("https://mykos2.onrender.com/api/fasilitas-rumah/create", {
+						kamar: kamarId,
+						name: facility.name,
+					  });
+					}
 
 					dispatch({ type: "openTheSnack" });
 				} catch (e) {
@@ -618,7 +655,34 @@ function ListingAdd() {
 				</Grid>
 
 				<Grid item container>
-					
+							<Grid item container xs={6}>
+					<TextField
+						id="newFacility"
+						label="Fasilitas Baru"
+						variant="standard"
+						fullWidth
+						value={state.newFacility}
+						onChange={handleFacilityChange}
+					/>
+					<Button
+						variant="contained"
+						color="primary"
+						fullWidth
+						onClick={handleAddFacility}
+						style={{marginTop: '5px'}}
+						disabled={!state.newFacility.trim()}
+					>
+						Tambahkan Fasilitas
+					</Button>
+					</Grid>
+
+					<Grid item container>
+					{state.facilities.map((facility, index) => (
+						<Grid item xs={3} key={index}>
+						<Typography>{facility}</Typography>
+						</Grid>
+					))}
+					</Grid>
 					
 				</Grid>
 				<Grid item container>

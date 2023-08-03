@@ -6,6 +6,15 @@ import Axios from "axios";
 import { useSelector } from 'react-redux'
 import { useNavigate, useParams } from "react-router-dom";
 import { makeStyles } from '@mui/styles';
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Paper,
+} from "@mui/material";
 
 const useStyles = makeStyles({
   cellSuccess: {
@@ -62,48 +71,48 @@ export default function RiwayatTransaksi() {
   }, []);
 
 
-  const columns = [
-    { field: 'fullName', headerName: 'Name', width: 200,},  
-    { field: 'listing_title', headerName: 'Nama Kos', width: 220 }, 
-    { field: 'phoneNumber', headerName: 'No. Telp', width: 130 },
-    { field: 'rentalFrequency', headerName: 'Frequensi Sewa', width: 130 },
-    { field: 'nominal', headerName: 'Total', width: 100 },
-    { field: 'date', headerName: 'Date', width: 250 },
-    {
-      field: 'approve',
-      headerName: 'Status',
-      width: 130,
-      // valueGetter: (params) => params.row.approve ? 'Sukses' : 'Proses',
-      renderCell: (params) => (
-        <div
-                style={{
-                  padding: '4px 8px',
-                  borderRadius: '4px',
-                  color: 'white',
-                  fontWeight: 'bold',
-                  textAlign: 'center',
-                  backgroundColor: params.row.approve ? 'green' : 'orange',
-                }}
-              >
-                {params.row.approve !== undefined
-                  ? params.row.approve
-                    ? "Approve"
-                    : "Proses"
-                  : "Data not available"}
-              </div>
-      )
-      // params.row.barang_dibeli ? classes.cellSuccess : classes.cellProcess,
-    },
-  ];
+  // const columns = [
+  //   { field: 'fullName', headerName: 'Name', width: 200,},  
+  //   { field: 'listing_title', headerName: 'Nama Kos', width: 220 }, 
+  //   { field: 'phoneNumber', headerName: 'No. Telp', width: 130 },
+  //   { field: 'rentalFrequency', headerName: 'Frequensi Sewa', width: 130 },
+  //   { field: 'nominal', headerName: 'Total', width: 100 },
+  //   { field: 'date', headerName: 'Date', width: 250 },
+  //   {
+  //     field: 'approve',
+  //     headerName: 'Status',
+  //     width: 130,
+  //     // valueGetter: (params) => params.row.approve ? 'Sukses' : 'Proses',
+  //     renderCell: (params) => (
+  //       <div
+  //               style={{
+  //                 padding: '4px 8px',
+  //                 borderRadius: '4px',
+  //                 color: 'white',
+  //                 fontWeight: 'bold',
+  //                 textAlign: 'center',
+  //                 backgroundColor: params.row.approve ? 'green' : 'orange',
+  //               }}
+  //             >
+  //               {params.row.approve !== undefined
+  //                 ? params.row.approve
+  //                   ? "Approve"
+  //                   : "Proses"
+  //                 : "Data not available"}
+  //             </div>
+  //     )
+  //     // params.row.barang_dibeli ? classes.cellSuccess : classes.cellProcess,
+  //   },
+  // ];
   return (
     <>
-    <Grid container style={{ position: 'absolute', width: '100%', height: '60%', marginLeft: '3rem'}}>
-      <Grid container alignItems="center" justifyContent="center" marginTop="2rem">
+    <Grid container style={{ width: '100%', height: '60%', marginLeft: '1rem'}}>
+      <Grid container alignItems="center" justifyContent="center">
         <Typography variant="h4" align="center">
           Pemesanan Kamar Kos
         </Typography>
       </Grid>
-      <div style={{height: 480, marginTop:'2rem', width: '85%' }}>
+      {/* <div style={{height: 480, marginTop:'2rem', width: '85%' }}>
         <DataGrid
           rows={allKos}
           columns={columns}
@@ -111,8 +120,66 @@ export default function RiwayatTransaksi() {
           rowsPerPageOptions={[10]}
           checkboxSelection
         />
-      </div>
-    </Grid>   
+      </div> */}
+
+
+<TableContainer component={Paper}>
+            <Table sx={{ minWidth: 650 }} aria-label="simple table">
+                <TableHead>
+                    <TableRow>
+                        <TableCell>Name</TableCell>
+                        <TableCell>Nama Kos</TableCell>
+                        <TableCell>No. Telp</TableCell>
+                        <TableCell>Frequensi Sewa</TableCell>
+                        <TableCell>Total</TableCell>
+                        <TableCell>Date</TableCell>
+                        <TableCell>Status</TableCell>
+  
+                    </TableRow>
+                </TableHead>
+                <TableBody>
+                    {allKos.map((row) => (
+                        
+                        <TableRow
+                            key={row.name}
+                            sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+                        >
+                            <TableCell component="th" scope="row">
+                                {row.fullName}
+                            </TableCell>
+                            <TableCell>{row.listing_title}</TableCell>
+                            <TableCell>{row.phoneNumber}</TableCell>
+                            <TableCell>{row.rentalFrequency}</TableCell>
+                            <TableCell>{row.date}</TableCell>
+                            <TableCell>{row.nominal}</TableCell>
+                            <TableCell>
+                            
+                            <div
+                              style={{
+                                padding: '4px 8px',
+                                borderRadius: '4px',
+                                color: 'white',
+                                fontWeight: 'bold',
+                                textAlign: 'center',
+                                backgroundColor: params.row.approve ? 'green' : 'orange',
+                              }}
+                            >
+                              {params.row.approve !== undefined
+                                ? params.row.approve
+                                  ? "Approve"
+                                  : "Proses"
+                                : "Data not available"}
+                            </div>  
+                            </TableCell>
+                    
+    
+                        </TableRow>
+                    ))}
+                </TableBody>
+            </Table>
+        </TableContainer> 
+    </Grid>  
+    
     </>    
   );
 }

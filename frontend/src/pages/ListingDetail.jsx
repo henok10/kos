@@ -291,7 +291,7 @@ const handleWhatsApp = () => {
             onClick={() => navigate("/listings")}
             style={{ cursor: "pointer" }}
           >
-            Listings
+            Rumah
           </Link>
 
           <Typography color="text.primary">
