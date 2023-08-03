@@ -113,6 +113,10 @@ class KamarCreate(generics.CreateAPIView):
     serializer_class = KamarSerializer
     queryset = Kamar.objects.all()
 
+class FasilitasKamarCreate(generics.CreateAPIView):
+    queryset = FasilitasKamar.objects.all()
+    serializer_class = FasilitasKamarSerializer
+
 class KamarDelete(generics.DestroyAPIView):
     queryset = Kamar.objects.all()
     serializer_class = KamarSerializer

@@ -291,28 +291,34 @@ function KamarAdd() {
 				formData.append("picture_room", state.pictureRoomValue);
 				formData.append("room_size", state.roomSizeValue);
 				formData.append("rumah", params.id);
-				// formData.append("fasilitaskamar_set", JSON.stringify(state.facilities)); // Convert the array to a JSON string
-
-
-
-				 // Mengirim daftar fasilitas yang telah dipilih ke API
-			// ...
- // Convert the facilities array into the appropriate format
+			  
+				// Convert the facilities array into the appropriate format
 				const facilitiesArray = state.facilities.map((facility) => ({ name: facility }));
 				formData.append("fasilitaskamar_set", JSON.stringify(facilitiesArray));
-				// ...
-
+			  
 				try {
-					const response = await Axios.post(
-						"https://mykos2.onrender.com/api/kamar/create",
-						formData
-					);
-
-					dispatch({ type: "openTheSnack" });
+				  // First, create the Kamar instance
+				  const kamarResponse = await Axios.post(
+					"https://mykos2.onrender.com/api/kamar/create",
+					formData
+				  );
+			  
+				  // Now, use the created Kamar instance's ID to associate the FasilitasKamar instances
+				  const kamarId = kamarResponse.data.id;
+			  
+				  for (const facility of facilitiesArray) {
+					await Axios.post("https://mykos2.onrender.com/api/fasilitas-kamar/create", {
+					  kamar: kamarId,
+					  name: facility.name,
+					});
+				  }
+			  
+				  dispatch({ type: "openTheSnack" });
 				} catch (e) {
-					dispatch({ type: "allowTheButton" });
+				  dispatch({ type: "allowTheButton" });
 				}
-			}
+			  }
+			  
 			AddProperty();
 		}
 	}, [state.sendRequest]);

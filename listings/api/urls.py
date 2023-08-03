@@ -36,5 +36,5 @@ urlpatterns = [
      path('fasilitas-kamar/<int:kamar>/', listings_api_views.FasilitasKamarList.as_view()),
      path('fasilitas-rumah/<int:rumah>/', listings_api_views.FasilitasRumahList.as_view()),
      path('fasilitas-rumah/create', listings_api_views.FasilitasRumahCreate.as_view()),
-     path('fasilitas-kamar/create', listings_api_views.KamarCreate.as_view()),
+     path('fasilitas-kamar/create', listings_api_views.FasilitasKamarCreate.as_view()),
 ]
