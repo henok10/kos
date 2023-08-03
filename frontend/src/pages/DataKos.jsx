@@ -80,14 +80,14 @@ export default function DataTable() {
 
   
   
-  async function DeleteHandler() {
+  async function DeleteHandler(id) {
 		const confirmDelete = window.confirm(
-			"Are you sure you want to delete this listing?"
+			"Are you sure you want to delete this Rumah?"
 		);
 		if (confirmDelete) {
 			try {
 				const response = await Axios.delete(
-					`https://mykos2.onrender.com/api/listings/${params.id}/delete/`
+					`https://mykos2.onrender.com/api/listings/${id}/delete/`
 				);
 
 	
@@ -172,7 +172,7 @@ export default function DataTable() {
           <Button variant="contained" color="primary" onClick={() => navigate(`/listingupdate/${params.row.id}`)}>
             Update
           </Button>
-          <Button variant="contained" color="error" onClick={DeleteHandler}>
+          <Button variant="contained" color="error"  onClick={() => DeleteHandler(params.id)}>
             Hapus
           </Button>
         </div>

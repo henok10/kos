@@ -376,16 +376,16 @@ function ListingAdd() {
 				const facilitiesArray = state.facilities.map((facility) => ({ name: facility }));
 
 				try {
-					const kamarResponse = await Axios.post(
+					const rumahResponse = await Axios.post(
 						"https://mykos2.onrender.com/api/listings/create/",
 						formData
 					);
 
-					const kamarId = kamarResponse.data.id;
+					const rumahId = rumahResponse.data.id;
 			  
 					for (const facility of facilitiesArray) {
 					  await Axios.post("https://mykos2.onrender.com/api/fasilitas-rumah/create", {
-						kamar: kamarId,
+						rumah: rumahId,
 						name: facility.name,
 					  });
 					}

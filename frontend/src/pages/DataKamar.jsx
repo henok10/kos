@@ -74,6 +74,10 @@ function DataKamar() {
       }
 
       async function deleteKamar(id) {
+        const confirmDelete = window.confirm(
+          "Are you sure you want to delete this kamar?"
+        );
+        if (confirmDelete) {
         try {
           await Axios.delete(`https://mykos2.onrender.com/api/kamar/${id}/delete/`);
 
@@ -82,6 +86,7 @@ function DataKamar() {
         }
         window.location.reload();
       }
+    }
       
       
       

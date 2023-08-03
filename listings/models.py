@@ -133,7 +133,7 @@ class FasilitasRumah(models.Model):
     name = models.CharField(max_length=100)
 
     def __str__(self):
-        return self.rumah.title
+        return self.rumah.title if self.rumah else "N/A"
 
 class Rule(models.Model):
     rumah = models.ForeignKey(Rumah, on_delete=models.CASCADE, blank=True, null=True, related_name='rule')

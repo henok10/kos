@@ -522,6 +522,9 @@ function KamarAdd() {
                 }}
               />
             </Button>
+			<Typography style={{height: '5rem'}}>
+              {state.pictureRoomValue ? <p>{state.pictureRoomValue.name}</p> : ""}
+            </Typography>
             
           </Grid>
           <Button
@@ -534,9 +537,7 @@ function KamarAdd() {
             >
               SUBMIT
           </Button>
-          <Typography style={{height: '5rem'}}>
-              {state.pictureRoomValue ? <p>{state.pictureRoomValue.name}</p> : ""}
-            </Typography>
+        
         
 
         </Grid>
