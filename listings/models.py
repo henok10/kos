@@ -123,14 +123,41 @@ class Review(models.Model):
       
 class FasilitasKamar(models.Model):
     kamar = models.ForeignKey(Kamar, on_delete=models.CASCADE, blank=True, null=True, related_name='fasilitaskamar')
-    name = models.CharField(max_length=100)
+    choices_fasilitas_kamar = (
+        ('Wc', 'Wc'),
+        ('Lemari', 'Lemari'),
+        ('Meja Belajar', 'Meja Belajar'),
+        ('Kursi', 'Kursi'),
+        ('Tempat Tidur', 'Tempat Tidur'),
+        ('Kasur', 'Kasur'),
+        ('Ac', 'Ac'),
+    )
+    name = models.CharField(max_length=100, choices=choices_fasilitas_kamar)
 
     def __str__(self):
         return self.kamar.address_room
 
 class FasilitasRumah(models.Model):
     rumah = models.ForeignKey(Rumah, on_delete=models.CASCADE, blank=True, null=True, related_name='fasilitasrumah')
-    name = models.CharField(max_length=100)
+    choices_fasilitas_rumah = (
+        ('Parkiran', 'Parkiran'),
+        ('Kolam', 'Kolam'),
+        ('Dapur Umum', 'Dapur Umum'),
+        ('Wc Umum', 'Wc Umum'),
+        ('Tangga', 'Tangga'),
+        ('Lift', 'Lift'),
+        ('CCTV', 'CCTV'),
+        ('Lapangan', 'Lapangan'),
+        ('Wifi', 'Wifi'),
+        ('Tv Umum', 'Tv Umum'),
+        ('Fasilitas Olahraga', 'Fasilitas Olahraga'),
+        ('Security', 'Security'),
+        ('Jasa Laundry', 'Jasa Laundry'),
+        ('Kantin Umum', 'Kantin Umum'),
+        ('Sarana Hiburan', 'Sarana Hiburan'),
+        ('Cleaning Service', 'Cleaning Service'),
+    )
+    name = models.CharField(max_length=100, choices=choices_fasilitas_rumah)
 
     def __str__(self):
         return self.rumah.title if self.rumah else "N/A"

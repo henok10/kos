@@ -144,6 +144,9 @@ class FasilitasKamarList(generics.ListAPIView):
         kamar = Kamar.objects.get(id=kamar_id)
         queryset = FasilitasKamar.objects.filter(kamar=kamar).order_by('name')
         return queryset
+class FasilitasKamarUpdate(generics.UpdateAPIView):
+    serializer_class = FasilitasKamarSerializer
+    queryset = FasilitasKamar.objects.all()
 
 class FasilitasRumahList(generics.ListAPIView):
     serializer_class = FasilitasRumahSerializer

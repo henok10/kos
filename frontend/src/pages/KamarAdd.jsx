@@ -2,6 +2,7 @@ import React, { useEffect, useState} from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import Axios from "axios";
 import { useImmerReducer } from "use-immer";
+import {choices} from "../components/Choice";
 
 // MUI
 import {
@@ -31,17 +32,11 @@ const useStyles = makeStyles({
 			backgroundColor: "primary",
 		},
 	},
-
-	picturesBtn: {
-		// backgroundColor: "blue",
-		color: "white",
-		fontSize: "0.8rem",
-		textAlign: "center",
-	},
 });
 function KamarAdd() {
-  const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
-  const isCostumer = useSelector((state) => state.auth.isCostumer);
+	const {choice_kamar} = choices();
+	const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
+	const isCostumer = useSelector((state) => state.auth.isCostumer);
 	const isPemilikKos = useSelector((state) => state.auth.isPemilikKos);
 	const userId = useSelector(state => state.auth.userId)
 	const ownerId = useSelector(state => state.auth.ownerId)
@@ -468,7 +463,17 @@ function KamarAdd() {
             fullWidth
             value={state.newFacility}
             onChange={handleFacilityChange}
-          />
+			select
+			SelectProps={{
+				native: true,
+			}}
+          >
+			{choice_kamar.map((option) => (
+				<option key={option.value} value={option.value}>
+					{option.label}
+				</option>
+			))}
+			</TextField>
           <Button
             variant="contained"
             color="primary"
@@ -478,6 +483,7 @@ function KamarAdd() {
             disabled={!state.newFacility.trim()}
           >
             Tambahkan Fasilitas
+			
           </Button>
         </Grid>
 
@@ -494,18 +500,16 @@ function KamarAdd() {
         
       </Grid>
       <Grid item container>
-        <Grid item xs={6}>
+        <Grid item xs={3}>
           <Grid
             item
             container
             xs={12}
-            style={{width:'50%', marginTop: "1rem"}}
+            style={{marginTop: "1rem", width: '10rem'}}
           >
             <Button
               variant="contained"
               component="label"
-              fullWidth
-              className={classes.picturesBtn}
             >
               UPLOAD PICTURES
               <input
@@ -522,16 +526,15 @@ function KamarAdd() {
                 }}
               />
             </Button>
-			<Typography style={{height: '5rem'}}>
+			<Typography>
               {state.pictureRoomValue ? <p>{state.pictureRoomValue.name}</p> : ""}
             </Typography>
             
           </Grid>
           <Button
               variant="contained"
-              fullWidth
               type="submit"
-              style={{ marginTop: "4rem", marginLeft: "auto", marginRight: "auto" }}
+              style={{ marginTop: "4rem", marginLeft: "auto", marginRight: "auto", width: '10rem' }}
               className={classes.registerBtn}
               disabled={state.disabledBtn}
             >

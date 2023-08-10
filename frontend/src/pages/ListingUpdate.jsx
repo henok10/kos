@@ -218,6 +218,7 @@ function ListingUpdate(props) {
         }
         GetListingInfo();
       }, []);
+	  console.log(state.titleValue)
 	useEffect(() => {
 		if (state.sendRequest) {
 			async function UpdateProperty() {

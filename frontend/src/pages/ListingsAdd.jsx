@@ -2,6 +2,7 @@ import React, { useEffect} from "react";
 import { useNavigate } from "react-router-dom";
 import Axios from "axios";
 import { useImmerReducer } from "use-immer";
+import {choices} from "../components/Choice";
 
 // MUI
 import {
@@ -44,6 +45,7 @@ const useStyles = makeStyles({
 
 
 function ListingAdd() {
+	const {choice_rumah} = choices();
 	const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
   	const isCostumer = useSelector((state) => state.auth.isCostumer);
 	const isPemilikKos = useSelector((state) => state.auth.isPemilikKos);
@@ -373,7 +375,12 @@ function ListingAdd() {
 				formData.append("picture4", state.picture4Value);
 				formData.append("user", userId);
 
-				const facilitiesArray = state.facilities.map((facility) => ({ name: facility }));
+				// const facilitiesArray = state.facilities.map((facility) => ({ name: facility }));
+				const facilitiesArray = state.facilities.map((facility) => {
+					const icon = choices().choice_kamar.find((item) => item.value === facility)?.icon;
+					return { name: facility, icon };
+				  });
+				  
 
 				try {
 					const rumahResponse = await Axios.post(
@@ -655,7 +662,7 @@ function ListingAdd() {
 				</Grid>
 
 				<Grid item container>
-							<Grid item container xs={6}>
+					<Grid item container xs={6}>
 					<TextField
 						id="newFacility"
 						label="Fasilitas Baru"
@@ -663,7 +670,17 @@ function ListingAdd() {
 						fullWidth
 						value={state.newFacility}
 						onChange={handleFacilityChange}
-					/>
+						select
+						SelectProps={{
+							native: true,
+						}}
+					>
+						{choice_rumah.map((option) => (
+							<option key={option.value} value={option.value}>
+								{option.label}
+							</option>
+						))}
+					</TextField>
 					<Button
 						variant="contained"
 						color="primary"
@@ -676,13 +693,22 @@ function ListingAdd() {
 					</Button>
 					</Grid>
 
-					<Grid item container>
+					{/* <Grid item container>
 					{state.facilities.map((facility, index) => (
 						<Grid item xs={3} key={index}>
 						<Typography>{facility}</Typography>
 						</Grid>
 					))}
-					</Grid>
+					</Grid> */}
+					<Grid item container>
+						{state.facilities.map((facility, index) => (
+							<Grid item xs={3} key={index}>
+							{choices().choice_kamar.find((item) => item.value === facility)?.icon}
+							<Typography>{facility}</Typography>
+							</Grid>
+						))}
+						</Grid>
+
 					
 				</Grid>
 				<Grid item container>
