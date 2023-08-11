@@ -160,9 +160,10 @@ function KamarUpdate() {
 				draft.editingFacility = action.editedFacility;
 				break;
 			  
-			case "catchFasilitasChange":
-				draft.fasilitasInfo[action.index].name = action.fasilitasChosen;
-				break;
+				case "catchFasilitasChange":
+					draft.fasilitasInfo[action.index].name = action.fasilitasChosen; // Ubah nama dalam array fasilitasInfo
+					draft.nameFasilitasValue = action.fasilitasChosen; // Ubah nilai nameFasilitasValue
+					break;
 				
 			  
 
@@ -391,20 +392,22 @@ function KamarUpdate() {
 
 			async function updateFasilitasInfo(updatedFasilitas) {
 				try {
-				  const response = await Axios.put(
-					`https://mykos2.onrender.com/api/fasilitas-kamar/${params.id}/update`,
-					updatedFasilitas
-				  );
-			  
-				  console.log("Fasilitas berhasil diupdate:", response.data);
+					const response = await Axios.put(
+						`https://mykos2.onrender.com/api/fasilitas-kamar/${params.id}/update`,
+						{
+							name: updatedFasilitas.name,
+						}
+					);
+			
+					console.log("Fasilitas berhasil diupdate:", response.data);
 				} catch (error) {
-				  console.error("Gagal mengupdate fasilitas:", error);
+					console.error("Gagal mengupdate fasilitas:", error);
 				}
-			  }
-			  
-			  // Di dalam kode Anda, setelah Anda mengubah fasilitas di state
-			updateFasilitasInfo({ name: state.nameValue, kamar: params.id });
-			  
+			}
+			
+			// Di dalam kode Anda, setelah Anda mengubah fasilitas dalam state
+			updateFasilitasInfo({ name: state.nameFasilitasValue, kamar: params.id });
+			
 		}
 	}, [state.sendRequest]);
 
