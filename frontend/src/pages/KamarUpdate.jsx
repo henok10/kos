@@ -161,7 +161,7 @@ function KamarUpdate() {
 				break;
 			  
 				case "catchFasilitasChange":
-					draft.fasilitasInfo[action.index].name = action.fasilitasChosen; // Ubah nama dalam array fasilitasInfo
+					draft.fasilitasInfo = action.fasilitasChosen; // Ubah nama dalam array fasilitasInfo
 					draft.nameFasilitasValue = action.fasilitasChosen; // Ubah nilai nameFasilitasValue
 					break;
 				
