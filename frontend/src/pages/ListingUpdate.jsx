@@ -3,6 +3,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import Axios from "axios";
 import { useImmerReducer } from "use-immer";
 import { useSelector } from 'react-redux'
+import {choices} from "../components/Choice";
 
 // MUI
 import {
@@ -73,6 +74,7 @@ function ListingUpdate(props) {
     const params = useParams();
 	const classes = useStyles();
 	const navigate = useNavigate();
+	const {choice_rumah} = choices();
     useEffect(() => {
 		if (!isAuthenticated) {
 		  navigate("/login");
@@ -99,6 +101,9 @@ function ListingUpdate(props) {
 		picture3Value: [],
 		picture4Value: [],
         listingInfo: "",
+		fasilitasInfo: [],
+		facilities: [],
+		newFacility: "",
 		sendRequest: 0,
 		openSnack: false,
 		disabledBtn: false,
@@ -159,6 +164,26 @@ function ListingUpdate(props) {
 				draft.picture4Value = action.listingObject.picture4;
 				
                 break;
+
+			case "catchFasilitasInfo":
+				draft.fasilitasInfo = action.fasilitasObject;
+				draft.nameFasilitasValue = action.fasilitasObject.name
+				break;
+					  
+			case "catchFasilitasChange":
+				draft.fasilitasInfo[action.index].name = action.fasilitasChosen;
+				break;
+						
+			case "catchNewFacility":
+				draft.newFacility = action.newFacilityChosen;
+				break;
+
+			case "addFacility":
+				if (action.newFacilityChosen.trim()) {
+					draft.facilities.push(action.newFacilityChosen.trim());
+					draft.newFacility = ""; // Reset the newFacility state after adding to facilities
+				}
+				break;
 			case "changeSendRequest":
 				draft.sendRequest = draft.sendRequest + 1;
 				break;
@@ -219,6 +244,53 @@ function ListingUpdate(props) {
         GetListingInfo();
       }, []);
 	  console.log(state.titleValue)
+
+	  useEffect(() => {
+		async function GetFasilitasInfo() {
+		  try {
+			const response = await Axios.get(
+			  `https://mykos2.onrender.com/api/fasilitas-rumah/${params.id}/`
+			);
+	
+			dispatch({
+			  type: "catchFasilitasInfo",
+			  fasilitasObject: response.data,  
+			});
+		
+		  } catch (e) {}
+		}
+		GetFasilitasInfo();
+	  }, []);
+console.log(params.id)
+	  const handleFacilityChange = async (event, index) => {
+		const newValue = event.target.value;
+	  
+		try {
+		  const updatedFacilities = state.fasilitasInfo.map((facility, i) =>
+			i === index ? { ...facility, name: newValue } : facility
+		  );
+	  
+		  await Axios.put(
+			`https://mykos2.onrender.com/api/fasilitas-rumah/${state.fasilitasInfo[index].id}/update`,
+			{ name: newValue }
+		  );
+	  
+		  dispatch({
+			type: "catchFasilitasChange",
+			index: index,
+			fasilitasChosen: newValue,
+		  });
+	  
+		  dispatch({
+			type: "updateFacilities",
+			facilities: updatedFacilities,
+		  });
+		} catch (error) {
+		  console.error("Gagal mengupdate fasilitas:", error);
+		}
+	  };
+	  
+	  
 	useEffect(() => {
 		if (state.sendRequest) {
 			async function UpdateProperty() {
@@ -497,6 +569,34 @@ function ListingUpdate(props) {
 						/>
 					</Grid>
 				</Grid>
+
+				<Typography style={{ marginTop: '1rem' }}>Fasilitas : </Typography>
+				<Grid item xs={12} container justifyContent="space-between">
+				{state.fasilitasInfo.map((facility, index) => (
+					<Grid item xs={2.5} key={index} style={{ marginRight: '5px', marginTop: '10px' }}>
+					<Typography>{facility.name}</Typography>
+					<TextField
+						id={`Facility-${index}`}
+						label="Fasilitas"
+						variant="standard"
+						fullWidth
+						value={facility.name} 
+						onChange={(e) => handleFacilityChange(e, index)} 
+						select
+						SelectProps={{
+						native: true,
+						}}
+					>
+						{choice_rumah.map((option) => (
+						<option key={option.value} value={option.value}>
+							{option.label}
+						</option>
+						))}
+					</TextField>
+					</Grid>
+				))}
+				</Grid>
+
 
 				<Grid item container>
 					<Grid item xs={6}>

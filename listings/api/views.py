@@ -132,6 +132,7 @@ class KamarList(generics.ListAPIView):
 class KamarUpdate(generics.UpdateAPIView):
     queryset = Kamar.objects.all()
     serializer_class = KamarSerializer
+    
 
 class KamarDetail(generics.RetrieveAPIView):
     serializer_class = KamarSerializer
@@ -154,7 +155,7 @@ class FasilitasRumahList(generics.ListAPIView):
     def get_queryset(self):
         rumah_id = self.kwargs['rumah']
         rumah = Rumah.objects.get(id=rumah_id)
-        queryset = FasilitasRumah.objects.filter(rumah=rumah).order_by('nama_fasilitas')
+        queryset = FasilitasRumah.objects.filter(rumah=rumah).order_by('name')
         return queryset
 
 class FasilitasRumahCreate(generics.CreateAPIView):

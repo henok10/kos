@@ -132,13 +132,10 @@ function KamarUpdate() {
 				break;
 
 
-			case "catchUploadedPicture":
-				draft.pictureRoomValue = action.pictureRoomChosen;
-				break;
-		
-			case "catchNewFacility":
-				draft.newFacility = action.newFacilityChosen;
-				break;
+			
+				case "catchNewFacility":
+					draft.newFacility = action.newFacilityChosen;
+					break;
 
       case "catchKamarInfo":
         draft.kamarInfo = action.kamarObject;
@@ -149,6 +146,10 @@ function KamarUpdate() {
         draft.roomSizeValue = action.kamarObject.room_size;
         draft.pictureRoomValue = action.kamarObject.picture_room;
         break;
+
+		case "catchUploadedPicture":
+				draft.pictureRoomValue = action.pictureRoomChosen;
+				break;
 
 		case "catchFasilitasInfo":
 			draft.fasilitasInfo = action.fasilitasObject;
@@ -264,12 +265,20 @@ function KamarUpdate() {
 
 	  
 	
+	function handleFacilityAdd(event) {
+		dispatch({
+		  type: "catchNewFacility",
+		  newFacilityChosen: event.target.value,
+		});
+	  }
+
 	  const handleAddFacility = () => {
 		if (state.newFacility && state.newFacility.trim()) {
 		  dispatch({ type: "addFacility", newFacilityChosen: state.newFacility });
 		  dispatch({ type: "catchNewFacility", newFacilityChosen: "" });
 		}
 	  };
+	  
 	  
 	  
 
@@ -378,23 +387,34 @@ function KamarUpdate() {
 		if (state.sendRequest) {
 			async function AddProperty() {
 				const formData = new FormData();
-				formData.append("address_room", state.addressRoomValue);
-				formData.append("price_day", state.priceDayValue);
-				formData.append("price_month", state.priceMonthValue);
-				formData.append("price_year", state.priceYearValue);
-				formData.append("picture_room", state.pictureRoomValue);
-				formData.append("room_size", state.roomSizeValue);
-				formData.append("rumah", params.id);
+				if (
+					typeof state.pictureRoomValue === "string" ||
+					state.pictureRoomValue === null
+				) {
+					formData.append("address_room", state.addressRoomValue);
+					formData.append("price_day", state.priceDayValue);
+					formData.append("price_month", state.priceMonthValue);
+					formData.append("price_year", state.priceYearValue);
+					formData.append("room_size", state.roomSizeValue);
+				} else {
+					formData.append("address_room", state.addressRoomValue);
+					formData.append("price_day", state.priceDayValue);
+					formData.append("price_month", state.priceMonthValue);
+					formData.append("price_year", state.priceYearValue);
+					formData.append("picture_room", state.pictureRoomValue);
+					formData.append("room_size", state.roomSizeValue);
+				}
+				// formData.append("rumah", params.id);
 			  
 				// Convert the facilities array into the appropriate format
 				const facilitiesArray = state.facilities.map((facility) => ({ name: facility }));
-
+console.log(state.pictureValue)
 
 				// formData.append("fasilitaskamar_set", JSON.stringify(facilitiesArray));
 			  
 				try {
 				  // First, create the Kamar instance
-				  const kamarResponse = await Axios.post(
+				  const kamarResponse = await Axios.patch(
 					`https://mykos2.onrender.com/api/kamar/${params.id}/update/`,
 					formData
 				  );
@@ -410,6 +430,13 @@ function KamarUpdate() {
 					  name: facility.name,
 					});
 				  }
+
+
+
+
+
+
+				  
 			  
 				  dispatch({ type: "openTheSnack" });
 				} catch (e) {
@@ -433,7 +460,7 @@ function KamarUpdate() {
 	// 	});
 	//   }
 	  
-console.log(state.facilities)
+	console.log(state.kamarInfo.picture_room)
 
 	  
 	useEffect(() => {
@@ -576,10 +603,10 @@ console.log(state.facilities)
 
 
 {/* ##  */}
-	{/* <Typography style={{ marginTop: '1rem' }}>Fasilitas : </Typography> */}
-	<Grid item container>
+	<Typography style={{ marginTop: '1rem' }}>Fasilitas : </Typography>
+<Grid item xs={12} container justifyContent="space-between">
   {state.fasilitasInfo.map((facility, index) => (
-    <Grid item xs={3} key={index} style={{ marginRight: '5px', marginTop: '10px' }}>
+    <Grid item xs={2.5} key={index} style={{ marginRight: '5px', marginTop: '10px' }}>
       <Typography>{facility.name}</Typography>
       <TextField
         id={`Facility-${index}`}
@@ -616,7 +643,7 @@ console.log(state.facilities)
             variant="standard"
             fullWidth
             value={state.newFacility}
-            onChange={handleFacilityChange}
+            onChange={handleFacilityAdd}
 			select
 			SelectProps={{
 				native: true,
@@ -667,24 +694,34 @@ console.log(state.facilities)
             >
               UPLOAD PICTURES
               <input
-                type="file"
-                multiple
-                accept="image/png, image/gif, image/jpeg"
-                hidden
-                onChange={(e) => {
-                  dispatch({
-                    type: "catchUploadedPicture",
-                    pictureRoomChosen: e.target.files[0],
-                  });
-                  
-                }}
-              />
-            </Button>
-			<Typography>
-              {state.pictureRoomValue ? <p>{state.pictureRoomValue.name}</p> : ""}
-            </Typography>
-            
+					type="file"
+					multiple
+					accept="image/png, image/gif, image/jpeg"
+					hidden
+					onChange={(e) => {
+						dispatch({
+						type: "catchUploadedPicture",
+						pictureRoomChosen: e.target.files[0],
+						});
+					}}
+					/>
+
+			</Button>
           </Grid>
+		  <Grid style={{marginLeft: "10%"}}>
+							<Grid item container>
+								<Grid marginLeft= '0'>
+									<img 
+										style={{border: '2px solid lightblue', marginTop:'1rem', height: "4rem", width: "3rem"}} 
+										src={state.kamarInfo.picture_room} />
+								</Grid>
+								<Grid>
+									<Typography style={{marginTop:'1rem'}}>
+										{state.pictureRoomValue ? <p>{state.pictureRoomValue.name}</p> : ""}
+									</Typography>
+							</Grid>
+							</Grid>	
+						</Grid>
           <Button
               variant="contained"
               type="submit"
