@@ -148,6 +148,10 @@ class FasilitasKamarList(generics.ListAPIView):
 class FasilitasKamarUpdate(generics.UpdateAPIView):
     serializer_class = FasilitasKamarSerializer
     queryset = FasilitasKamar.objects.all()
+
+class FasilitasRumahUpdate(generics.UpdateAPIView):
+    serializer_class = FasilitasRumahSerializer
+    queryset = FasilitasRumah.objects.all()
   
 
 class FasilitasRumahList(generics.ListAPIView):
