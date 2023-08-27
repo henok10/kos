@@ -134,8 +134,8 @@ class FasilitasKamar(models.Model):
     )
     name = models.CharField(max_length=100, choices=choices_fasilitas_kamar)
 
-    def __str__(self):
-        return self.kamar.address_room
+    # def __str__(self):
+    #     return self.kamar.address_room
 
 class FasilitasRumah(models.Model):
     rumah = models.ForeignKey(Rumah, on_delete=models.CASCADE, blank=True, null=True, related_name='fasilitasrumah')
@@ -159,8 +159,8 @@ class FasilitasRumah(models.Model):
     )
     name = models.CharField(max_length=100, choices=choices_fasilitas_rumah)
 
-    def __str__(self):
-        return self.rumah.title if self.rumah else "N/A"
+    # def __str__(self):
+    #     return self.rumah.title if self.rumah else "N/A"
 
 class Rule(models.Model):
     rumah = models.ForeignKey(Rumah, on_delete=models.CASCADE, blank=True, null=True, related_name='rule')

@@ -160,10 +160,10 @@ function KamarUpdate() {
 				draft.editingFacility = action.editedFacility;
 				break;
 			  
-				case "catchFasilitasChange":
-					draft.fasilitasInfo = action.fasilitasChosen; // Ubah nama dalam array fasilitasInfo
-					draft.nameFasilitasValue = action.fasilitasChosen; // Ubah nilai nameFasilitasValue
-					break;
+			case "catchFasilitasChange":
+				draft.fasilitasInfo[action.index].name = action.fasilitasChosen;
+				break;
+				
 				
 			  
 
@@ -261,12 +261,15 @@ function KamarUpdate() {
 
  
 	
-	function handleFacilityChange(event) {
+	const handleFacilityChange = (event, index) => {
+		const newValue = event.target.value;
 		dispatch({
-		  type: "catchNewFacility",
-		  newFacilityChosen: event.target.value,
+		  type: "catchFasilitasChange",
+		  index: index, // Pass the index to the reducer
+		  fasilitasChosen: newValue,
 		});
-	  }
+	  };
+	  
 	
 	  const handleAddFacility = () => {
 		if (state.newFacility && state.newFacility.trim()) {
@@ -392,26 +395,24 @@ function KamarUpdate() {
 
 			async function updateFasilitasInfo(updatedFasilitas) {
 				try {
-					const response = await Axios.put(
-						`https://mykos2.onrender.com/api/fasilitas-kamar/${params.id}/update`,
-						{
-							name: updatedFasilitas.name,
-						}
-					);
-			
-					console.log("Fasilitas berhasil diupdate:", response.data);
+				  const response = await Axios.put(
+					`https://mykos2.onrender.com/api/fasilitas-kamar/${params.id}/update`,
+					updatedFasilitas
+				  );
+			  
+				  console.log("Fasilitas berhasil diupdate:", response.data);
 				} catch (error) {
-					console.error("Gagal mengupdate fasilitas:", error);
+				  console.error("Gagal mengupdate fasilitas:", error);
 				}
-			}
-			
-			// Di dalam kode Anda, setelah Anda mengubah fasilitas dalam state
-			updateFasilitasInfo({ name: state.nameFasilitasValue, kamar: params.id });
-			
+			  }
+			  
+			  // Di dalam kode Anda, setelah Anda mengubah fasilitas di state
+			updateFasilitasInfo({ name: state.nameValue, kamar: params.id });
+			  
 		}
 	}, [state.sendRequest]);
 
-	function handleFacilitiesChange(event) {
+	const handleFacilitiesChange = (event) => {
 		const newValue = event.target.value;
 		const newFacilities = newValue.split(',').map(facility => facility.trim());
 		
@@ -422,26 +423,6 @@ function KamarUpdate() {
 	  }
 	  
 console.log(state.facilities)
-
-function editFacility(index) {
-	const editedFacility = state.facilities[index];
-	
-	dispatch({
-	  type: "editFacility",
-	  index,
-	  editedFacility,
-	});
-  }
-  
-  function removeFacility(index) {
-	const updatedFacilities = state.facilities.filter((_, i) => i !== index);
-	
-	dispatch({
-	  type: "updateFacilities",
-	  facilities: updatedFacilities,
-	});
-  }
-  
 
 	  
 	useEffect(() => {
@@ -584,38 +565,33 @@ function editFacility(index) {
 
 
 {/* ##  */}
-
+	{/* <Typography style={{ marginTop: '1rem' }}>Fasilitas : </Typography> */}
 	<Grid item container>
-	{state.fasilitasInfo.map((facility, index) => (
-		<Grid item xs={3} key={index} style={{ margin: '5px' }}>
-		<Typography>{facility.name}</Typography>
-		<TextField
-			id={`Facility-${index}`}
-			label="Fasilitas"
-			variant="standard"
-			fullWidth
-			value={facility.name}
-			onChange={(e) =>
-			dispatch({
-				type: "catchFasilitasChange",
-				index: index, // Pass the index of the facility being updated
-				fasilitasChosen: e.target.value,
-			})
-			}
-			select
-			SelectProps={{
-				native: true,
-			}}
-		>
-			{choice_kamar.map((option) => (
-			<option key={option.value} value={option.value}>
-				{option.label}
-			</option>
-		))}
-		</TextField>
-		</Grid>
-	))}
-	</Grid>
+  {state.fasilitasInfo.map((facility, index) => (
+    <Grid item xs={3} key={index} style={{ marginRight: '5px', marginTop: '10px' }}>
+      <Typography>{facility.name}</Typography>
+      <TextField
+        id={`Facility-${index}`}
+        label="Fasilitas"
+        variant="standard"
+        fullWidth
+        value={facility.name} 
+        onChange={(e) => handleFacilityChange(e, index)} 
+        select
+        SelectProps={{
+          native: true,
+        }}
+      >
+        {choice_kamar.map((option) => (
+          <option key={option.value} value={option.value}>
+            {option.label}
+          </option>
+        ))}
+      </TextField>
+    </Grid>
+  ))}
+</Grid>
+
 
 				
 

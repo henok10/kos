@@ -12,6 +12,6 @@ admin.site.register(Poi, PoiAdmin)
 admin.site.register(Transaction)
 admin.site.register(Review)
 admin.site.register(Kamar)
-admin.site.register(FasilitasKamar)
-admin.site.register(FasilitasRumah)
+# admin.site.register(FasilitasKamar)
+# admin.site.register(FasilitasRumah)
 
