@@ -261,14 +261,7 @@ function KamarUpdate() {
 
  
 	
-	const handleFacilityChange = (event, index) => {
-		const newValue = event.target.value;
-		dispatch({
-		  type: "catchFasilitasChange",
-		  index: index, // Pass the index to the reducer
-		  fasilitasChosen: newValue,
-		});
-	  };
+
 	  
 	
 	  const handleAddFacility = () => {
@@ -347,6 +340,39 @@ function KamarUpdate() {
     GetFasilitasInfo();
   }, []);
 
+  const handleFacilityChange = async (event, index) => {
+	const newValue = event.target.value;
+  
+	try {
+	  const updatedFacilities = state.fasilitasInfo.map((facility, i) =>
+		i === index ? { ...facility, name: newValue } : facility
+	  );
+  
+	  await Axios.put(
+		`https://mykos2.onrender.com/api/fasilitas-kamar/${state.fasilitasInfo[index].id}/update`,
+		{ name: newValue }
+	  );
+  
+	  dispatch({
+		type: "catchFasilitasChange",
+		index: index,
+		fasilitasChosen: newValue,
+	  });
+  
+	  dispatch({
+		type: "updateFacilities",
+		facilities: updatedFacilities,
+	  });
+	} catch (error) {
+	  console.error("Gagal mengupdate fasilitas:", error);
+	}
+  };
+  
+  
+  
+
+  // .
+  
   console.log(state.fasilitasInfo)
 	useEffect(() => {
 		if (state.sendRequest) {
@@ -393,34 +419,19 @@ function KamarUpdate() {
 			  
 			AddProperty();
 
-			async function updateFasilitasInfo(updatedFasilitas) {
-				try {
-				  const response = await Axios.put(
-					`https://mykos2.onrender.com/api/fasilitas-kamar/${params.id}/update`,
-					updatedFasilitas
-				  );
-			  
-				  console.log("Fasilitas berhasil diupdate:", response.data);
-				} catch (error) {
-				  console.error("Gagal mengupdate fasilitas:", error);
-				}
-			  }
-			  
-			  // Di dalam kode Anda, setelah Anda mengubah fasilitas di state
-			updateFasilitasInfo({ name: state.nameValue, kamar: params.id });
 			  
 		}
 	}, [state.sendRequest]);
 
-	const handleFacilitiesChange = (event) => {
-		const newValue = event.target.value;
-		const newFacilities = newValue.split(',').map(facility => facility.trim());
+	// const handleFacilitiesChange = (event) => {
+	// 	const newValue = event.target.value;
+	// 	const newFacilities = newValue.split(',').map(facility => facility.trim());
 		
-		dispatch({
-		  type: "updateFacilities",
-		  facilities: newFacilities,
-		});
-	  }
+	// 	dispatch({
+	// 	  type: "updateFacilities",
+	// 	  facilities: newFacilities,
+	// 	});
+	//   }
 	  
 console.log(state.facilities)
 
