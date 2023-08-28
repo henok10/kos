@@ -19,6 +19,7 @@ export default function DataTable() {
   const [dataIsLoading, setDataIsLoading] = useState(true);
   const params = useParams();
   const [listingIds, setListingIds] = useState([]);
+  const [allKamar, setAllKamar] = useState([]);
 
 	useEffect(() => {
 		if (!isAuthenticated) {
@@ -55,30 +56,76 @@ export default function DataTable() {
     };
   }, [userId]);
   const [numItemsBoughtByListingId, setNumItemsBoughtByListingId] = useState({});
-  useEffect(() => {
-    const source = Axios.CancelToken.source();
-    async function GetTransaksiKos() {
-      try {
-        const numItemsBoughtByListingId = {};
-        for (const listingId of listingIds) {
-          console.log(listingId)
-          const response = await Axios.get(`https://mykos2.onrender.com/api/transaction/${listingId}/user`);
-          const data = response.data;
-          const numItemsBought = data.filter(transaksi => transaksi.barang_dibeli).length;
-          numItemsBoughtByListingId[listingId] = numItemsBought;
-         
-        }
-        setNumItemsBoughtByListingId(numItemsBoughtByListingId);
-        setDataIsLoading(false);
-      } catch (error) {}
-    }   
-    GetTransaksiKos();
-    return () => {
-      source.cancel();
-    };
-  }, [listingIds]);
 
+
+  useEffect(() => {
+    async function GetAllKamar() {
+        try {
+          const totalRoomsByListing = {};
+          for (const listingId of listingIds) {
+            const response = await Axios.get(
+                `https://mykos2.onrender.com/api/kamar/${listingId}/`
+            );
+            const dataKamar = response.data;
+            const totalRooms = dataKamar.length;
+            totalRoomsByListing[listingId] = totalRooms;
+            setAllKamar(totalRoomsByListing);
+            
+          }
+            
+              
+        } catch (error) {
+            // Tangani error jika diperlukan
+            console.error('Error:', error);
+        }
+    }
+
+    GetAllKamar();
+
+    
+}, [listingIds]); // Tambah
+
+
+useEffect(() => {
+  const source = Axios.CancelToken.source();
+  async function GetTransaksiKos() {
+    try {
+      const numItemsBoughtByListingId = {};
+      for (const listingId of listingIds) {
+        console.log(listingId)
+        const response = await Axios.get(`https://mykos2.onrender.com/api/transaction/${listingIds}/user`);
+        const data = response.data;
+        const numItemsBought = data.filter(transaksi => transaksi.approve).length;
+        numItemsBoughtByListingId[listingId] = numItemsBought;
+       
+       
+      }
+      setNumItemsBoughtByListingId(numItemsBoughtByListingId);
+      setDataIsLoading(false);
+    } catch (error) {}
+  }   
+  GetTransaksiKos();
+  return () => {
+    source.cancel();
+  };
   
+}, [listingIds]);
+
+// console.log(numItemsBoughtByListingId)
+// console.log(allKamar)
+
+
+const kamarKosongByListingId = {}; // Objek untuk menyimpan jumlah kamar kosong pada setiap rumah kos
+
+for (const listingId in allKamar) {
+  const totalKamar = allKamar[listingId];
+  const kamarDibeli = numItemsBoughtByListingId[listingId] || 0;
+  const kamarKosong = totalKamar - kamarDibeli;
+  kamarKosongByListingId[listingId] = kamarKosong;
+}
+
+// console.log(kamarKosongByListingId);
+
   
   async function DeleteHandler(id) {
 		const confirmDelete = window.confirm(
@@ -125,26 +172,22 @@ export default function DataTable() {
       width: 180 
     },
     { 
-      field: 'rooms', 
+      field: 'allKamar', 
       headerName: 'Rooms', 
-      width: 60 
+      width: 60,
+      valueGetter: (params) => allKamar[params.row.id] || 0 // Mengambil jumlah kamar dari objek allKamar
     },
     { 
-      field: 'available_rooms', 
+      field: 'kamarKosongByListingId', 
       headerName: 'Rooms Kosong', 
       width: 110, 
-      renderCell: (params) => {
-        const numItemsBoughts = numItemsBoughtByListingId[params.row.id];
-        return(
-          <div>{params.row.rooms - numItemsBoughts}</div>
-        )  
-      }
+      valueGetter: (params) => kamarKosongByListingId[params.row.id] || 0 // Mengambil jumlah kamar dari objek allKamar
       
     },
     { 
       field: 'borough', 
-      headerName: 'Borough', 
-      width: 120 
+      headerName: 'Area', 
+      width: 100 
     },
     {
       field: 'data kamar',

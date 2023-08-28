@@ -2,12 +2,43 @@ import React, { useEffect, useState } from "react";
 import { DataGrid } from '@mui/x-data-grid';
 import {Grid, Box, Button, CircularProgress} from '@mui/material';
 import { useNavigate, useParams, Link } from "react-router-dom";
+import { useImmerReducer } from "use-immer";
 import Axios from 'axios';
 
 function DataKamar() {
     const navigate = useNavigate();
     const params = useParams();
     const [allRoom, setAllRoom] = useState([]);
+    const [approveData, setApproveData] = useState([]);
+
+    const initialState = {
+      dataIsLoading: true,
+      kamarInfo: "",
+      openSnack: false,
+      disabledBtn: false,
+    };
+
+    function ReducerFuction(draft, action) {
+      switch (action.type) {
+        case "catchKamarInfo":
+          draft.kamarInfo = action.kamarObject;
+          break;
+  
+        case "openTheSnack":
+          draft.openSnack = true;
+          break;
+  
+        case "disableTheButton":
+          draft.disabledBtn = true;
+          break;
+  
+        case "allowTheButton":
+          draft.disabledBtn = false;
+          break;
+      }
+    }
+    
+    const [state, dispatch] = useImmerReducer(ReducerFuction, initialState);
 
     useEffect(() => {
         async function GetAllRoom() {
@@ -15,9 +46,14 @@ function DataKamar() {
                 const response = await Axios.get(
                     `https://mykos2.onrender.com/api/kamar/${params.id}/`
                 );
-                const data = response.data;
-                    setAllRoom(data);
-                   
+                // const data = response.data;
+                //     setAllRoom(data);
+                  dispatch({
+                    type: "catchKamarInfo",
+                    kamarObject: response.data,
+                    
+                  });
+                 
             } catch (error) {
                 // Tangani error jika diperlukan
                 console.error('Error:', error);
@@ -32,11 +68,15 @@ function DataKamar() {
     useEffect((approves) => {
         async function GetTransaksi() {
             try {
+              const approveListing = {};
                 const response = await Axios.get(
-                    `https://mykos2.onrender.com/api/transaction/${params.id}/user`, {approve: approves}
+                    `https://mykos2.onrender.com/api/transaction/${state.kamarInfo.id}/user`
                 );
-                // const data = response.data;
-                //     setAllRoom(data);
+                // setApproveData(response.data.approve); // Assuming response.data has an 'approve' field
+                const dataKamar = response.data.approve;
+                approveListing[params.id]= dataKamar
+                setApproveData(approveListing);
+                
                 
             } catch (error) {
                 // Tangani error jika diperlukan
@@ -48,6 +88,7 @@ function DataKamar() {
 
         
     }, []); // Tambah
+    
 
     async function updateApprove(id, newValue) {
         try {
@@ -70,7 +111,7 @@ function DataKamar() {
         } catch (error) {
             console.error('Error deleting data:', error);
         }
-        window.location.reload();
+        // window.location.reload();
       }
 
       async function deleteKamar(id) {
@@ -91,8 +132,8 @@ function DataKamar() {
       
       
       
-      
-      
+      console.log(approveData)
+      console.log(state.kamarInfo.id)
 
     const columns = [
         { 
@@ -153,35 +194,30 @@ function DataKamar() {
             width: 110,
         },
         {
-            field: 'kamar_transaksi_approve',
-            headerName: 'Status Approve',
-            width: 120,
-            renderCell: (params) => {
-              const approveStatus = params.row.kamar_transaksi && params.row.kamar_transaksi.length > 0
-                ? params.row.kamar_transaksi[0].approve
-                : false;
-          
+          field: 'approve',
+          headerName: 'Status Approve',
+          width: 140,
+          renderCell: (params) => {
               return (
-                <div
-                  style={{
-                    padding: '4px 8px',
-                    borderRadius: '4px',
-                    color: 'white',
-                    fontWeight: 'bold',
-                    textAlign: 'center',
-                    backgroundColor: approveStatus ? 'green' : 'grey', // Use 'grey' instead of 'gray'
-                  }}
-                >
-                  {approveStatus !== undefined
-                    ? approveStatus
-                      ? "Approved"
-                      : "Not Approved"
-                    : "Data not available"}
-                </div>
+                  <div
+                      style={{
+                          padding: '4px 8px',
+                          borderRadius: '4px',
+                          color: 'white',
+                          fontWeight: 'bold',
+                          textAlign: 'center',
+                          backgroundColor: params.row.approve ? 'green' : 'grey',
+                      }}
+                  >
+                      {params.row.approve !== undefined
+                          ? params.row.approve
+                              ? 'Approved'
+                              : 'Not Approved'
+                          : 'Data not available'}
+                  </div>
               );
-            },
           },
-          
+      },
           
           
     

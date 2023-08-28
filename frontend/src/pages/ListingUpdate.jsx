@@ -218,7 +218,20 @@ function ListingUpdate(props) {
 		}
 	}
 
+	function handleFacilityAdd(event) {
+		dispatch({
+		  type: "catchNewFacility",
+		  newFacilityChosen: event.target.value,
+		});
+	  }
 
+	const handleAddFacility = () => {
+	if (state.newFacility && state.newFacility.trim()) {
+		dispatch({ type: "addFacility", newFacilityChosen: state.newFacility });
+		dispatch({ type: "catchNewFacility", newFacilityChosen: "" });
+	}
+	};
+	
 
 	const [state, dispatch] = useImmerReducer(ReducerFuction, initialState);
 
@@ -397,7 +410,7 @@ console.log(params.id)
 					formData.append("user", userId);
 				}
 					
-				
+				const facilitiesArray = state.facilities.map((facility) => ({ name: facility }));
 				console.log(params.id)
 				try {
 					const response = await Axios.patch(
@@ -405,6 +418,18 @@ console.log(params.id)
 						formData
 						
 					);
+
+				 // Now, use the created Kamar instance's ID to associate the FasilitasKamar instances
+				 const rumahId = response.data.id;
+
+
+			  
+				 for (const facility of facilitiesArray) {
+				   await Axios.post("https://mykos2.onrender.com/api/fasilitas-rumah/create", {
+					 rumah: rumahId,
+					 name: facility.name,
+				   });
+				 }
 
 					dispatch({ type: "openTheSnack" });
 				} catch (e) {
@@ -596,6 +621,47 @@ console.log(params.id)
 					</Grid>
 				))}
 				</Grid>
+
+				<Grid item container xs={6}>
+          <TextField
+            id="newFacility"
+            label="Fasilitas Baru"
+            variant="standard"
+            fullWidth
+            value={state.newFacility}
+            onChange={handleFacilityAdd}
+			select
+			SelectProps={{
+				native: true,
+			}}
+          >
+			{choice_rumah.map((option) => (
+				<option key={option.value} value={option.value}>
+					{option.label}
+				</option>
+			))}
+			</TextField>
+          <Button
+            variant="contained"
+            color="primary"
+            fullWidth
+            onClick={handleAddFacility}
+			style={{marginTop: '5px'}}
+            disabled={!state.newFacility.trim()}
+          >
+            Tambahkan Fasilitas
+			
+          </Button>
+        </Grid>
+
+        <Grid item container>
+          {state.facilities.map((facility, index) => (
+            <Grid item xs={3} key={index}>
+              <Typography>{facility}</Typography>
+            </Grid>
+          ))}
+        </Grid>
+
 
 
 				<Grid item container>

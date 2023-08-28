@@ -98,4 +98,4 @@ class KamarSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Kamar
-        fields = '__all__'
+        fields = ['id', 'fasilitaskamar', 'price_day', 'price_month', 'price_year', 'picture_room', 'room_size', 'address_room', 'barang_dipesan']

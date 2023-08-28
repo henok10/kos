@@ -677,10 +677,6 @@ console.log(state.pictureValue)
         </Grid>
 
       <Grid item container>
-        
-        
-      </Grid>
-      <Grid item container>
         <Grid item xs={3}>
           <Grid
             item
