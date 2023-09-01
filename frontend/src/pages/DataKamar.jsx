@@ -10,35 +10,7 @@ function DataKamar() {
     const params = useParams();
     const [allRoom, setAllRoom] = useState([]);
     const [approveData, setApproveData] = useState([]);
-
-    const initialState = {
-      dataIsLoading: true,
-      kamarInfo: "",
-      openSnack: false,
-      disabledBtn: false,
-    };
-
-    function ReducerFuction(draft, action) {
-      switch (action.type) {
-        case "catchKamarInfo":
-          draft.kamarInfo = action.kamarObject;
-          break;
-  
-        case "openTheSnack":
-          draft.openSnack = true;
-          break;
-  
-        case "disableTheButton":
-          draft.disabledBtn = true;
-          break;
-  
-        case "allowTheButton":
-          draft.disabledBtn = false;
-          break;
-      }
-    }
-    
-    const [state, dispatch] = useImmerReducer(ReducerFuction, initialState);
+    const [kamarIds, setKamarIds] = useState([]);
 
     useEffect(() => {
         async function GetAllRoom() {
@@ -46,13 +18,15 @@ function DataKamar() {
                 const response = await Axios.get(
                     `https://mykos2.onrender.com/api/kamar/${params.id}/`
                 );
-                // const data = response.data;
-                //     setAllRoom(data);
-                  dispatch({
-                    type: "catchKamarInfo",
-                    kamarObject: response.data,
+                const data = response.data;
+                const kamarIds = data.map(kamar => parseInt(kamar.id));
+                setKamarIds(kamarIds)
+                    setAllRoom(data);
+                  // dispatch({
+                  //   type: "catchKamarInfo",
+                  //   kamarObject: response.data,
                     
-                  });
+                  // });
                  
             } catch (error) {
                 // Tangani error jika diperlukan
@@ -64,21 +38,22 @@ function DataKamar() {
 
         
     }, []); // Tambah
-    console.log(allRoom.address_room)
-    console.log(state.kamarInfo.id)
+    
+    // console.log(state.kamarInfo.price_day)
     useEffect(() => {
         async function GetTransaksi() {
             try {
               const approveListing = {};
+              for (const kamarId of kamarIds) {
                 const response = await Axios.get(
-                    `https://mykos2.onrender.com/api/transaction/${state.kamarInfo.id}/user`
+                    `https://mykos2.onrender.com/api/transaction/${kamarId}/user`
                 );
                 // setApproveData(response.data.approve); // Assuming response.data has an 'approve' field
-                const dataKamar = response.data.approve;
-                approveListing[params.id]= dataKamar
+                const dataKamar = response.data;
+                approveListing[kamarId]= dataKamar
                 setApproveData(approveListing);
-                
-                
+                console.log(approveListing)
+              }
             } catch (error) {
                 // Tangani error jika diperlukan
                 console.error('Error:', error);
@@ -89,7 +64,7 @@ function DataKamar() {
 
         
     }, []); // Tambah
-    
+    console.log(approveData)
 
     async function updateApprove(id, newValue) {
         try {
@@ -109,7 +84,8 @@ function DataKamar() {
         try {
           await Axios.delete(`https://mykos2.onrender.com/api/transaction/${id}/delete/kamar`);
 
-        } catch (error) {
+        } 
+        catch (error) {
             console.error('Error deleting data:', error);
         }
         // window.location.reload();
@@ -129,12 +105,6 @@ function DataKamar() {
         window.location.reload();
       }
     }
-      
-      
-      
-      
-      console.log(approveData)
-      console.log(state.kamarInfo.id)
 
     const columns = [
         { 
@@ -242,9 +212,13 @@ function DataKamar() {
           width: 200,
           renderCell: (params) => (
             <div style={{ display: 'flex', justifyContent: 'space-between', width: '95%' }}>
-              <Button variant="contained" color="warning" onClick={() =>  deleteTransaksi(params.id)} >
-                Cancel
+              <Button variant="contained" color="warning" onClick={() => {
+                  deleteTransaksi(params.id);
+                  updateApprove(params.id, false);
+                }}>
+                  Cancel
               </Button>
+
 
               <Button variant="contained" color="error" onClick={() => deleteKamar(params.id)} >
                 Hapus
