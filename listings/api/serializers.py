@@ -95,7 +95,8 @@ class FasilitasRumahSerializer(serializers.ModelSerializer):
 
 class KamarSerializer(serializers.ModelSerializer):
     fasilitaskamar = FasilitasKamarSerializer(many=True, read_only=True)
+    approve = serializers.ReadOnlyField(source='transactions.approve')
 
     class Meta:
         model = Kamar
-        fields = ['id', 'fasilitaskamar', 'price_day', 'price_month', 'price_year', 'picture_room', 'room_size', 'address_room', 'barang_dipesan']
+        fields = ['id', 'approve', 'fasilitaskamar', 'price_day', 'price_month', 'price_year', 'picture_room', 'room_size', 'address_room', 'barang_dipesan']

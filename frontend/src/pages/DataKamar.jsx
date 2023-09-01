@@ -9,7 +9,7 @@ function DataKamar() {
     const navigate = useNavigate();
     const params = useParams();
     const [allRoom, setAllRoom] = useState([]);
-    const [approveData, setApproveData] = useState([]);
+    const [approvesData, setApproveData] = useState([]);
     const [kamarIds, setKamarIds] = useState([]);
 
     useEffect(() => {
@@ -43,17 +43,20 @@ function DataKamar() {
     useEffect(() => {
         async function GetTransaksi() {
             try {
-              const approveListing = {};
+              const approveData = {};
               for (const kamarId of kamarIds) {
                 const response = await Axios.get(
                     `https://mykos2.onrender.com/api/transaction/${kamarId}/user`
                 );
                 // setApproveData(response.data.approve); // Assuming response.data has an 'approve' field
-                const dataKamar = response.data;
-                approveListing[kamarId]= dataKamar
-                setApproveData(approveListing);
-                console.log(approveListing)
+                const data = response.data;
+                const approveValue = data[0].approve; // Mengambil nilai approve dari respons
+                setApproveData(approveValue);
+                console.log(approveValue)
+                // Menyimpan nilai approve dalam objek approveData berdasarkan kamarId
+                // approveData[kamarId] = approveValue;
               }
+             
             } catch (error) {
                 // Tangani error jika diperlukan
                 console.error('Error:', error);
@@ -64,16 +67,14 @@ function DataKamar() {
 
         
     }, []); // Tambah
-    console.log(approveData)
+    console.log(approvesData)
 
     async function updateApprove(id, newValue) {
         try {
           const response = await Axios.patch(`https://mykos2.onrender.com/api/kamar/${id}/update/`, {
             barang_dipesan: newValue,
           });
-    
-
-         
+   
         } catch (error) {
           console.error(error);
         }
@@ -165,30 +166,28 @@ function DataKamar() {
             width: 110,
         },
         {
-          field: 'approve',
+          field: 'approvesData',
           headerName: 'Status Approve',
           width: 140,
-          renderCell: (params) => {
-              return (
-                  <div
-                      style={{
-                          padding: '4px 8px',
-                          borderRadius: '4px',
-                          color: 'white',
-                          fontWeight: 'bold',
-                          textAlign: 'center',
-                          backgroundColor: params.row.approve ? 'green' : 'grey',
-                      }}
-                  >
-                      {params.row.approve !== undefined
-                          ? params.row.approve
-                              ? 'Approved'
-                              : 'Not Approved'
-                          : 'Data not available'}
-                  </div>
-              );
-          },
-      },
+          renderCell: (params) => (
+            <div
+              style={{
+                padding: '4px 8px',
+                borderRadius: '4px',
+                fontWeight: 'bold',
+                textAlign: 'center',
+                backgroundColor: kamarIds.approvesData ? 'green' : 'yellow',
+              }}
+            >
+              {kamarIds.approvesData !== undefined
+                ? kamarIds.approvesData
+                  ? "Approve"
+                  : "Not Approve"
+                : "Data not available"}
+            </div>
+          )
+        },
+        
           
           
     
