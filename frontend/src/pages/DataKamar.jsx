@@ -65,7 +65,8 @@ function DataKamar() {
         
     }, []); // Tambah
     console.log(allRoom.address_room)
-    useEffect((approves) => {
+    console.log(state.kamarInfo.id)
+    useEffect(() => {
         async function GetTransaksi() {
             try {
               const approveListing = {};

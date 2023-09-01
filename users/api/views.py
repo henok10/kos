@@ -192,8 +192,8 @@ class CustomerUpdate(generics.UpdateAPIView):
     lookup_field = 'user'
     def get_object(self):
         user_id = self.kwargs['user']
-        user = User.objects.get(id=user_id)
-        queryset = Customer.objects.all()
+        customer = User.objects.get(id=user_id)
+        # queryset = Customer.objects.all()
         return customer
 
 
