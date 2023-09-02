@@ -40,37 +40,41 @@ function DataKamar() {
     }, []); // Tambah
  console.log(allRoom)
 
-    async function updateApprove(id, newValue) {
-        try {
-          const response = await Axios.patch(`https://mykos2.onrender.com/api/kamar/${id}/update/`, {
-            barang_dipesan: newValue,
-          });
-   
-        } catch (error) {
-          console.error(error);
-        }
+ async function updateApprove(id, newValue) {
+  try {
+    const response = await Axios.patch(`https://mykos2.onrender.com/api/kamar/${id}/update/`, {
+      barang_dipesan: newValue,
+    });
+    // Tambahkan log atau logika lainnya untuk menangani respons dari server jika diperlukan
+    console.log('Response:', response.data);
+  } catch (error) {
+    console.error('Error updating data:', error);
+  }
+}
 
-        window.location.reload();
-      }
-      async function deleteTransaksi(id) {
-        try {
-          await Axios.delete(`https://mykos2.onrender.com/api/transaction/${id}/delete/kamar`);
-
-        } 
-        catch (error) {
-            console.error('Error deleting data:', error);
-        }
-        // window.location.reload();
-      }
+async function deleteTransaksi(id) {
+  const confirmDelete = window.confirm(
+    "Are you sure you want to delete this room transactions?"
+  );
+  if (confirmDelete) {
+    try {
+      await Axios.delete(`https://mykos2.onrender.com/api/transaction/${id}/delete/kamar`);
+      await updateApprove(id, false);
+      // Refresh halaman hanya ketika kedua operasi berhasil
+      window.location.reload();
+    } catch (error) {
+      console.error('Error deleting data:', error);
+    }
+  }
+}
 
       async function deleteKamar(id) {
         const confirmDelete = window.confirm(
-          "Are you sure you want to delete this kamar?"
+          "Are you sure you want to delete this room?"
         );
         if (confirmDelete) {
         try {
           await Axios.delete(`https://mykos2.onrender.com/api/kamar/${id}/delete/`);
-
         } catch (error) {
             console.error('Error deleting data:', error);
         }
@@ -83,6 +87,9 @@ function DataKamar() {
           field: 'address_room', 
           headerName: 'No. Kamar', 
           width: 80,
+          renderCell: (params) => (
+            <Link to={`/kamar-detail/${params.row.id}`}>{params.value}</Link>
+          ),
         },
         { 
             field: 'picture_room', 
@@ -152,14 +159,15 @@ function DataKamar() {
                           borderRadius: '4px',
                           fontWeight: 'bold',
                           textAlign: 'center',
-                          backgroundColor: approveStatus ? 'green' : 'yellow',
+                          backgroundColor: approveStatus ? 'green' : 'grey',
+                          color: 'white'
                       }}
                   >
                       {approveStatus !== null
                           ? approveStatus
                               ? "Approve"
                               : "Not Approve"
-                          : "Data not available"}
+                          : "Not Approve"}
                   </div>
               );
           },
@@ -191,13 +199,15 @@ function DataKamar() {
             <div style={{ display: 'flex', justifyContent: 'space-between', width: '95%' }}>
               <Button variant="contained" color="warning" onClick={() => {
                   deleteTransaksi(params.id);
-                  updateApprove(params.id, false);
+                  // updateApprove(params.id, false);
                 }}>
                   Cancel
               </Button>
 
 
-              <Button variant="contained" color="error" onClick={() => deleteKamar(params.id)} >
+              <Button variant="contained" color="error" onClick={() => {
+                deleteKamar(params.id)
+                }} >
                 Hapus
               </Button>
             </div>

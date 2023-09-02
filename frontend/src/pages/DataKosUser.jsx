@@ -75,7 +75,7 @@ console.log(allKos)
     { field: 'phoneNumber', headerName: 'No. Telp', width: 120 },
     { field: 'rentalFrequency', headerName: 'Frequensi Sewa', width: 120 },
     { field: 'nominal', headerName: 'Jumlah Pembayaran', width: 100 },
-    { field: 'date', headerName: 'Date', width: 260 },
+    { field: 'date', headerName: 'Date', width: 150 },
     {
         field: 'barang_dibeli',
         headerName: 'Aksi',
