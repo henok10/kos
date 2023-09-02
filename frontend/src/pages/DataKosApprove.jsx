@@ -49,6 +49,10 @@ export default function DataTableApprove() {
   }, []);
 
   async function deleteKos(id) {
+    const confirmDelete = window.confirm(
+      "Are you sure you want to delete this room transactions?"
+    );
+    if (confirmDelete) {
     try {
       await Axios.delete(`https://mykos2.onrender.com/api/transaction/${id}/delete`);
   
@@ -66,19 +70,21 @@ export default function DataTableApprove() {
       console.error(error);
     }
   }
+  }
   
   async function updateApprove(id, newValue) {
+    const confirmApprove = window.confirm(
+      "Are you sure you want to approve this room transactions?"
+    );
+    if (confirmApprove) {
     try {
         const response = await Axios.patch(`https://mykos2.onrender.com/api/transaction/${id}/update`, {approve: newValue});
-    
-        const updatedKos = {
-          ...response.data,
-          approve: newValue,
-        };
+  
         window.location.reload();
       } catch (error) {
         console.error(error);
       }
+    }
   }
 
   if (dataIsLoading === true) {
@@ -104,13 +110,18 @@ export default function DataTableApprove() {
     },
     { field: 'fullName', 
       headerName: 'Name', 
-      width: 240,
+      width: 180,
+    },
+
+    { field: 'addressRoom', 
+      headerName: 'address room', 
+      width: 100,
     },
       
     { field: 'phoneNumber', headerName: 'No. Telp', width: 120 },
     { field: 'rentalFrequency', headerName: 'Frequensi Sewa', width: 115 },
     { field: 'nominal', headerName: 'Jumlah Pembayaran', width: 120 },
-    { field: 'date', headerName: 'Date', width: 180 },
+    { field: 'date', headerName: 'Date', width: 150 },
     {
         field: 'approve',
         headerName: 'Aksi',

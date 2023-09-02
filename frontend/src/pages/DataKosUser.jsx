@@ -49,6 +49,10 @@ export default function DataTableUser() {
   }, []);
 
   const handleDelete = async (id) => {
+    const confirmDelete = window.confirm(
+      "Are you sure you want to delete this room transactions?"
+    );
+    if (confirmDelete) {
     try {
       await Axios.delete(`https://mykos2.onrender.com/api/transaction/${id}/delete`);
   
@@ -66,6 +70,7 @@ export default function DataTableUser() {
     } catch (error) {
       console.error(error);
     }
+  }
   }
 
 console.log(allKos)

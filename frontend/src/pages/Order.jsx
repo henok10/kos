@@ -128,7 +128,7 @@ console.log(params.id)
         e.preventDefault();
 
         dispatch({ type: "sendRequest" });
-        updateKamar(params.id, true);
+
       const formData = new FormData();
       formData.append("fullName", state.fullNameValue);
       formData.append("phoneNumber", state.phoneNumberValue);
@@ -138,12 +138,18 @@ console.log(params.id)
       formData.append("kamar", params.id);
       formData.append("customer", customerId);
       formData.append("user", userId);
-  
+
+
+      const confirmOrder = window.confirm(
+        "Are you sure you want to order this room?"
+      );
+      if (confirmOrder) {
       try {
         const response = await Axios.post(
           `https://mykos2.onrender.com/api/transaction/create`,
           formData
         );
+        await updateKamar(params.id, true);
         console.log(response.data);
         dispatch({ type: "openTheSnack" });
        
@@ -152,6 +158,7 @@ console.log(params.id)
         console.error(error);
         dispatch({ type: "requestSent" });
       }
+    }
     }, [dispatch, state.fullNameValue, state.phoneNumberValue, state.nominalValue, state.barangDipesanValue, state.buktiTransferValue, params.id, customerId]);
     
 

@@ -59,8 +59,12 @@ class TransactionKamarUpdate(generics.UpdateAPIView):
 
 class TransactionListUser(generics.ListAPIView):
     serializer_class = TransactionSerializer
-    queryset = Transaction.objects.all()
-    lookup_field = 'kamar'
+    def get_queryset(self):
+        rumah_id = self.kwargs['rumah']
+        rumah = Rumah.objects.get(id=rumah_id)  # Fetch the User instance
+        # customer = Customer.objects.get(user=user)  # Get the associated Customer instance
+        queryset = Transaction.objects.filter(kamar__rumah=rumah, approve=True).order_by('-date')
+        return queryset
 
 class TransactionUser(generics.ListAPIView):
     serializer_class = TransactionSerializer

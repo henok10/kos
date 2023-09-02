@@ -58,8 +58,9 @@ async function deleteTransaksi(id) {
   );
   if (confirmDelete) {
     try {
-      await Axios.delete(`https://mykos2.onrender.com/api/transaction/${id}/delete/kamar`);
       await updateApprove(id, false);
+      await Axios.delete(`https://mykos2.onrender.com/api/transaction/${id}/delete/kamar`);
+      
       // Refresh halaman hanya ketika kedua operasi berhasil
       window.location.reload();
     } catch (error) {
