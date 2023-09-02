@@ -49,8 +49,6 @@ class TransactionSerializer(serializers.ModelSerializer):
         model = Transaction
         fields = ['id', 'kamar', 'rumah', 'listing_title', 'addressRoom', 'user', 'buktiTransfer', 'fullName', 'phoneNumber', 'rentalFrequency', 'nominal', 'date', 'approve']
 
-
-
 class ReviewSerializer(serializers.ModelSerializer):
     user_username = serializers.ReadOnlyField(source='user.username')
     class Meta:
@@ -93,10 +91,19 @@ class FasilitasRumahSerializer(serializers.ModelSerializer):
 #         model = FasilitasKamar
 #         fields = '__all__'
 
+class TransactionsSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Transaction
+        fields = '__all__'
+
 class KamarSerializer(serializers.ModelSerializer):
     fasilitaskamar = FasilitasKamarSerializer(many=True, read_only=True)
-    approve = serializers.ReadOnlyField(source='transactions.approve')
+    approvekamar = serializers.SerializerMethodField()
+
+    def get_approvekamar(self, obj):
+        transactions = Transaction.objects.filter(kamar=obj)
+        return TransactionsSerializer(transactions, many=True).data
 
     class Meta:
         model = Kamar
-        fields = ['id', 'approve', 'fasilitaskamar', 'price_day', 'price_month', 'price_year', 'picture_room', 'room_size', 'address_room', 'barang_dipesan']
+        fields = ['id', 'fasilitaskamar', ' ', 'price_day', 'price_month', 'price_year', 'picture_room', 'room_size', 'address_room', 'barang_dipesan']
