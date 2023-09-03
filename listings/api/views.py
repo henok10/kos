@@ -106,10 +106,6 @@ class ReviewList(generics.ListAPIView):
         queryset = Review.objects.filter(rumah=rumah).order_by('-create_at')
         return queryset
 
-# class KamarCreate(generics.CreateAPIView):
-#     serializer_class = KamarSerializer
-#     queryset = Kamar.objects.all()
-
 class KamarCreate(generics.CreateAPIView):
     serializer_class = KamarSerializer
     queryset = Kamar.objects.all()

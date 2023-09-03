@@ -187,12 +187,12 @@ class CustomerDetail(generics.RetrieveAPIView):
         return customer
 
 class CustomerUpdate(generics.UpdateAPIView):
-    queryset = Customer.objects.all()
+    # queryset = Customer.objects.all()
     serializer_class = CustomerSerializer
     lookup_field = 'user'
     def get_object(self):
         user_id = self.kwargs['user']
-        customer = User.objects.get(id=user_id)
+        customer = Customer.objects.get(user=user_id)
         # queryset = Customer.objects.all()
         return customer
 

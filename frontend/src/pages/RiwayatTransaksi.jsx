@@ -150,8 +150,8 @@ export default function RiwayatTransaksi() {
                             <TableCell>{row.listing_title}</TableCell>
                             <TableCell>{row.phoneNumber}</TableCell>
                             <TableCell>{row.rentalFrequency}</TableCell>
-                            <TableCell>{row.date}</TableCell>
                             <TableCell>{row.nominal}</TableCell>
+                            <TableCell>{row.date}</TableCell>
                             <TableCell>
                             
                             <div
@@ -161,15 +161,16 @@ export default function RiwayatTransaksi() {
                                 color: 'white',
                                 fontWeight: 'bold',
                                 textAlign: 'center',
-                                backgroundColor: params.row.approve ? 'green' : 'orange',
+                                backgroundColor: row.approve ? 'green' : 'orange',
                               }}
                             >
-                              {params.row.approve !== undefined
-                                ? params.row.approve
+                              {row.approve !== undefined
+                                ? row.approve
                                   ? "Approve"
                                   : "Proses"
                                 : "Data not available"}
-                            </div>  
+                            </div>
+                            
                             </TableCell>
                     
     

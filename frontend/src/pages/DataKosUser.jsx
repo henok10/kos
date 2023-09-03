@@ -48,12 +48,26 @@ export default function DataTableUser() {
     };
   }, []);
 
+  async function updateApprove(id, newValue) {
+    try {
+      const response = await Axios.patch(`https://mykos2.onrender.com/api/kamar/${id}/update/`, {
+        barang_dipesan: newValue,
+      });
+      // Tambahkan log atau logika lainnya untuk menangani respons dari server jika diperlukan
+      console.log('Response:', response.data);
+    } catch (error) {
+      console.error('Error updating data:', error);
+    }
+  }
+  
+
   const handleDelete = async (id) => {
     const confirmDelete = window.confirm(
-      "Are you sure you want to delete this room transactions?"
+      "Are you sure you want to delete the boarder?"
     );
     if (confirmDelete) {
     try {
+      await updateApprove(id, false);
       await Axios.delete(`https://mykos2.onrender.com/api/transaction/${id}/delete`);
   
       setAllKos(prevState => {

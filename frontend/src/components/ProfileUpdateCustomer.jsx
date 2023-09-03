@@ -129,14 +129,14 @@ function ProfileUpdateCustomer(props) {
 					formData.append("address", state.addressValue);
 					formData.append("phone_number", state.phoneNumberValue);
                     formData.append("date_of_birth", state.dateOfBirthValue);
-					// formData.append("user", userId);
+					formData.append("user", userId);
 				} else {
 					formData.append("agency_name", state.agencyNameValue);
 					formData.append("phone_number", state.phoneNumberValue);
 					formData.append("address", state.addressValue);
                     formData.append("date_of_birth", state.dateOfBirthValue);
 					formData.append("profile_picture", state.profilePictureValue);
-					// formData.append("user", userId);
+					formData.append("user", userId);
 				}
 
 				try {
