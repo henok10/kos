@@ -1,11 +1,10 @@
 // import * as React from 'react';
-import { DataGrid } from '@mui/x-data-grid';
-import {Grid, Button, CircularProgress} from '@mui/material';
+import { DataGrid } from "@mui/x-data-grid";
+import { Grid, Button, CircularProgress } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import Axios from "axios";
-import { useSelector } from 'react-redux'
+import { useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
-
 
 export default function DataTableUser() {
   const navigate = useNavigate();
@@ -16,32 +15,31 @@ export default function DataTableUser() {
   const [dataIsLoading, setDataIsLoading] = useState(true);
   const params = useParams();
 
-	useEffect(() => {
-		if (!isAuthenticated) {
-		  navigate("/login");
-		}
-	  }, [isAuthenticated, navigate]);
-	
-	  useEffect(() => {
-		if (isCostumer) {
-		  navigate("/profileCustomer");
-		}
-	  }, [isPemilikKos, navigate]);
+  useEffect(() => {
+    if (!isAuthenticated) {
+      navigate("/login");
+    }
+  }, [isAuthenticated, navigate]);
 
+  useEffect(() => {
+    if (isCostumer) {
+      navigate("/profileCustomer");
+    }
+  }, [isPemilikKos, navigate]);
 
-	// request to get profile info
-	useEffect(() => {
+  // request to get profile info
+  useEffect(() => {
     const source = Axios.CancelToken.source();
-		async function GetAllKos() {
-			try {
-				const response = await Axios.get(
-					`https://mykos2.onrender.com/api/transaction/${params.id}/user`
-				);
-                
-				setAllKos(response.data);
+    async function GetAllKos() {
+      try {
+        const response = await Axios.get(
+          `https://mykos2.onrender.com/api/transaction/${params.id}/user`
+        );
+
+        setAllKos(response.data);
         setDataIsLoading(false);
       } catch (error) {}
-    }   
+    }
     GetAllKos();
     return () => {
       source.cancel();
@@ -50,95 +48,101 @@ export default function DataTableUser() {
 
   async function updateApprove(id, newValue) {
     try {
-      const response = await Axios.patch(`https://mykos2.onrender.com/api/kamar/${id}/update/`, {
-        barang_dipesan: newValue,
-      });
+      const response = await Axios.patch(
+        `https://mykos2.onrender.com/api/kamar/${id}/update/`,
+        {
+          barang_dipesan: newValue,
+        }
+      );
       // Tambahkan log atau logika lainnya untuk menangani respons dari server jika diperlukan
-      console.log('Response:', response.data);
+      console.log("Response:", response.data);
     } catch (error) {
-      console.error('Error updating data:', error);
+      console.error("Error updating data:", error);
     }
   }
-  
 
   const handleDelete = async (id) => {
     const confirmDelete = window.confirm(
       "Are you sure you want to delete the boarder?"
     );
     if (confirmDelete) {
-    try {
-      await updateApprove(id, false);
-      await Axios.delete(`https://mykos2.onrender.com/api/transaction/${id}/delete`);
-  
-      setAllKos(prevState => {
-        const index = prevState.findIndex(kos => kos.id === id);
-        if (index >= 0) {
-          const updatedKos = [...prevState];
-          // updatedKos.splice(index, 1);
-          return updatedKos;
-        } else {
-          return prevState;
-        }
-      });
-      window.location.reload();
-    } catch (error) {
-      console.error(error);
-    }
-  }
-  }
+      try {
+        await updateApprove(id, false);
+        await Axios.delete(
+          `https://mykos2.onrender.com/api/transaction/${id}/delete`
+        );
 
-console.log(allKos)
-  const columns = [
-    { field: 'fullName', headerName: 'Name', width: 200,}, 
-    { field: 'addressRoom', headerName: 'No. Kamar', width: 100 },  
-    { field: 'phoneNumber', headerName: 'No. Telp', width: 120 },
-    { field: 'rentalFrequency', headerName: 'Frequensi Sewa', width: 120 },
-    { field: 'nominal', headerName: 'Jumlah Pembayaran', width: 100 },
-    { field: 'date', headerName: 'Date', width: 150 },
-    {
-        field: 'barang_dibeli',
-        headerName: 'Aksi',
-        width: 150,
-        renderCell: (params) => {
-  
-            return (
-              <div>
-                <Button 
-                  variant="contained" 
-                  color="secondary" 
-                  style={{ backgroundColor: 'red', color: 'white', marginLeft: '0.2rem' }}
-                  onClick={() => handleDelete(params.id)}
-                >
-                  Hapus
-                </Button>
-              </div>
-            );
-          
-      },
+        setAllKos((prevState) => {
+          const index = prevState.findIndex((kos) => kos.id === id);
+          if (index >= 0) {
+            const updatedKos = [...prevState];
+            // updatedKos.splice(index, 1);
+            return updatedKos;
+          } else {
+            return prevState;
+          }
+        });
+        window.location.reload();
+      } catch (error) {
+        console.error(error);
+      }
     }
+  };
+
+  console.log(allKos);
+  const columns = [
+    { field: "fullName", headerName: "Name", width: 200 },
+    { field: "addressRoom", headerName: "No. Kamar", width: 100 },
+    { field: "phoneNumber", headerName: "No. Telp", width: 120 },
+    { field: "rentalFrequency", headerName: "Frequensi Sewa", width: 120 },
+    { field: "nominal", headerName: "Jumlah Pembayaran", width: 100 },
+    { field: "date", headerName: "Date", width: 150 },
+    {
+      field: "barang_dibeli",
+      headerName: "Aksi",
+      width: 150,
+      renderCell: (params) => {
+        return (
+          <div>
+            <Button
+              variant="contained"
+              color="secondary"
+              style={{
+                backgroundColor: "red",
+                color: "white",
+                marginLeft: "0.2rem",
+              }}
+              onClick={() => handleDelete(params.id)}
+            >
+              Hapus
+            </Button>
+          </div>
+        );
+      },
+    },
   ];
   return (
     <>
-    <Grid height={'100vh'}>
-      <Grid marginTop={'2rem'}>
-        <Button 
-          color='primary' 
-          variant='contained'  
-          onClick={() => navigate("/datakos")
-                            }>
-          Pilih Kos
-        </Button>
+      <Grid height={"100vh"}>
+        <Grid marginTop={"2rem"}>
+          <Button
+            color="primary"
+            variant="contained"
+            onClick={() => navigate("/datakos")}
+          >
+            Pilih Kos
+          </Button>
+        </Grid>
+        <Grid style={{ height: "75vh", width: "100%", marginTop: "2rem" }}>
+          <DataGrid
+            rows={allKos}
+            columns={columns}
+            pageSize={10}
+            rowsPerPageOptions={[10]}
+            checkboxSelection
+          />
+        </Grid>
       </Grid>
-      <Grid style={{ height: '75vh', width: '100%', marginTop:'2rem' }}>
-        <DataGrid
-          rows={allKos}
-          columns={columns}
-          pageSize={10}
-          rowsPerPageOptions={[10]}
-          checkboxSelection
-        />
-      </Grid>
-    </Grid>   
-    </>    
+    </>
   );
 }

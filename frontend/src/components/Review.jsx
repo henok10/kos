@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from "react";
 import { useImmerReducer } from "use-immer";
-import axios from 'axios';
+import axios from "axios";
 import { makeStyles } from "@mui/styles";
 import { useNavigate, useParams } from "react-router-dom";
 import {
@@ -14,10 +14,9 @@ import {
   Snackbar,
   Grid,
 } from "@mui/material";
-import Alert from '@mui/material/Alert';
+import Alert from "@mui/material/Alert";
 import { useSelector } from "react-redux";
 import { FaStar } from "react-icons/fa";
-
 
 const useStyles = makeStyles((theme) => ({
   formControl: {
@@ -27,13 +26,13 @@ const useStyles = makeStyles((theme) => ({
   },
   submitButton: {
     marginTop: "1rem",
-    width: "50%"
+    width: "50%",
     // marginTop: theme.spacing(2),
   },
   container: {
     display: "flex",
     flexDirection: "column",
-    alignItems: "center"
+    alignItems: "center",
   },
   stars: {
     display: "flex",
@@ -46,7 +45,7 @@ const useStyles = makeStyles((theme) => ({
     padding: 10,
     // margin: "20px",
     minHeight: 100,
-    width: 600
+    width: 600,
   },
   button: {
     border: "1px solid #a9a9a9",
@@ -58,53 +57,55 @@ const useStyles = makeStyles((theme) => ({
 
 const colors = {
   orange: "#FFBA5A",
-  grey: "#a9a9a9"
-  
+  grey: "#a9a9a9",
 };
 
 function Review() {
   // const navigate = useNavigate();
   // const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
   // const isCostumer = useSelector((state) => state.auth.isCostumer);
-  const customerId = useSelector(state => state.auth.customerId)
+  const customerId = useSelector((state) => state.auth.customerId);
   const params = useParams();
   // const params = useParams();
   const classes = useStyles();
-  const [comment, setComment] = useState('');
+  const [comment, setComment] = useState("");
   const [rate, setRate] = useState(0);
-  const [error, setError] = useState('');
+  const [error, setError] = useState("");
   const [success, setSuccess] = useState(false);
   const [currentValue, setCurrentValue] = useState(0);
   const [hoverValue, setHoverValue] = useState(undefined);
-  const stars = Array(5).fill(0)
+  const stars = Array(5).fill(0);
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    axios.post('https://mykos2.onrender.com/api/review/create', {
-      comment: comment,
-      rate: rate,
-      rumah: params.id,
-      customer: customerId,
-    }).then(response => {
-      setSuccess(true);
-    }).catch(error => {
-      setError('There was an error submitting your review');
-    });
-  }
-  const handleClick = value => {
-    setRate(value)
-  }
+    axios
+      .post("https://mykos2.onrender.com/api/review/create", {
+        comment: comment,
+        rate: rate,
+        rumah: params.id,
+        customer: customerId,
+      })
+      .then((response) => {
+        setSuccess(true);
+      })
+      .catch((error) => {
+        setError("There was an error submitting your review");
+      });
+  };
+  const handleClick = (value) => {
+    setRate(value);
+  };
 
-  const handleMouseOver = newHoverValue => {
-    setHoverValue(newHoverValue)
+  const handleMouseOver = (newHoverValue) => {
+    setHoverValue(newHoverValue);
   };
 
   const handleMouseLeave = () => {
-    setHoverValue(undefined)
-  }
+    setHoverValue(undefined);
+  };
 
   const handleClose = (event, reason) => {
-    if (reason === 'clickaway') {
+    if (reason === "clickaway") {
       return;
     }
     setSuccess(false);
@@ -112,64 +113,68 @@ function Review() {
 
   return (
     <>
-    <form onSubmit={handleSubmit} className={classes.container}>
-      <h4><strong>Beri Kami Penilaian</strong></h4>
-    <div className={classes.stars}>
-        {stars.map((_, index) => {
-          return (
-            <FaStar
-              key={index}
-              size={24}
-              onClick={() => handleClick(index + 1)}
-              onMouseOver={() => handleMouseOver(index + 1)}
-              onMouseLeave={handleMouseLeave}
-              color={(hoverValue || rate) > index ? colors.orange : colors.grey}
-              style={{
-                marginRight: 10,
-                cursor: "pointer"
-              }}
+      <form onSubmit={handleSubmit} className={classes.container}>
+        <h4>
+          <strong>Beri Kami Penilaian</strong>
+        </h4>
+        <div className={classes.stars}>
+          {stars.map((_, index) => {
+            return (
+              <FaStar
+                key={index}
+                size={24}
+                onClick={() => handleClick(index + 1)}
+                onMouseOver={() => handleMouseOver(index + 1)}
+                onMouseLeave={handleMouseLeave}
+                color={
+                  (hoverValue || rate) > index ? colors.orange : colors.grey
+                }
+                style={{
+                  marginRight: 10,
+                  cursor: "pointer",
+                }}
+              />
+            );
+          })}
+        </div>
+        <div style={{ margin: "20px" }}>
+          <FormControl className={classes.textarea}>
+            <TextField
+              id="comment"
+              label="What's your experience?"
+              multiline
+              rows={4}
+              variant="outlined"
+              value={comment}
+              onChange={(e) => setComment(e.target.value)}
+              marginTop="1rem"
             />
-          )
-        })} 
-    </div>
-    <div style={{margin: '20px'}}>
-      <FormControl className={classes.textarea} >
-        <TextField
-          id="comment"
-          label="What's your experience?"
-          multiline
-          rows={4}
-          variant="outlined"
-          value={comment}
-          onChange={e => setComment(e.target.value)}
-          marginTop='1rem'
-        />
-      </FormControl>
-    </div>
-      
-      <Button
-        className={classes.button}
-        type="submit"
-        // fullWidth
-        variant="contained"
-        // color="primary"
-       
-      >
-        Submit
-      </Button>
-      {error && <Typography color="error">{error}</Typography>}
-      <Snackbar open={success} autoHideDuration={6000} onClose={handleClose}>
-        <Alert elevation={6} variant="filled" onClose={handleClose} severity="success">
-          Review added successfully!
-        </Alert>
-      </Snackbar>
-    </form>
+          </FormControl>
+        </div>
+
+        <Button
+          className={classes.button}
+          type="submit"
+          // fullWidth
+          variant="contained"
+          // color="primary"
+        >
+          Submit
+        </Button>
+        {error && <Typography color="error">{error}</Typography>}
+        <Snackbar open={success} autoHideDuration={6000} onClose={handleClose}>
+          <Alert
+            elevation={6}
+            variant="filled"
+            onClose={handleClose}
+            severity="success"
+          >
+            Review added successfully!
+          </Alert>
+        </Snackbar>
+      </form>
     </>
-    
   );
 }
 
-
 export default Review;
-
-

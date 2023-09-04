@@ -3,12 +3,12 @@ import { useNavigate, useParams } from "react-router-dom";
 import { useSelector } from "react-redux";
 import Axios from "axios";
 
-import 'leaflet-routing-machine/dist/leaflet-routing-machine.css';
-import 'leaflet-routing-machine/dist/leaflet-routing-machine.js';
+import "leaflet-routing-machine/dist/leaflet-routing-machine.css";
+import "leaflet-routing-machine/dist/leaflet-routing-machine.js";
 import "leaflet-routing-machine";
-import 'leaflet-control-geocoder';
-import L from 'leaflet';
-import 'leaflet-routing-machine';
+import "leaflet-control-geocoder";
+import L from "leaflet";
+import "leaflet-routing-machine";
 // import { useMap } from 'react-leaflet';
 import { useImmerReducer } from "use-immer";
 // Assets
@@ -16,22 +16,28 @@ import stadiumIconPng from "../data/Mapicons/stadium.png";
 import hospitalIconPng from "../data/Mapicons/hospital.png";
 import universityIconPng from "../data/Mapicons/university.png";
 // React Leaflet
-import {
-  MapContainer, TileLayer, Marker, Popup, useMap,
-} from "react-leaflet";
+import { MapContainer, TileLayer, Marker, Popup, useMap } from "react-leaflet";
 import { Icon } from "leaflet";
 // MUI
 import {
-  Grid, Typography, CircularProgress, Breadcrumbs, Link, Box, Stack, Button, AccordionDetails, Paper
+  Grid,
+  Typography,
+  CircularProgress,
+  Breadcrumbs,
+  Link,
+  Box,
+  Stack,
+  Button,
+  AccordionDetails,
+  Paper,
 } from "@mui/material";
 
 import ArrowCircleLeftIcon from "@mui/icons-material/ArrowCircleLeft";
 import ArrowCircleRightIcon from "@mui/icons-material/ArrowCircleRight";
 import RoomIcon from "@mui/icons-material/Room";
 import CheckBoxIcon from "@mui/icons-material/CheckBox";
-import AssistantDirectionIcon from '@mui/icons-material/AssistantDirection';
+import AssistantDirectionIcon from "@mui/icons-material/AssistantDirection";
 import TheMapComponent from "../components/TheMapComponent";
-
 
 import { makeStyles } from "@mui/styles";
 import Review from "../components/Review";
@@ -69,14 +75,11 @@ const useStyles = makeStyles({
   },
 });
 
-
-
 function ListingDetail() {
   const navigate = useNavigate();
   const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
   const isCustomer = useSelector((state) => state.auth.isCustomer);
   const [allOrderKos, setAllOrderKos] = useState([]);
-  
 
   useEffect(() => {
     if (!isAuthenticated) {
@@ -122,7 +125,7 @@ function ListingDetail() {
         break;
 
       case "catchUserOrderInfo":
-        draft.orderInfo = action.orderObject
+        draft.orderInfo = action.orderObject;
         break;
 
       case "loadingDone":
@@ -131,7 +134,7 @@ function ListingDetail() {
 
       case "catchUserProfileInfo":
         draft.userProfileInfo = action.profileObject;
-        draft.phoneNumbers = action.profileObject.phone_number
+        draft.phoneNumbers = action.profileObject.phone_number;
         break;
 
       case "openTheSnack":
@@ -147,7 +150,7 @@ function ListingDetail() {
         break;
     }
   }
-  
+
   const [state, dispatch] = useImmerReducer(ReducerFuction, initialState);
   useEffect(() => {
     async function GetKamarInfo() {
@@ -186,22 +189,25 @@ function ListingDetail() {
   }, [state.listingInfo]);
 
   // / request to get profile info
-  const [numItemsBoughtByListingId, setNumItemsBoughtByListingId] = useState({});
-	useEffect(() => {
-		async function GetAllOrderKos() {
-			try {
-				const response = await Axios.get(
-					`https://mykos2.onrender.com/api/transaction/${params.id}/user`
-				);
-        const numItemsBought = response.data.filter(transaksi => transaksi.barang_dibeli).length;
+  const [numItemsBoughtByListingId, setNumItemsBoughtByListingId] = useState(
+    {}
+  );
+  useEffect(() => {
+    async function GetAllOrderKos() {
+      try {
+        const response = await Axios.get(
+          `https://mykos2.onrender.com/api/transaction/${params.id}/user`
+        );
+        const numItemsBought = response.data.filter(
+          (transaksi) => transaksi.barang_dibeli
+        ).length;
         setNumItemsBoughtByListingId(numItemsBought);
       } catch (error) {}
-    } 
-    GetAllOrderKos()
+    }
+    GetAllOrderKos();
   }, []);
-  
-  const roomsLeft = state.listingInfo.rooms - numItemsBoughtByListingId;
 
+  const roomsLeft = state.listingInfo.rooms - numItemsBoughtByListingId;
 
   const listingPictures = [
     state.listingInfo.picture1,
@@ -234,20 +240,24 @@ function ListingDetail() {
     date.getMonth() + 1
   }/${date.getDate()}/${date.getFullYear()}`;
 
-
-function GoogleMapsShortcut() {
-  const url = `https://www.google.com/maps/search/?api=1&query=${state.listingInfo.latitude},${state.listingInfo.longitude}`;
-  window.open(url, "_blank");
-}
-const handleWhatsApp = () => {
-  const phoneNumber = state.phoneNumbers;
-  const message = encodeURIComponent(`Halo, saya ingin memesan kamar kos (${state.listingInfo.title})`);
-  const formattedPhoneNumber = phoneNumber.startsWith('0') ? `62${phoneNumber.substr(1)}` : phoneNumber;
-  console.log(formattedPhoneNumber)
-  window.open(`https://wa.me/${formattedPhoneNumber}?text=${message}`, '_blank');
-};
-
-
+  function GoogleMapsShortcut() {
+    const url = `https://www.google.com/maps/search/?api=1&query=${state.listingInfo.latitude},${state.listingInfo.longitude}`;
+    window.open(url, "_blank");
+  }
+  const handleWhatsApp = () => {
+    const phoneNumber = state.phoneNumbers;
+    const message = encodeURIComponent(
+      `Halo, saya ingin memesan kamar kos (${state.listingInfo.title})`
+    );
+    const formattedPhoneNumber = phoneNumber.startsWith("0")
+      ? `62${phoneNumber.substr(1)}`
+      : phoneNumber;
+    console.log(formattedPhoneNumber);
+    window.open(
+      `https://wa.me/${formattedPhoneNumber}?text=${message}`,
+      "_blank"
+    );
+  };
 
   useEffect(() => {
     if (state.openSnack) {
@@ -298,10 +308,10 @@ const handleWhatsApp = () => {
             {state.listingInfo.title} /
           </Typography>
         </Breadcrumbs>
-      </Grid>  
+      </Grid>
       {/* information */}
       <Grid container>
-        <Grid item lg={7.5} md={7.5} sm={12} xs={12} width={'100%'}>
+        <Grid item lg={7.5} md={7.5} sm={12} xs={12} width={"100%"}>
           <Grid
             item
             container
@@ -314,7 +324,7 @@ const handleWhatsApp = () => {
           >
             <Grid item container xs={12} direction="column" spacing={1}>
               <Grid item>
-                <Typography variant="h6" >{state.listingInfo.title}</Typography>
+                <Typography variant="h6">{state.listingInfo.title}</Typography>
               </Grid>
               <Grid item>
                 <RoomIcon />{" "}
@@ -330,43 +340,45 @@ const handleWhatsApp = () => {
 
           {/* Alamat */}
 
-                
-            <Grid
-              item
-              style={{
-                padding: "1rem",
-                borderBottom: "1px solid gray",
-                marginTop: "0.3rem",
-              }}
-            >
-              <Typography variant="h6" style={{fontSize: '16px'}}>Alamat :</Typography>
-              {state.listingInfo.address ? (
-              <Typography variant="body1" style={{fontSize: '15px'}}>
+          <Grid
+            item
+            style={{
+              padding: "1rem",
+              borderBottom: "1px solid gray",
+              marginTop: "0.3rem",
+            }}
+          >
+            <Typography variant="h6" style={{ fontSize: "16px" }}>
+              Alamat :
+            </Typography>
+            {state.listingInfo.address ? (
+              <Typography variant="body1" style={{ fontSize: "15px" }}>
                 {state.listingInfo.address}
               </Typography>
-                ) : (
-                ""
-              )}
-            </Grid>
+            ) : (
+              ""
+            )}
+          </Grid>
 
-            <Grid
-              item
-              style={{
-                padding: "1rem",
-                borderBottom: "1px solid gray",
-                marginTop: "0.3rem",
-              }}
-            >
-              <Typography variant="h6" style={{fontSize: '16px'}}>No Rekening :</Typography>
-              {state.listingInfo.no_rekening ? (
-              <Typography variant="body1" style={{fontSize: '15px'}}>
+          <Grid
+            item
+            style={{
+              padding: "1rem",
+              borderBottom: "1px solid gray",
+              marginTop: "0.3rem",
+            }}
+          >
+            <Typography variant="h6" style={{ fontSize: "16px" }}>
+              No Rekening :
+            </Typography>
+            {state.listingInfo.no_rekening ? (
+              <Typography variant="body1" style={{ fontSize: "15px" }}>
                 {state.listingInfo.no_rekening}
               </Typography>
-                ) : (
-                ""
-              )}
-            </Grid>
-               
+            ) : (
+              ""
+            )}
+          </Grid>
 
           <Grid
             item
@@ -379,83 +391,91 @@ const handleWhatsApp = () => {
           >
             <Grid>
               <div>
-                <Typography variant="h6" style={{fontSize: '16px'}}>Fasilitas :</Typography>
+                <Typography variant="h6" style={{ fontSize: "16px" }}>
+                  Fasilitas :
+                </Typography>
               </div>
               <Stack direction="row" spacing={1}>
                 <Grid item lg={3} md={3} sm={12} xs={12}>
-                {state.listingInfo.rooms ? (
-                  <Grid style={{ display: "flex" }}>
-                    <Typography variant="body1" style={{fontSize: '15px'}}>
-                      {state.listingInfo.rooms} Rooms
-                    </Typography>
-                  </Grid>
-                ) : (
-                  ""
-                )}
-
-                {state.listingInfo.room_size ? (
-                  <Grid style={{ display: "flex" }}>
-                    <Typography variant="body1" style={{fontSize: '15px'}}>
-                    Ukuran {state.listingInfo.room_size} 
-                    </Typography>
-                  </Grid>
-                ) : (
-                  ""
-                )}
-                </Grid>
-                    <Grid item lg={2} md={2} sm={3} xs={3}>
-                        {state.listingInfo.furnished ? (
-                        <Grid style={{ display: "flex" }}>
-                          <CheckBoxIcon
-                            style={{ color: "#4CAF50", fontSize: "1.5rem" }}
-                          />{" "}
-                          <Typography variant="body1" style={{fontSize: '15px'}}>Furnished</Typography>
-                        </Grid>
-                      ) : (
-                        ""
-                      )}
+                  {state.listingInfo.rooms ? (
+                    <Grid style={{ display: "flex" }}>
+                      <Typography variant="body1" style={{ fontSize: "15px" }}>
+                        {state.listingInfo.rooms} Rooms
+                      </Typography>
                     </Grid>
-                  
+                  ) : (
+                    ""
+                  )}
+
+                  {state.listingInfo.room_size ? (
+                    <Grid style={{ display: "flex" }}>
+                      <Typography variant="body1" style={{ fontSize: "15px" }}>
+                        Ukuran {state.listingInfo.room_size}
+                      </Typography>
+                    </Grid>
+                  ) : (
+                    ""
+                  )}
+                </Grid>
+                <Grid item lg={2} md={2} sm={3} xs={3}>
+                  {state.listingInfo.furnished ? (
+                    <Grid style={{ display: "flex" }}>
+                      <CheckBoxIcon
+                        style={{ color: "#4CAF50", fontSize: "1.5rem" }}
+                      />{" "}
+                      <Typography variant="body1" style={{ fontSize: "15px" }}>
+                        Furnished
+                      </Typography>
+                    </Grid>
+                  ) : (
+                    ""
+                  )}
+                </Grid>
+
                 <Grid item lg={1.5} md={1.5} sm={3} xs={3}>
                   {state.listingInfo.elevator ? (
                     <Grid style={{ display: "flex" }}>
                       <CheckBoxIcon
                         style={{ color: "#4CAF50", fontSize: "1.5rem" }}
                       />{" "}
-                      <Typography variant="body1" style={{fontSize: '15px'}}>Elevator</Typography>
+                      <Typography variant="body1" style={{ fontSize: "15px" }}>
+                        Elevator
+                      </Typography>
                     </Grid>
                   ) : (
                     ""
                   )}
                 </Grid>
-                
-                  <Grid item lg={1.5} md={1.5} sm={3} xs={3}>
-                    {state.listingInfo.cctv ? (
-                        <Grid style={{ display: "flex" }}>
-                          <CheckBoxIcon
-                            style={{ color: "#4CAF50", fontSize: "1.5rem" }}
-                          />{" "}
-                          <Typography variant="body1" style={{fontSize: '15px'}}>Cctv</Typography>
-                        </Grid>
-                      ) : (
-                        ""
-                      )}
-                  </Grid>
-              
-                  <Grid item lg={1.5} md={1.5} sm={3} xs={3}>
-                    {state.listingInfo.parking ? (
-                      <Grid style={{ display: "flex" }}>
-                        <CheckBoxIcon
-                          style={{ color: "#4CAF50", fontSize: "1.5rem" }}
-                        />{" "}
-                        <Typography variant="body1" style={{fontSize: '15px'}}>Parking</Typography>
-                      </Grid>
-                    ) : (
-                      ""
-                    )}
-                  </Grid>
-                 
-                
+
+                <Grid item lg={1.5} md={1.5} sm={3} xs={3}>
+                  {state.listingInfo.cctv ? (
+                    <Grid style={{ display: "flex" }}>
+                      <CheckBoxIcon
+                        style={{ color: "#4CAF50", fontSize: "1.5rem" }}
+                      />{" "}
+                      <Typography variant="body1" style={{ fontSize: "15px" }}>
+                        Cctv
+                      </Typography>
+                    </Grid>
+                  ) : (
+                    ""
+                  )}
+                </Grid>
+
+                <Grid item lg={1.5} md={1.5} sm={3} xs={3}>
+                  {state.listingInfo.parking ? (
+                    <Grid style={{ display: "flex" }}>
+                      <CheckBoxIcon
+                        style={{ color: "#4CAF50", fontSize: "1.5rem" }}
+                      />{" "}
+                      <Typography variant="body1" style={{ fontSize: "15px" }}>
+                        Parking
+                      </Typography>
+                    </Grid>
+                  ) : (
+                    ""
+                  )}
+                </Grid>
               </Stack>
             </Grid>
           </Grid>
@@ -472,8 +492,12 @@ const handleWhatsApp = () => {
               }}
             >
               <div>
-                <Typography variant="h6" style={{fontSize: '16px'}}>Kamar Yang Tersedia :</Typography>
-                <Typography variant="body1" style={{fontSize: '15px'}}>{roomsLeft} Rooms</Typography>
+                <Typography variant="h6" style={{ fontSize: "16px" }}>
+                  Kamar Yang Tersedia :
+                </Typography>
+                <Typography variant="body1" style={{ fontSize: "15px" }}>
+                  {roomsLeft} Rooms
+                </Typography>
               </div>
             </Grid>
             {/* </Grid> */}
@@ -487,8 +511,10 @@ const handleWhatsApp = () => {
                   marginTop: "0.3rem",
                 }}
               >
-                <Typography variant="h6" style={{fontSize: '16px'}}>Description :</Typography>
-                <Typography variant="body1" style={{fontSize: '15px'}}>
+                <Typography variant="h6" style={{ fontSize: "16px" }}>
+                  Description :
+                </Typography>
+                <Typography variant="body1" style={{ fontSize: "15px" }}>
                   {state.listingInfo.description}
                 </Typography>
               </Grid>
@@ -498,87 +524,99 @@ const handleWhatsApp = () => {
           </Grid>
         </Grid>
 
-
-        <Grid item lg={4.5} md={4.5} sm={12} xs={12} width={'100%'} style={{ marginTop: "2rem", paddingLeft: '0.5rem'}}>
+        <Grid
+          item
+          lg={4.5}
+          md={4.5}
+          sm={12}
+          xs={12}
+          width={"100%"}
+          style={{ marginTop: "2rem", paddingLeft: "0.5rem" }}
+        >
           {/* Image slider */}
-          <Box position="sticky" top= '0' >
-          <Paper style={{ border: '2px solid white' }}>
-            {listingPictures.length > 0 ? (
-              <Box>
-                <Grid
-                  item
-                  container
-                  justifyContent="center"
-                  className={classes.sliderContainer}
+          <Box position="sticky" top="0">
+            <Paper style={{ border: "2px solid white" }}>
+              {listingPictures.length > 0 ? (
+                <Box>
+                  <Grid
+                    item
+                    container
+                    justifyContent="center"
+                    className={classes.sliderContainer}
+                  >
+                    {listingPictures.map((picture, index) => {
+                      return (
+                        <div key={index}>
+                          {index === currentPicture ? (
+                            <img
+                              src={picture}
+                              style={{
+                                width: "100%",
+                                height: "100%",
+                                objectFit: "cover", // Adjusts image to cover the container while maintaining aspect ratio
+                              }}
+                            />
+                          ) : (
+                            ""
+                          )}
+                        </div>
+                      );
+                    })}
+                    <ArrowCircleLeftIcon
+                      onClick={PreviousPicture}
+                      className={classes.leftArrow}
+                    />
+                    <ArrowCircleRightIcon
+                      onClick={NextPicture}
+                      className={classes.rightArrow}
+                    />
+                  </Grid>
+                </Box>
+              ) : (
+                ""
+              )}
+            </Paper>
+            <Paper
+              style={{ width: "100%", marginTop: "0.5rem", padding: "0.5rem" }}
+            >
+              <Grid item container xs={12} alignItems="center">
+                <Typography
+                  variant="h6"
+                  style={{
+                    fontWeight: "bolder",
+                    color: "black",
+                    fontSize: "14px",
+                  }}
                 >
-                  {listingPictures.map((picture, index) => {
-                    return (
-                      <div key={index}>
-                        {index === currentPicture ? (
-                          <img
-                            src={picture}
-                            style={{
-                              width: "100%",
-                              height: "100%",
-                              objectFit: "cover", // Adjusts image to cover the container while maintaining aspect ratio
-                            }}
-                          />
-                        ) : (
-                          ""
-                        )}
-                      </div>
-                    );
-                  })}
-                  <ArrowCircleLeftIcon
-                    onClick={PreviousPicture}
-                    className={classes.leftArrow}
-                  />
-                  <ArrowCircleRightIcon
-                    onClick={NextPicture}
-                    className={classes.rightArrow}
-                  />
-                </Grid>
-              </Box>
-            ) : (
-              ""
-            )}
-          </Paper>
-          <Paper style={{ width: '100%', marginTop: '0.5rem', padding: '0.5rem' }}>
-            <Grid item container xs={12} alignItems="center">
-              <Typography
-                variant="h6"
-                style={{ fontWeight: "bolder", color: "black", fontSize:'14px'}}
-              >Harga 
-                Rp{state.listingInfo.price_per_month}/tahun
-                {/* Rp{state.listingInfo.price_per_month}/Month
+                  Harga Rp{state.listingInfo.price_per_month}/tahun
+                  {/* Rp{state.listingInfo.price_per_month}/Month
                 Rp{state.listingInfo.price_per_day}/Day */}
-              </Typography>
-            </Grid>
-             <Grid item container marginTop={'1rem'}>
+                </Typography>
+              </Grid>
+              <Grid item container marginTop={"1rem"}>
                 <Button
                   variant="outlined"
                   color="primary"
                   size="small"
                   // onClick={() => navigate(`/order/${state.listingInfo.id}`)}
-                  onClick={() => navigate(`/pesan_kamar/${state.listingInfo.id}`)}
+                  onClick={() =>
+                    navigate(`/pesan_kamar/${state.listingInfo.id}`)
+                  }
                   style={{}}
                 >
                   Pesan Kamar
                 </Button>
-                <Button 
+                <Button
                   onClick={handleWhatsApp}
                   variant="outlined"
                   color="success"
                   size="small"
-                  style={{marginLeft: '0.5rem'}}
+                  style={{ marginLeft: "0.5rem" }}
                 >
                   Chat Pemilik Kos
                 </Button>
               </Grid>
-          </Paper>
-
-
-
+            </Paper>
           </Box>
         </Grid>
       </Grid>
@@ -626,16 +664,18 @@ const handleWhatsApp = () => {
                       Math.cos(lonDiff)
                 ) * R;
               return dist.toFixed(2);
-             
             }
             return (
               <div
                 key={poi.id}
-                style={{ marginBottom: "0.5rem", borderBottom: "1px solid black" }}
+                style={{
+                  marginBottom: "0.5rem",
+                  borderBottom: "1px solid black",
+                }}
               >
                 <Typography variant="h6">{poi.name}</Typography>
                 <Typography variant="subtitle1">
-                  {poi.type} | {" "}
+                  {poi.type} |{" "}
                   <span style={{ fontWeight: "bolder", color: "black" }}>
                     {CalculateDistance()} Kilometers
                   </span>
@@ -643,25 +683,25 @@ const handleWhatsApp = () => {
               </div>
             );
           })}
-              <Button 
-                onClick={GoogleMapsShortcut}
-                style={{backgroundColor: '#4CAF50',
-                  color: 'white',
-                  fontSize: '16px',
-                  padding: '10px 20px',
-                  marginTop: '0.5rem',
-                  borderRadius: '5px',
-                  cursor: 'pointer'}}
-                startIcon={<AssistantDirectionIcon />}
-                >
-
-                google maps
-              </Button>
+          <Button
+            onClick={GoogleMapsShortcut}
+            style={{
+              backgroundColor: "#4CAF50",
+              color: "white",
+              fontSize: "16px",
+              padding: "10px 20px",
+              marginTop: "0.5rem",
+              borderRadius: "5px",
+              cursor: "pointer",
+            }}
+            startIcon={<AssistantDirectionIcon />}
+          >
+            google maps
+          </Button>
         </Grid>
         <Grid item lg={9} md={9} sm={12} xs={12} style={{ height: "35rem" }}>
           <MapContainer
             center={[state.listingInfo.latitude, state.listingInfo.longitude]}
-            
             zoom={16}
             scrollWheelZoom={true}
           >
@@ -697,19 +737,29 @@ const handleWhatsApp = () => {
           </MapContainer>
         </Grid>
       </Grid>
-      <Grid item container width={'60%'} margin={'auto'} borderTop={'1px solid gray'} marginTop={'1rem'}>
-        <Grid width={'80%'} margin={'auto'}>
-          <Typography variant={'h4'} style={{ marginTop: '2rem', textAlign: 'center'  }}>
+      <Grid
+        item
+        container
+        width={"60%"}
+        margin={"auto"}
+        borderTop={"1px solid gray"}
+        marginTop={"1rem"}
+      >
+        <Grid width={"80%"} margin={"auto"}>
+          <Typography
+            variant={"h4"}
+            style={{ marginTop: "2rem", textAlign: "center" }}
+          >
             Review
           </Typography>
-            <Box padding={'2px'} border={'2px solid white'}>
-                  <Review />
-            </Box>
-          <Box style={{width: '100%', marginTop:'2rem'}}>
+          <Box padding={"2px"} border={"2px solid white"}>
+            <Review />
+          </Box>
+          <Box style={{ width: "100%", marginTop: "2rem" }}>
             <ReviewMessage />
           </Box>
-        </Grid>  
-        <Box style={{ borderBottom: '1px solid gray', width: '100%' }}/>   
+        </Grid>
+        <Box style={{ borderBottom: "1px solid gray", width: "100%" }} />
       </Grid>
     </div>
   );

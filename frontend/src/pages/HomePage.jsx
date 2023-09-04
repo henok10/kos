@@ -2,8 +2,7 @@ import React from "react";
 import HouseList from "../components/HomeList";
 import { useSelector } from "react-redux";
 
-const HomePage = () => { 
-
+const HomePage = () => {
   return (
     <>
       <HouseList />
@@ -12,4 +11,3 @@ const HomePage = () => {
 };
 
 export default HomePage;
-

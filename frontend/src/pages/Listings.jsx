@@ -18,18 +18,16 @@ import {
   CardMedia,
   CardContent,
   CircularProgress,
-	IconButton,
-	CardActions,
-
+  IconButton,
+  CardActions,
 } from "@mui/material";
 import { makeStyles } from "@mui/styles";
-import InputBase from '@mui/material/InputBase';
+import InputBase from "@mui/material/InputBase";
 import RoomIcon from "@mui/icons-material/Room";
-import SearchIcon from '@mui/icons-material/Search';
+import SearchIcon from "@mui/icons-material/Search";
 
 // Map icons
 import houseIconPng from "../data/Mapicons/house.png";
-
 
 const useStyles = makeStyles({
   cardStyle: {
@@ -45,18 +43,16 @@ const useStyles = makeStyles({
     cursor: "pointer",
   },
   priceLabel: {
-    fontSize: '14px',
-    fontWeight: 'bold',
-    color: 'skyblue',
-    height: '2rem'
-
+    fontSize: "14px",
+    fontWeight: "bold",
+    color: "skyblue",
+    height: "2rem",
   },
-
 });
 function Listings() {
   const navigate = useNavigate();
   const classes = useStyles();
-  
+
   const houseIcon = new Icon({
     iconUrl: houseIconPng,
     iconSize: [40, 40],
@@ -120,7 +116,9 @@ function Listings() {
   const filteredListings = allListings.filter((listing) => {
     return (
       listing.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      listing.price_per_month.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      listing.price_per_month
+        .toLowerCase()
+        .includes(searchTerm.toLowerCase()) ||
       listing.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
       listing.borough.toLowerCase().includes(searchTerm.toLowerCase())
     );
@@ -141,45 +139,53 @@ function Listings() {
 
   return (
     <>
-      <Grid container paddingTop={'0.5rem'}>
+      <Grid container paddingTop={"0.5rem"}>
         <Grid item lg={5.5} md={5.5} sm={12}>
-        <Grid item xs={12} padding="0.5rem">
-            <Paper 
-            component="form"
-            sx={{display: 'flex', alignItems: 'center', paddingLeft: '0.8rem'}}
-            onSubmit={handleSearch}
+          <Grid item xs={12} padding="0.5rem">
+            <Paper
+              component="form"
+              sx={{
+                display: "flex",
+                alignItems: "center",
+                paddingLeft: "0.8rem",
+              }}
+              onSubmit={handleSearch}
             >
-            <InputBase
-                style={{height: '100%'}}
+              <InputBase
+                style={{ height: "100%" }}
                 id="outlined-basic"
                 placeholder="Silakan Cari Di Sini..."
                 size="small"
                 fullWidth
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-            />
-                <IconButton type="button" aria-label="search">
-                  <SearchIcon />
-                </IconButton>
+              />
+              <IconButton type="button" aria-label="search">
+                <SearchIcon />
+              </IconButton>
             </Paper>
-        </Grid>
+          </Grid>
 
           <Grid container padding="0.5rem" spacing={0}>
             {filteredListings.slice(0, 10).map((listing) => {
               return (
-              <Grid item xs={12} sm={6} md={6}>
-                <Card key={listing.id} className={classes.cardStyle} >
+                <Grid item xs={12} sm={6} md={6}>
+                  <Card key={listing.id} className={classes.cardStyle}>
                     <CardMedia
-                    className={classes.pictureStyle}
-                    component="img"
-                    height="160"
-                    image={listing.picture1}
-                    alt={listing.title}
-                    onClick={() => navigate(`/listings/${listing.id}`)}
+                      className={classes.pictureStyle}
+                      component="img"
+                      height="160"
+                      image={listing.picture1}
+                      alt={listing.title}
+                      onClick={() => navigate(`/listings/${listing.id}`)}
                     />
                     <CardHeader
                       title={
-                        <Typography gutterBottom variant="h6" style={{ fontSize: "18px" }}>
+                        <Typography
+                          gutterBottom
+                          variant="h6"
+                          style={{ fontSize: "18px" }}
+                        >
                           {listing.title.substring(0, 36)}
                         </Typography>
                       }
@@ -197,29 +203,55 @@ function Listings() {
                         </IconButton>
                       }
                     />
-                    <CardContent style={{ marginTop: '-30px'}}>
-                      <Typography gutterBottom variant="body4" component="div" style={{ fontSize: "10px" }}>
+                    <CardContent style={{ marginTop: "-30px" }}>
+                      <Typography
+                        gutterBottom
+                        variant="body4"
+                        component="div"
+                        style={{ fontSize: "10px" }}
+                      >
                         {listing.address.substring(0, 100)}
                       </Typography>
                     </CardContent>
-                    <CardActions style={{ position: 'absolute', bottom: '0', width: '100%' }}>
-                      <Box width='100%' style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '2px' }}>
-                          <Typography className={classes.priceLabel} component="span">
-                            Rp{listing.price_per_month}/bulan
-                          </Typography>     
-                          <Button variant="contained" color="primary" size='small' onClick={() => navigate(`/listings/${listing.id}`)}>
-                            Details
-                          </Button>
+                    <CardActions
+                      style={{
+                        position: "absolute",
+                        bottom: "0",
+                        width: "100%",
+                      }}
+                    >
+                      <Box
+                        width="100%"
+                        style={{
+                          display: "flex",
+                          justifyContent: "space-between",
+                          marginBottom: "2px",
+                        }}
+                      >
+                        <Typography
+                          className={classes.priceLabel}
+                          component="span"
+                        >
+                          Rp{listing.price_per_month}/bulan
+                        </Typography>
+                        <Button
+                          variant="contained"
+                          color="primary"
+                          size="small"
+                          onClick={() => navigate(`/listings/${listing.id}`)}
+                        >
+                          Details
+                        </Button>
                       </Box>
                     </CardActions>
-                </Card>
-            </Grid>
+                  </Card>
+                </Grid>
               );
             })}
           </Grid>
         </Grid>
         <Grid item lg={6.5} md={5.5} sm={12} xs={12}>
-          <Box position="sticky" top= '0'>
+          <Box position="sticky" top="0">
             <Box backgroundColor="white" height="70vh" border="8px solid white">
               <div style={{ height: "100%" }}>
                 <MapContainer
@@ -270,9 +302,9 @@ function Listings() {
                       </Marker>
                     );
                   })}
-                </MapContainer>                
-              </div>             
-            </Box>           
+                </MapContainer>
+              </div>
+            </Box>
           </Box>
         </Grid>
       </Grid>

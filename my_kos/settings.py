@@ -14,7 +14,7 @@ from pathlib import Path
 import os
 from datetime import timedelta
 from django.conf import settings
-import cloudinary_storage 
+import cloudinary_storage
 import cloudinary
 # import cloudinary.uploader
 # import cloudinary.api
@@ -80,7 +80,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
- 
+
 ]
 
 ROOT_URLCONF = 'my_kos.urls'
@@ -172,8 +172,6 @@ CLOUDINARY_STORAGE = {
 DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
 
 
-
-
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
 
@@ -210,8 +208,8 @@ REST_FRAMEWORK = {
     #     'rest_framework.permissions.IsAuthenticated',
     # ],
 
-   
-       
+
+
 }
 
 
@@ -234,9 +232,7 @@ SIMPLE_JWT = {
 }
 
 
-
 # try:
 #     from .server_settings import *
 # except ImportError:
 #     pass
-

@@ -1,20 +1,18 @@
-import React, { useState, useEffect } from 'react';
-import {getOwnerUser} from "../actions/auth"
-import {useDispatch} from "react-redux"
+import React, { useState, useEffect } from "react";
+import { getOwnerUser } from "../actions/auth";
+import { useDispatch } from "react-redux";
 import HouseList from "../components/HomeList";
 
- function OwnerHome() {
-     const dispatch=useDispatch()
-     useEffect(()=>{
-         dispatch(getOwnerUser())
-     }, [dispatch])
-    return (
-     <>
+function OwnerHome() {
+  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(getOwnerUser());
+  }, [dispatch]);
+  return (
+    <>
       <HouseList />
     </>
-    )
+  );
 }
-
-
 
 export default OwnerHome;

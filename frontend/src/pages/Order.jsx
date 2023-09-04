@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect, useCallback } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import Axios from "axios";
@@ -6,13 +5,13 @@ import { useSelector } from "react-redux";
 import { useImmerReducer } from "use-immer";
 // MUI
 import {
-	Grid,
-	Typography,
-    Box,
-	TextField,
-    Button,
-    MenuItem,
-    Snackbar,
+  Grid,
+  Typography,
+  Box,
+  TextField,
+  Button,
+  MenuItem,
+  Snackbar,
 } from "@mui/material";
 import { makeStyles } from "@mui/styles";
 // import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
@@ -21,33 +20,33 @@ import { makeStyles } from "@mui/styles";
 
 const useStyles = makeStyles({
   formContainer: {
-		width: "80%",
-		marginLeft: "auto",
-		marginRight: "auto",
-		marginTop: "1rem",
-		border: "5px solid lightWhite",
-		padding: "3rem",
-	},
-	loginBtn: {
-		backgroundColor: "green",
-		color: "white",
-		fontSize: "1.1rem",
-		marginLeft: "1rem",
-		"&:hover": {
-			backgroundColor: "blue",
-		},
-	},
+    width: "80%",
+    marginLeft: "auto",
+    marginRight: "auto",
+    marginTop: "1rem",
+    border: "5px solid lightWhite",
+    padding: "3rem",
+  },
+  loginBtn: {
+    backgroundColor: "green",
+    color: "white",
+    fontSize: "1.1rem",
+    marginLeft: "1rem",
+    "&:hover": {
+      backgroundColor: "blue",
+    },
+  },
 });
 function Order() {
-    const classes = useStyles();
-    const navigate = useNavigate();
-    const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
-    const isCustomer = useSelector((state) => state.auth.isCustomer);
-    const userId = useSelector(state => state.auth.userId)
-    const customerId = useSelector(state => state.auth.customerId)
-    const [nameValue, setFullNameValue] = useState("");
-    const [phoneNumberValue, setPhoneNumberValue] = useState("");
-    const params = useParams();
+  const classes = useStyles();
+  const navigate = useNavigate();
+  const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
+  const isCustomer = useSelector((state) => state.auth.isCustomer);
+  const userId = useSelector((state) => state.auth.userId);
+  const customerId = useSelector((state) => state.auth.customerId);
+  const [nameValue, setFullNameValue] = useState("");
+  const [phoneNumberValue, setPhoneNumberValue] = useState("");
+  const params = useParams();
 
   useEffect(() => {
     if (!isAuthenticated) {
@@ -60,7 +59,7 @@ function Order() {
       navigate("/");
     }
   }, [isCustomer, navigate]);
-console.log(nameValue)
+  console.log(nameValue);
   const initialState = {
     fullNameValue: nameValue,
     phoneNumberValue: phoneNumberValue,
@@ -68,66 +67,70 @@ console.log(nameValue)
     nominalValue: "",
     uploadedPicture: [],
     openSnack: false,
-  }
+  };
   const [state, dispatch] = useImmerReducer(ReducerFuction, initialState);
   // Use effect to cath uplaoded picture
 
   function ReducerFuction(draft, action) {
     switch (action.type) {
-        case "catchUserOrderInfo":
-            draft[action.name] = action.value;
+      case "catchUserOrderInfo":
+        draft[action.name] = action.value;
         break;
 
-        case "catchOrderInfo":
-            draft.buktiTransferValue = action.profileOrder.buktiTransfer
-            break;
-        case "catchUploadedPicture":
-            draft.uploadedPicture = action.pictureChosen;
-            break;
-  
-        case "catchProfilePictureChange":
-            draft.buktiTransferValue = action.buktiTransferChosen;
+      case "catchOrderInfo":
+        draft.buktiTransferValue = action.profileOrder.buktiTransfer;
+        break;
+      case "catchUploadedPicture":
+        draft.uploadedPicture = action.pictureChosen;
         break;
 
-        case "catchUserProfileInfo":
-            draft.userProfile.fullName = action.profileObject.full_name;
-            draft.userProfile.phoneNumber = action.profileObject.phone_number;
-            
-            break;
+      case "catchProfilePictureChange":
+        draft.buktiTransferValue = action.buktiTransferChosen;
+        break;
 
-        case "openTheSnack":
-          draft.openSnack = true;
-          break;
-  
-        case "sendRequest":
-            draft.sendRequest = true;
-            break;
-        case "requestSent":
-            draft.sendRequest = false;
-            break;
-        default:
-            return draft;
+      case "catchUserProfileInfo":
+        draft.userProfile.fullName = action.profileObject.full_name;
+        draft.userProfile.phoneNumber = action.profileObject.phone_number;
+
+        break;
+
+      case "openTheSnack":
+        draft.openSnack = true;
+        break;
+
+      case "sendRequest":
+        draft.sendRequest = true;
+        break;
+      case "requestSent":
+        draft.sendRequest = false;
+        break;
+      default:
+        return draft;
     }
-}
+  }
 
-    useEffect(() => {
-      if (state.uploadedPicture[0]) {
-        dispatch({
-          type: "catchProfilePictureChange",
-          buktiTransferChosen: state.uploadedPicture[0],
-        });
-      }
-    }, [state.uploadedPicture[0]]);
+  useEffect(() => {
+    if (state.uploadedPicture[0]) {
+      dispatch({
+        type: "catchProfilePictureChange",
+        buktiTransferChosen: state.uploadedPicture[0],
+      });
+    }
+  }, [state.uploadedPicture[0]]);
 
-    const handleChange = useCallback((e) => {
-        const { name, value } = e.target;
-        dispatch({ type: "catchUserOrderInfo", name, value });
-    }, [dispatch]);
-console.log(params.id)
-    const handleSubmit = useCallback(async (e) => {
-        e.preventDefault();
+  const handleChange = useCallback(
+    (e) => {
+      const { name, value } = e.target;
+      dispatch({ type: "catchUserOrderInfo", name, value });
+    },
+    [dispatch]
+  );
+  console.log(params.id);
+  const handleSubmit = useCallback(
+    async (e) => {
+      e.preventDefault();
 
-        dispatch({ type: "sendRequest" });
+      dispatch({ type: "sendRequest" });
 
       const formData = new FormData();
       formData.append("fullName", state.fullNameValue);
@@ -139,38 +142,45 @@ console.log(params.id)
       formData.append("customer", customerId);
       formData.append("user", userId);
 
-
       const confirmOrder = window.confirm(
         "Are you sure you want to order this room?"
       );
       if (confirmOrder) {
-      try {
-        const response = await Axios.post(
-          `https://mykos2.onrender.com/api/transaction/create`,
-          formData
-        );
-        await updateKamar(params.id, true);
-        console.log(response.data);
-        dispatch({ type: "openTheSnack" });
-       
-      
-      } catch (error) {
-        console.error(error);
-        dispatch({ type: "requestSent" });
+        try {
+          const response = await Axios.post(
+            `https://mykos2.onrender.com/api/transaction/create`,
+            formData
+          );
+          await updateKamar(params.id, true);
+          console.log(response.data);
+          dispatch({ type: "openTheSnack" });
+        } catch (error) {
+          console.error(error);
+          dispatch({ type: "requestSent" });
+        }
       }
-    }
-    }, [dispatch, state.fullNameValue, state.phoneNumberValue, state.nominalValue, state.barangDipesanValue, state.buktiTransferValue, params.id, customerId]);
-    
+    },
+    [
+      dispatch,
+      state.fullNameValue,
+      state.phoneNumberValue,
+      state.nominalValue,
+      state.barangDipesanValue,
+      state.buktiTransferValue,
+      params.id,
+      customerId,
+    ]
+  );
 
-    	// request to get profile info
-	useEffect(() => {
-		async function GetProfileInfo() {
-			try {
-				const response = await Axios.get(
-					`https://mykos2.onrender.com/api/profiles/customer/${userId}/`
-				);
+  // request to get profile info
+  useEffect(() => {
+    async function GetProfileInfo() {
+      try {
+        const response = await Axios.get(
+          `https://mykos2.onrender.com/api/profiles/customer/${userId}/`
+        );
 
-				dispatch({
+        dispatch({
           type: "catchUserOrderInfo",
           name: "fullNameValue",
           value: response.data.full_name,
@@ -181,39 +191,42 @@ console.log(params.id)
           name: "phoneNumberValue",
           value: response.data.phone_number,
         });
-			} catch (e) {}
-		}
-		GetProfileInfo();
-	}, []);
+      } catch (e) {}
+    }
+    GetProfileInfo();
+  }, []);
 
   async function updateKamar(id, newValue) {
     try {
-        const response = await Axios.patch(`https://mykos2.onrender.com/api/kamar/${id}/update/`, {barang_dipesan: newValue});
-    
-        const updatedKamar = {
-          ...response.data,
-          barang_dipesan: newValue
-        };
-        // window.location.reload();
-      } catch (error) {
-        console.error(error);
-      }
+      const response = await Axios.patch(
+        `https://mykos2.onrender.com/api/kamar/${id}/update/`,
+        { barang_dipesan: newValue }
+      );
+
+      const updatedKamar = {
+        ...response.data,
+        barang_dipesan: newValue,
+      };
+      // window.location.reload();
+    } catch (error) {
+      console.error(error);
+    }
   }
 
-console.log(nameValue)
+  console.log(nameValue);
 
-    useEffect(() => {
-      if (state.openSnack) {
-        setTimeout(() => {
-          navigate(`/riwayatTransaksi`);
-        }, 1500);
-      }
-    }, [state.openSnack]);
-return (
+  useEffect(() => {
+    if (state.openSnack) {
+      setTimeout(() => {
+        navigate(`/riwayatTransaksi`);
+      }, 1500);
+    }
+  }, [state.openSnack]);
+  return (
     <>
       <Box width="50%" height="100%" margin="auto" backgroundColor="white">
         <div container>
-          <Typography style={{textAlign: "center"}}>
+          <Typography style={{ textAlign: "center" }}>
             <h1>Pesan Kamar</h1>
           </Typography>
         </div>
@@ -227,12 +240,6 @@ return (
                 fullWidth
                 value={state.fullNameValue}
                 onChange={handleChange}
-                // onChange={(e) =>
-                //   dispatch({
-                //     type: "catchFullNameChange",
-                //     nameValue: e.target.value,
-                //   })
-                // }
                 name="fullNameValue"
               />
             </Grid>
@@ -244,7 +251,7 @@ return (
                 fullWidth
                 value={state.phoneNumberValue}
                 onChange={handleChange}
-                name="phoneNumberValue" 
+                name="phoneNumberValue"
               />
             </Grid>
             <Grid margin="auto" marginTop="1rem">
@@ -272,42 +279,46 @@ return (
                 fullWidth
                 value={state.nominalValue}
                 onChange={handleChange}
-                name="nominalValue" 
+                name="nominalValue"
               />
             </Grid>
             <Grid
-                item
-                container
-                xs={6}
-                style={{
-                  marginTop: "1rem",
-                  marginLeft: "auto",
-                  marginRight: "auto",
-                }}
+              item
+              container
+              xs={6}
+              style={{
+                marginTop: "1rem",
+                marginLeft: "auto",
+                marginRight: "auto",
+              }}
+            >
+              <Button
+                variant="contained"
+                component="label"
+                fullWidth
+                style={{ textAlign: "center" }}
               >
-                <Button
-                  variant="contained"
-                  component="label"
-                  fullWidth
-                  style={{textAlign: 'center'}}
-                >
-                  UPLOAD BUKTI PEMBAYARAN
-                  <input
-                    type="file"
-                    accept="image/png, image/gif, image/jpeg"
-                    hidden
-                    onChange={(e) =>
-                      dispatch({
-                        type: "catchUploadedPicture",
-                        pictureChosen: e.target.files,
-                      })
-                    }
-                  />
-                </Button>
-                <Typography style={{marginTop:'1rem'}}>
-										{state.buktiTransferValue ? <p>{state.buktiTransferValue.name}</p> : ""}
-									</Typography>
-					  </Grid>
+                UPLOAD BUKTI PEMBAYARAN
+                <input
+                  type="file"
+                  accept="image/png, image/gif, image/jpeg"
+                  hidden
+                  onChange={(e) =>
+                    dispatch({
+                      type: "catchUploadedPicture",
+                      pictureChosen: e.target.files,
+                    })
+                  }
+                />
+              </Button>
+              <Typography style={{ marginTop: "1rem" }}>
+                {state.buktiTransferValue ? (
+                  <p>{state.buktiTransferValue.name}</p>
+                ) : (
+                  ""
+                )}
+              </Typography>
+            </Grid>
 
             <Grid
               item
@@ -330,7 +341,6 @@ return (
               container
               justifyContent="center"
               style={{ marginTop: "1rem" }}
-              
             >
               <Typography variant="small">
                 Sudah memesan?{" "}
@@ -355,7 +365,6 @@ return (
       </Box>
     </>
   );
-  
 }
 
-export default Order
+export default Order;

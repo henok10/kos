@@ -3,7 +3,16 @@ import React from "react";
 
 function Footer() {
   return (
-    <div style={{color: 'white', backgroundColor: '#dc3545', paddingTop: '3em', position: 'relative', bottom: '0', width: '100%'}}>
+    <div
+      style={{
+        color: "white",
+        backgroundColor: "#dc3545",
+        paddingTop: "3em",
+        position: "relative",
+        bottom: "0",
+        width: "100%",
+      }}
+    >
       <div>
         <div className="row">
           <p className="col-sm">

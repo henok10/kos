@@ -13,15 +13,6 @@ import os
 import uuid
 
 
-# def compress(picture):
-#     if picture:
-#         pic = PIL.Image.open(picture)
-#         buf = BytesIO()
-#         pic.save(buf, 'JPEG', quality=35)
-#         new_pic = File(buf, name=picture.name)
-#         return new_pic
-#     else:
-#         return None
 def upload_to(instance, filename):
     # Dapatkan ekstensi berkas
     ext = filename.split('.')[-1]
@@ -39,7 +30,6 @@ class Rumah(models.Model):
     address = models.TextField(null=True, blank=True)
     borough = models.CharField(max_length=50, blank=True, null=True)
     no_rekening = models.CharField(max_length=100, blank=True, null=True)
-    # rooms = models.IntegerField(blank=True, null=True)
     price_per_month = models.DecimalField(max_digits=50, decimal_places=0, blank=True, null=True)
     date_posted = models.DateTimeField(default=timezone.now)
     latitude = models.FloatField(blank=True, null=True)
@@ -55,7 +45,7 @@ class Rumah(models.Model):
     picture5 = models.ImageField(
         blank=True, null=True, upload_to=upload_to, max_length=455)
 
-       # tambahan atribut available_rooms
+    # tambahan atribut available_rooms
     @property
     def available_rooms(self):
         transactions = self.transactions.filter(barang_dibeli=True)

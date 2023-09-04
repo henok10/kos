@@ -1,13 +1,17 @@
-import React, { useState, useEffect } from 'react';
-import { Grid, TextField, Button, Alert, Typography } from '@mui/material';
-import PropTypes from 'prop-types';
-import { useDispatch, useSelector, connect } from 'react-redux';
-import { useNavigate, useParams } from 'react-router-dom';
-import { clearErrors, clearSuccess } from '../../actions/auth';
-import { change_user_password } from '../../actions/auth';
-import {Validation2} from './validation';
+import React, { useState, useEffect } from "react";
+import { Grid, TextField, Button, Alert, Typography } from "@mui/material";
+import PropTypes from "prop-types";
+import { useDispatch, useSelector, connect } from "react-redux";
+import { useNavigate, useParams } from "react-router-dom";
+import { clearErrors, clearSuccess } from "../../actions/auth";
+import { change_user_password } from "../../actions/auth";
+import { Validation2 } from "./validation";
 
-const ChangePassword = ({change_user_password, clearErrors, clearSuccess}) => {
+const ChangePassword = ({
+  change_user_password,
+  clearErrors,
+  clearSuccess,
+}) => {
   useEffect(() => {
     // Dispatch aksi CLEAR_ERRORS saat komponen dimuat ulang atau website direfresh
     clearErrors();
@@ -18,10 +22,9 @@ const ChangePassword = ({change_user_password, clearErrors, clearSuccess}) => {
     clearSuccess();
   }, []);
 
-
   const [formData, setFormData] = useState({
-    password: '',
-    password2: ''
+    password: "",
+    password2: "",
   });
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -29,16 +32,15 @@ const ChangePassword = ({change_user_password, clearErrors, clearSuccess}) => {
 
   const [changeSuccess, setChangeSuccess] = useState(false); // State for reset success message
   const { password, password2 } = formData;
-  const [errors, setErrors] = useState({})
+  const [errors, setErrors] = useState({});
   const changeError = useSelector((state) => state.auth.error);
   const success = useSelector((state) => state.auth.success);
- 
 
-  const onChange = e => {
+  const onChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const onSubmit = async e => {
+  const onSubmit = async (e) => {
     e.preventDefault();
     setErrors({});
     const validationErrors = Validation2({ formData });
@@ -52,35 +54,34 @@ const ChangePassword = ({change_user_password, clearErrors, clearSuccess}) => {
         // Reset password error
         setChangeSuccess(false); // Clear reset success message
       }
-     }
-   
+    }
   };
 
-  console.log(changeSuccess)
-  console.log(success)
+  console.log(changeSuccess);
+  console.log(success);
   return (
-    <Grid contained width={'40%'} margin='auto' height='100%'>
-      <Typography variant='h5' marginTop={'2rem'} textAlign={'center'}>
+    <Grid contained width={"40%"} margin="auto" height="100%">
+      <Typography variant="h5" marginTop={"2rem"} textAlign={"center"}>
         Reset Password Anda
       </Typography>
-     
-      <form onSubmit={onSubmit} style={{ marginTop: '2rem' }}>
-      {success && (
-        <Alert severity="success" style={{ marginTop: '10px' }}>
-          Password reset successful
-        </Alert>
-      )}
-       {changeError && (
-            <Typography variant="body1" color="error">
-                {changeError}
-            </Typography>
-            )}
-        <Grid item container marginTop={'1rem'}>
-        {errors.password && <p style={{ color: 'red' }}>{errors.password}</p>}
+
+      <form onSubmit={onSubmit} style={{ marginTop: "2rem" }}>
+        {success && (
+          <Alert severity="success" style={{ marginTop: "10px" }}>
+            Password reset successful
+          </Alert>
+        )}
+        {changeError && (
+          <Typography variant="body1" color="error">
+            {changeError}
+          </Typography>
+        )}
+        <Grid item container marginTop={"1rem"}>
+          {errors.password && <p style={{ color: "red" }}>{errors.password}</p>}
           <TextField
             id="password"
             label="Password"
-            fullWidth         
+            fullWidth
             name="password"
             variant="outlined"
             type="password"
@@ -88,8 +89,10 @@ const ChangePassword = ({change_user_password, clearErrors, clearSuccess}) => {
             onChange={onChange}
           />
         </Grid>
-        <Grid item container marginTop={'0.5rem'}>
-        {errors.password2 && <p style={{ color: 'red' }}>{errors.password2}</p>}
+        <Grid item container marginTop={"0.5rem"}>
+          {errors.password2 && (
+            <p style={{ color: "red" }}>{errors.password2}</p>
+          )}
           <TextField
             id="password2"
             label="Konfirmasi Password"
@@ -101,12 +104,23 @@ const ChangePassword = ({change_user_password, clearErrors, clearSuccess}) => {
             onChange={onChange}
           />
         </Grid>
-        <Grid style={{ marginTop: '4px', display: 'flex', justifyContent: 'center' }}>
+        <Grid
+          style={{
+            marginTop: "4px",
+            display: "flex",
+            justifyContent: "center",
+          }}
+        >
           <Button
             variant="contained"
-            color='primary'
-            style={{ marginTop: '1rem', display: 'flex', justifyContent: 'center' }}
-            type='submit'>
+            color="primary"
+            style={{
+              marginTop: "1rem",
+              display: "flex",
+              justifyContent: "center",
+            }}
+            type="submit"
+          >
             Reset Password
           </Button>
         </Grid>
@@ -128,5 +142,8 @@ const mapStateToProps = (state) => ({
   isOwner: state.auth.isOwner,
 });
 
-
-export default connect(mapStateToProps, { change_user_password, clearErrors, clearSuccess })(ChangePassword);
+export default connect(mapStateToProps, {
+  change_user_password,
+  clearErrors,
+  clearSuccess,
+})(ChangePassword);

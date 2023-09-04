@@ -1,53 +1,63 @@
 // Search.jsx
-import React, { useState } from 'react';
+import React, { useState } from "react";
 import { makeStyles } from "@mui/styles";
-import { Box, Button, Container, Grid, Typography, Paper, MenuItem, Slider, TextField } from "@mui/material";
+import {
+  Box,
+  Button,
+  Container,
+  Grid,
+  Typography,
+  Paper,
+  MenuItem,
+  Slider,
+  TextField,
+} from "@mui/material";
 
 const useStyles = makeStyles(() => ({
   title: {
-    fontFamily: 'Arial, sans-serif',
-    fontWeight: 'bold',
-    fontSize: '32px',
-    margin: 'auto',
-    textAlign: 'center',
-    color: 'white'
+    fontFamily: "Arial, sans-serif",
+    fontWeight: "bold",
+    fontSize: "32px",
+    margin: "auto",
+    textAlign: "center",
+    color: "white",
   },
   subtitle: {
-    fontFamily: 'Arial, sans-serif',
-    fontSize: '16px',
-    margin: 'auto',
-    textAlign: 'center',
+    fontFamily: "Arial, sans-serif",
+    fontSize: "16px",
+    margin: "auto",
+    textAlign: "center",
   },
   form: {
-    padding: '0',
-    margin: '100px auto',
-    maxWidth: '70%',
-    height: '7rem',
-    marginBottom: '1rem',
+    padding: "0",
+    margin: "100px auto",
+    maxWidth: "70%",
+    height: "7rem",
+    marginBottom: "1rem",
   },
   box: {
-    margin: '10px',
+    margin: "10px",
   },
   label: {
-    fontFamily: 'Arial, sans-serif',
-    fontWeight: 'bold',
-    fontSize: '16px',
-    margin: '10px 0',
-    color: 'lightblue'
+    fontFamily: "Arial, sans-serif",
+    fontWeight: "bold",
+    fontSize: "16px",
+    margin: "10px 0",
+    color: "lightblue",
   },
   heading: {
-    fontFamily: 'Arial, sans-serif',
-    fontWeight: 'bold',
-    fontSize: '48px',
-    margin: '10px',
+    fontFamily: "Arial, sans-serif",
+    fontWeight: "bold",
+    fontSize: "48px",
+    margin: "10px",
   },
   textField: {
-    height: '50%',
-},
+    height: "50%",
+  },
 }));
 
 function Search({ setSearchResults }) {
-  const [cityArea, setCityArea] = useState('');
+  const [cityArea, setCityArea] = useState("");
   const [priceRange, setPriceRange] = useState([0, 10000000]);
   const classes = useStyles();
 
@@ -57,7 +67,7 @@ function Search({ setSearchResults }) {
     console.log("Price Range:", priceRange);
     const searchFilter = {
       cityArea,
-      priceRange
+      priceRange,
     };
 
     setSearchResults(searchFilter);
@@ -77,7 +87,7 @@ function Search({ setSearchResults }) {
           </Typography>
         </Box>
 
-        <form className={classes.form} >
+        <form className={classes.form}>
           <Grid container spacing={2}>
             <Grid item xs={12} sm={6} md={4.5}>
               <Box className={classes.box}>
@@ -86,7 +96,7 @@ function Search({ setSearchResults }) {
                 </Typography>
                 <Paper>
                   <TextField
-                    style={{ height: '50%' }}
+                    style={{ height: "50%" }}
                     id="outlined-basic"
                     label="City/Street..."
                     size="small"
@@ -116,13 +126,16 @@ function Search({ setSearchResults }) {
                   max={15000000}
                   step={500000}
                 />
-
               </Box>
             </Grid>
 
             <Grid item xs={12} sm={6} md={3}>
               <Box className={classes.box}>
-                <Typography className={classes.label} variant="body1" style={{ textAlign: "center" }}>
+                <Typography
+                  className={classes.label}
+                  variant="body1"
+                  style={{ textAlign: "center" }}
+                >
                   Filter
                 </Typography>
                 <Button
@@ -140,7 +153,7 @@ function Search({ setSearchResults }) {
         </form>
       </Container>
     </>
-  )
+  );
 }
 
 export default Search;

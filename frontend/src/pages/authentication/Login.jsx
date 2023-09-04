@@ -1,32 +1,32 @@
-import React, { useState, useEffect } from 'react';
-import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
-import { login, clearErrors } from '../../actions/auth';
-import { NavLink, Navigate, useNavigate } from 'react-router-dom';
+import React, { useState, useEffect } from "react";
+import PropTypes from "prop-types";
+import { connect } from "react-redux";
+import { login, clearErrors } from "../../actions/auth";
+import { NavLink, Navigate, useNavigate } from "react-router-dom";
 
 // MUI
-import { Grid, Typography, Button, TextField } from '@mui/material';
-import { makeStyles } from '@mui/styles';
-import { useSelector, useDispatch } from 'react-redux';
-import {Validation} from './validation';
+import { Grid, Typography, Button, TextField } from "@mui/material";
+import { makeStyles } from "@mui/styles";
+import { useSelector, useDispatch } from "react-redux";
+import { Validation } from "./validation";
 
 const useStyles = makeStyles({
   formContainer: {
-    width: '70%',
-    marginLeft: 'auto',
-    marginRight: 'auto',
-    marginTop: '3rem',
-    border: '5px solid lightWhite',
-    padding: '3rem',
-    height: '100%',
+    width: "70%",
+    marginLeft: "auto",
+    marginRight: "auto",
+    marginTop: "3rem",
+    border: "5px solid lightWhite",
+    padding: "3rem",
+    height: "100%",
   },
   loginBtn: {
-    marginTop: '1rem',
-    backgroundColor: 'green',
-    color: 'white',
-    fontSize: '1.1rem',
-    '&:hover': {
-      backgroundColor: 'blue',
+    marginTop: "1rem",
+    backgroundColor: "green",
+    color: "white",
+    fontSize: "1.1rem",
+    "&:hover": {
+      backgroundColor: "blue",
     },
   },
 });
@@ -38,8 +38,8 @@ function Login({ login, isAuthenticated, isCustomer, isOwner, clearErrors }) {
   const loginError = useSelector((state) => state.auth.error);
   const dispatch = useDispatch();
   const [user, setUser] = useState({
-    email: '',
-    password: '',
+    email: "",
+    password: "",
   });
   const { email, password } = user;
   const [errors, setErrors] = useState({});
@@ -49,13 +49,14 @@ function Login({ login, isAuthenticated, isCustomer, isOwner, clearErrors }) {
     clearErrors();
   }, []);
 
-  const loginChange = (e) => setUser({ ...user, [e.target.name]: e.target.value });
+  const loginChange = (e) =>
+    setUser({ ...user, [e.target.name]: e.target.value });
   const handleLoginSubmit = (e) => {
     e.preventDefault();
     const logins = {
-        email,
-        password
-    }
+      email,
+      password,
+    };
     setErrors({});
     const validationErrors = Validation({ user: user });
     setErrors(validationErrors);
@@ -72,7 +73,7 @@ function Login({ login, isAuthenticated, isCustomer, isOwner, clearErrors }) {
   } else if (isAuthenticated && isOwner) {
     return <Navigate to="/owner/home" />;
   } else {
-// console.log(clearErrors())
+    // console.log(clearErrors())
     return (
       <div className={classes.formContainer}>
         <div className="row">
@@ -86,8 +87,8 @@ function Login({ login, isAuthenticated, isCustomer, isOwner, clearErrors }) {
               </Typography>
             )}
             <form onSubmit={handleLoginSubmit}>
-              <Grid item container style={{ marginTop: '1rem' }}>
-              {errors.email && <p style={{ color: 'red' }}>{errors.email}</p>}
+              <Grid item container style={{ marginTop: "1rem" }}>
+                {errors.email && <p style={{ color: "red" }}>{errors.email}</p>}
                 <TextField
                   id="email"
                   label="Email"
@@ -98,8 +99,10 @@ function Login({ login, isAuthenticated, isCustomer, isOwner, clearErrors }) {
                   onChange={loginChange}
                 />
               </Grid>
-              <Grid item container style={{ marginTop: '1rem' }}>
-              {errors.password && <p style={{ color: 'red' }}>{errors.password}</p>}
+              <Grid item container style={{ marginTop: "1rem" }}>
+                {errors.password && (
+                  <p style={{ color: "red" }}>{errors.password}</p>
+                )}
                 <TextField
                   id="password"
                   label="Password"
@@ -116,7 +119,11 @@ function Login({ login, isAuthenticated, isCustomer, isOwner, clearErrors }) {
                 item
                 container
                 xs={8}
-                style={{ marginTop: '1rem', marginLeft: 'auto', marginRight: 'auto' }}
+                style={{
+                  marginTop: "1rem",
+                  marginLeft: "auto",
+                  marginRight: "auto",
+                }}
                 disabled={Object.keys(errors).length > 0} // Menonaktifkan tombol jika ada kesalahan
               >
                 <Button variant="contained" fullWidth type="submit">
@@ -125,10 +132,18 @@ function Login({ login, isAuthenticated, isCustomer, isOwner, clearErrors }) {
               </Grid>
             </form>
 
-            <Grid item container justifyContent="center" style={{ marginTop: '1rem' }}>
+            <Grid
+              item
+              container
+              justifyContent="center"
+              style={{ marginTop: "1rem" }}
+            >
               <Typography variant="small">
-                Don't have an account yet?{' '}
-                <span onClick={() => navigate('/')} style={{ cursor: 'pointer', color: 'green' }}>
+                Don't have an account yet?{" "}
+                <span
+                  onClick={() => navigate("/")}
+                  style={{ cursor: "pointer", color: "green" }}
+                >
                   SIGN UP
                 </span>
               </Typography>

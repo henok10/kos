@@ -3,23 +3,30 @@ import { useNavigate, useParams } from "react-router-dom";
 import { useSelector } from "react-redux";
 import Axios from "axios";
 import L from "leaflet";
-import 'react-leaflet';
+import "react-leaflet";
 import "leaflet-routing-machine/dist/leaflet-routing-machine.css";
 import "leaflet-routing-machine";
-import 'leaflet-control-geocoder';
+import "leaflet-control-geocoder";
 import { useImmerReducer } from "use-immer";
 // Assets
 import stadiumIconPng from "../data/Mapicons/stadium.png";
 import hospitalIconPng from "../data/Mapicons/hospital.png";
 import universityIconPng from "../data/Mapicons/university.png";
 // React Leaflet
-import {
-  MapContainer, TileLayer, Marker, Popup, useMap,
-} from "react-leaflet";
+import { MapContainer, TileLayer, Marker, Popup, useMap } from "react-leaflet";
 import { Icon } from "leaflet";
 // MUI
 import {
-  Grid, Typography, CircularProgress, Breadcrumbs, Link, Box, Avatar, Stack, Button, Dialog
+  Grid,
+  Typography,
+  CircularProgress,
+  Breadcrumbs,
+  Link,
+  Box,
+  Avatar,
+  Stack,
+  Button,
+  Dialog,
 } from "@mui/material";
 
 import ArrowCircleLeftIcon from "@mui/icons-material/ArrowCircleLeft";
@@ -63,11 +70,9 @@ const useStyles = makeStyles({
   },
 });
 
-
-
 function ListingOwnerDetail() {
-  const userId = useSelector(state => state.auth.userId)
-  const ownerId = useSelector(state => state.auth.ownerId)
+  const userId = useSelector((state) => state.auth.userId);
+  const ownerId = useSelector((state) => state.auth.ownerId);
   const navigate = useNavigate();
   const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
   const isCostumer = useSelector((state) => state.auth.isCostumer);
@@ -83,7 +88,7 @@ function ListingOwnerDetail() {
     if (isCostumer) {
       navigate("/listing");
     }
-  }, [isPemilikKos, navigate])
+  }, [isPemilikKos, navigate]);
 
   const classes = useStyles();
   const params = useParams();
@@ -179,22 +184,22 @@ function ListingOwnerDetail() {
   }, [state.listingInfo]);
 
   async function DeleteHandler() {
-		const confirmDelete = window.confirm(
-			"Are you sure you want to delete this listing?"
-		);
-		if (confirmDelete) {
-			try {
-				const response = await Axios.delete(
-					`https://mykos2.onrender.com/api/listings/${params.id}/delete/`
-				);
+    const confirmDelete = window.confirm(
+      "Are you sure you want to delete this listing?"
+    );
+    if (confirmDelete) {
+      try {
+        const response = await Axios.delete(
+          `https://mykos2.onrender.com/api/listings/${params.id}/delete/`
+        );
 
-				dispatch({ type: "openTheSnack" });
-				dispatch({ type: "disableTheButton" });
-			} catch (e) {
-				dispatch({ type: "allowTheButton" });
-			}
-		}
-	}
+        dispatch({ type: "openTheSnack" });
+        dispatch({ type: "disableTheButton" });
+      } catch (e) {
+        dispatch({ type: "allowTheButton" });
+      }
+    }
+  }
 
   const [allFasilitas, setAllFasilitas] = useState([]);
   const [loadingFasilitas, setLoadingFasilitas] = useState(true);
@@ -219,7 +224,7 @@ function ListingOwnerDetail() {
       GetFasilitasInfo();
     }
   }, [state.listingInfo]);
-  console.log(state.listingInfo)
+  console.log(state.listingInfo);
 
   const listingPictures = [
     state.listingInfo.picture1,
@@ -251,8 +256,6 @@ function ListingOwnerDetail() {
   const formattedDate = `${
     date.getMonth() + 1
   }/${date.getDate()}/${date.getFullYear()}`;
-
-
 
   useEffect(() => {
     if (state.openSnack) {
@@ -288,7 +291,6 @@ function ListingOwnerDetail() {
     <div
       style={{ marginLeft: "2rem", marginRight: "2rem", marginBottom: "2rem" }}
     >
-     
       <Grid container>
         <Grid item xs={6} columns={{ xs: 6, sm: 6, md: 12 }}>
           <Grid
@@ -318,9 +320,13 @@ function ListingOwnerDetail() {
             <Grid item container xs={5} alignItems="center">
               <Typography
                 variant="h6"
-                style={{fontWeight: "bolder", color: "black", fontSize:'18px' }}
+                style={{
+                  fontWeight: "bolder",
+                  color: "black",
+                  fontSize: "18px",
+                }}
               >
-                Rp{state.listingInfo.price_per_month}/Month 
+                Rp{state.listingInfo.price_per_month}/Month
               </Typography>
             </Grid>
           </Grid>
@@ -336,8 +342,10 @@ function ListingOwnerDetail() {
                 marginTop: "0.3rem",
               }}
             >
-              <Typography variant="h6"style={{fontSize: '16px'}}>Alamat :</Typography>
-              <Typography variant="body1" style={{fontSize: '15px'}}>
+              <Typography variant="h6" style={{ fontSize: "16px" }}>
+                Alamat :
+              </Typography>
+              <Typography variant="body1" style={{ fontSize: "15px" }}>
                 {state.listingInfo.address}
               </Typography>
             </Grid>
@@ -345,42 +353,67 @@ function ListingOwnerDetail() {
             ""
           )}
 
-     
-<Grid container style={{ padding: "1rem", borderBottom: "1px solid grey" }}>
-<Typography variant="h6" style={{ fontSize: "16px" }}>Fasilitas Kamar:</Typography>
-<Button variant="outlined" style={{marginLeft: '20px'}} onClick={() => navigate(`/listingupdate/${params.row.id}`)}>
-    Tambahkan Fasilitas
-</Button>  
-<Grid container marginTop={'1rem'}>
-    <Grid item xs={12} md={6} style={{ paddingRight: "1rem" }}>
-      {loadingFasilitas ? (
-        <CircularProgress />
-      ) : errorFasilitas ? (
-        <Typography variant="body1" color="error">
-          {errorFasilitas}
-        </Typography>
-      ) : allFasilitas.length === 0 ? (
-        <Typography variant="body1">No facilities available.</Typography>
-      ) : (
-        allFasilitas.slice(0, 4).map((listing, index) => (
-          <Typography key={index} variant="body1" style={{ fontSize: "15px" }}>
-            {listing.nama_fasilitas}
-          </Typography>
-        ))
-      )}
-    </Grid>
-    <Grid item xs={12} md={6} style={{ display: "flex", flexDirection: "column", justifyContent: "flex-start" }}>
-      {/* Baris-baris selanjutnya ditampilkan di samping kanan */}
-      {allFasilitas.slice(4).map((listing, index) => (
-        <Typography key={index} variant="body1" style={{ fontSize: "15px" }}>
-          {listing.nama_fasilitas}
-        </Typography>
-      ))}
-    </Grid>
-</Grid>
- 
-</Grid>
-
+          <Grid
+            container
+            style={{ padding: "1rem", borderBottom: "1px solid grey" }}
+          >
+            <Typography variant="h6" style={{ fontSize: "16px" }}>
+              Fasilitas Kamar:
+            </Typography>
+            <Button
+              variant="outlined"
+              style={{ marginLeft: "20px" }}
+              onClick={() => navigate(`/listingupdate/${params.row.id}`)}
+            >
+              Tambahkan Fasilitas
+            </Button>
+            <Grid container marginTop={"1rem"}>
+              <Grid item xs={12} md={6} style={{ paddingRight: "1rem" }}>
+                {loadingFasilitas ? (
+                  <CircularProgress />
+                ) : errorFasilitas ? (
+                  <Typography variant="body1" color="error">
+                    {errorFasilitas}
+                  </Typography>
+                ) : allFasilitas.length === 0 ? (
+                  <Typography variant="body1">
+                    No facilities available.
+                  </Typography>
+                ) : (
+                  allFasilitas.slice(0, 4).map((listing, index) => (
+                    <Typography
+                      key={index}
+                      variant="body1"
+                      style={{ fontSize: "15px" }}
+                    >
+                      {listing.nama_fasilitas}
+                    </Typography>
+                  ))
+                )}
+              </Grid>
+              <Grid
+                item
+                xs={12}
+                md={6}
+                style={{
+                  display: "flex",
+                  flexDirection: "column",
+                  justifyContent: "flex-start",
+                }}
+              >
+                {/* Baris-baris selanjutnya ditampilkan di samping kanan */}
+                {allFasilitas.slice(4).map((listing, index) => (
+                  <Typography
+                    key={index}
+                    variant="body1"
+                    style={{ fontSize: "15px" }}
+                  >
+                    {listing.nama_fasilitas}
+                  </Typography>
+                ))}
+              </Grid>
+            </Grid>
+          </Grid>
 
           <Grid>
             {/* <Grid item xs={6} columns={{ xs: 6, sm: 6, md: 12 }}> */}
@@ -395,8 +428,12 @@ function ListingOwnerDetail() {
               }}
             >
               <div>
-                <Typography variant="h6"style={{fontSize: '16px'}}>Kamar Yang Tersedia :</Typography>
-                <Typography variant="body1" style={{fontSize: '15px'}}>1 Kamar Tersedia</Typography>
+                <Typography variant="h6" style={{ fontSize: "16px" }}>
+                  Kamar Yang Tersedia :
+                </Typography>
+                <Typography variant="body1" style={{ fontSize: "15px" }}>
+                  1 Kamar Tersedia
+                </Typography>
               </div>
             </Grid>
             {/* </Grid> */}
@@ -411,8 +448,10 @@ function ListingOwnerDetail() {
                   marginTop: "0.3rem",
                 }}
               >
-                <Typography variant="h6" style={{fontSize: '16px'}}>Description :</Typography>
-                <Typography variant="body1" style={{fontSize: '15px'}}>
+                <Typography variant="h6" style={{ fontSize: "16px" }}>
+                  Description :
+                </Typography>
+                <Typography variant="body1" style={{ fontSize: "15px" }}>
                   {state.listingInfo.description}
                 </Typography>
               </Grid>
@@ -530,7 +569,6 @@ function ListingOwnerDetail() {
         <Grid item xs={9} style={{ height: "35rem" }}>
           <MapContainer
             center={[state.listingInfo.latitude, state.listingInfo.longitude]}
-            
             zoom={16}
             scrollWheelZoom={true}
           >

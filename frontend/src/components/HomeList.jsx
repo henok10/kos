@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from 'react';
-import Axios from 'axios';
+import React, { useState, useEffect } from "react";
+import Axios from "axios";
 import { Grid, CircularProgress, Box, Typography } from "@mui/material";
-import Listing from './HomeListing';
-import HomeImg from './HomeImg';
+import Listing from "./HomeListing";
+import HomeImg from "./HomeImg";
 
 function HouseList() {
   const [allListings, setAllListings] = useState([]);
@@ -31,32 +31,41 @@ function HouseList() {
 
   useEffect(() => {
     let filteredListings = [];
-  
-    if (Array.isArray(searchResults.cityArea) || Array.isArray(searchResults.priceRange)) {
+
+    if (
+      Array.isArray(searchResults.cityArea) ||
+      Array.isArray(searchResults.priceRange)
+    ) {
       // Pemfilteran berdasarkan City/Area dan Price
       filteredListings = allListings.filter((listing) => {
         if (Array.isArray(searchResults.cityArea)) {
-          if (!listing.cityArea.toLowerCase().includes(searchResults.cityArea.toLowerCase())) {
+          if (
+            !listing.cityArea
+              .toLowerCase()
+              .includes(searchResults.cityArea.toLowerCase())
+          ) {
             return false;
           }
         }
-  
+
         if (Array.isArray(searchResults.priceRange)) {
           const price_per_month = parseInt(listing.price_per_month);
-          if (price_per_month < searchResults.priceRange[0] || price_per_month > searchResults.priceRange[1]) {
+          if (
+            price_per_month < searchResults.priceRange[0] ||
+            price_per_month > searchResults.priceRange[1]
+          ) {
             return false;
           }
         }
-  
+
         return true;
       });
     } else {
       filteredListings = allListings;
     }
-  
+
     setFiltered(filteredListings);
   }, [allListings, searchResults]);
-  
 
   if (dataIsLoading === true) {
     return (
@@ -74,12 +83,16 @@ function HouseList() {
   return (
     <>
       <HomeImg setSearchResults={setSearchResults} />
-      <Grid container width='80%' margin={'auto'}>
+      <Grid container width="80%" margin={"auto"}>
         <Grid item xs={12}>
-          <Grid container spacing={1} marginTop='10rem'>
-            <Box textAlign='center'>
+          <Grid container spacing={1} marginTop="10rem">
+            <Box textAlign="center">
               <h1>Recent Rumah Kos Listed</h1>
-              <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam.</p>
+              <p>
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
+                eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
+                enim ad minim veniam.
+              </p>
             </Box>
             {/* Ubah properti yang dikirimkan menjadi filtered */}
             <Listing filtered={filtered} isLoading={dataIsLoading} />

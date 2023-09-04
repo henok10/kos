@@ -5,180 +5,187 @@ import Axios from "axios";
 import { makeStyles } from "@mui/styles";
 import { useImmerReducer } from "use-immer";
 import RoomIcon from "@mui/icons-material/Room";
-import {choices} from "../components/Choice";
+import { choices } from "../components/Choice";
 
 // MUI
 import {
-    Grid, Typography, CircularProgress, Breadcrumbs, Link, Box, Stack, Button, AccordionDetails, Paper
-  } from "@mui/material";
+  Grid,
+  Typography,
+  CircularProgress,
+  Breadcrumbs,
+  Link,
+  Box,
+  Stack,
+  Button,
+  AccordionDetails,
+  Paper,
+} from "@mui/material";
 import ArrowCircleLeftIcon from "@mui/icons-material/ArrowCircleLeft";
 import ArrowCircleRightIcon from "@mui/icons-material/ArrowCircleRight";
- 
-  const useStyles = makeStyles({
-    sliderContainer: {
-      position: "relative",
-    },
 
-    leftArrow: {
-        borderRadius: "100%",
-        position: "absolute",
-        cursor: "pointer",
-        fontSize: "3rem",
-        color: "white",
-        top: "50%",
-        left: "27.5%",
-        "&:hover": {
-          backgroundColor: "white",
-        },
-      },
-    
-    rightArrow: {
-        position: "absolute",
-        borderRadius: "100%",
-        cursor: "pointer",
-        fontSize: "3rem",
-        color: "white",
-        top: "50%",
-        right: "27.5%",
-        "&:hover": {
-            backgroundColor: "white",
-        },
-    },
+const useStyles = makeStyles({
+  sliderContainer: {
+    position: "relative",
+  },
 
-  });
+  leftArrow: {
+    borderRadius: "100%",
+    position: "absolute",
+    cursor: "pointer",
+    fontSize: "3rem",
+    color: "white",
+    top: "50%",
+    left: "27.5%",
+    "&:hover": {
+      backgroundColor: "white",
+    },
+  },
+
+  rightArrow: {
+    position: "absolute",
+    borderRadius: "100%",
+    cursor: "pointer",
+    fontSize: "3rem",
+    color: "white",
+    top: "50%",
+    right: "27.5%",
+    "&:hover": {
+      backgroundColor: "white",
+    },
+  },
+});
 
 function KamarDetail() {
-    const classes = useStyles();
-    const params = useParams();
-    const [allFasilitas, setAllFasilitas] = useState([]);
-    const [loadingFasilitas, setLoadingFasilitas] = useState(true);
-    const [errorFasilitas, setErrorFasilitas] = useState(null);
-    const initialState = {
-        dataIsLoading: true,
-        kamarInfo: "",  
-        listingInfo: "", 
-    };
-    function ReducerFuction(draft, action) {
-        switch (action.type) {
-            case "catchKamarInfo":
-                draft.kamarInfo = action.kamarObject;
-                break;
+  const classes = useStyles();
+  const params = useParams();
+  const [allFasilitas, setAllFasilitas] = useState([]);
+  const [loadingFasilitas, setLoadingFasilitas] = useState(true);
+  const [errorFasilitas, setErrorFasilitas] = useState(null);
+  const initialState = {
+    dataIsLoading: true,
+    kamarInfo: "",
+    listingInfo: "",
+  };
+  function ReducerFuction(draft, action) {
+    switch (action.type) {
+      case "catchKamarInfo":
+        draft.kamarInfo = action.kamarObject;
+        break;
 
-            case "catchListingInfo":
-                draft.listingInfo = action.listingObject;
-                break;
-              
-            case "loadingDone":
-                draft.dataIsLoading = false;
-                break;
+      case "catchListingInfo":
+        draft.listingInfo = action.listingObject;
+        break;
+
+      case "loadingDone":
+        draft.dataIsLoading = false;
+        break;
+    }
+  }
+
+  const [state, dispatch] = useImmerReducer(ReducerFuction, initialState);
+
+  useEffect(() => {
+    async function GetKamarInfo() {
+      try {
+        const response = await Axios.get(
+          `https://mykos2.onrender.com/api/kamar/${params.id}/detail/`
+        );
+
+        dispatch({
+          type: "catchKamarInfo",
+          kamarObject: response.data,
+        });
+      } catch (e) {}
+    }
+    GetKamarInfo();
+  }, []);
+
+  useEffect(() => {
+    if (state.kamarInfo) {
+      async function GetListingInfo() {
+        try {
+          const response = await Axios.get(
+            `https://mykos2.onrender.com/api/listings/${state.kamarInfo.rumah}/`
+          );
+
+          dispatch({
+            type: "catchListingInfo",
+            listingObject: response.data,
+          });
+          dispatch({ type: "loadingDone" });
+        } catch (e) {}
+      }
+      GetListingInfo();
+    }
+  }, [state.kamarInfo]);
+
+  useEffect(() => {
+    if (state.kamarInfo) {
+      async function GetFasilitasInfo() {
+        try {
+          const response = await Axios.get(
+            `https://mykos2.onrender.com/api/fasilitas-kamar/${state.kamarInfo.id}/`
+          );
+
+          const data = response.data;
+          setAllFasilitas(data);
+          setLoadingFasilitas(false);
+        } catch (e) {
+          setErrorFasilitas("Error fetching facilities information.");
+          setLoadingFasilitas(false);
         }
       }
+      GetFasilitasInfo();
+    }
+  }, [state.kamarInfo]);
+  console.log(state.kamarInfo);
 
-    const [state, dispatch] = useImmerReducer(ReducerFuction, initialState);
+  const kamarPictures = [
+    state.kamarInfo.picture_room,
+    // state.kamarInfo.picture2,
+    // state.kamarInfo.picture3,
+    // state.kamarInfo.picture4,
+    // state.kamarInfo.picture5,
+  ].filter((picture) => picture !== null);
 
-    useEffect(() => {
-        async function GetKamarInfo() {
-          try {
-            const response = await Axios.get(
-              `https://mykos2.onrender.com/api/kamar/${params.id}/detail/`
-            );
-    
-            dispatch({
-              type: "catchKamarInfo",
-              kamarObject: response.data,
-            });
-          } catch (e) {}
-        }
-        GetKamarInfo();
-      }, []);
+  const [currentPicture, setCurrentPicture] = useState(0);
 
-    useEffect(() => {
-        if (state.kamarInfo) {
-        async function GetListingInfo() {
-          try {
-            const response = await Axios.get(
-              `https://mykos2.onrender.com/api/listings/${state.kamarInfo.rumah}/`
-            );
-    
-            dispatch({
-              type: "catchListingInfo",
-              listingObject: response.data,
-            });
-            dispatch({ type: "loadingDone" });
-          } catch (e) {}
-        }
-        GetListingInfo();
-        }
-    }, [state.kamarInfo]);
+  function NextPicture() {
+    if (currentPicture === kamarPictures.length - 1) {
+      return setCurrentPicture(0);
+    } else {
+      return setCurrentPicture(currentPicture + 1);
+    }
+  }
 
-    useEffect(() => {
-        if (state.kamarInfo) {
-          async function GetFasilitasInfo() {
-            try {
-              const response = await Axios.get(
-                `https://mykos2.onrender.com/api/fasilitas-kamar/${state.kamarInfo.id}/`
-              );
-    
-              const data = response.data;
-              setAllFasilitas(data);
-              setLoadingFasilitas(false);
-            } catch (e) {
-              setErrorFasilitas("Error fetching facilities information.");
-              setLoadingFasilitas(false);
-            }
-          }
-          GetFasilitasInfo();
-        }
-      }, [state.kamarInfo]);
-      console.log(state.kamarInfo)
+  function PreviousPicture() {
+    if (currentPicture === 0) {
+      return setCurrentPicture(kamarPictures.length - 1);
+    } else {
+      return setCurrentPicture(currentPicture - 1);
+    }
+  }
+  const date = new Date(state.listingInfo.date_posted);
+  const formattedDate = `${
+    date.getMonth() + 1
+  }/${date.getDate()}/${date.getFullYear()}`;
 
-      const kamarPictures = [
-        state.kamarInfo.picture_room,
-        // state.kamarInfo.picture2,
-        // state.kamarInfo.picture3,
-        // state.kamarInfo.picture4,
-        // state.kamarInfo.picture5,
-      ].filter((picture) => picture !== null);
-    
-      const [currentPicture, setCurrentPicture] = useState(0);
-    
-      function NextPicture() {
-        if (currentPicture === kamarPictures.length - 1) {
-          return setCurrentPicture(0);
-        } else {
-          return setCurrentPicture(currentPicture + 1);
-        }
-      }
-    
-      function PreviousPicture() {
-        if (currentPicture === 0) {
-          return setCurrentPicture(kamarPictures.length - 1);
-        } else {
-          return setCurrentPicture(currentPicture - 1);
-        }
-      }
-      const date = new Date(state.listingInfo.date_posted);
-      const formattedDate = `${
-        date.getMonth() + 1
-      }/${date.getDate()}/${date.getFullYear()}`;
+  const { choice_kamar, choice_rumah } = choices();
 
+  // Find the appropriate icon URL based on the value in allFasilitas array
+  function getIconUrl(value) {
+    const kamarIcon = choice_kamar.find((item) => item.value === value);
+    const rumahIcon = choice_rumah.find((item) => item.value === value);
 
-      const { choice_kamar, choice_rumah } = choices();
-
-      // Find the appropriate icon URL based on the value in allFasilitas array
-      function getIconUrl(value) {
-        const kamarIcon = choice_kamar.find((item) => item.value === value);
-        const rumahIcon = choice_rumah.find((item) => item.value === value);
-    
-        if (kamarIcon) {
-          return kamarIcon.icon;
-        } else if (rumahIcon) {
-          return rumahIcon.icon;
-        } else {
-          return ""; // Return a default icon URL or an empty string
-        }
-      }
-      console.log("Choice Kamar:", choice_kamar);
+    if (kamarIcon) {
+      return kamarIcon.icon;
+    } else if (rumahIcon) {
+      return rumahIcon.icon;
+    } else {
+      return ""; // Return a default icon URL or an empty string
+    }
+  }
+  console.log("Choice Kamar:", choice_kamar);
   console.log("Choice Rumah:", choice_rumah);
   console.log("All Fasilitas:", allFasilitas);
   console.log("Icon URLs for all fasilitas:");
@@ -186,179 +193,197 @@ function KamarDetail() {
     console.log(listing.name, getIconUrl(listing.name));
   });
 
-      // console.log(state.kamarInfo.rumah)
+  // console.log(state.kamarInfo.rumah)
   return (
     <div>
-        
-<Grid container>
-    <Grid item lg={7} md={7} sm={12} xs={12} width={'100%'}>
-    <Grid
-        item
-        container
-        style={{
-            padding: "1rem",
-            borderBottom: "1px solid gray",
-            // marginTop: "1rem",
-            width: "100%",
-        }}
-        >
-        <Grid item container xs={12} direction="column" spacing={1}>
-            <Grid item>
-            <Typography variant="h6" >{state.listingInfo.title}</Typography>
-            </Grid>
-            <Grid item>
-            <RoomIcon />{" "}
-            <Typography varaiant="h6">
-                {state.listingInfo.borough}
-            </Typography>
-            </Grid>
-            <Grid item>
-            <Typography varaiant="subtitle1">{formattedDate}</Typography>
-            </Grid>
-        </Grid>
-        </Grid>        
-
-      <Grid
-            item
-            style={{
-            padding: "1rem",
-            borderBottom: "1px solid gray",
-            marginTop: "0.3rem",
-            }}
-        >
-            <Typography variant="h6" style={{fontSize: '16px'}}>Alamat Kamar :</Typography>
-            {state.kamarInfo.address_room ? (
-            <Typography variant="body1" style={{fontSize: '15px'}}>
-            {state.kamarInfo.address_room}
-            </Typography>
-            ) : (
-            ""
-            )}
-        </Grid>
-
-        <Grid
-            item
-            style={{
-            padding: "1rem",
-            borderBottom: "1px solid gray",
-            marginTop: "0.3rem",
-            }}
-        >
-            <Typography variant="h6" style={{fontSize: '16px'}}>Ukuran Kamar :</Typography>
-            {state.kamarInfo.room_size ? (
-            <Typography variant="body1" style={{fontSize: '15px'}}>
-            {state.kamarInfo.room_size}
-            </Typography>
-            ) : (
-            ""
-            )}
-        </Grid>
-
-        
-
-
-        <Grid container style={{ padding: "1rem" }}>
-        <Typography variant="h6" style={{ fontSize: "16px" }}>
-          Fasilitas Kamar:
-        </Typography>
-        <Grid container>
-          <Grid item xs={12} md={6} style={{ paddingRight: "1rem" }}>
-            {loadingFasilitas ? (
-              <CircularProgress />
-            ) : errorFasilitas ? (
-              <Typography variant="body1" color="error">
-                {errorFasilitas}
-              </Typography>
-            ) : allFasilitas.length === 0 ? (
-              <Typography variant="body1">No facilities available.</Typography>
-            ) : (
-              allFasilitas.slice(0, 4).map((listing, index) => (
-                <Box key={index} display="flex" alignItems="center">
-                  <img
-                    src={getIconUrl(listing.name)}
-                    alt={listing.name}
-                    style={{ marginLeft: "0.5rem", width: "24px", height: "24px" }}
-                  />
-                  <Typography style={{marginLeft: '6px'}}>{listing.name}</Typography>
-                </Box>
-              ))
-            )}
-          </Grid>
+      <Grid container>
+        <Grid item lg={7} md={7} sm={12} xs={12} width={"100%"}>
           <Grid
             item
-            xs={12}
-            md={6}
-            style={{ display: "flex", flexDirection: "column", justifyContent: "flex-start" }}
+            container
+            style={{
+              padding: "1rem",
+              borderBottom: "1px solid gray",
+              // marginTop: "1rem",
+              width: "100%",
+            }}
           >
-            {/* Baris-baris selanjutnya ditampilkan di samping kanan */}
-            {allFasilitas.slice(4).map((listing, index) => (
-              <Box key={index} display="flex" alignItems="center">
-                {listing.name}
-                <img
-                  src={getIconUrl(listing.name)}
-                  alt={listing.name}
-                  style={{ marginLeft: "0.5rem", width: "24px", height: "24px" }}
-                />
-              </Box>
-            ))}
+            <Grid item container xs={12} direction="column" spacing={1}>
+              <Grid item>
+                <Typography variant="h6">{state.listingInfo.title}</Typography>
+              </Grid>
+              <Grid item>
+                <RoomIcon />{" "}
+                <Typography varaiant="h6">
+                  {state.listingInfo.borough}
+                </Typography>
+              </Grid>
+              <Grid item>
+                <Typography varaiant="subtitle1">{formattedDate}</Typography>
+              </Grid>
+            </Grid>
+          </Grid>
+
+          <Grid
+            item
+            style={{
+              padding: "1rem",
+              borderBottom: "1px solid gray",
+              marginTop: "0.3rem",
+            }}
+          >
+            <Typography variant="h6" style={{ fontSize: "16px" }}>
+              Alamat Kamar :
+            </Typography>
+            {state.kamarInfo.address_room ? (
+              <Typography variant="body1" style={{ fontSize: "15px" }}>
+                {state.kamarInfo.address_room}
+              </Typography>
+            ) : (
+              ""
+            )}
+          </Grid>
+
+          <Grid
+            item
+            style={{
+              padding: "1rem",
+              borderBottom: "1px solid gray",
+              marginTop: "0.3rem",
+            }}
+          >
+            <Typography variant="h6" style={{ fontSize: "16px" }}>
+              Ukuran Kamar :
+            </Typography>
+            {state.kamarInfo.room_size ? (
+              <Typography variant="body1" style={{ fontSize: "15px" }}>
+                {state.kamarInfo.room_size}
+              </Typography>
+            ) : (
+              ""
+            )}
+          </Grid>
+
+          <Grid container style={{ padding: "1rem" }}>
+            <Typography variant="h6" style={{ fontSize: "16px" }}>
+              Fasilitas Kamar:
+            </Typography>
+            <Grid container>
+              <Grid item xs={12} md={6} style={{ paddingRight: "1rem" }}>
+                {loadingFasilitas ? (
+                  <CircularProgress />
+                ) : errorFasilitas ? (
+                  <Typography variant="body1" color="error">
+                    {errorFasilitas}
+                  </Typography>
+                ) : allFasilitas.length === 0 ? (
+                  <Typography variant="body1">
+                    No facilities available.
+                  </Typography>
+                ) : (
+                  allFasilitas.slice(0, 4).map((listing, index) => (
+                    <Box key={index} display="flex" alignItems="center">
+                      <img
+                        src={getIconUrl(listing.name)}
+                        alt={listing.name}
+                        style={{
+                          marginLeft: "0.5rem",
+                          width: "24px",
+                          height: "24px",
+                        }}
+                      />
+                      <Typography style={{ marginLeft: "6px" }}>
+                        {listing.name}
+                      </Typography>
+                    </Box>
+                  ))
+                )}
+              </Grid>
+              <Grid
+                item
+                xs={12}
+                md={6}
+                style={{
+                  display: "flex",
+                  flexDirection: "column",
+                  justifyContent: "flex-start",
+                }}
+              >
+                {/* Baris-baris selanjutnya ditampilkan di samping kanan */}
+                {allFasilitas.slice(4).map((listing, index) => (
+                  <Box key={index} display="flex" alignItems="center">
+                    {listing.name}
+                    <img
+                      src={getIconUrl(listing.name)}
+                      alt={listing.name}
+                      style={{
+                        marginLeft: "0.5rem",
+                        width: "24px",
+                        height: "24px",
+                      }}
+                    />
+                  </Box>
+                ))}
+              </Grid>
+            </Grid>
           </Grid>
         </Grid>
-      </Grid>
-       
-
-    </Grid>
-    <Grid item lg={5} md={5} sm={12} xs={12} width={'100%'} style={{ marginTop: "2rem", paddingLeft: '0.5rem'}}>
-            <Box position="sticky" top= '0'>
-                <Paper style={{ border: '2px solid white' }}>
-                {kamarPictures.length > 0 ? (
+        <Grid
+          item
+          lg={5}
+          md={5}
+          sm={12}
+          xs={12}
+          width={"100%"}
+          style={{ marginTop: "2rem", paddingLeft: "0.5rem" }}
+        >
+          <Box position="sticky" top="0">
+            <Paper style={{ border: "2px solid white" }}>
+              {kamarPictures.length > 0 ? (
                 <Box>
-                    <Grid
+                  <Grid
                     item
                     container
                     justifyContent="center"
                     className={classes.sliderContainer}
-                    >
+                  >
                     {kamarPictures.map((picture, index) => {
-                        return (
+                      return (
                         <div key={index}>
-                            {index === currentPicture ? (
+                          {index === currentPicture ? (
                             <img
-                                src={picture}
-                                style={{
+                              src={picture}
+                              style={{
                                 width: "100%",
                                 height: "100%",
                                 objectFit: "cover", // Adjusts image to cover the container while maintaining aspect ratio
-                                }}
+                              }}
                             />
-                            ) : (
+                          ) : (
                             ""
-                            )}
+                          )}
                         </div>
-                        );
+                      );
                     })}
                     <ArrowCircleLeftIcon
-                        onClick={PreviousPicture}
-                        className={classes.leftArrow}
+                      onClick={PreviousPicture}
+                      className={classes.leftArrow}
                     />
                     <ArrowCircleRightIcon
-                        onClick={NextPicture}
-                        className={classes.rightArrow}
+                      onClick={NextPicture}
+                      className={classes.rightArrow}
                     />
-                    </Grid>
+                  </Grid>
                 </Box>
-                ) : (
+              ) : (
                 ""
-                )}
+              )}
             </Paper>
-            </Box>
-    </Grid>
-
-
-
-   
-</Grid>
-  </div>
-  )
+          </Box>
+        </Grid>
+      </Grid>
+    </div>
+  );
 }
 
-export default KamarDetail
+export default KamarDetail;
