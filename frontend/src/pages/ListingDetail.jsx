@@ -1,4 +1,4 @@
-import React, { useEffect, useState} from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useSelector } from "react-redux";
 import Axios from "axios";
@@ -15,7 +15,7 @@ import stadiumIconPng from "../data/Mapicons/stadium.png";
 import hospitalIconPng from "../data/Mapicons/hospital.png";
 import universityIconPng from "../data/Mapicons/university.png";
 // React Leaflet
-import { MapContainer, TileLayer, Marker, Popup} from "react-leaflet";
+import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
 import { Icon } from "leaflet";
 // MUI
 import {
@@ -36,6 +36,7 @@ import RoomIcon from "@mui/icons-material/Room";
 import CheckBoxIcon from "@mui/icons-material/CheckBox";
 import AssistantDirectionIcon from "@mui/icons-material/AssistantDirection";
 import TheMapComponent from "../components/TheMapComponent";
+import { choices } from "../components/Choice";
 
 import { makeStyles } from "@mui/styles";
 import Review from "../components/Review";
@@ -77,6 +78,8 @@ function ListingDetail() {
   const navigate = useNavigate();
   const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
   const isCustomer = useSelector((state) => state.auth.isCustomer);
+  const [allFasilitas, setAllFasilitas] = useState([]);
+  const [allKamar, setAllKamar] = useState([]);
 
   useEffect(() => {
     if (!isAuthenticated) {
@@ -145,9 +148,8 @@ function ListingDetail() {
       case "allowTheButton":
         draft.disabledBtn = false;
         break;
-      
-      default:
 
+      default:
         break;
     }
   }
@@ -177,7 +179,6 @@ function ListingDetail() {
           const response = await Axios.get(
             `https://mykos2.onrender.com/api/profiles/owner/${state.listingInfo.user}/`
           );
-
           dispatch({
             type: "catchUserProfileInfo",
             profileObject: response.data,
@@ -199,14 +200,72 @@ function ListingDetail() {
         const response = await Axios.get(
           `https://mykos2.onrender.com/api/transaction/${params.id}/user`
         );
-        const numItemsBought = response.data.filter(
-          (transaksi) => transaksi.barang_dibeli
-        ).length;
-        setNumItemsBoughtByListingId(numItemsBought);
+        const data = response.data;
+        
       } catch (error) {}
     }
     GetAllOrderKos();
   }, [params.id]);
+
+  useEffect(() => {
+    async function GetFasilitasInfo() {
+      try {
+        const response = await Axios.get(
+          `https://mykos2.onrender.com/api/fasilitas-rumah/${params.id}/`
+        );
+        const data = response.data;
+        setAllFasilitas(data);
+      } catch (e) {}
+    }
+    GetFasilitasInfo();
+  }, [params.id]);
+
+  useEffect(() => {
+    async function GetAllKamar() {
+      try {
+        const totalRoomsByListing = {};
+        const response = await Axios.get(
+          `https://mykos2.onrender.com/api/kamar/${params.id}/`
+        );
+        const dataKamar = response.data;
+        const totalRooms = dataKamar.length;
+        totalRoomsByListing[params.id] = totalRooms;
+        setAllKamar(totalRoomsByListing);
+
+        const numItemsBought = dataKamar.filter(
+          (transaksi) => transaksi.barang_dipesan
+        ).length;
+       
+        setNumItemsBoughtByListingId(numItemsBought);
+      } catch (error) {
+        // Tangani error jika diperlukan
+        console.error("Error:", error);
+      }
+    }
+
+    GetAllKamar();
+  }, []); // Tambah
+
+  const kamarKosongByListingId = {};
+
+  const totalKamar = allKamar[params.id];
+  const kamarDibeli = numItemsBoughtByListingId;
+  const kamarKosong = totalKamar - kamarDibeli;
+
+  const { choice_kamar, choice_rumah } = choices();
+
+  function getIconUrl(value) {
+    const kamarIcon = choice_kamar.find((item) => item.value === value);
+    const rumahIcon = choice_rumah.find((item) => item.value === value);
+
+    if (kamarIcon) {
+      return kamarIcon.icon;
+    } else if (rumahIcon) {
+      return rumahIcon.icon;
+    } else {
+      return ""; // Return a default icon URL or an empty string
+    }
+  }
 
   const roomsLeft = state.listingInfo.rooms - numItemsBoughtByListingId;
 
@@ -282,9 +341,9 @@ function ListingDetail() {
   }
   return (
     <div
-      style={{ marginLeft: "2rem", marginRight: "2rem", marginBottom: "2rem" }}
+      style={{ margin: 'auto', width: '80%', marginBottom: "2rem" }}
     >
-      <Grid item style={{ marginTop: "1rem" }}>
+      <Grid item style={{ marginTop: "1rem", marginBottom: "0.5rem" }}>
         <Breadcrumbs aria-label="breadcrumb">
           <Link
             underline="hover"
@@ -296,13 +355,21 @@ function ListingDetail() {
           </Link>
 
           <Typography color="text.primary">
-            {state.listingInfo.title} /
+            {state.listingInfo.title}
           </Typography>
         </Breadcrumbs>
       </Grid>
       {/* information */}
       <Grid container>
-        <Grid item lg={7.5} md={7.5} sm={12} xs={12} width={"100%"}>
+        <Grid
+          item
+          lg={7.5}
+          md={7.5}
+          sm={12}
+          xs={12}
+          width={"100%"}
+          backgroundColor="#F8F8FF"
+        >
           <Grid
             item
             container
@@ -318,13 +385,9 @@ function ListingDetail() {
                 <Typography variant="h6">{state.listingInfo.title}</Typography>
               </Grid>
               <Grid item>
-                <RoomIcon />{" "}
                 <Typography varaiant="h6">
-                  {state.listingInfo.borough}
+                  <RoomIcon /> {state.listingInfo.borough} | {formattedDate}
                 </Typography>
-              </Grid>
-              <Grid item>
-                <Typography varaiant="subtitle1">{formattedDate}</Typography>
               </Grid>
             </Grid>
           </Grid>
@@ -370,6 +433,25 @@ function ListingDetail() {
               ""
             )}
           </Grid>
+          <Grid
+            item
+            container
+            style={{
+              padding: "1rem",
+              borderBottom: "1px solid gray",
+              marginTop: "0.3rem",
+              width: "100%",
+            }}
+          >
+            <div>
+              <Typography variant="h6" style={{ fontSize: "16px" }}>
+                Kamar Yang Tersedia :
+              </Typography>
+              <Typography variant="body1" style={{ fontSize: "15px" }}>
+                {kamarKosong} Rooms
+              </Typography>
+            </div>
+          </Grid>
 
           <Grid
             item
@@ -386,113 +468,30 @@ function ListingDetail() {
                   Fasilitas :
                 </Typography>
               </div>
-              <Stack direction="row" spacing={1}>
-                <Grid item lg={3} md={3} sm={12} xs={12}>
-                  {state.listingInfo.rooms ? (
-                    <Grid style={{ display: "flex" }}>
-                      <Typography variant="body1" style={{ fontSize: "15px" }}>
-                        {state.listingInfo.rooms} Rooms
-                      </Typography>
-                    </Grid>
-                  ) : (
-                    ""
-                  )}
 
-                  {state.listingInfo.room_size ? (
-                    <Grid style={{ display: "flex" }}>
-                      <Typography variant="body1" style={{ fontSize: "15px" }}>
-                        Ukuran {state.listingInfo.room_size}
+              <Grid container>
+                <Grid item xs={12} md={6} style={{ paddingRight: "1rem" }}>
+                  {allFasilitas.slice(0, 4).map((listing, index) => (
+                    <Box key={index} display="flex" alignItems="center">
+                      <img
+                        src={getIconUrl(listing.name)}
+                        alt={listing.name}
+                        style={{
+                          marginLeft: "0.5rem",
+                          width: "24px",
+                          height: "24px",
+                        }}
+                      />
+                      <Typography style={{ marginLeft: "6px" }}>
+                        {listing.name}
                       </Typography>
-                    </Grid>
-                  ) : (
-                    ""
-                  )}
+                    </Box>
+                  ))}
                 </Grid>
-                <Grid item lg={2} md={2} sm={3} xs={3}>
-                  {state.listingInfo.furnished ? (
-                    <Grid style={{ display: "flex" }}>
-                      <CheckBoxIcon
-                        style={{ color: "#4CAF50", fontSize: "1.5rem" }}
-                      />{" "}
-                      <Typography variant="body1" style={{ fontSize: "15px" }}>
-                        Furnished
-                      </Typography>
-                    </Grid>
-                  ) : (
-                    ""
-                  )}
-                </Grid>
-
-                <Grid item lg={1.5} md={1.5} sm={3} xs={3}>
-                  {state.listingInfo.elevator ? (
-                    <Grid style={{ display: "flex" }}>
-                      <CheckBoxIcon
-                        style={{ color: "#4CAF50", fontSize: "1.5rem" }}
-                      />{" "}
-                      <Typography variant="body1" style={{ fontSize: "15px" }}>
-                        Elevator
-                      </Typography>
-                    </Grid>
-                  ) : (
-                    ""
-                  )}
-                </Grid>
-
-                <Grid item lg={1.5} md={1.5} sm={3} xs={3}>
-                  {state.listingInfo.cctv ? (
-                    <Grid style={{ display: "flex" }}>
-                      <CheckBoxIcon
-                        style={{ color: "#4CAF50", fontSize: "1.5rem" }}
-                      />{" "}
-                      <Typography variant="body1" style={{ fontSize: "15px" }}>
-                        Cctv
-                      </Typography>
-                    </Grid>
-                  ) : (
-                    ""
-                  )}
-                </Grid>
-
-                <Grid item lg={1.5} md={1.5} sm={3} xs={3}>
-                  {state.listingInfo.parking ? (
-                    <Grid style={{ display: "flex" }}>
-                      <CheckBoxIcon
-                        style={{ color: "#4CAF50", fontSize: "1.5rem" }}
-                      />{" "}
-                      <Typography variant="body1" style={{ fontSize: "15px" }}>
-                        Parking
-                      </Typography>
-                    </Grid>
-                  ) : (
-                    ""
-                  )}
-                </Grid>
-              </Stack>
+              </Grid>
             </Grid>
           </Grid>
           <Grid>
-            {/* <Grid item xs={6} columns={{ xs: 6, sm: 6, md: 12 }}> */}
-            <Grid
-              item
-              container
-              style={{
-                padding: "1rem",
-                borderBottom: "1px solid gray",
-                marginTop: "0.3rem",
-                width: "100%",
-              }}
-            >
-              <div>
-                <Typography variant="h6" style={{ fontSize: "16px" }}>
-                  Kamar Yang Tersedia :
-                </Typography>
-                <Typography variant="body1" style={{ fontSize: "15px" }}>
-                  {roomsLeft} Rooms
-                </Typography>
-              </div>
-            </Grid>
-            {/* </Grid> */}
-
             {/* Description */}
             {state.listingInfo.description ? (
               <Grid
@@ -522,11 +521,11 @@ function ListingDetail() {
           sm={12}
           xs={12}
           width={"100%"}
-          style={{ marginTop: "2rem", paddingLeft: "0.5rem" }}
+          style={{ paddingLeft: "0.5rem" }}
         >
           {/* Image slider */}
           <Box position="sticky" top="0">
-            <Paper style={{ border: "2px solid white" }}>
+            <Paper style={{ border: "2px solid white", backgroundColor: "#F8F8FF" }}>
               {listingPictures.length > 0 ? (
                 <Box>
                   <Grid
@@ -541,7 +540,7 @@ function ListingDetail() {
                           {index === currentPicture ? (
                             <img
                               src={picture}
-                              alt='gambarrumah'
+                              alt="gambarrumah"
                               style={{
                                 width: "100%",
                                 height: "100%",
@@ -569,7 +568,7 @@ function ListingDetail() {
               )}
             </Paper>
             <Paper
-              style={{ width: "100%", marginTop: "0.5rem", padding: "0.5rem" }}
+              style={{ width: "100%", marginTop: "0.5rem", padding: "0.5rem", backgroundColor: "#F8F8FF" }}
             >
               <Grid item container xs={12} alignItems="center">
                 <Typography
@@ -585,7 +584,7 @@ function ListingDetail() {
                 Rp{state.listingInfo.price_per_day}/Day */}
                 </Typography>
               </Grid>
-              <Grid item container marginTop={"1rem"}>
+              <Grid item container marginTop={"1rem"} justifyContent='space-between' >
                 <Button
                   variant="outlined"
                   color="primary"
@@ -594,7 +593,7 @@ function ListingDetail() {
                   onClick={() =>
                     navigate(`/pesan_kamar/${state.listingInfo.id}`)
                   }
-                  style={{}}
+                  style={{width: '48%'}}
                 >
                   Pesan Kamar
                 </Button>
@@ -603,7 +602,7 @@ function ListingDetail() {
                   variant="outlined"
                   color="success"
                   size="small"
-                  style={{ marginLeft: "0.5rem" }}
+                  style={{ marginLeft: "0.5rem", width: '48%' }}
                 >
                   Chat Pemilik Kos
                 </Button>
@@ -636,7 +635,6 @@ function ListingDetail() {
               // The formula
               const lonDiff = longitude2 - longitude1;
               const R = 6371000 / 1000;
-
 
               const dist =
                 Math.acos(

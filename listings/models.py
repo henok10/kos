@@ -30,7 +30,6 @@ class Rumah(models.Model):
     address = models.TextField(null=True, blank=True)
     borough = models.CharField(max_length=50, blank=True, null=True)
     no_rekening = models.CharField(max_length=100, blank=True, null=True)
-    price_per_month = models.DecimalField(max_digits=50, decimal_places=0, blank=True, null=True)
     date_posted = models.DateTimeField(default=timezone.now)
     latitude = models.FloatField(blank=True, null=True)
     longitude = models.FloatField(blank=True, null=True)

@@ -10,6 +10,36 @@ class ListingSerializer(serializers.ModelSerializer):
     user_username = serializers.SerializerMethodField()
     # user_agency_name = serializers.SerializerMethodField()
     listing_pois_within_10km = serializers.SerializerMethodField()
+    price_day = serializers.SerializerMethodField() 
+    price_month = serializers.SerializerMethodField() 
+    price_year = serializers.SerializerMethodField() 
+
+    def get_price_day(self, obj):
+    # Get the first related Kamar instance or None if there are none
+        kamar_instance = obj.kamar.first()
+
+        if kamar_instance:
+            return kamar_instance.price_day
+        else:
+            return None
+    
+    def get_price_month(self, obj):
+    # Get the first related Kamar instance or None if there are none
+        kamar_instance = obj.kamar.first()
+
+        if kamar_instance:
+            return kamar_instance.price_month
+        else:
+            return None
+    
+    def get_price_year(self, obj):
+    # Get the first related Kamar instance or None if there are none
+        kamar_instance = obj.kamar.first()
+
+        if kamar_instance:
+            return kamar_instance.price_year
+        else:
+            return None
 
     def get_listing_pois_within_10km(self, obj):
         listing_location = Point(obj.latitude, obj.longitude, srid=4326)

@@ -17,7 +17,7 @@ function ImageConverter({ transaction }) {
 
   const handleDownloadClick = async () => {
     console.log("Mengklik tombol unduh");
-    console.log(transaction.fullName);
+    console.log(transaction.noRekening);
     // Membuat elemen div baru dengan konten yang ingin Anda konversi menjadi gambar
     const divToConvert = document.createElement("div");
     divToConvert.innerHTML = `
@@ -25,7 +25,11 @@ function ImageConverter({ transaction }) {
           <h2>Payment Receipt</h2>
           <p><strong>Transaction ID:</strong> ${transaction.id}</p>
           <p><strong>Name:</strong> ${transaction.fullName}</p>
-          <p><strong>Amount:</strong> ${transaction.nominal}</p>
+          <p><strong>No Rekening:</strong> ${transaction.noRekening}</p>
+          <p><strong>Alamat Kamar:</strong> ${transaction.addressRoom}</p>
+          <p><strong>Alamar Rumah:</strong> ${transaction.listing_title}</p>
+          <p><strong>Frekuensi Sewa:</strong> ${transaction.rentalFrequency}</p>
+          <p><strong>Total Bayar:</strong> ${transaction.nominal}</p>
           <p><strong>Date:</strong> ${transaction.date}</p>
           <p><strong>Status:</strong> ${
             transaction.approve

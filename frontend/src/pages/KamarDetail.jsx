@@ -7,13 +7,7 @@ import RoomIcon from "@mui/icons-material/Room";
 import { choices } from "../components/Choice";
 
 // MUI
-import {
-  Grid,
-  Typography,
-  CircularProgress,
-  Box,
-  Paper,
-} from "@mui/material";
+import { Grid, Typography, CircularProgress, Box, Paper } from "@mui/material";
 import ArrowCircleLeftIcon from "@mui/icons-material/ArrowCircleLeft";
 import ArrowCircleRightIcon from "@mui/icons-material/ArrowCircleRight";
 
@@ -53,8 +47,6 @@ function KamarDetail() {
   const classes = useStyles();
   const params = useParams();
   const [allFasilitas, setAllFasilitas] = useState([]);
-  const [loadingFasilitas, setLoadingFasilitas] = useState(true);
-  const [errorFasilitas, setErrorFasilitas] = useState(null);
   const initialState = {
     dataIsLoading: true,
     kamarInfo: "",
@@ -126,16 +118,12 @@ function KamarDetail() {
 
           const data = response.data;
           setAllFasilitas(data);
-          setLoadingFasilitas(false);
-        } catch (e) {
-          setErrorFasilitas("Error fetching facilities information.");
-          setLoadingFasilitas(false);
-        }
+        } catch (e) {}
       }
       GetFasilitasInfo();
     }
   }, [state.kamarInfo]);
-  console.log(state.kamarInfo);
+  console.log(allFasilitas);
 
   const kamarPictures = [
     state.kamarInfo.picture_room,
@@ -182,19 +170,20 @@ function KamarDetail() {
       return ""; // Return a default icon URL or an empty string
     }
   }
-  console.log("Choice Kamar:", choice_kamar);
-  console.log("Choice Rumah:", choice_rumah);
-  console.log("All Fasilitas:", allFasilitas);
-  console.log("Icon URLs for all fasilitas:");
-  allFasilitas.forEach((listing) => {
-    console.log(listing.name, getIconUrl(listing.name));
-  });
 
   // console.log(state.kamarInfo.rumah)
   return (
-    <div>
+    <div style={{ margin: "auto", width: "80%" }}>
       <Grid container>
-        <Grid item lg={7} md={7} sm={12} xs={12} width={"100%"}>
+        <Grid
+          item
+          lg={7}
+          md={7}
+          sm={12}
+          xs={12}
+          width={"100%"}
+          backgroundColor="#F8F8FF"
+        >
           <Grid
             item
             container
@@ -210,13 +199,9 @@ function KamarDetail() {
                 <Typography variant="h6">{state.listingInfo.title}</Typography>
               </Grid>
               <Grid item>
-                <RoomIcon />{" "}
                 <Typography varaiant="h6">
-                  {state.listingInfo.borough}
+                  <RoomIcon /> {state.listingInfo.borough} | {formattedDate}
                 </Typography>
-              </Grid>
-              <Grid item>
-                <Typography varaiant="subtitle1">{formattedDate}</Typography>
               </Grid>
             </Grid>
           </Grid>
@@ -267,49 +252,8 @@ function KamarDetail() {
             </Typography>
             <Grid container>
               <Grid item xs={12} md={6} style={{ paddingRight: "1rem" }}>
-                {loadingFasilitas ? (
-                  <CircularProgress />
-                ) : errorFasilitas ? (
-                  <Typography variant="body1" color="error">
-                    {errorFasilitas}
-                  </Typography>
-                ) : allFasilitas.length === 0 ? (
-                  <Typography variant="body1">
-                    No facilities available.
-                  </Typography>
-                ) : (
-                  allFasilitas.slice(0, 4).map((listing, index) => (
-                    <Box key={index} display="flex" alignItems="center">
-                      <img
-                        src={getIconUrl(listing.name)}
-                        alt={listing.name}
-                        style={{
-                          marginLeft: "0.5rem",
-                          width: "24px",
-                          height: "24px",
-                        }}
-                      />
-                      <Typography style={{ marginLeft: "6px" }}>
-                        {listing.name}
-                      </Typography>
-                    </Box>
-                  ))
-                )}
-              </Grid>
-              <Grid
-                item
-                xs={12}
-                md={6}
-                style={{
-                  display: "flex",
-                  flexDirection: "column",
-                  justifyContent: "flex-start",
-                }}
-              >
-                {/* Baris-baris selanjutnya ditampilkan di samping kanan */}
-                {allFasilitas.slice(4).map((listing, index) => (
+                {allFasilitas.slice(0, 4).map((listing, index) => (
                   <Box key={index} display="flex" alignItems="center">
-                    {listing.name}
                     <img
                       src={getIconUrl(listing.name)}
                       alt={listing.name}
@@ -319,6 +263,9 @@ function KamarDetail() {
                         height: "24px",
                       }}
                     />
+                    <Typography style={{ marginLeft: "6px" }}>
+                      {listing.name}
+                    </Typography>
                   </Box>
                 ))}
               </Grid>
@@ -332,7 +279,7 @@ function KamarDetail() {
           sm={12}
           xs={12}
           width={"100%"}
-          style={{ marginTop: "2rem", paddingLeft: "0.5rem" }}
+          style={{ paddingLeft: "0.5rem" }}
         >
           <Box position="sticky" top="0">
             <Paper style={{ border: "2px solid white" }}>
@@ -350,7 +297,7 @@ function KamarDetail() {
                           {index === currentPicture ? (
                             <img
                               src={picture}
-                              alt='kamar'
+                              alt="kamar"
                               style={{
                                 width: "100%",
                                 height: "100%",

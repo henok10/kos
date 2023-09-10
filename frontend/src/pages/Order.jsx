@@ -32,8 +32,6 @@ function Order() {
   const isCustomer = useSelector((state) => state.auth.isCustomer);
   const userId = useSelector((state) => state.auth.userId);
   const customerId = useSelector((state) => state.auth.customerId);
-  const nameValue = useState("");
-  const phoneNumberValue = useState("");
   const params = useParams();
 
   useEffect(() => {
@@ -47,7 +45,7 @@ function Order() {
       navigate("/");
     }
   }, [isCustomer, navigate]);
-  console.log(nameValue);
+
   const initialState = {
     fullNameValue: "",
     phoneNumberValue: "",
@@ -222,7 +220,6 @@ function Order() {
     }
   }
 
-  console.log(nameValue);
 
   useEffect(() => {
     if (state.openSnack) {
@@ -327,7 +324,7 @@ function Order() {
                   component="label"
                   style={{ textAlign: "center" }}
                 >
-                  UPLOAD BUKTI PEMBAYARAN
+                 upload struk
                   <input
                     type="file"
                     accept="image/png, image/gif, image/jpeg"

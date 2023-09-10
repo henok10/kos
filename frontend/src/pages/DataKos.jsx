@@ -85,7 +85,7 @@ export default function DataTable() {
         for (const listingId of listingIds) {
           console.log(listingId);
           const response = await Axios.get(
-            `https://mykos2.onrender.com/api/transaction/${listingIds}/user`
+            `https://mykos2.onrender.com/api/transaction/${listingId}/user`
           );
           const data = response.data;
           const numItemsBought = data.filter(
@@ -103,19 +103,16 @@ export default function DataTable() {
     };
   }, [listingIds]);
 
-  // console.log(numItemsBoughtByListingId)
-  // console.log(allKamar)
 
   const kamarKosongByListingId = {}; // Objek untuk menyimpan jumlah kamar kosong pada setiap rumah kos
-
+  
   for (const listingId in allKamar) {
     const totalKamar = allKamar[listingId];
-    const kamarDibeli = numItemsBoughtByListingId[listingId] || 0;
+    const kamarDibeli = numItemsBoughtByListingId[listingId];
     const kamarKosong = totalKamar - kamarDibeli;
     kamarKosongByListingId[listingId] = kamarKosong;
   }
 
-  // console.log(kamarKosongByListingId);
   async function DeleteHandler(id) {
     const swalWithBootstrapButtons = Swal.mixin({
       customClass: {

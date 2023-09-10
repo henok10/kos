@@ -62,7 +62,7 @@ function Kamar() {
     <TableContainer component={Paper}>
       <Table sx={{ minWidth: 650 }} aria-label="simple table">
         <TableHead>
-          <TableRow>
+          <TableRow style={{backgroundColor: "#F8F8FF"}}>
             <TableCell>Address room</TableCell>
             <TableCell>Picture room</TableCell>
             <TableCell>Status</TableCell>
