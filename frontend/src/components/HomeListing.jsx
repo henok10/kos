@@ -13,10 +13,8 @@ import {
   CardActions,
   CardContent,
   CardHeader,
-  IconButton,
 } from "@mui/material";
 import { makeStyles } from "@mui/styles";
-import RoomIcon from "@mui/icons-material/Room";
 
 const useStyles = makeStyles(() => ({
   cardStyle: {

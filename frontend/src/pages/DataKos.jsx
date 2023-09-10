@@ -1,25 +1,24 @@
 // import * as React from 'react';
 import { DataGrid } from "@mui/x-data-grid";
-import { Grid, Box, Button, CircularProgress } from "@mui/material";
+import { Grid, Button, CircularProgress } from "@mui/material";
 import React, { useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import Axios from "axios";
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
+import Swal from "sweetalert2";
 
 export default function DataTable() {
   const userId = useSelector((state) => state.auth.userId);
-  const ownerId = useSelector((state) => state.auth.ownerId);
   const navigate = useNavigate();
-  const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
-  const isCustomer = useSelector((state) => state.auth.isCustomer);
-  const isOwner = useSelector((state) => state.auth.isOwner);
   const [allKos, setAllKos] = useState([]);
   const [dataIsLoading, setDataIsLoading] = useState(true);
-  const params = useParams();
   const [listingIds, setListingIds] = useState([]);
   const [allKamar, setAllKamar] = useState([]);
 
+  const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
+  const isOwner = useSelector((state) => state.auth.isOwner);
+  
   useEffect(() => {
     if (!isAuthenticated) {
       navigate("/login");
@@ -27,8 +26,8 @@ export default function DataTable() {
   }, [isAuthenticated, navigate]);
 
   useEffect(() => {
-    if (isCustomer) {
-      navigate("/profileCustomer");
+    if (!isOwner) {
+      navigate("/");
     }
   }, [isOwner, navigate]);
 
@@ -117,19 +116,54 @@ export default function DataTable() {
   }
 
   // console.log(kamarKosongByListingId);
-
   async function DeleteHandler(id) {
-    const confirmDelete = window.confirm(
-      "Are you sure you want to delete this Rumah?"
-    );
-    if (confirmDelete) {
+    const swalWithBootstrapButtons = Swal.mixin({
+      customClass: {
+        confirmButton: 'btn btn-success',
+        cancelButton: 'btn btn-danger'
+      },
+      buttonsStyling: false
+    });
+  
+    const result = await swalWithBootstrapButtons.fire({
+      title: 'Are you sure?',
+      text: "You won't be able to revert this!",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Yes, delete it!',
+      cancelButtonText: 'No, cancel!',
+      reverseButtons: true
+    });
+  
+    if (result.isConfirmed) {
       try {
-        const response = await Axios.delete(
-          `https://mykos2.onrender.com/api/listings/${id}/delete/`
+        await Axios.delete(`https://mykos2.onrender.com/api/listings/${id}/delete/`);
+        swalWithBootstrapButtons.fire(
+          'Deleted!',
+          'Your file has been deleted.',
+          'success'
+        ).then(() => {
+          // Reload halaman setelah penghapusan berhasil
+          window.location.reload();
+        });
+      } catch (error) {
+        // Handle error if deletion fails
+        swalWithBootstrapButtons.fire(
+          'Error',
+          'An error occurred while deleting the file.',
+          'error'
         );
-      } catch (error) {}
+      }
+    } else if (result.dismiss === Swal.DismissReason.cancel) {
+      // Handle cancellation
+      swalWithBootstrapButtons.fire(
+        'Cancelled',
+        'Your imaginary file is safe :)',
+        'error'
+      );
     }
   }
+  
 
   if (dataIsLoading === true) {
     return (

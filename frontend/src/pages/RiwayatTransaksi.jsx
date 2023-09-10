@@ -1,11 +1,8 @@
-// import * as React from 'react';
-import { DataGrid } from "@mui/x-data-grid";
-import { Grid, Button, Typography } from "@mui/material";
-import React, { useEffect, useState } from "react";
+import { Grid, Typography } from "@mui/material";
+import React, { useEffect, useState, useRef } from "react";
 import Axios from "axios";
 import { useSelector } from "react-redux";
-import { useNavigate, useParams } from "react-router-dom";
-import { makeStyles } from "@mui/styles";
+import { useNavigate, Link } from "react-router-dom";
 import {
   Table,
   TableBody,
@@ -14,27 +11,22 @@ import {
   TableHead,
   TableRow,
   Paper,
+  Button,
 } from "@mui/material";
+import html2canvas from "html2canvas";
+import { canvasToBlob } from "blob-util";
+import * as htmlToImage from "html-to-image";
+import { toPng } from "html-to-image";
+import ImageConverter from "../components/ImageConverter";
 
-const useStyles = makeStyles({
-  cellSuccess: {
-    backgroundColor: "#4caf50", // Ubah dengan kode warna tombol yang diinginkan
-  },
-  cellProcess: {
-    backgroundColor: "#ffc107", // Ubah dengan kode warna tombol yang diinginkan
-  },
-});
+// Komponen terpisah untuk mengkonversi elemen HTML menjadi gamb
 
 export default function RiwayatTransaksi() {
-  const classes = useStyles();
   const navigate = useNavigate();
   const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
   const isCustomer = useSelector((state) => state.auth.isCustomer);
   const [allKos, setAllKos] = useState([]);
   const userId = useSelector((state) => state.auth.userId);
-  const customerId = useSelector((state) => state.auth.customerId);
-  const [dataIsLoading, setDataIsLoading] = useState(true);
-  const params = useParams();
 
   useEffect(() => {
     if (!isAuthenticated) {
@@ -60,48 +52,14 @@ export default function RiwayatTransaksi() {
         setAllKos(response.data);
         const listings = response.data.filter((listings) => listings.listing);
         console.log(listings);
-        setDataIsLoading(false);
       } catch (error) {}
     }
     GetAllKos();
     return () => {
       source.cancel();
     };
-  }, []);
+  }, [userId]);
 
-  // const columns = [
-  //   { field: 'fullName', headerName: 'Name', width: 200,},
-  //   { field: 'listing_title', headerName: 'Nama Kos', width: 220 },
-  //   { field: 'phoneNumber', headerName: 'No. Telp', width: 130 },
-  //   { field: 'rentalFrequency', headerName: 'Frequensi Sewa', width: 130 },
-  //   { field: 'nominal', headerName: 'Total', width: 100 },
-  //   { field: 'date', headerName: 'Date', width: 250 },
-  //   {
-  //     field: 'approve',
-  //     headerName: 'Status',
-  //     width: 130,
-  //     // valueGetter: (params) => params.row.approve ? 'Sukses' : 'Proses',
-  //     renderCell: (params) => (
-  //       <div
-  //               style={{
-  //                 padding: '4px 8px',
-  //                 borderRadius: '4px',
-  //                 color: 'white',
-  //                 fontWeight: 'bold',
-  //                 textAlign: 'center',
-  //                 backgroundColor: params.row.approve ? 'green' : 'orange',
-  //               }}
-  //             >
-  //               {params.row.approve !== undefined
-  //                 ? params.row.approve
-  //                   ? "Approve"
-  //                   : "Proses"
-  //                 : "Data not available"}
-  //             </div>
-  //     )
-  //     // params.row.barang_dibeli ? classes.cellSuccess : classes.cellProcess,
-  //   },
-  // ];
   return (
     <>
       <Grid
@@ -113,15 +71,6 @@ export default function RiwayatTransaksi() {
             Pemesanan Kamar Kos
           </Typography>
         </Grid>
-        {/* <div style={{height: 480, marginTop:'2rem', width: '85%' }}>
-        <DataGrid
-          rows={allKos}
-          columns={columns}
-          pageSize={6}
-          rowsPerPageOptions={[10]}
-          checkboxSelection
-        />
-      </div> */}
 
         <TableContainer component={Paper}>
           <Table sx={{ minWidth: 650 }} aria-label="simple table">
@@ -129,6 +78,7 @@ export default function RiwayatTransaksi() {
               <TableRow>
                 <TableCell>Name</TableCell>
                 <TableCell>Nama Kos</TableCell>
+                <TableCell>Address Room</TableCell>
                 <TableCell>No. Telp</TableCell>
                 <TableCell>Frequensi Sewa</TableCell>
                 <TableCell>Total</TableCell>
@@ -142,30 +92,48 @@ export default function RiwayatTransaksi() {
                   key={row.name}
                   sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
                 >
-                  <TableCell component="th" scope="row">
-                    {row.fullName}
+                  <TableCell>{row.fullName}</TableCell>
+                  <TableCell>
+                    <Link to={`/listings/${row.rumah}`}>
+                      {row.listing_title}
+                    </Link>
                   </TableCell>
-                  <TableCell>{row.listing_title}</TableCell>
+                  <TableCell>
+                    <Link to={`/kamar-detail/${row.kamar}`}>
+                      {row.addressRoom}
+                    </Link>
+                  </TableCell>
                   <TableCell>{row.phoneNumber}</TableCell>
                   <TableCell>{row.rentalFrequency}</TableCell>
                   <TableCell>{row.nominal}</TableCell>
                   <TableCell>{row.date}</TableCell>
                   <TableCell>
+                  <ImageConverter transaction={row} />
+                  </TableCell>
+                  <TableCell>
                     <div
                       style={{
-                        padding: "4px 8px",
-                        borderRadius: "4px",
-                        color: "white",
-                        fontWeight: "bold",
-                        textAlign: "center",
-                        backgroundColor: row.approve ? "green" : "orange",
+                        flexDirection: "column",
+                        justifyContent: "space-between",
                       }}
                     >
-                      {row.approve !== undefined
-                        ? row.approve
-                          ? "Approve"
-                          : "Proses"
-                        : "Data not available"}
+                      <Button
+                        style={{
+                          padding: "4px 8px",
+                          borderRadius: "4px",
+                          marginRight: "2%",
+                          color: "white",
+                          fontWeight: "bold",
+                          textAlign: "center",
+                          backgroundColor: row.approve ? "green" : "orange",
+                        }}
+                      >
+                        {row.approve !== undefined
+                          ? row.approve
+                            ? "Approve"
+                            : "Proses"
+                          : "Data not available"}
+                      </Button>
                     </div>
                   </TableCell>
                 </TableRow>

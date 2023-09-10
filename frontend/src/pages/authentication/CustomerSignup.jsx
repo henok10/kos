@@ -15,7 +15,6 @@ import {
   FormControlLabel,
   Checkbox,
 } from "@mui/material";
-import { makeStyles } from "@mui/styles";
 
 const CustomerSignup = ({
   create_customeruser,

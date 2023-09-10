@@ -5,16 +5,18 @@ import React, { useEffect, useState } from "react";
 import Axios from "axios";
 import { useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
+import Swal from "sweetalert2";
+import { saveAs } from "file-saver";
 
 export default function DataTableApprove() {
   const navigate = useNavigate();
-  const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
-  const isCostumer = useSelector((state) => state.auth.isCostumer);
-  const isPemilikKos = useSelector((state) => state.auth.isPemilikKos);
   const [allKos, setAllKos] = useState([]);
   const [dataIsLoading, setDataIsLoading] = useState(true);
   const params = useParams();
 
+  const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
+  const isOwner = useSelector((state) => state.auth.isOwner);
+  
   useEffect(() => {
     if (!isAuthenticated) {
       navigate("/login");
@@ -22,10 +24,26 @@ export default function DataTableApprove() {
   }, [isAuthenticated, navigate]);
 
   useEffect(() => {
-    if (isCostumer) {
-      navigate("/profileCustomer");
+    if (!isOwner) {
+      navigate("/");
     }
-  }, [isPemilikKos, navigate]);
+  }, [isOwner, navigate]);
+
+  async function downloadImage(imageUrl, fullName, addressRoom) {
+    try {
+      const response = await fetch(imageUrl);
+      const blob = await response.blob();
+      
+      // Buat nama file yang digabungkan dengan "fullName" dan "addressRoom"
+      const fileName = `${fullName}_${addressRoom}_bukti_transfer.png`.replace(/ /g, "_");
+      
+      // Mengunduh file gambar dengan menggunakan 'file-saver'
+      saveAs(blob, fileName);
+    } catch (error) {
+      console.error("Error downloading image:", error);
+    }
+  }
+  
 
   // request to get profile info
   useEffect(() => {
@@ -44,41 +62,88 @@ export default function DataTableApprove() {
     return () => {
       source.cancel();
     };
-  }, []);
+  }, [params.id]);
 
-  async function deleteKos(id) {
-    const confirmDelete = window.confirm(
-      "Are you sure you want to delete this room transactions?"
-    );
-    if (confirmDelete) {
+  async function updateKamars(kamar, newValue) {
+    try {
+      const response = await Axios.patch(
+        `https://mykos2.onrender.com/api/kamar/${kamar}/update/`,
+        {
+          barang_dipesan: newValue,
+        }
+      );
+      // Tambahkan log atau logika lainnya untuk menangani respons dari server jika diperlukan
+      console.log("Response:", response.data);
+    } catch (error) {
+      console.error("Error updating data:", error);
+    }
+  }
+
+  async function deleteKos(id, kamar) {
+    const swalWithBootstrapButtons = Swal.mixin({
+      customClass: {
+        confirmButton: 'btn btn-success',
+        cancelButton: 'btn btn-danger'
+      },
+      buttonsStyling: false
+    });
+  
+    const result = await swalWithBootstrapButtons.fire({
+      title: 'Are you sure?',
+      text: "You won't be able to revert this!",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Yes, delete it!',
+      cancelButtonText: 'No, cancel!',
+      reverseButtons: true
+    });
+  
+    if (result.isConfirmed) {
       try {
+        await updateKamars(kamar, false)
         await Axios.delete(
           `https://mykos2.onrender.com/api/transaction/${id}/delete`
         );
-
-        setAllKos((prevState) => {
-          const index = prevState.findIndex((kos) => kos.id === id);
-          if (index >= 0) {
-            const updatedKos = [...prevState];
-            updatedKos.splice(index, 1);
-            return updatedKos;
-          } else {
-            return prevState;
-          }
+        
+        swalWithBootstrapButtons.fire(
+          'Deleted!',
+          'Your file has been deleted.',
+          'success'
+        ).then(() => {
+          // Reload halaman setelah penghapusan berhasil
+          window.location.reload();
         });
       } catch (error) {
-        console.error(error);
+        swalWithBootstrapButtons.fire(
+          'Error',
+          'An error occurred while deleting the file.',
+          'error'
+        );
       }
+    } else if (result.dismiss === Swal.DismissReason.cancel) {
+      // Handle cancellation
+      swalWithBootstrapButtons.fire(
+        'Cancelled',
+        'Your imaginary file is safe :)',
+        'error'
+      );
     }
   }
 
   async function updateApprove(id, newValue) {
-    const confirmApprove = window.confirm(
-      "Are you sure you want to approve this room transactions?"
-    );
-    if (confirmApprove) {
+    
+    Swal.fire({
+      title: "Are you sure?",
+      text: "Are you sure you want to approve this room transactions?",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, approve it!",
+    }).then(async (result) => {
+      if (result.isConfirmed) {
       try {
-        const response = await Axios.patch(
+        await Axios.patch(
           `https://mykos2.onrender.com/api/transaction/${id}/update`,
           { approve: newValue }
         );
@@ -88,7 +153,8 @@ export default function DataTableApprove() {
         console.error(error);
       }
     }
-  }
+  });
+}
 
   if (dataIsLoading === true) {
     return (
@@ -109,16 +175,20 @@ export default function DataTableApprove() {
       headerName: "Bukti Transfer",
       width: 150,
       renderCell: (params) => (
-        <img
-          src={params.value}
-          alt="product"
-          style={{
-            width: "80%",
-            height: "80%",
-            objectFit: "cover",
-            margin: "auto",
-          }}
-        />
+        <div>
+          <img
+            src={params.value}
+            alt="product"
+            onClick={() => {downloadImage(params.value, params.row.fullName, params.row.addressRoom);}}
+            style={{
+              cursor: "pointer", // Tambahkan gaya kursor
+              width: "80%",
+              height: "80%",
+              objectFit: "cover",
+              margin: "auto",
+            }}
+          />
+        </div>
       ),
     },
     { field: "fullName", headerName: "Name", width: 180 },
@@ -143,6 +213,7 @@ export default function DataTableApprove() {
             </div>
           );
         } else {
+          const kamar = params.row.kamar;
           return (
             <Box
               style={{
@@ -161,11 +232,12 @@ export default function DataTableApprove() {
               <Button
                 variant="contained"
                 color="error"
-                onClick={() => deleteKos(params.id)}
+                onClick={() => deleteKos(params.id, kamar, false)}
               >
                 Tolak
               </Button>
             </Box>
+           
           );
         }
       },

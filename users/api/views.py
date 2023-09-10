@@ -198,7 +198,8 @@ class CustomerDetail(generics.RetrieveAPIView):
 
     def get_object(self):
         user_id = self.kwargs['user']
-        customer = Customer.objects.get(user=user_id)
+        user = User.objects.get(id=user_id)
+        customer = Customer.objects.get(user=user)
         return customer
 
 

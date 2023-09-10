@@ -3,6 +3,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import Axios from "axios";
 import { useSelector } from "react-redux";
 import { useImmerReducer } from "use-immer";
+import Swal from "sweetalert2";
 // MUI
 import {
   Grid,
@@ -14,28 +15,15 @@ import {
   Snackbar,
 } from "@mui/material";
 import { makeStyles } from "@mui/styles";
-// import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-// import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-// import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
 
 const useStyles = makeStyles({
   formContainer: {
     width: "80%",
     marginLeft: "auto",
     marginRight: "auto",
-    marginTop: "1rem",
     border: "5px solid lightWhite",
-    padding: "3rem",
-  },
-  loginBtn: {
-    backgroundColor: "green",
-    color: "white",
-    fontSize: "1.1rem",
-    marginLeft: "1rem",
-    "&:hover": {
-      backgroundColor: "blue",
-    },
-  },
+    padding: "1rem",
+  }
 });
 function Order() {
   const classes = useStyles();
@@ -44,8 +32,8 @@ function Order() {
   const isCustomer = useSelector((state) => state.auth.isCustomer);
   const userId = useSelector((state) => state.auth.userId);
   const customerId = useSelector((state) => state.auth.customerId);
-  const [nameValue, setFullNameValue] = useState("");
-  const [phoneNumberValue, setPhoneNumberValue] = useState("");
+  const nameValue = useState("");
+  const phoneNumberValue = useState("");
   const params = useParams();
 
   useEffect(() => {
@@ -61,8 +49,9 @@ function Order() {
   }, [isCustomer, navigate]);
   console.log(nameValue);
   const initialState = {
-    fullNameValue: nameValue,
-    phoneNumberValue: phoneNumberValue,
+    fullNameValue: "",
+    phoneNumberValue: "",
+    noRekeningValue: "",
     buktiTransferValue: "",
     nominalValue: "",
     uploadedPicture: [],
@@ -91,6 +80,7 @@ function Order() {
       case "catchUserProfileInfo":
         draft.userProfile.fullName = action.profileObject.full_name;
         draft.userProfile.phoneNumber = action.profileObject.phone_number;
+        draft.userProfile.noRekeningValue = action.profileObject.no_rekening
 
         break;
 
@@ -116,7 +106,7 @@ function Order() {
         buktiTransferChosen: state.uploadedPicture[0],
       });
     }
-  }, [state.uploadedPicture[0]]);
+  }, [state.uploadedPicture, dispatch]);
 
   const handleChange = useCallback(
     (e) => {
@@ -125,7 +115,7 @@ function Order() {
     },
     [dispatch]
   );
-  console.log(params.id);
+  console.log(params.rumah);
   const handleSubmit = useCallback(
     async (e) => {
       e.preventDefault();
@@ -141,34 +131,41 @@ function Order() {
       formData.append("kamar", params.id);
       formData.append("customer", customerId);
       formData.append("user", userId);
-
-      const confirmOrder = window.confirm(
-        "Are you sure you want to order this room?"
-      );
-      if (confirmOrder) {
-        try {
-          const response = await Axios.post(
-            `https://mykos2.onrender.com/api/transaction/create`,
-            formData
-          );
-          await updateKamar(params.id, true);
-          console.log(response.data);
-          dispatch({ type: "openTheSnack" });
-        } catch (error) {
-          console.error(error);
-          dispatch({ type: "requestSent" });
+      Swal.fire({
+        title: "Are you sure?",
+        text: "Are you sure you want to order this room?",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Yes, approve it!",
+      }).then(async (result) => {
+        if (result.isConfirmed) {
+          try {
+            const response = await Axios.post(
+              `https://mykos2.onrender.com/api/transaction/create`,
+              formData
+            );
+            await updateKamar(params.id, true);
+            console.log(response.data);
+            dispatch({ type: "openTheSnack" });
+          } catch (error) {
+            console.error(error);
+            dispatch({ type: "requestSent" });
+          }
         }
-      }
+      });
     },
     [
       dispatch,
       state.fullNameValue,
       state.phoneNumberValue,
       state.nominalValue,
-      state.barangDipesanValue,
       state.buktiTransferValue,
+      state.rentalFrequencyValue,
       params.id,
       customerId,
+      userId,
     ]
   );
 
@@ -194,19 +191,31 @@ function Order() {
       } catch (e) {}
     }
     GetProfileInfo();
-  }, []);
+  }, [userId, dispatch]);
+
+  useEffect(() => {
+    async function GetRumahInfo() {
+      try {
+        const response = await Axios.get(
+          `https://mykos2.onrender.com/api/listings/${params.rumah}/`
+        );
+
+        dispatch({
+          type: "catchUserOrderInfo",
+          name: "noRekeningValue",
+          value: response.data.no_rekening
+          ,
+        });
+      } catch (e) {}
+    }
+    GetRumahInfo();
+  }, [params.rumah, dispatch]);
 
   async function updateKamar(id, newValue) {
     try {
-      const response = await Axios.patch(
-        `https://mykos2.onrender.com/api/kamar/${id}/update/`,
-        { barang_dipesan: newValue }
-      );
-
-      const updatedKamar = {
-        ...response.data,
+      await Axios.patch(`https://mykos2.onrender.com/api/kamar/${id}/update/`, {
         barang_dipesan: newValue,
-      };
+      });
       // window.location.reload();
     } catch (error) {
       console.error(error);
@@ -221,147 +230,163 @@ function Order() {
         navigate(`/riwayatTransaksi`);
       }, 1500);
     }
-  }, [state.openSnack]);
+  }, [state.openSnack, navigate]);
   return (
     <>
-      <Box width="50%" height="100%" margin="auto" backgroundColor="white">
-        <div container>
-          <Typography style={{ textAlign: "center" }}>
-            <h1>Pesan Kamar</h1>
+      <Box width="40%" margin="auto" border="4px solid white" marginTop='20px'>
+        <Box
+          height="40px"
+          backgroundColor="#1E90FF"
+          justifyContent='center'
+          alignItems="center"
+          display="flex"
+        >
+          <Typography style={{ marginLeft: "10px", color: 'white' }}>
+            Pesan Kamar Kos Sekarang
           </Typography>
-        </div>
-        <div className={classes.formContainer}>
-          <form onSubmit={handleSubmit}>
-            <Grid item container style={{ marginTop: "1rem" }}>
-              <TextField
-                id="username"
-                label="Nama Penyewa"
-                variant="outlined"
-                fullWidth
-                value={state.fullNameValue}
-                onChange={handleChange}
-                name="fullNameValue"
-              />
-            </Grid>
-            <Grid item container style={{ marginTop: "1rem" }}>
-              <TextField
-                id="username"
-                label="No. Telp"
-                variant="outlined"
-                fullWidth
-                value={state.phoneNumberValue}
-                onChange={handleChange}
-                name="phoneNumberValue"
-              />
-            </Grid>
-            <Grid margin="auto" marginTop="1rem">
-              <TextField
-                id="number"
-                label="Durasi Penyewaan"
-                variant="outlined"
-                fullWidth
-                marginTop="1rem"
-                value={state.rentalFrequencyValue}
-                onChange={handleChange}
-                name="rentalFrequencyValue"
-                select
-              >
-                <MenuItem value="Year">Year</MenuItem>
-                <MenuItem value="Month">Month</MenuItem>
-                <MenuItem value="Day">Day</MenuItem>
-              </TextField>
-            </Grid>
-            <Grid item container style={{ marginTop: "1rem" }}>
-              <TextField
-                id="nominal pembayaran"
-                label="Jumlah Pembayaran"
-                variant="outlined"
-                fullWidth
-                value={state.nominalValue}
-                onChange={handleChange}
-                name="nominalValue"
-              />
-            </Grid>
-            <Grid
-              item
-              container
-              xs={6}
-              style={{
-                marginTop: "1rem",
-                marginLeft: "auto",
-                marginRight: "auto",
-              }}
-            >
-              <Button
-                variant="contained"
-                component="label"
-                fullWidth
-                style={{ textAlign: "center" }}
-              >
-                UPLOAD BUKTI PEMBAYARAN
-                <input
-                  type="file"
-                  accept="image/png, image/gif, image/jpeg"
-                  hidden
-                  onChange={(e) =>
-                    dispatch({
-                      type: "catchUploadedPicture",
-                      pictureChosen: e.target.files,
-                    })
-                  }
+        </Box>
+        <Box height="550px" backgroundColor="#F8F8FF">
+          <div className={classes.formContainer}>
+            <form onSubmit={handleSubmit}>
+              <Grid item container style={{ marginTop: "1rem" }}>
+                <TextField
+                  id="username"
+                  label="Nama Penyewa"
+                  variant="outlined"
+                  fullWidth
+                  size="small"
+                  value={state.fullNameValue}
+                  onChange={handleChange}
+                  name="fullNameValue"
                 />
-              </Button>
-              <Typography style={{ marginTop: "1rem" }}>
-                {state.buktiTransferValue ? (
-                  <p>{state.buktiTransferValue.name}</p>
-                ) : (
-                  ""
-                )}
-              </Typography>
-            </Grid>
-
-            <Grid
-              item
-              container
-              justifyContent="center"
-              style={{ marginTop: "1rem" }}
-            >
-              <Button
-                variant="contained"
-                fullWidth
-                className={classes.loginBtn}
-                type="submit"
-                disabled={state.sendRequest}
-              >
-                Order
-              </Button>
-            </Grid>
-            <Grid
-              item
-              container
-              justifyContent="center"
-              style={{ marginTop: "1rem" }}
-            >
-              <Typography variant="small">
-                Sudah memesan?{" "}
-                <span
-                  onClick={() => navigate(`/riwayatTransaksi`)}
-                  style={{ color: "#2F80ED", cursor: "pointer" }}
+              </Grid>
+              <Grid item container style={{ marginTop: "1rem" }}>
+                <TextField
+                  id="username"
+                  label="No. Telp"
+                  variant="outlined"
+                  fullWidth
+                  size="small"
+                  value={state.phoneNumberValue}
+                  onChange={handleChange}
+                  name="phoneNumberValue"
+                />
+              </Grid>
+              <Grid item container style={{ marginTop: "1rem" }}>
+                <TextField
+                  id="no_rekening"
+                  label="No. Rekening Tujuan"
+                  variant="outlined"
+                  fullWidth
+                  size="small"
+                  value={state.noRekeningValue}
+                  onChange={handleChange}
+                  name="noRekeningValue"
+                />
+              </Grid>
+              <Grid margin="auto" marginTop="1rem">
+                <TextField
+                  id="number"
+                  label="Durasi Penyewaan"
+                  variant="outlined"
+                  fullWidth
+                  size="small"
+                  marginTop="1rem"
+                  value={state.rentalFrequencyValue}
+                  onChange={handleChange}
+                  name="rentalFrequencyValue"
+                  select
                 >
-                  Lihat transaksi kamu disini
-                </span>
-              </Typography>
-            </Grid>
-          </form>
-          <Snackbar
-            open={state.openSnack}
-            message="You have successfully Order Rumah Kos!"
-            anchorOrigin={{
-              vertical: "bottom",
-              horizontal: "center",
-            }}
-          />
-        </div>
+                  <MenuItem value="Year">Year</MenuItem>
+                  <MenuItem value="Month">Month</MenuItem>
+                  <MenuItem value="Day">Day</MenuItem>
+                </TextField>
+              </Grid>
+              <Grid item container style={{ marginTop: "1rem" }}>
+                <TextField
+                  id="nominal pembayaran"
+                  label="Jumlah Pembayaran"
+                  variant="outlined"
+                  fullWidth
+                  size="small"
+                  value={state.nominalValue}
+                  onChange={handleChange}
+                  name="nominalValue"
+                />
+              </Grid>
+              <Grid
+                item
+                container
+                xs={6}
+                style={{
+                  marginTop: "1rem"
+                }}
+              >
+                <Button
+                  variant="outlined"
+                  component="label"
+                  style={{ textAlign: "center" }}
+                >
+                  UPLOAD BUKTI PEMBAYARAN
+                  <input
+                    type="file"
+                    accept="image/png, image/gif, image/jpeg"
+                    hidden
+                    onChange={(e) =>
+                      dispatch({
+                        type: "catchUploadedPicture",
+                        pictureChosen: e.target.files,
+                      })
+                    }
+                  />
+                </Button>
+                <Typography style={{ marginTop: "1rem" }}>
+                  {state.buktiTransferValue ? (
+                    <p>{state.buktiTransferValue.name}</p>
+                  ) : (
+                    ""
+                  )}
+                </Typography>
+              </Grid>
+
+              <Grid
+                style={{ marginTop: "1rem" }}
+              >
+                <Button
+                  variant="contained"
+                  className={classes.loginBtn}
+                  type="submit"
+                  disabled={state.sendRequest}
+                >
+                  Order
+                </Button>
+              </Grid>
+              <Grid
+                item
+                container
+                style={{ marginTop: "1rem" }}
+              >
+                <Typography variant="small">
+                  Sudah memesan?{" "}
+                  <span
+                    onClick={() => navigate(`/riwayatTransaksi`)}
+                    style={{ color: "#2F80ED", cursor: "pointer" }}
+                  >
+                    Lihat transaksi kamu disini
+                  </span>
+                </Typography>
+              </Grid>
+            </form>
+            <Snackbar
+              open={state.openSnack}
+              message="You have successfully Order Rumah Kos!"
+              anchorOrigin={{
+                vertical: "bottom",
+                horizontal: "center",
+              }}
+            />
+          </div>
+        </Box>
       </Box>
     </>
   );

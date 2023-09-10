@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import Axios from "axios";
 import { useImmerReducer } from "use-immer";
 import { choices } from "../components/Choice";
-
+import Swal from "sweetalert2";
 // MUI
 import { Grid, Typography, Button, TextField, Snackbar } from "@mui/material";
 import { makeStyles } from "@mui/styles";
@@ -39,13 +39,13 @@ const useStyles = makeStyles({
 
 function ListingAdd() {
   const { choice_rumah } = choices();
-  const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
-  const isCostumer = useSelector((state) => state.auth.isCostumer);
-  const isPemilikKos = useSelector((state) => state.auth.isPemilikKos);
   const userId = useSelector((state) => state.auth.userId);
-  const ownerId = useSelector((state) => state.auth.ownerId);
   const classes = useStyles();
   const navigate = useNavigate();
+
+  const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
+  const isOwner = useSelector((state) => state.auth.isOwner);
+  
   useEffect(() => {
     if (!isAuthenticated) {
       navigate("/login");
@@ -53,10 +53,10 @@ function ListingAdd() {
   }, [isAuthenticated, navigate]);
 
   useEffect(() => {
-    if (isCostumer) {
+    if (!isOwner) {
       navigate("/");
     }
-  }, [isPemilikKos, navigate]);
+  }, [isOwner, navigate]);
 
   const initialState = {
     titleValue: "",
@@ -271,6 +271,11 @@ function ListingAdd() {
         draft.priceMonthErrors.hasErrors = true;
         draft.priceMonthErrors.errorMessage = "This field must not be empty";
         break;
+
+
+      default:
+
+        break;
     }
   }
 
@@ -291,7 +296,7 @@ function ListingAdd() {
       } catch (e) {}
     }
     GetProfileInfo();
-  }, []);
+  }, [userId, dispatch]);
   function handleFacilityChange(event) {
     dispatch({
       type: "catchNewFacility",
@@ -369,33 +374,78 @@ function ListingAdd() {
           )?.icon;
           return { name: facility, icon };
         });
-
-        try {
-          const rumahResponse = await Axios.post(
-            "https://mykos2.onrender.com/api/listings/create/",
-            formData
-          );
-
-          const rumahId = rumahResponse.data.id;
-
-          for (const facility of facilitiesArray) {
-            await Axios.post(
-              "https://mykos2.onrender.com/api/fasilitas-rumah/create",
-              {
-                rumah: rumahId,
-                name: facility.name,
-              }
+        Swal.fire({
+          title: "Are you sure?",
+          text: "Are you sure you want to add this Rumah?",
+          icon: "warning",
+          showCancelButton: true,
+          confirmButtonColor: "#3085d6",
+          cancelButtonColor: "#d33",
+          confirmButtonText: "Yes, add it!",
+        }).then(async (result) => {
+          if (result.isConfirmed) {
+          try {
+            const rumahResponse = await Axios.post(
+              "https://mykos2.onrender.com/api/listings/create/",
+              formData
             );
-          }
 
-          dispatch({ type: "openTheSnack" });
-        } catch (e) {
-          dispatch({ type: "allowTheButton" });
+            const rumahId = rumahResponse.data.id;
+
+            for (const facility of facilitiesArray) {
+              await Axios.post(
+                "https://mykos2.onrender.com/api/fasilitas-rumah/create",
+                {
+                  rumah: rumahId,
+                  name: facility.name,
+                }
+              );
+            }
+
+            Swal.fire({
+              position: "center",
+              icon: "success",
+              title: "Rumah telah berhasil disimpan",
+              showConfirmButton: false,
+              timer: 2000,
+            });
+  
+            dispatch({ type: "openTheSnack" });
+          } catch (e) {
+            // Menampilkan notifikasi kesalahan jika terjadi kesalahan
+            Swal.fire({
+              position: "center",
+              icon: "error",
+              title: "Terjadi kesalahan saat menyimpan Rumah",
+              showConfirmButton: false,
+              timer: 2000,
+            });
+            dispatch({ type: "allowTheButton" });
+          }
         }
+      });
       }
       AddProperty();
     }
-  }, [state.sendRequest]);
+  }, [
+    state.sendRequest, 
+    dispatch, 
+    state.picture1Value, 
+    state.picture2Value, 
+    state.picture3Value, 
+    state.picture4Value,
+    state.longitudeValue,
+    state.latitudeValue,
+    state.priceMonthValue,
+    state.no_rekeningValue,
+    state.titleValue,
+    state.descriptionValue,
+    state.addressValue,
+    state.boroughValue,
+    state.facilities,
+    userId
+
+  ]);
 
   function SubmitButtonDisplay() {
     if (
@@ -453,7 +503,7 @@ function ListingAdd() {
         navigate("/datakos");
       }, 1500);
     }
-  }, [state.openSnack]);
+  }, [state.openSnack, navigate]);
 
   return (
     <div className={classes.formContainer}>

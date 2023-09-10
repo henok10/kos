@@ -1,16 +1,31 @@
 import React, { useEffect, useState } from "react";
 import { DataGrid } from "@mui/x-data-grid";
-import { Grid, Box, Button, CircularProgress } from "@mui/material";
+import { Grid, Button } from "@mui/material";
 import { useNavigate, useParams, Link } from "react-router-dom";
-import { useImmerReducer } from "use-immer";
+import { useSelector } from "react-redux";
 import Axios from "axios";
+import Swal from "sweetalert2";
 
 function DataKamar() {
   const navigate = useNavigate();
   const params = useParams();
   const [allRoom, setAllRoom] = useState([]);
   // const [approvesData, setApproveData] = useState([]);
-  const [kamarIds, setKamarIds] = useState([]);
+
+  const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
+  const isOwner = useSelector((state) => state.auth.isOwner);
+
+  useEffect(() => {
+    if (!isAuthenticated) {
+      navigate("/login");
+    }
+  }, [isAuthenticated, navigate]);
+
+  useEffect(() => {
+    if (!isOwner) {
+      navigate("/");
+    }
+  }, [isOwner, navigate]);
 
   useEffect(() => {
     async function GetAllRoom() {
@@ -19,8 +34,6 @@ function DataKamar() {
           `https://mykos2.onrender.com/api/kamar/${params.id}/`
         );
         const data = response.data;
-        const kamarIds = data.map((kamar) => parseInt(kamar.id));
-        setKamarIds(kamarIds);
         setAllRoom(data);
         // dispatch({
         //   type: "catchKamarInfo",
@@ -34,56 +47,93 @@ function DataKamar() {
     }
 
     GetAllRoom();
-  }, []); // Tambah
+  }, [params.id]); // Tambah
   console.log(allRoom);
 
   async function updateApprove(id, newValue) {
     try {
-      const response = await Axios.patch(
+      await Axios.patch(
         `https://mykos2.onrender.com/api/kamar/${id}/update/`,
         {
           barang_dipesan: newValue,
         }
       );
-      // Tambahkan log atau logika lainnya untuk menangani respons dari server jika diperlukan
-      console.log("Response:", response.data);
+      window.location.reload();
     } catch (error) {
       console.error("Error updating data:", error);
     }
   }
 
   async function deleteTransaksi(id) {
-    const confirmDelete = window.confirm(
-      "Are you sure you want to delete this room transactions?"
-    );
-    if (confirmDelete) {
-      try {
-        await updateApprove(id, false);
-        await Axios.delete(
-          `https://mykos2.onrender.com/api/transaction/${id}/delete/kamar`
-        );
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, delete it!",
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        try {
+          await updateApprove(id, false);
+          await Axios.delete(
+            `https://mykos2.onrender.com/api/transaction/${id}/delete/kamar`
+          );
 
-        // Refresh halaman hanya ketika kedua operasi berhasil
-        window.location.reload();
-      } catch (error) {
-        console.error("Error deleting data:", error);
+          // Refresh halaman hanya ketika kedua operasi berhasil
+          window.location.reload();
+        } catch (error) {
+          console.error("Error deleting data:", error);
+        }
       }
-    }
+    });
   }
 
   async function deleteKamar(id) {
-    const confirmDelete = window.confirm(
-      "Are you sure you want to delete this room?"
-    );
-    if (confirmDelete) {
+    const swalWithBootstrapButtons = Swal.mixin({
+      customClass: {
+        confirmButton: "btn btn-success",
+        cancelButton: "btn btn-danger",
+      },
+      buttonsStyling: false,
+    });
+
+    const result = await swalWithBootstrapButtons.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonText: "Yes, delete it!",
+      cancelButtonText: "No, cancel!",
+      reverseButtons: true,
+    });
+
+    if (result.isConfirmed) {
       try {
         await Axios.delete(
           `https://mykos2.onrender.com/api/kamar/${id}/delete/`
         );
+        swalWithBootstrapButtons
+          .fire("Deleted!", "Your file has been deleted.", "success")
+          .then(() => {
+            // Reload halaman setelah penghapusan berhasil
+            window.location.reload();
+          });
       } catch (error) {
-        console.error("Error deleting data:", error);
+        swalWithBootstrapButtons.fire(
+          "Error",
+          "An error occurred while deleting the file.",
+          "error"
+        );
       }
-      window.location.reload();
+    } else if (result.dismiss === Swal.DismissReason.cancel) {
+      // Handle cancellation
+      swalWithBootstrapButtons.fire(
+        "Cancelled",
+        "Your imaginary file is safe :)",
+        "error"
+      );
     }
   }
 

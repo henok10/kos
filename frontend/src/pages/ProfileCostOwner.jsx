@@ -14,7 +14,6 @@ import ProfileUpdate from "../components/ProfileUpdateOwner";
 import {
   Grid,
   Typography,
-  Button,
   CircularProgress,
   Card,
   CardMedia,
@@ -23,12 +22,10 @@ import {
 
 function ProfileOwner() {
   const userId = useSelector((state) => state.auth.userId);
-  const ownerId = useSelector((state) => state.auth.ownerId);
   const navigate = useNavigate();
   const username = useSelector((state) => state.auth.username);
   const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
   const isCustomer = useSelector((state) => state.auth.isCustomer);
-  const isOwner = useSelector((state) => state.auth.isOwner);
 
   useEffect(() => {
     if (!isAuthenticated) {
@@ -40,7 +37,7 @@ function ProfileOwner() {
     if (isCustomer) {
       navigate("/profileCustomer");
     }
-  }, [isOwner, navigate]);
+  }, [isCustomer, navigate]);
 
   const initialState = {
     userProfile: {
@@ -70,6 +67,10 @@ function ProfileOwner() {
       case "loadingDone":
         draft.dataIsLoading = false;
         break;
+
+      default:
+        // Kasus default: tidak ada perubahan pada draft
+        break;
     }
   }
 
@@ -91,29 +92,7 @@ function ProfileOwner() {
       } catch (e) {}
     }
     GetProfileInfo();
-  }, []);
-
-  function PropertiesDisplay() {
-    if (state.userProfile.userListings.length === 0) {
-      return (
-        <Button onClick={() => navigate(`/datakos`)} disabled size="small">
-          No Property
-        </Button>
-      );
-    } else if (state.userProfile.userListings.length === 1) {
-      return (
-        <Button onClick={() => navigate(`/datakos`)} size="small">
-          One Property listed
-        </Button>
-      );
-    } else {
-      return (
-        <Button onClick={() => navigate(`/datakos`)} size="small">
-          {state.userProfile.userListings.length} Rumah Kos
-        </Button>
-      );
-    }
-  }
+  }, [userId, dispatch]);
 
   function WelcomeDisplay() {
     if (

@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import { Grid, TextField, Button, Alert, Typography } from "@mui/material";
 import PropTypes from "prop-types";
 import { useDispatch, useSelector, connect } from "react-redux";
-import { useNavigate, useParams } from "react-router-dom";
 import { clearErrors, clearSuccess } from "../../actions/auth";
 import { change_user_password } from "../../actions/auth";
 import { Validation2 } from "./validation";
@@ -15,21 +14,18 @@ const ChangePassword = ({
   useEffect(() => {
     // Dispatch aksi CLEAR_ERRORS saat komponen dimuat ulang atau website direfresh
     clearErrors();
-  }, []);
+  }, [clearErrors]);
 
   useEffect(() => {
     // Dispatch aksi CLEAR_ERRORS saat komponen dimuat ulang atau website direfresh
     clearSuccess();
-  }, []);
+  }, [clearSuccess]);
 
   const [formData, setFormData] = useState({
     password: "",
     password2: "",
   });
   const dispatch = useDispatch();
-  const navigate = useNavigate();
-  const { id, token } = useParams();
-
   const [changeSuccess, setChangeSuccess] = useState(false); // State for reset success message
   const { password, password2 } = formData;
   const [errors, setErrors] = useState({});

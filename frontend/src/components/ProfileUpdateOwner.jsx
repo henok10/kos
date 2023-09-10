@@ -44,7 +44,6 @@ function ProfileUpdate(props) {
   const userId = useSelector((state) => state.auth.userId);
   const classes = useStyles();
   const navigate = useNavigate();
-  const ownerId = useSelector((state) => state.auth.ownerId);
 
   const initialState = {
     agencyNameValue: props.userProfile.agencyName,
@@ -99,6 +98,9 @@ function ProfileUpdate(props) {
       case "allowTheButton":
         draft.disabledBtn = false;
         break;
+
+      default:
+        break;
     }
   }
 
@@ -112,7 +114,7 @@ function ProfileUpdate(props) {
         profilePictureChosen: state.uploadedPicture[0],
       });
     }
-  }, [state.uploadedPicture[0]]);
+  }, [state.uploadedPicture, dispatch]);
 
   // use effect to send the request
   useEffect(() => {
@@ -143,7 +145,7 @@ function ProfileUpdate(props) {
         );
         if (confirmUpdate) {
           try {
-            const response = await Axios.patch(
+            await Axios.patch(
               `https://mykos2.onrender.com/api/profiles/owner/${userId}/update/`,
               formData
             );
@@ -156,7 +158,7 @@ function ProfileUpdate(props) {
       }
       UpdateProfile();
     }
-  }, [state.sendRequest]);
+  }, [state.sendRequest, dispatch, userId, state.profilePictureValue, state.phoneNumberValue, state.agencyNameValue, state.addressValue, state.bioValue]);
 
   useEffect(() => {
     if (state.openSnack) {
@@ -164,7 +166,7 @@ function ProfileUpdate(props) {
         navigate(0);
       }, 1500);
     }
-  }, [state.openSnack]);
+  }, [state.openSnack, navigate]);
 
   function FormSubmit(e) {
     e.preventDefault();
@@ -194,6 +196,7 @@ function ProfileUpdate(props) {
           }}
         >
           <img
+            alt='profile'
             src={props.userProfile.profilePic}
             style={{ height: "5rem", width: "5rem" }}
           />

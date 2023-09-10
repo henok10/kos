@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import Axios from "axios";
-import { Grid, CircularProgress, Box, Typography } from "@mui/material";
+import { Grid, CircularProgress, Box} from "@mui/material";
 import Listing from "./HomeListing";
 import HomeImg from "./HomeImg";
 

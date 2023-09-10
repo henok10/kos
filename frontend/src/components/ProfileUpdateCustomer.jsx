@@ -42,7 +42,6 @@ const useStyles = makeStyles({
 
 function ProfileUpdateCustomer(props) {
   const userId = useSelector((state) => state.auth.userId);
-  const customerId = useSelector((state) => state.auth.customerId);
   const classes = useStyles();
   const navigate = useNavigate();
 
@@ -99,6 +98,9 @@ function ProfileUpdateCustomer(props) {
       case "allowTheButton":
         draft.disabledBtn = false;
         break;
+
+      default:
+        break;
     }
   }
 
@@ -112,7 +114,7 @@ function ProfileUpdateCustomer(props) {
         profilePictureChosen: state.uploadedPicture[0],
       });
     }
-  }, [state.uploadedPicture[0]]);
+  }, [state.uploadedPicture, dispatch]);
 
   // use effect to send the request
   useEffect(() => {
@@ -142,7 +144,7 @@ function ProfileUpdateCustomer(props) {
         );
         if (confirmUpdate) {
           try {
-            const response = await Axios.patch(
+            await Axios.patch(
               `https://mykos2.onrender.com/api/profiles/customer/${userId}/update/`,
               formData
             );
@@ -155,7 +157,17 @@ function ProfileUpdateCustomer(props) {
       }
       UpdateProfile();
     }
-  }, [state.sendRequest]);
+  }, [
+    state.sendRequest,
+    dispatch, 
+    state.addressValue, 
+    state.agencyNameValue, 
+    state.dateOfBirthValue, 
+    state.fullNameValue, 
+    state.phoneNumberValue, 
+    state.profilePictureValue, 
+    userId
+  ]);
 
   useEffect(() => {
     if (state.openSnack) {
@@ -163,7 +175,7 @@ function ProfileUpdateCustomer(props) {
         navigate(0);
       }, 1500);
     }
-  }, [state.openSnack]);
+  }, [state.openSnack, navigate]);
 
   function FormSubmit(e) {
     e.preventDefault();
@@ -193,6 +205,7 @@ function ProfileUpdateCustomer(props) {
           }}
         >
           <img
+            alt='profile'
             src={props.userProfile.profilePic}
             style={{ height: "5rem", width: "5rem", borderRadius: "50%" }}
           />

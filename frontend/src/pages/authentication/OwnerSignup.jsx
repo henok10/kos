@@ -14,7 +14,6 @@ import {
   FormControlLabel,
   Checkbox,
 } from "@mui/material";
-import { makeStyles } from "@mui/styles";
 
 const OwnerSignup = ({ create_owneruser, isAuthenticated, isOwner }) => {
   const navigate = useNavigate();

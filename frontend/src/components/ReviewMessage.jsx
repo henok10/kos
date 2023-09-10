@@ -1,21 +1,16 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { makeStyles } from "@mui/styles";
-import { useNavigate, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import {
   Typography,
   Grid,
   CircularProgress,
   Box,
   List,
-  ListItem,
   ListItemAvatar,
   Avatar,
-  ListItemText,
-  Rating,
 } from "@mui/material";
-import Alert from "@mui/material/Alert";
-import { useSelector } from "react-redux";
 import { FaStar } from "react-icons/fa";
 const useStyles = makeStyles((theme) => ({
   formControl: {
@@ -64,7 +59,6 @@ function ReviewMessage() {
   const classes = useStyles();
   const [allReviews, setAllReviews] = useState([]);
   const [dataIsLoading, setDataIsLoading] = useState(true);
-  const stars = Array(5).fill(0);
 
   useEffect(() => {
     async function GetReviewInfo() {
@@ -78,7 +72,7 @@ function ReviewMessage() {
       } catch (e) {}
     }
     GetReviewInfo();
-  }, []);
+  }, [params.id]);
   console.log(allReviews.user_username);
   const totalReviews = allReviews.length;
   const totalStars = allReviews.reduce((sum, review) => sum + review.rate, 0);

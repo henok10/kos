@@ -7,7 +7,7 @@ import { NavLink, Navigate, useNavigate } from "react-router-dom";
 // MUI
 import { Grid, Typography, Button, TextField } from "@mui/material";
 import { makeStyles } from "@mui/styles";
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
 import { Validation } from "./validation";
 
 const useStyles = makeStyles({
@@ -34,9 +34,7 @@ const useStyles = makeStyles({
 function Login({ login, isAuthenticated, isCustomer, isOwner, clearErrors }) {
   const classes = useStyles();
   const navigate = useNavigate();
-  const userId = useSelector((state) => state.auth.userId);
   const loginError = useSelector((state) => state.auth.error);
-  const dispatch = useDispatch();
   const [user, setUser] = useState({
     email: "",
     password: "",
@@ -47,7 +45,7 @@ function Login({ login, isAuthenticated, isCustomer, isOwner, clearErrors }) {
   useEffect(() => {
     // Dispatch aksi CLEAR_ERRORS saat komponen dimuat ulang
     clearErrors();
-  }, []);
+  }, [clearErrors]);
 
   const loginChange = (e) =>
     setUser({ ...user, [e.target.name]: e.target.value });

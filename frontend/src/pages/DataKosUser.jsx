@@ -1,20 +1,20 @@
 // import * as React from 'react';
 import { DataGrid } from "@mui/x-data-grid";
-import { Grid, Button, CircularProgress } from "@mui/material";
+import { Grid, Button } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import Axios from "axios";
 import { useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
+import Swal from "sweetalert2";
 
 export default function DataTableUser() {
   const navigate = useNavigate();
-  const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
-  const isCostumer = useSelector((state) => state.auth.isCostumer);
-  const isPemilikKos = useSelector((state) => state.auth.isPemilikKos);
   const [allKos, setAllKos] = useState([]);
-  const [dataIsLoading, setDataIsLoading] = useState(true);
   const params = useParams();
 
+  const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
+  const isOwner = useSelector((state) => state.auth.isOwner);
+  
   useEffect(() => {
     if (!isAuthenticated) {
       navigate("/login");
@@ -22,10 +22,10 @@ export default function DataTableUser() {
   }, [isAuthenticated, navigate]);
 
   useEffect(() => {
-    if (isCostumer) {
-      navigate("/profileCustomer");
+    if (!isOwner) {
+      navigate("/");
     }
-  }, [isPemilikKos, navigate]);
+  }, [isOwner, navigate]);
 
   // request to get profile info
   useEffect(() => {
@@ -37,14 +37,13 @@ export default function DataTableUser() {
         );
 
         setAllKos(response.data);
-        setDataIsLoading(false);
       } catch (error) {}
     }
     GetAllKos();
     return () => {
       source.cancel();
     };
-  }, []);
+  }, [params.id]);
 
   async function updateApprove(id, newValue) {
     try {
@@ -61,31 +60,70 @@ export default function DataTableUser() {
     }
   }
 
-  const handleDelete = async (id) => {
-    const confirmDelete = window.confirm(
-      "Are you sure you want to delete the boarder?"
-    );
-    if (confirmDelete) {
+  async function updateKamars(kamar, newValue) {
+    try {
+      const response = await Axios.patch(
+        `https://mykos2.onrender.com/api/kamar/${kamar}/update/`,
+        {
+          barang_dipesan: newValue,
+        }
+      );
+      // Tambahkan log atau logika lainnya untuk menangani respons dari server jika diperlukan
+      console.log("Response:", response.data);
+    } catch (error) {
+      console.error("Error updating data:", error);
+    }
+  }
+
+  const handleDelete = async (id, kamar) => {
+    const swalWithBootstrapButtons = Swal.mixin({
+      customClass: {
+        confirmButton: 'btn btn-success',
+        cancelButton: 'btn btn-danger'
+      },
+      buttonsStyling: false
+    });
+  
+    const result = await swalWithBootstrapButtons.fire({
+      title: 'Are you sure?',
+      text: "You won't be able to revert this!",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Yes, delete it!',
+      cancelButtonText: 'No, cancel!',
+      reverseButtons: true
+    });
+  
+    if (result.isConfirmed) {
       try {
         await updateApprove(id, false);
+        await updateKamars(kamar, false)
         await Axios.delete(
           `https://mykos2.onrender.com/api/transaction/${id}/delete`
         );
 
-        setAllKos((prevState) => {
-          const index = prevState.findIndex((kos) => kos.id === id);
-          if (index >= 0) {
-            const updatedKos = [...prevState];
-            // updatedKos.splice(index, 1);
-            return updatedKos;
-          } else {
-            return prevState;
-          }
+        swalWithBootstrapButtons.fire(
+          'Deleted!',
+          'Your file has been deleted.',
+          'success'
+        ).then(() => {
+          // Reload halaman setelah penghapusan berhasil
+          window.location.reload();
         });
-        window.location.reload();
       } catch (error) {
-        console.error(error);
+        swalWithBootstrapButtons.fire(
+          'Error',
+          'An error occurred while deleting the file.',
+          'error'
+        );
       }
+    } else if (result.dismiss === Swal.DismissReason.cancel) {
+      // Handle cancellation
+      swalWithBootstrapButtons.fire(
+        'Cancelled',
+        'Your imaginary file is safe :)',
+        'error'
+      );
     }
   };
 
@@ -102,6 +140,7 @@ export default function DataTableUser() {
       headerName: "Aksi",
       width: 150,
       renderCell: (params) => {
+        const kamar = params.row.kamar;
         return (
           <div>
             <Button
@@ -112,7 +151,7 @@ export default function DataTableUser() {
                 color: "white",
                 marginLeft: "0.2rem",
               }}
-              onClick={() => handleDelete(params.id)}
+              onClick={() => handleDelete(params.id, kamar)}
             >
               Hapus
             </Button>

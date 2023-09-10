@@ -21,7 +21,6 @@ import ProfileCustomer from "./pages/ProfileCustomer";
 import DataTable from "./pages/DataKos.jsx";
 import DataTableApprove from "./pages/DataKosApprove";
 import DataTableUser from "./pages/DataKosUser";
-import Footer from "./components/Footer";
 import CustomerHome from "./pages/HomeCustomer";
 import OwnerHome from "./pages/HomeOwner";
 import RiwayatTransaksi from "./pages/RiwayatTransaksi";
@@ -64,7 +63,7 @@ function App() {
                   <Route path="/listings" element={<Listings />} />                
                   <Route path="/register" element={<Register />} />
                   <Route path="/coba" element={<TheMapComponent />} />
-                  <Route path="/order/:id" element={<Order />} />
+                  <Route path="/order/:id/:rumah" element={<Order />} />
                   <Route path="/profileOwner" element={<ProfileOwner />} />
                   <Route path="/profileCustomer" element={<ProfileCustomer />} />
                   <Route path="/listings/:id" element={<ListingDetail />} />

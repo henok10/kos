@@ -56,7 +56,7 @@ function Kamar() {
     }
 
     GetAllRoom();
-  }, []); // Tambahkan params.id sebagai dependency agar useEffect dipanggil ulang ketika params.id berubah
+  }, [params.id]); // Tambahkan params.id sebagai dependency agar useEffect dipanggil ulang ketika params.id berubah
   console.log();
   return (
     <TableContainer component={Paper}>
@@ -87,7 +87,7 @@ function Kamar() {
                 {row.picture_room && (
                   <img
                     src={row.picture_room}
-                    alt="Room Picture"
+                    alt="Room"
                     style={{ maxWidth: "100px" }}
                   />
                 )}
@@ -126,7 +126,7 @@ function Kamar() {
                 ) : (
                   <Button
                     variant="contained"
-                    onClick={() => navigate(`/order/${row.id}`)}
+                    onClick={() => navigate(`/order/${row.id}/${row.rumah}`)}
                   >
                     Order
                   </Button>

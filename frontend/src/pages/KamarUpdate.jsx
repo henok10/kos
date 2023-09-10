@@ -1,8 +1,9 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import Axios from "axios";
 import { useImmerReducer } from "use-immer";
 import { choices } from "../components/Choice";
+import Swal from 'sweetalert2';
 
 // MUI
 import { Grid, Typography, Button, TextField, Snackbar } from "@mui/material";
@@ -29,14 +30,12 @@ const useStyles = makeStyles({
 });
 function KamarUpdate() {
   const { choice_kamar } = choices();
-  const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
-  const isCostumer = useSelector((state) => state.auth.isCostumer);
-  const isPemilikKos = useSelector((state) => state.auth.isPemilikKos);
-  const userId = useSelector((state) => state.auth.userId);
-  const ownerId = useSelector((state) => state.auth.ownerId);
   const classes = useStyles();
   const navigate = useNavigate();
   const params = useParams();
+  const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
+  const isOwner = useSelector((state) => state.auth.isOwner);
+
   useEffect(() => {
     if (!isAuthenticated) {
       navigate("/login");
@@ -44,10 +43,10 @@ function KamarUpdate() {
   }, [isAuthenticated, navigate]);
 
   useEffect(() => {
-    if (isCostumer) {
+    if (!isOwner) {
       navigate("/");
     }
-  }, [isPemilikKos, navigate]);
+  }, [isOwner, navigate]);
 
   const initialState = {
     kamarInfo: "",
@@ -237,6 +236,9 @@ function KamarUpdate() {
         draft.priceYearErrors.hasErrors = true;
         draft.priceYearErrors.errorMessage = "This field must not be empty";
         break;
+
+      default:
+        break;
     }
   }
 
@@ -300,7 +302,7 @@ function KamarUpdate() {
       } catch (e) {}
     }
     GetKamarInfo();
-  }, []);
+  }, [params.id, dispatch]);
 
   useEffect(() => {
     async function GetFasilitasInfo() {
@@ -316,7 +318,7 @@ function KamarUpdate() {
       } catch (e) {}
     }
     GetFasilitasInfo();
-  }, []);
+  }, [dispatch, params.id]);
 
   const handleFacilityChange = async (event, index) => {
     const newValue = event.target.value;
@@ -377,38 +379,59 @@ function KamarUpdate() {
           name: facility,
         }));
 
-        try {
-          // First, create the Kamar instance
-          const kamarResponse = await Axios.patch(
-            `https://mykos2.onrender.com/api/kamar/${params.id}/update/`,
-            formData
-          );
-
-          // Now, use the created Kamar instance's ID to associate the FasilitasKamar instances
-          const kamarId = kamarResponse.data.id;
-
-          for (const facility of facilitiesArray) {
-            await Axios.post(
-              "https://mykos2.onrender.com/api/fasilitas-kamar/create",
-              {
-                kamar: kamarId,
-                name: facility.name,
-              }
+        const confirmUpdate = await Swal.fire({
+          title: 'Do you want to save the changes?',
+          showDenyButton: true,
+          showCancelButton: true,
+          confirmButtonText: 'Save',
+          denyButtonText: `Don't save`,
+        });
+        if (confirmUpdate.isConfirmed) {
+          try {
+            // First, create the Kamar instance
+            const kamarResponse = await Axios.patch(
+              `https://mykos2.onrender.com/api/kamar/${params.id}/update/`,
+              formData
             );
-          }
 
-          dispatch({ type: "openTheSnack" });
-        } catch (e) {
-          dispatch({ type: "allowTheButton" });
+            // Now, use the created Kamar instance's ID to associate the FasilitasKamar instances
+            const kamarId = kamarResponse.data.id;
+
+            for (const facility of facilitiesArray) {
+              await Axios.post(
+                "https://mykos2.onrender.com/api/fasilitas-kamar/create",
+                {
+                  kamar: kamarId,
+                  name: facility.name,
+                }
+              );
+            }
+            Swal.fire('Saved!', '', 'success')
+            dispatch({ type: "openTheSnack" });
+          } catch (e) {
+            dispatch({ type: "allowTheButton" });
+          }
+        } else if (confirmUpdate.isDenied) {
+          // Handle the case where the user chooses not to save the changes
+          Swal.fire('Changes are not saved', '', 'info');
         }
       }
 
       AddProperty();
     }
-  }, [state.sendRequest]);
+  }, [
+    state.sendRequest, 
+    params.id, 
+    dispatch, 
+    state.addressRoomValue,
+    state.priceDayValue,
+    state.priceMonthValue,
+    state.priceYearValue,
+    state.roomSizeValue,
+    state.facilities,
+    state.pictureRoomValue
+  ]);
 
-
-  console.log(state.kamarInfo.picture_room);
 
   useEffect(() => {
     if (state.openSnack) {
@@ -416,7 +439,7 @@ function KamarUpdate() {
         navigate("/datakos");
       }, 1500);
     }
-  }, [state.openSnack]);
+  }, [state.openSnack, navigate]);
   return (
     <div className={classes.formContainer}>
       <form onSubmit={FormSubmit}>
@@ -655,6 +678,7 @@ function KamarUpdate() {
                       height: "4rem",
                       width: "3rem",
                     }}
+                    alt='gambar-ruangan'
                     src={state.kamarInfo.picture_room}
                   />
                 </Grid>

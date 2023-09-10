@@ -1,8 +1,9 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import Axios from "axios";
 import { useImmerReducer } from "use-immer";
 import { choices } from "../components/Choice";
+import Swal from "sweetalert2";
 
 // MUI
 import { Grid, Typography, Button, TextField, Snackbar } from "@mui/material";
@@ -29,14 +30,12 @@ const useStyles = makeStyles({
 });
 function KamarAdd() {
   const { choice_kamar } = choices();
-  const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
-  const isCostumer = useSelector((state) => state.auth.isCostumer);
-  const isPemilikKos = useSelector((state) => state.auth.isPemilikKos);
-  const userId = useSelector((state) => state.auth.userId);
-  const ownerId = useSelector((state) => state.auth.ownerId);
   const classes = useStyles();
   const navigate = useNavigate();
   const params = useParams();
+  const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
+  const isOwner = useSelector((state) => state.auth.isOwner);
+
   useEffect(() => {
     if (!isAuthenticated) {
       navigate("/login");
@@ -44,10 +43,10 @@ function KamarAdd() {
   }, [isAuthenticated, navigate]);
 
   useEffect(() => {
-    if (isCostumer) {
+    if (!isOwner) {
       navigate("/");
     }
-  }, [isPemilikKos, navigate]);
+  }, [isOwner, navigate]);
 
   const initialState = {
     addressRoomValue: "",
@@ -86,7 +85,6 @@ function KamarAdd() {
   };
 
   const [state, dispatch] = useImmerReducer(ReducerFuction, initialState);
-  const [selectedFacilities, setSelectedFacilities] = useState([]);
 
   function ReducerFuction(draft, action) {
     switch (action.type) {
@@ -209,6 +207,9 @@ function KamarAdd() {
         draft.priceYearErrors.hasErrors = true;
         draft.priceYearErrors.errorMessage = "This field must not be empty";
         break;
+
+      default:
+        break;
     }
   }
 
@@ -274,36 +275,79 @@ function KamarAdd() {
           name: facility,
         }));
         // formData.append("fasilitaskamar_set", JSON.stringify(facilitiesArray));
+        // const confirmAdd = window.confirm(
+        //   "Are you sure you want to add this Kamar?"
+        // );
+        // if (confirmAdd) {
+        Swal.fire({
+          title: "Are you sure?",
+          text: "Are you sure you want to add this Kamar?",
+          icon: "warning",
+          showCancelButton: true,
+          confirmButtonColor: "#3085d6",
+          cancelButtonColor: "#d33",
+          confirmButtonText: "Yes, add it!",
+        }).then(async (result) => {
+          if (result.isConfirmed) {
+            try {
+              // First, create the Kamar instance
+              const kamarResponse = await Axios.post(
+                "https://mykos2.onrender.com/api/kamar/create",
+                formData
+              );
 
-        try {
-          // First, create the Kamar instance
-          const kamarResponse = await Axios.post(
-            "https://mykos2.onrender.com/api/kamar/create",
-            formData
-          );
+              // Now, use the created Kamar instance's ID to associate the FasilitasKamar instances
+              const kamarId = kamarResponse.data.id;
 
-          // Now, use the created Kamar instance's ID to associate the FasilitasKamar instances
-          const kamarId = kamarResponse.data.id;
-
-          for (const facility of facilitiesArray) {
-            await Axios.post(
-              "https://mykos2.onrender.com/api/fasilitas-kamar/create",
-              {
-                kamar: kamarId,
-                name: facility.name,
+              for (const facility of facilitiesArray) {
+                await Axios.post(
+                  "https://mykos2.onrender.com/api/fasilitas-kamar/create",
+                  {
+                    kamar: kamarId,
+                    name: facility.name,
+                  }
+                );
               }
-            );
+
+              // Menampilkan notifikasi sukses menggunakan Swal
+              // Menampilkan notifikasi sukses menggunakan Swal
+              Swal.fire({
+                position: "center",
+                icon: "success",
+                title: "Kamar telah berhasil disimpan",
+                showConfirmButton: false,
+                timer: 2500,
+              });
+
+              dispatch({ type: "openTheSnack" });
+            } catch (e) {
+              // Menampilkan notifikasi kesalahan jika terjadi kesalahan
+              Swal.fire({
+                position: "center",
+                icon: "error",
+                title: "Terjadi kesalahan saat menyimpan Kamar",
+                showConfirmButton: false,
+                timer: 2500,
+              });
+              dispatch({ type: "allowTheButton" });
+            }
           }
-
-          dispatch({ type: "openTheSnack" });
-        } catch (e) {
-          dispatch({ type: "allowTheButton" });
-        }
+        });
       }
-
       AddProperty();
     }
-  }, [state.sendRequest]);
+  }, [
+    state.sendRequest,
+    dispatch,
+    params.id,
+    state.addressRoomValue,
+    state.facilities,
+    state.pictureRoomValue,
+    state.priceDayValue,
+    state.priceMonthValue,
+    state.priceYearValue,
+    state.roomSizeValue,
+  ]);
 
   useEffect(() => {
     if (state.openSnack) {
@@ -311,7 +355,7 @@ function KamarAdd() {
         navigate("/datakos");
       }, 1500);
     }
-  }, [state.openSnack]);
+  }, [state.openSnack, navigate]);
   return (
     <div className={classes.formContainer}>
       <form onSubmit={FormSubmit}>

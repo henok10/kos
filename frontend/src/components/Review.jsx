@@ -1,18 +1,13 @@
-import React, { useState, useEffect } from "react";
-import { useImmerReducer } from "use-immer";
+import React, { useState } from "react";
 import axios from "axios";
 import { makeStyles } from "@mui/styles";
-import { useNavigate, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import {
   TextField,
-  Select,
-  MenuItem,
   FormControl,
-  InputLabel,
   Button,
   Typography,
   Snackbar,
-  Grid,
 } from "@mui/material";
 import Alert from "@mui/material/Alert";
 import { useSelector } from "react-redux";
@@ -61,18 +56,13 @@ const colors = {
 };
 
 function Review() {
-  // const navigate = useNavigate();
-  // const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
-  // const isCostumer = useSelector((state) => state.auth.isCostumer);
   const customerId = useSelector((state) => state.auth.customerId);
   const params = useParams();
-  // const params = useParams();
   const classes = useStyles();
   const [comment, setComment] = useState("");
   const [rate, setRate] = useState(0);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState(false);
-  const [currentValue, setCurrentValue] = useState(0);
   const [hoverValue, setHoverValue] = useState(undefined);
   const stars = Array(5).fill(0);
 

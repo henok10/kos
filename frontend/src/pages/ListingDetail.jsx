@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState} from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useSelector } from "react-redux";
 import Axios from "axios";
@@ -7,7 +7,6 @@ import "leaflet-routing-machine/dist/leaflet-routing-machine.css";
 import "leaflet-routing-machine/dist/leaflet-routing-machine.js";
 import "leaflet-routing-machine";
 import "leaflet-control-geocoder";
-import L from "leaflet";
 import "leaflet-routing-machine";
 // import { useMap } from 'react-leaflet';
 import { useImmerReducer } from "use-immer";
@@ -16,7 +15,7 @@ import stadiumIconPng from "../data/Mapicons/stadium.png";
 import hospitalIconPng from "../data/Mapicons/hospital.png";
 import universityIconPng from "../data/Mapicons/university.png";
 // React Leaflet
-import { MapContainer, TileLayer, Marker, Popup, useMap } from "react-leaflet";
+import { MapContainer, TileLayer, Marker, Popup} from "react-leaflet";
 import { Icon } from "leaflet";
 // MUI
 import {
@@ -28,7 +27,6 @@ import {
   Box,
   Stack,
   Button,
-  AccordionDetails,
   Paper,
 } from "@mui/material";
 
@@ -79,7 +77,6 @@ function ListingDetail() {
   const navigate = useNavigate();
   const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
   const isCustomer = useSelector((state) => state.auth.isCustomer);
-  const [allOrderKos, setAllOrderKos] = useState([]);
 
   useEffect(() => {
     if (!isAuthenticated) {
@@ -148,6 +145,10 @@ function ListingDetail() {
       case "allowTheButton":
         draft.disabledBtn = false;
         break;
+      
+      default:
+
+        break;
     }
   }
 
@@ -166,7 +167,7 @@ function ListingDetail() {
       } catch (e) {}
     }
     GetKamarInfo();
-  }, []);
+  }, [params.id, dispatch]);
 
   // request to get profile info
   useEffect(() => {
@@ -186,7 +187,7 @@ function ListingDetail() {
       }
       GetListingInfo();
     }
-  }, [state.listingInfo]);
+  }, [state.listingInfo, dispatch]);
 
   // / request to get profile info
   const [numItemsBoughtByListingId, setNumItemsBoughtByListingId] = useState(
@@ -205,7 +206,7 @@ function ListingDetail() {
       } catch (error) {}
     }
     GetAllOrderKos();
-  }, []);
+  }, [params.id]);
 
   const roomsLeft = state.listingInfo.rooms - numItemsBoughtByListingId;
 
@@ -265,17 +266,7 @@ function ListingDetail() {
         navigate("/listings");
       }, 1500);
     }
-  }, [state.openSnack]);
-
-  const [open, setOpen] = React.useState(false);
-
-  const handleClickOpen = () => {
-    setOpen(true);
-  };
-
-  const handleClose = () => {
-    setOpen(true);
-  };
+  }, [state.openSnack, navigate]);
 
   if (state.dataIsLoading === true) {
     return (
@@ -550,6 +541,7 @@ function ListingDetail() {
                           {index === currentPicture ? (
                             <img
                               src={picture}
+                              alt='gambarrumah'
                               style={{
                                 width: "100%",
                                 height: "100%",
@@ -642,19 +634,9 @@ function ListingDetail() {
               const latitude2 = DegreeToRadian(poi.location.coordinates[0]);
               const longitude2 = DegreeToRadian(poi.location.coordinates[1]);
               // The formula
-              const latDiff = latitude2 - latitude1;
               const lonDiff = longitude2 - longitude1;
               const R = 6371000 / 1000;
 
-              const a =
-                Math.sin(latDiff / 2) * Math.sin(latDiff / 2) +
-                Math.cos(latitude1) *
-                  Math.cos(latitude2) *
-                  Math.sin(lonDiff / 2) *
-                  Math.sin(lonDiff / 2);
-              const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-
-              const d = R * c;
 
               const dist =
                 Math.acos(

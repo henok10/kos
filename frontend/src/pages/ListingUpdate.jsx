@@ -4,6 +4,7 @@ import Axios from "axios";
 import { useImmerReducer } from "use-immer";
 import { useSelector } from "react-redux";
 import { choices } from "../components/Choice";
+import Swal from 'sweetalert2';
 
 // MUI
 import {
@@ -11,8 +12,6 @@ import {
   Typography,
   Button,
   TextField,
-  FormControlLabel,
-  Checkbox,
   Snackbar,
 } from "@mui/material";
 import { makeStyles } from "@mui/styles";
@@ -43,38 +42,16 @@ const useStyles = makeStyles({
   },
 });
 
-const listingTypeOptions = [
-  {
-    value: "",
-    label: "",
-  },
-  {
-    value: "Rumah Kos",
-    label: "Rumah Kos",
-  },
-];
-
-const propertyStatusOptions = [
-  {
-    value: "",
-    label: "",
-  },
-  {
-    value: "Rental",
-    label: "Rental",
-  },
-];
 
 function ListingUpdate(props) {
-  const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
-  const isCostumer = useSelector((state) => state.auth.isCostumer);
-  const isPemilikKos = useSelector((state) => state.auth.isPemilikKos);
   const userId = useSelector((state) => state.auth.userId);
-  const ownerId = useSelector((state) => state.auth.ownerId);
   const params = useParams();
   const classes = useStyles();
   const navigate = useNavigate();
   const { choice_rumah } = choices();
+  const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
+  const isOwner = useSelector((state) => state.auth.isOwner);
+  
   useEffect(() => {
     if (!isAuthenticated) {
       navigate("/login");
@@ -82,10 +59,10 @@ function ListingUpdate(props) {
   }, [isAuthenticated, navigate]);
 
   useEffect(() => {
-    if (isCostumer) {
+    if (!isOwner) {
       navigate("/");
     }
-  }, [isPemilikKos, navigate]);
+  }, [isOwner, navigate]);
 
   const initialState = {
     titleValue: "",
@@ -213,6 +190,10 @@ function ListingUpdate(props) {
       case "allowTheButton":
         draft.disabledBtn = false;
         break;
+
+      default:
+        
+        break;
     }
   }
 
@@ -252,7 +233,7 @@ function ListingUpdate(props) {
       } catch (e) {}
     }
     GetListingInfo();
-  }, []);
+  }, [dispatch, params.id]);
   console.log(state.titleValue);
 
   useEffect(() => {
@@ -269,7 +250,7 @@ function ListingUpdate(props) {
       } catch (e) {}
     }
     GetFasilitasInfo();
-  }, []);
+  }, [params.id, dispatch]);
   console.log(params.id);
   const handleFacilityChange = async (event, index) => {
     const newValue = event.target.value;
@@ -408,7 +389,15 @@ function ListingUpdate(props) {
         const facilitiesArray = state.facilities.map((facility) => ({
           name: facility,
         }));
-        console.log(params.id);
+        
+        const confirmUpdate = await Swal.fire({
+          title: 'Do you want to save the changes?',
+          showDenyButton: true,
+          showCancelButton: true,
+          confirmButtonText: 'Save',
+          denyButtonText: `Don't save`,
+        });
+        if (confirmUpdate.isConfirmed) {
         try {
           const response = await Axios.patch(
             `https://mykos2.onrender.com/api/listings/${params.id}/update/`,
@@ -427,23 +416,48 @@ function ListingUpdate(props) {
               }
             );
           }
-
+          Swal.fire('Saved!', '', 'success')
           dispatch({ type: "openTheSnack" });
         } catch (e) {
           dispatch({ type: "allowTheButton" });
         }
+      } else if (confirmUpdate.isDenied) {
+        // Handle the case where the user chooses not to save the changes
+        Swal.fire('Changes are not saved', '', 'info');
+      }
+
       }
       UpdateProperty();
     }
-  }, [state.sendRequest]);
+  }, [
+    state.sendRequest, 
+    params.id, 
+    dispatch, 
+    userId, 
+    state.picture4Value, 
+    state.picture1Value, 
+    state.picture3Value, 
+    state.picture2Value, 
+    state.boroughValue, 
+    state.longitudeValue,
+    state.latitudeValue,
+    state.no_rekeningValue,
+    state.priceMonthValue,
+    state.addressValue,
+    state.descriptionValue,
+    state.titleValue,
+    state.facilities,
+    state.priceDayValue,
+    state.propertyStatusValue
+  ]);
 
   useEffect(() => {
     if (state.openSnack) {
       setTimeout(() => {
-        navigate(0);
+        navigate("/datakos");
       }, 1500);
     }
-  }, [state.openSnack]);
+  }, [state.openSnack, navigate]);
 
   return (
     <div className={classes.formContainer}>
@@ -700,6 +714,7 @@ function ListingUpdate(props) {
                       height: "4rem",
                       width: "3rem",
                     }}
+                    alt="gambar1"
                     src={state.listingInfo.picture1}
                   />
                 </Grid>
@@ -724,6 +739,7 @@ function ListingUpdate(props) {
                 marginRight: "auto",
                 width: "50%",
               }}
+             
             >
               <Button
                 variant="contained"
@@ -756,6 +772,7 @@ function ListingUpdate(props) {
                       height: "4rem",
                       width: "3rem",
                     }}
+                    alt="gambar2"
                     src={state.listingInfo.picture2}
                   />
                 </Grid>
@@ -783,6 +800,7 @@ function ListingUpdate(props) {
                 marginRight: "auto",
                 width: "50%",
               }}
+              alt="gambar4"
             >
               <Button
                 variant="contained"
@@ -815,6 +833,7 @@ function ListingUpdate(props) {
                       height: "4rem",
                       width: "3rem",
                     }}
+                    alt="gambar3"
                     src={state.listingInfo.picture3}
                   />
                 </Grid>
@@ -872,6 +891,7 @@ function ListingUpdate(props) {
                       height: "4rem",
                       width: "3rem",
                     }}
+                    alt="gambar4"
                     src={state.listingInfo.picture4}
                   />
                 </Grid>

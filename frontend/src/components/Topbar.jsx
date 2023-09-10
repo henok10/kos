@@ -1,22 +1,17 @@
-import React, { Fragment } from "react";
+import React from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { logout } from "../actions/auth";
 import {
   Button,
   Typography,
-  Grid,
   AppBar,
   Toolbar,
-  Menu,
-  MenuItem,
-  Snackbar,
   Box,
 } from "@mui/material";
 
 function Topbar() {
   const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
-  const user = useSelector((state) => state.auth.user);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 

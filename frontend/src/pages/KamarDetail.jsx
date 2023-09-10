@@ -1,6 +1,5 @@
-import React, { useEffect, useState, useRef } from "react";
-import { useNavigate, useParams } from "react-router-dom";
-import { useSelector } from "react-redux";
+import React, { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
 import Axios from "axios";
 import { makeStyles } from "@mui/styles";
 import { useImmerReducer } from "use-immer";
@@ -12,12 +11,7 @@ import {
   Grid,
   Typography,
   CircularProgress,
-  Breadcrumbs,
-  Link,
   Box,
-  Stack,
-  Button,
-  AccordionDetails,
   Paper,
 } from "@mui/material";
 import ArrowCircleLeftIcon from "@mui/icons-material/ArrowCircleLeft";
@@ -79,6 +73,9 @@ function KamarDetail() {
       case "loadingDone":
         draft.dataIsLoading = false;
         break;
+
+      default:
+        break;
     }
   }
 
@@ -98,7 +95,7 @@ function KamarDetail() {
       } catch (e) {}
     }
     GetKamarInfo();
-  }, []);
+  }, [dispatch, params.id]);
 
   useEffect(() => {
     if (state.kamarInfo) {
@@ -117,7 +114,7 @@ function KamarDetail() {
       }
       GetListingInfo();
     }
-  }, [state.kamarInfo]);
+  }, [state.kamarInfo, dispatch]);
 
   useEffect(() => {
     if (state.kamarInfo) {
@@ -353,6 +350,7 @@ function KamarDetail() {
                           {index === currentPicture ? (
                             <img
                               src={picture}
+                              alt='kamar'
                               style={{
                                 width: "100%",
                                 height: "100%",

@@ -3,13 +3,12 @@ import { Navigate } from "react-router-dom";
 import { connect } from "react-redux";
 import { Grid, Button, TextField, Typography } from "@mui/material";
 import { sendPasswordResetEmail } from "../../actions/auth";
-import { useSelector, useDispatch } from "react-redux";
+import { useDispatch } from "react-redux";
 import { clearErrors } from "../../actions/auth";
 
 const SendPasswordResetEmail = ({ sendPasswordResetEmail }) => {
   const [requestSent, setRequestSent] = useState(false);
   const dispatch = useDispatch();
-  const loginError = useSelector((state) => state.auth.error);
   const [formData, setFormData] = useState({
     email: "",
   });

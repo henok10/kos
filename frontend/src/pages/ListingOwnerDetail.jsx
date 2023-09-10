@@ -1,8 +1,7 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useSelector } from "react-redux";
 import Axios from "axios";
-import L from "leaflet";
 import "react-leaflet";
 import "leaflet-routing-machine/dist/leaflet-routing-machine.css";
 import "leaflet-routing-machine";
@@ -13,27 +12,14 @@ import stadiumIconPng from "../data/Mapicons/stadium.png";
 import hospitalIconPng from "../data/Mapicons/hospital.png";
 import universityIconPng from "../data/Mapicons/university.png";
 // React Leaflet
-import { MapContainer, TileLayer, Marker, Popup, useMap } from "react-leaflet";
+import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
 import { Icon } from "leaflet";
 // MUI
-import {
-  Grid,
-  Typography,
-  CircularProgress,
-  Breadcrumbs,
-  Link,
-  Box,
-  Avatar,
-  Stack,
-  Button,
-  Dialog,
-} from "@mui/material";
+import { Grid, Typography, CircularProgress, Box, Button } from "@mui/material";
 
 import ArrowCircleLeftIcon from "@mui/icons-material/ArrowCircleLeft";
 import ArrowCircleRightIcon from "@mui/icons-material/ArrowCircleRight";
 import RoomIcon from "@mui/icons-material/Room";
-import CheckBoxIcon from "@mui/icons-material/CheckBox";
-import ListingUpdate from "./ListingUpdate";
 import TheMapComponent from "../components/TheMapComponent";
 import { makeStyles } from "@mui/styles";
 
@@ -71,12 +57,9 @@ const useStyles = makeStyles({
 });
 
 function ListingOwnerDetail() {
-  const userId = useSelector((state) => state.auth.userId);
-  const ownerId = useSelector((state) => state.auth.ownerId);
   const navigate = useNavigate();
   const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
-  const isCostumer = useSelector((state) => state.auth.isCostumer);
-  const isPemilikKos = useSelector((state) => state.auth.isPemilikKos);
+  const isOwner = useSelector((state) => state.auth.isOwner);
 
   useEffect(() => {
     if (!isAuthenticated) {
@@ -85,10 +68,10 @@ function ListingOwnerDetail() {
   }, [isAuthenticated, navigate]);
 
   useEffect(() => {
-    if (isCostumer) {
-      navigate("/listing");
+    if (!isOwner) {
+      navigate("/");
     }
-  }, [isPemilikKos, navigate]);
+  }, [isOwner, navigate]);
 
   const classes = useStyles();
   const params = useParams();
@@ -141,6 +124,9 @@ function ListingOwnerDetail() {
       case "allowTheButton":
         draft.disabledBtn = false;
         break;
+
+      default:
+        break;
     }
   }
 
@@ -161,7 +147,7 @@ function ListingOwnerDetail() {
       } catch (e) {}
     }
     GetListingInfo();
-  }, []);
+  }, [dispatch, params.id]);
 
   // request to get profile info
   useEffect(() => {
@@ -181,25 +167,7 @@ function ListingOwnerDetail() {
       }
       GetProfileInfo();
     }
-  }, [state.listingInfo]);
-
-  async function DeleteHandler() {
-    const confirmDelete = window.confirm(
-      "Are you sure you want to delete this listing?"
-    );
-    if (confirmDelete) {
-      try {
-        const response = await Axios.delete(
-          `https://mykos2.onrender.com/api/listings/${params.id}/delete/`
-        );
-
-        dispatch({ type: "openTheSnack" });
-        dispatch({ type: "disableTheButton" });
-      } catch (e) {
-        dispatch({ type: "allowTheButton" });
-      }
-    }
-  }
+  }, [state.listingInfo, dispatch]);
 
   const [allFasilitas, setAllFasilitas] = useState([]);
   const [loadingFasilitas, setLoadingFasilitas] = useState(true);
@@ -263,17 +231,7 @@ function ListingOwnerDetail() {
         navigate("/datakos");
       }, 1500);
     }
-  }, [state.openSnack]);
-
-  const [open, setOpen] = React.useState(false);
-
-  const handleClickOpen = () => {
-    setOpen(true);
-  };
-
-  const handleClose = () => {
-    setOpen(true);
-  };
+  }, [state.openSnack, navigate]);
 
   if (state.dataIsLoading === true) {
     return (
@@ -483,6 +441,7 @@ function ListingOwnerDetail() {
                         <img
                           src={picture}
                           style={{ width: "100%", height: "31rem" }}
+                          alt="gambar1"
                         />
                       ) : (
                         ""
@@ -527,19 +486,19 @@ function ListingOwnerDetail() {
               const latitude2 = DegreeToRadian(poi.location.coordinates[0]);
               const longitude2 = DegreeToRadian(poi.location.coordinates[1]);
               // The formula
-              const latDiff = latitude2 - latitude1;
+
               const lonDiff = longitude2 - longitude1;
               const R = 6371000 / 1000;
 
-              const a =
-                Math.sin(latDiff / 2) * Math.sin(latDiff / 2) +
-                Math.cos(latitude1) *
-                  Math.cos(latitude2) *
-                  Math.sin(lonDiff / 2) *
-                  Math.sin(lonDiff / 2);
-              const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+              // const a =
+              //   Math.sin(latDiff / 2) * Math.sin(latDiff / 2) +
+              //   Math.cos(latitude1) *
+              //     Math.cos(latitude2) *
+              //     Math.sin(lonDiff / 2) *
+              //     Math.sin(lonDiff / 2);
+              // const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
 
-              const d = R * c;
+              // const d = R * c;
 
               const dist =
                 Math.acos(
@@ -599,7 +558,7 @@ function ListingOwnerDetail() {
                 </Marker>
               );
             })}
-            <TheMapComponent />
+            <TheMapComponent listingInfo={state.listingInfo} />
           </MapContainer>
         </Grid>
       </Grid>

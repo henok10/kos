@@ -8,7 +8,6 @@ import HomeIcon from "@mui/icons-material/Home";
 import AccountBoxIcon from "@mui/icons-material/AccountBox";
 import FolderIcon from "@mui/icons-material/Folder";
 import MenuOutlinedIcon from "@mui/icons-material/MenuOutlined";
-import FolderOpenOutlinedIcon from "@mui/icons-material/FolderOpenOutlined";
 import PageviewIcon from "@mui/icons-material/Pageview";
 import Shop2Icon from "@mui/icons-material/Shop2";
 

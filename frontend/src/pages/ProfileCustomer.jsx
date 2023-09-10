@@ -15,17 +15,14 @@ import {
   Grid,
   Typography,
   CircularProgress,
-  CardHeader,
   CardMedia,
   CardContent,
-  CardActions,
   Card,
   Button,
 } from "@mui/material";
 
 function ProfileCustomer() {
   const userId = useSelector((state) => state.auth.userId);
-  const customerId = useSelector((state) => state.auth.customerId);
   const username = useSelector((state) => state.auth.username);
   const navigate = useNavigate();
 
@@ -55,6 +52,10 @@ function ProfileCustomer() {
       case "loadingDone":
         draft.dataIsLoading = false;
         break;
+
+      default:
+        // Kasus default: tidak ada perubahan pada draft
+        break;
     }
   }
 
@@ -76,7 +77,7 @@ function ProfileCustomer() {
       } catch (e) {}
     }
     GetProfileInfo();
-  }, []);
+  }, [userId, dispatch]);
 
   function WelcomeDisplay() {
     if (

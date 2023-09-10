@@ -299,7 +299,6 @@ export const sendPasswordResetEmail = (email) => async (dispatch) => {
 export const change_user_password =
   (password, password2) => async (dispatch, getState) => {
     const access_token = getState().auth.access_token;
-    const UserId = getState().auth.userId;
     const config = {
       headers: {
         "Content-Type": "application/json",

@@ -4,7 +4,6 @@ import { useImmerReducer } from "use-immer";
 import { useNavigate } from "react-router-dom";
 // React leaflet
 import { MapContainer, TileLayer, Marker, Popup, useMap } from "react-leaflet";
-import { TextField } from "@mui/material";
 import { Icon } from "leaflet";
 // MUI
 import {
@@ -83,7 +82,7 @@ function Listings() {
   const [allListings, setAllListings] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [dataIsLoading, setDataIsLoading] = useState(true);
-  const [searchResults, setSearchResults] = useState([]);
+  const setSearchResults = useState([]);
 
   useEffect(() => {
     const source = Axios.CancelToken.source();
