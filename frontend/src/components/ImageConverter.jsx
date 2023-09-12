@@ -23,42 +23,49 @@ function ImageConverter({ transaction }) {
     divToConvert.innerHTML = `
         <div class="receipt">
           <h2>Payment Receipt</h2>
-          <p><strong>Transaction ID:</strong> ${transaction.id}</p>
-          <p><strong>Name:</strong> ${transaction.fullName}</p>
-          <p><strong>No Rekening:</strong> ${transaction.noRekening}</p>
-          <p><strong>Alamat Kamar:</strong> ${transaction.addressRoom}</p>
-          <p><strong>Alamar Rumah:</strong> ${transaction.listing_title}</p>
-          <p><strong>Frekuensi Sewa:</strong> ${transaction.rentalFrequency}</p>
-          <p><strong>Total Bayar:</strong> ${transaction.nominal}</p>
-          <p><strong>Date:</strong> ${transaction.date}</p>
-          <p><strong>Status:</strong> ${
-            transaction.approve
-              ? "<span class='approved'>Approved</span>"
-              : "<span class='processing'>Processing</span>"
-          }</p>
+          <h2>MyKoss</h2>
+          <div class='kamars'>
+              <p><strong>Transaction ID:</strong> ${transaction.id}</p>
+              <p><strong>Name:</strong> ${transaction.fullName}</p>
+              <p><strong>No Rekening Tujuan:</strong> ${transaction.noRekening}</p>
+              <p><strong>Frekuensi Sewa:</strong> ${transaction.rentalFrequency}</p>
+              <p><strong>Total Bayar:</strong> ${transaction.nominal}</p>
+          </div>
+          
+
+          <div class='kamar'>
+            <p><strong>Alamat Kamar:</strong> ${transaction.addressRoom}</p>
+            <p><strong>Alamar Rumah:</strong> ${transaction.listing_title}</p>
+            <p><strong>Date:</strong> ${transaction.date}</p>
+            <p><strong>Status:</strong> ${
+              transaction.approve
+                ? "<span class='approved'>Approved</span>"
+                : "<span class='processing'>Processing</span>"
+            }</p>
+          </div>
+         
         </div>
   
           <style>
               div {
-                width: 20rem;
-              }
-              .receipt {
-                  border: 1px solid #ccc;
-                  padding: 10px;
-                  // margin: 10px;
-                  
-                  border-radius: 5px;
+                width: 25rem;
+                padding: 20px;
               }
   
               h2 {
                   font-size: 20px;
-                  // margin: auto;
                   margin-bottom: 10px;
+                  text-align: center; 
               }
   
-              p {
-                  margin: 5px 0;
+              div.receipt div.kamars p{
+                  width: 90%;
+                  border-bottom: 1px solid gray
               }
+
+              div.receipt div.kamar p { 
+                line-height: 0.2;
+            }
   
               strong {
                   font-weight: bold;

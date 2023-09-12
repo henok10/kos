@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import Axios from "axios";
-import { Grid, CircularProgress, Box} from "@mui/material";
+import { Grid, CircularProgress, Box } from "@mui/material";
 import Listing from "./HomeListing";
 import HomeImg from "./HomeImg";
 
@@ -49,10 +49,17 @@ function HouseList() {
         }
 
         if (Array.isArray(searchResults.priceRange)) {
-          const price_per_month = parseInt(listing.price_per_month);
+          const price_month = parseInt(listing.price_month);
+          const price_day = parseInt(listing.price_day);
+          const price_year = parseInt(listing.price_year);
+
           if (
-            price_per_month < searchResults.priceRange[0] ||
-            price_per_month > searchResults.priceRange[1]
+            (price_month < searchResults.priceRange[0] ||
+              price_month > searchResults.priceRange[1]) &&
+            (price_day < searchResults.priceRange[0] ||
+              price_day > searchResults.priceRange[1]) &&
+            (price_year < searchResults.priceRange[0] ||
+              price_year > searchResults.priceRange[1])
           ) {
             return false;
           }

@@ -201,7 +201,6 @@ function ListingDetail() {
           `https://mykos2.onrender.com/api/transaction/${params.id}/user`
         );
         const data = response.data;
-        
       } catch (error) {}
     }
     GetAllOrderKos();
@@ -235,7 +234,7 @@ function ListingDetail() {
         const numItemsBought = dataKamar.filter(
           (transaksi) => transaksi.barang_dipesan
         ).length;
-       
+
         setNumItemsBoughtByListingId(numItemsBought);
       } catch (error) {
         // Tangani error jika diperlukan
@@ -319,6 +318,22 @@ function ListingDetail() {
     );
   };
 
+  const [selectedOption, setSelectedOption] = useState("bulan"); // Nilai default adalah 'bulan'
+
+  const handleOptionChange = (event) => {
+    setSelectedOption(event.target.value);
+  };
+
+  // let priceText = "";
+
+  // if (selectedOption === "bulan") {
+  //   priceText = `Harga Rp${state.listingInfo.price_month}/bulan`;
+  // } else if (selectedOption === "hari") {
+  //   priceText = `Harga Rp${state.listingInfo.price_day}/hari`;
+  // } else if (selectedOption === "tahun") {
+  //   priceText = `Harga Rp${state.listingInfo.price_year}/tahun`;
+  // }
+
   useEffect(() => {
     if (state.openSnack) {
       setTimeout(() => {
@@ -340,9 +355,7 @@ function ListingDetail() {
     );
   }
   return (
-    <div
-      style={{ margin: 'auto', width: '80%', marginBottom: "2rem" }}
-    >
+    <div style={{ margin: "auto", width: "80%", marginBottom: "2rem" }}>
       <Grid item style={{ marginTop: "1rem", marginBottom: "0.5rem" }}>
         <Breadcrumbs aria-label="breadcrumb">
           <Link
@@ -525,7 +538,9 @@ function ListingDetail() {
         >
           {/* Image slider */}
           <Box position="sticky" top="0">
-            <Paper style={{ border: "2px solid white", backgroundColor: "#F8F8FF" }}>
+            <Paper
+              style={{ border: "2px solid white", backgroundColor: "#F8F8FF" }}
+            >
               {listingPictures.length > 0 ? (
                 <Box>
                   <Grid
@@ -568,9 +583,15 @@ function ListingDetail() {
               )}
             </Paper>
             <Paper
-              style={{ width: "100%", marginTop: "0.5rem", padding: "0.5rem", backgroundColor: "#F8F8FF" }}
+              style={{
+                width: "100%",
+                marginTop: "0.5rem",
+                padding: "0.5rem",
+                backgroundColor: "#F8F8FF",
+              }}
             >
               <Grid item container xs={12} alignItems="center">
+                
                 <Typography
                   variant="h6"
                   style={{
@@ -579,12 +600,43 @@ function ListingDetail() {
                     fontSize: "14px",
                   }}
                 >
-                  Harga Rp{state.listingInfo.price_per_month}/tahun
-                  {/* Rp{state.listingInfo.price_per_month}/Month
-                Rp{state.listingInfo.price_per_day}/Day */}
+                   {selectedOption === "bulan" && (
+                    <div>Harga Rp{state.listingInfo.price_month}/bulan</div>
+                  )}
+                  {selectedOption === "hari" && (
+                    <div>Harga Rp{state.listingInfo.price_day}/hari</div>
+                  )}
+                  {selectedOption === "tahun" && (
+                    <div>Harga Rp{state.listingInfo.price_year}/tahun</div>
+                  )}
+
+                  <select
+                    value={selectedOption}
+                    onChange={handleOptionChange}
+                    style={{
+                      backgroundColor: "#f0f0f0",
+                      border: "1px solid #ccc",
+                      borderRadius: "4px",
+                      padding: "8px",
+                      fontSize: "14px",
+                      width: "6rem"
+                    }}
+                  >
+                    <option value="">Pilih opsi</option>
+                    <option value="hari">Hari</option>
+                    <option value="bulan">Bulan</option>
+                    <option value="tahun">Tahun</option>
+                  </select>
+                 
                 </Typography>
               </Grid>
-              <Grid item container marginTop={"1rem"} justifyContent='space-between' >
+
+              <Grid
+                item
+                container
+                marginTop={"1rem"}
+                justifyContent="space-between"
+              >
                 <Button
                   variant="outlined"
                   color="primary"
@@ -593,7 +645,7 @@ function ListingDetail() {
                   onClick={() =>
                     navigate(`/pesan_kamar/${state.listingInfo.id}`)
                   }
-                  style={{width: '48%'}}
+                  style={{ width: "48%" }}
                 >
                   Pesan Kamar
                 </Button>
@@ -602,7 +654,7 @@ function ListingDetail() {
                   variant="outlined"
                   color="success"
                   size="small"
-                  style={{ marginLeft: "0.5rem", width: '48%' }}
+                  style={{ marginLeft: "0.5rem", width: "48%" }}
                 >
                   Chat Pemilik Kos
                 </Button>
