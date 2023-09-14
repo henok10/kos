@@ -65,7 +65,6 @@ function ListingAdd() {
     boroughValue: "",
     latitudeValue: "",
     longitudeValue: "",
-    priceMonthValue: "",
     no_rekeningValue: "",
     facilities: [],
     newFacility: "", // State untuk menyimpan fasilitas baru yang akan dimasukkan
@@ -155,12 +154,6 @@ function ListingAdd() {
 
       case "catchLongitudeChange":
         draft.longitudeValue = action.longitudeChosen;
-        break;
-
-      case "catchPriceMonthChange":
-        draft.priceMonthErrors.hasErrors = false;
-        draft.priceMonthErrors.errorMessage = "";
-        draft.priceMonthValue = action.priceMonthChosen;
         break;
 
       case "catchUploadedPicture1":
@@ -337,9 +330,6 @@ function ListingAdd() {
     } else if (state.no_rekeningValue === "") {
       dispatch({ type: "emptyNo_Rekening" });
       window.scrollTo(0, 0);
-    } else if (state.priceMonthValue === "") {
-      dispatch({ type: "emptyPriceMonth" });
-      window.scrollTo(0, 0);
     } else if (state.boroughValue === "") {
       dispatch({ type: "emptyBorough" });
       window.scrollTo(0, 0);
@@ -358,7 +348,6 @@ function ListingAdd() {
         formData.append("address", state.addressValue);
         formData.append("borough", state.boroughValue);
         formData.append("no_rekening", state.no_rekeningValue);
-        formData.append("price_per_month", state.priceMonthValue);
         formData.append("latitude", state.latitudeValue);
         formData.append("longitude", state.longitudeValue);
         formData.append("picture1", state.picture1Value);
@@ -560,30 +549,6 @@ function ListingAdd() {
               helperText={state.no_rekeningErrors.errorMessage}
             />
           </Grid>
-          <Grid item xs={5} style={{ marginTop: "1rem" }}>
-            <TextField
-              id="price"
-              type="number"
-              label="Harga per Bulan"
-              variant="standard"
-              fullWidth
-              value={state.priceMonthValue}
-              onChange={(e) =>
-                dispatch({
-                  type: "catchPriceMonthChange",
-                  priceMonthChosen: e.target.value,
-                })
-              }
-              onBlur={(e) =>
-                dispatch({
-                  type: "catchPriceMonthErrors",
-                  priceMonthChosen: e.target.value,
-                })
-              }
-              error={state.priceMonthErrors.hasErrors ? true : false}
-              helperText={state.priceMonthErrors.errorMessage}
-            />
-          </Grid>
         </Grid>
         <Grid item container>
           <Grid item xs={12} style={{ marginTop: "1rem" }}>
@@ -732,14 +697,6 @@ function ListingAdd() {
               Tambahkan Fasilitas
             </Button>
           </Grid>
-
-          {/* <Grid item container>
-					{state.facilities.map((facility, index) => (
-						<Grid item xs={3} key={index}>
-						<Typography>{facility}</Typography>
-						</Grid>
-					))}
-					</Grid> */}
           <Grid item container>
             {state.facilities.map((facility, index) => (
               <Grid item xs={3} key={index}>

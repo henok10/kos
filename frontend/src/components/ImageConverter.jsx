@@ -20,6 +20,19 @@ function ImageConverter({ transaction }) {
     console.log(transaction.noRekening);
     // Membuat elemen div baru dengan konten yang ingin Anda konversi menjadi gambar
     const divToConvert = document.createElement("div");
+
+    const transactionDate = new Date(transaction.date);
+
+    // Mendapatkan tahun, bulan, dan tanggal dari objek Date
+    const year = transactionDate.getFullYear();
+    const month = transactionDate.getMonth() + 1; // Ingat bahwa indeks bulan dimulai dari 0, jadi tambahkan 1.
+    const day = transactionDate.getDate();
+
+    // Membuat string dengan format yang diinginkan (misalnya, "2023-09-08")
+    const formattedDate = `${year}-${month < 10 ? "0" : ""}${month}-${day < 10 ? "0" : ""}${day}`;
+
+    
+
     divToConvert.innerHTML = `
         <div class="receipt">
           <h2>Payment Receipt</h2>
@@ -27,17 +40,21 @@ function ImageConverter({ transaction }) {
           <div class='kamars'>
               <p><strong>Transaction ID:</strong> ${transaction.id}</p>
               <p><strong>Name:</strong> ${transaction.fullName}</p>
-              <p><strong>No Rekening Tujuan:</strong> ${transaction.noRekening}</p>
-              <p><strong>Frekuensi Sewa:</strong> ${transaction.rentalFrequency}</p>
+              <p><strong>No Rekening Tujuan:</strong> ${
+                transaction.noRekening
+              }</p>
+              <p><strong>Frekuensi Sewa:</strong> ${
+                transaction.rentalFrequency
+              }</p>
               <p><strong>Total Bayar:</strong> ${transaction.nominal}</p>
           </div>
           
 
           <div class='kamar'>
-            <p><strong>Alamat Kamar:</strong> ${transaction.addressRoom}</p>
-            <p><strong>Alamar Rumah:</strong> ${transaction.listing_title}</p>
-            <p><strong>Date:</strong> ${transaction.date}</p>
-            <p><strong>Status:</strong> ${
+            <p>Alamat Kamar: ${transaction.addressRoom}</p>
+            <p>Alamar Rumah: ${transaction.listing_title}</p>
+            <p>Date: ${formattedDate}</p>
+            <p>Status: ${
               transaction.approve
                 ? "<span class='approved'>Approved</span>"
                 : "<span class='processing'>Processing</span>"
@@ -48,23 +65,42 @@ function ImageConverter({ transaction }) {
   
           <style>
               div {
-                width: 25rem;
+                width: 23rem;
+                background-color: #87CEFA;
+
+              }
+              div.receipt {
                 padding: 20px;
+ 
               }
   
               h2 {
                   font-size: 20px;
-                  margin-bottom: 10px;
+                  font-weight: bolt;
                   text-align: center; 
               }
   
-              div.receipt div.kamars p{
-                  width: 90%;
-                  border-bottom: 1px solid gray
+              div.receipt div.kamars{
+                
+                display: fixed;
+                border: 1px solid gray;
+                width: 90%;
+                margin: auto;
+                margin-top: 30px;
+                padding: 10px;
               }
 
+              div.receipt div.kamars p{
+                  // border-bottom: 1px solid gray
+              }
+
+              div.receipt div.kamar {
+                margin-top: 3rem;
+              }
               div.receipt div.kamar p { 
+               
                 line-height: 0.2;
+                font-size: 12px;
             }
   
               strong {

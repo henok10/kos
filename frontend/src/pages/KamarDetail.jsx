@@ -173,25 +173,38 @@ function KamarDetail() {
 
   // console.log(state.kamarInfo.rumah)
   return (
-    <div style={{ margin: "auto", width: "80%" }}>
-      <Grid container>
+    <div style={{ margin: "auto", width: "80%", padding: '1rem', backgroundColor: "#F8F8FF"}}>
+      <Grid
+        container
+        width={"90%"}
+        height={"100%"}
+        margin="auto"
+        marginTop="1rem"
+        border="px solid black"
+      >
         <Grid
           item
-          lg={7}
-          md={7}
+          lg={5}
+          md={5}
           sm={12}
           xs={12}
           width={"100%"}
-          backgroundColor="#F8F8FF"
+          // height={'60%'}
         >
+          <img
+            src={state.kamarInfo.picture_room}
+            alt="kamar"
+            style={{
+              width: "98%",
+            }}
+          />
+        </Grid>
+
+        <Grid item lg={7} md={7} sm={12} xs={12} >
           <Grid
-            item
-            container
             style={{
               padding: "1rem",
-              borderBottom: "1px solid gray",
               // marginTop: "1rem",
-              width: "100%",
             }}
           >
             <Grid item container xs={12} direction="column" spacing={1}>
@@ -209,46 +222,30 @@ function KamarDetail() {
           <Grid
             item
             style={{
-              padding: "1rem",
-              borderBottom: "1px solid gray",
-              marginTop: "0.3rem",
+              paddingLeft: "1rem",
             }}
           >
-            <Typography variant="h6" style={{ fontSize: "16px" }}>
-              Alamat Kamar :
+            <Typography variant="h6" style={{ fontSize: "16px",  display: 'inline' }}>
+              Alamat Kamar : 
             </Typography>
-            {state.kamarInfo.address_room ? (
-              <Typography variant="body1" style={{ fontSize: "15px" }}>
-                {state.kamarInfo.address_room}
-              </Typography>
-            ) : (
-              ""
-            )}
+            <p style={{display: 'inline', marginLeft: '4px'}}>{state.kamarInfo.address_room}</p>
           </Grid>
 
           <Grid
             item
             style={{
-              padding: "1rem",
-              borderBottom: "1px solid gray",
-              marginTop: "0.3rem",
+              paddingLeft: "1rem",
             }}
           >
-            <Typography variant="h6" style={{ fontSize: "16px" }}>
-              Ukuran Kamar :
+            <Typography variant="h6" style={{ fontSize: "16px", display: 'inline' }}>
+              Ukuran Kamar : 
             </Typography>
-            {state.kamarInfo.room_size ? (
-              <Typography variant="body1" style={{ fontSize: "15px" }}>
-                {state.kamarInfo.room_size}
-              </Typography>
-            ) : (
-              ""
-            )}
+            <p style={{display: 'inline', marginLeft: '4px'}} >{state.kamarInfo.room_size}</p>
           </Grid>
 
-          <Grid container style={{ padding: "1rem" }}>
+          <Grid container style={{ paddingLeft: "1rem" }}>
             <Typography variant="h6" style={{ fontSize: "16px" }}>
-              Fasilitas Kamar:
+              Fasilitas Kamar 
             </Typography>
             <Grid container>
               <Grid item xs={12} md={6} style={{ paddingRight: "1rem" }}>
@@ -271,60 +268,6 @@ function KamarDetail() {
               </Grid>
             </Grid>
           </Grid>
-        </Grid>
-        <Grid
-          item
-          lg={5}
-          md={5}
-          sm={12}
-          xs={12}
-          width={"100%"}
-          style={{ paddingLeft: "0.5rem" }}
-        >
-          <Box position="sticky" top="0">
-            <Paper style={{ border: "2px solid white" }}>
-              {kamarPictures.length > 0 ? (
-                <Box>
-                  <Grid
-                    item
-                    container
-                    justifyContent="center"
-                    className={classes.sliderContainer}
-                  >
-                    {kamarPictures.map((picture, index) => {
-                      return (
-                        <div key={index}>
-                          {index === currentPicture ? (
-                            <img
-                              src={picture}
-                              alt="kamar"
-                              style={{
-                                width: "100%",
-                                height: "100%",
-                                objectFit: "cover", // Adjusts image to cover the container while maintaining aspect ratio
-                              }}
-                            />
-                          ) : (
-                            ""
-                          )}
-                        </div>
-                      );
-                    })}
-                    <ArrowCircleLeftIcon
-                      onClick={PreviousPicture}
-                      className={classes.leftArrow}
-                    />
-                    <ArrowCircleRightIcon
-                      onClick={NextPicture}
-                      className={classes.rightArrow}
-                    />
-                  </Grid>
-                </Box>
-              ) : (
-                ""
-              )}
-            </Paper>
-          </Box>
         </Grid>
       </Grid>
     </div>

@@ -28,6 +28,7 @@ import {
   Stack,
   Button,
   Paper,
+  TextField,
 } from "@mui/material";
 
 import ArrowCircleLeftIcon from "@mui/icons-material/ArrowCircleLeft";
@@ -355,8 +356,8 @@ function ListingDetail() {
     );
   }
   return (
-    <div style={{ margin: "auto", width: "80%", marginBottom: "2rem" }}>
-      <Grid item style={{ marginTop: "1rem", marginBottom: "0.5rem" }}>
+    <>
+      <Grid item style={{ marginTop: "1rem", marginBottom: "0.5rem", marginLeft: '5rem' }}>
         <Breadcrumbs aria-label="breadcrumb">
           <Link
             underline="hover"
@@ -372,6 +373,9 @@ function ListingDetail() {
           </Typography>
         </Breadcrumbs>
       </Grid>
+    
+    <div style={{ margin: "auto", width: "80%", marginBottom: "2rem", marginTop: '1rem' }}>
+    
       {/* information */}
       <Grid container>
         <Grid
@@ -591,16 +595,16 @@ function ListingDetail() {
               }}
             >
               <Grid item container xs={12} alignItems="center">
-                
                 <Typography
                   variant="h6"
                   style={{
                     fontWeight: "bolder",
                     color: "black",
                     fontSize: "14px",
+                    padding: "8px",
                   }}
                 >
-                   {selectedOption === "bulan" && (
+                  {selectedOption === "bulan" && (
                     <div>Harga Rp{state.listingInfo.price_month}/bulan</div>
                   )}
                   {selectedOption === "hari" && (
@@ -610,25 +614,30 @@ function ListingDetail() {
                     <div>Harga Rp{state.listingInfo.price_year}/tahun</div>
                   )}
 
-                  <select
+                  
+                </Typography>
+                <TextField
+                    id="standard-select-currency"
                     value={selectedOption}
                     onChange={handleOptionChange}
+                    size="small"
+                    select
+                    SelectProps={{
+                      native: true,
+                    }}
+                    variant="standard"
+                    helperText="pilih frekuensi sewa"
                     style={{
-                      backgroundColor: "#f0f0f0",
-                      border: "1px solid #ccc",
                       borderRadius: "4px",
                       padding: "8px",
                       fontSize: "14px",
-                      width: "6rem"
+                      width: "60%",
                     }}
                   >
-                    <option value="">Pilih opsi</option>
                     <option value="hari">Hari</option>
                     <option value="bulan">Bulan</option>
                     <option value="tahun">Tahun</option>
-                  </select>
-                 
-                </Typography>
+                  </TextField>
               </Grid>
 
               <Grid
@@ -794,6 +803,7 @@ function ListingDetail() {
         <Box style={{ borderBottom: "1px solid gray", width: "100%" }} />
       </Grid>
     </div>
+    </>
   );
 }
 

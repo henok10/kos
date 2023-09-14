@@ -62,12 +62,15 @@ export default function RiwayatTransaksi() {
 
   return (
     <>
-      <Grid
-        container
-        style={{ width: "100%", height: "60%", marginLeft: "1rem" }}
-      >
-        <Grid container alignItems="center" justifyContent="center">
-          <Typography variant="h4" align="center">
+      <Grid container style={{ width: "90%", margin: "auto" }}>
+        <Grid
+          container
+          alignItems="center"
+          paddingLeft="1rem"
+          height="3rem"
+          backgroundColor="#1E90FF"
+        >
+          <Typography variant="h5" color="white" fontWeight= "bold">
             Pemesanan Kamar Kos
           </Typography>
         </Grid>
@@ -108,20 +111,19 @@ export default function RiwayatTransaksi() {
                   <TableCell>{row.nominal}</TableCell>
                   <TableCell>{row.date}</TableCell>
                   <TableCell>
-                  <ImageConverter transaction={row} />
-                  </TableCell>
-                  <TableCell>
-                    <div
+                    <Grid
                       style={{
-                        flexDirection: "column",
+                        display: 'flex',
                         justifyContent: "space-between",
                       }}
                     >
+                      <ImageConverter transaction={row} />
                       <Button
                         style={{
                           padding: "4px 8px",
                           borderRadius: "4px",
-                          marginRight: "2%",
+                          width: '5rem',
+                          marginLeft: "2%", // Menggunakan marginLeft agar ada jarak antara elemen
                           color: "white",
                           fontWeight: "bold",
                           textAlign: "center",
@@ -134,7 +136,7 @@ export default function RiwayatTransaksi() {
                             : "Proses"
                           : "Data not available"}
                       </Button>
-                    </div>
+                    </Grid>
                   </TableCell>
                 </TableRow>
               ))}

@@ -118,7 +118,7 @@ export default function Listing({ filtered, isLoading }) {
                   style={{ display: "flex", justifyContent: "space-between" }}
                 >
                   <Typography className={classes.priceLabel} component="span">
-                    Rp{listing.price_per_month}/bulan
+                    Rp{listing.price_month}/bulan
                   </Typography>
                   <Button
                     variant="contained"

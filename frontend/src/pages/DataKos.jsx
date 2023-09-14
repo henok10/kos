@@ -1,6 +1,6 @@
 // import * as React from 'react';
 import { DataGrid } from "@mui/x-data-grid";
-import { Grid, Button, CircularProgress } from "@mui/material";
+import { Grid, Button, CircularProgress, Typography } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Axios from "axios";
@@ -18,7 +18,7 @@ export default function DataTable() {
 
   const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
   const isOwner = useSelector((state) => state.auth.isOwner);
-  
+
   useEffect(() => {
     if (!isAuthenticated) {
       navigate("/login");
@@ -103,9 +103,8 @@ export default function DataTable() {
     };
   }, [listingIds]);
 
-
   const kamarKosongByListingId = {}; // Objek untuk menyimpan jumlah kamar kosong pada setiap rumah kos
-  
+
   for (const listingId in allKamar) {
     const totalKamar = allKamar[listingId];
     const kamarDibeli = numItemsBoughtByListingId[listingId];
@@ -116,51 +115,50 @@ export default function DataTable() {
   async function DeleteHandler(id) {
     const swalWithBootstrapButtons = Swal.mixin({
       customClass: {
-        confirmButton: 'btn btn-success',
-        cancelButton: 'btn btn-danger'
+        confirmButton: "btn btn-success",
+        cancelButton: "btn btn-danger",
       },
-      buttonsStyling: false
+      buttonsStyling: false,
     });
-  
+
     const result = await swalWithBootstrapButtons.fire({
-      title: 'Are you sure?',
+      title: "Are you sure?",
       text: "You won't be able to revert this!",
-      icon: 'warning',
+      icon: "warning",
       showCancelButton: true,
-      confirmButtonText: 'Yes, delete it!',
-      cancelButtonText: 'No, cancel!',
-      reverseButtons: true
+      confirmButtonText: "Yes, delete it!",
+      cancelButtonText: "No, cancel!",
+      reverseButtons: true,
     });
-  
+
     if (result.isConfirmed) {
       try {
-        await Axios.delete(`https://mykos2.onrender.com/api/listings/${id}/delete/`);
-        swalWithBootstrapButtons.fire(
-          'Deleted!',
-          'Your file has been deleted.',
-          'success'
-        ).then(() => {
-          // Reload halaman setelah penghapusan berhasil
-          window.location.reload();
-        });
+        await Axios.delete(
+          `https://mykos2.onrender.com/api/listings/${id}/delete/`
+        );
+        swalWithBootstrapButtons
+          .fire("Deleted!", "Your file has been deleted.", "success")
+          .then(() => {
+            // Reload halaman setelah penghapusan berhasil
+            window.location.reload();
+          });
       } catch (error) {
         // Handle error if deletion fails
         swalWithBootstrapButtons.fire(
-          'Error',
-          'An error occurred while deleting the file.',
-          'error'
+          "Error",
+          "An error occurred while deleting the file.",
+          "error"
         );
       }
     } else if (result.dismiss === Swal.DismissReason.cancel) {
       // Handle cancellation
       swalWithBootstrapButtons.fire(
-        'Cancelled',
-        'Your imaginary file is safe :)',
-        'error'
+        "Cancelled",
+        "Your imaginary file is safe :)",
+        "error"
       );
     }
   }
-  
 
   if (dataIsLoading === true) {
     return (
@@ -266,9 +264,27 @@ export default function DataTable() {
     <>
       <Grid
         container
-        style={{ position: "absolute", height: "60%", width: "85%" }}
+        style={{  height: "60%", width: "85%", margin: 'auto' }}
       >
-        <Grid item xs={12} style={{ marginTop: "2rem" }}>
+        {/* <Grid
+          container
+          alignItems="center"
+          paddingLeft="1rem"
+          height="3rem"
+          backgroundColor="#1E90FF"
+        >
+          <Typography variant="h5" color="white" fontWeight="bold">
+            List Rumah Kos
+          </Typography>
+        </Grid> */}
+        <Grid
+          item
+          xs={12}
+          style={{
+            alignItems: "center",
+            marginTop: "2rem" 
+          }}
+        >
           <Button
             color="primary"
             variant="contained"
@@ -279,7 +295,7 @@ export default function DataTable() {
         </Grid>
         <div
           className="responsive-table"
-          style={{ height: 480, marginTop: "0.5rem" }}
+          style={{ height: '100%'}}
         >
           <DataGrid
             rows={allKos}
