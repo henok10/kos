@@ -173,7 +173,7 @@ export default function DataTableApprove() {
     {
       field: "buktiTransfer",
       headerName: "Bukti Transfer",
-      width: 150,
+      width: 100,
       renderCell: (params) => (
         <div>
           <img
@@ -195,14 +195,14 @@ export default function DataTableApprove() {
 
     { field: "addressRoom", headerName: "address room", width: 100 },
 
-    { field: "phoneNumber", headerName: "No. Telp", width: 120 },
-    { field: "rentalFrequency", headerName: "Frequensi Sewa", width: 115 },
-    { field: "nominal", headerName: "Jumlah Pembayaran", width: 120 },
-    { field: "date", headerName: "Date", width: 150 },
+    { field: "phoneNumber", headerName: "No. Telp", width: 100 },
+    { field: "rentalFrequency", headerName: "Frequensi Sewa", width: 100 },
+    { field: "nominal", headerName: "Jumlah Pembayaran", width: 100 },
+    { field: "date", headerName: "Date", width: 100 },
     {
       field: "approve",
       headerName: "Aksi",
-      width: 195,
+      width: 150,
       renderCell: (params) => {
         if (params.value === true) {
           return (
@@ -245,17 +245,17 @@ export default function DataTableApprove() {
   ];
   return (
     <>
-      <Grid height={"60%"}>
+      <Grid height={"60%"} margin='auto' width='80%'>
         <Grid marginTop={"2rem"}>
           <Button
-            color="success"
+            color="primary"
             variant="contained"
             onClick={() => navigate("/datakos")}
           >
             Pilih Kos
           </Button>
         </Grid>
-        <Grid style={{ height: 480, width: "100%", marginTop: "2rem" }}>
+        <Grid style={{ height: 480, marginTop: "10px" }}>
           <DataGrid
             rows={allKos}
             columns={columns}

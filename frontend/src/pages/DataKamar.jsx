@@ -52,12 +52,9 @@ function DataKamar() {
 
   async function updateApprove(id, newValue) {
     try {
-      await Axios.patch(
-        `https://mykos2.onrender.com/api/kamar/${id}/update/`,
-        {
-          barang_dipesan: newValue,
-        }
-      );
+      await Axios.patch(`https://mykos2.onrender.com/api/kamar/${id}/update/`, {
+        barang_dipesan: newValue,
+      });
       window.location.reload();
     } catch (error) {
       console.error("Error updating data:", error);
@@ -149,18 +146,20 @@ function DataKamar() {
     {
       field: "picture_room",
       headerName: "Picture",
-      width: 80,
+      width: 150,
       renderCell: (params) => (
-        <img
-          src={params.value}
-          alt="product"
-          style={{
-            width: "80%",
-            height: "80%",
-            objectFit: "cover",
-            margin: "auto",
-          }}
-        />
+        <div>
+          <img
+            src={params.value}
+            alt="product"
+            style={{
+              width: "80%",
+              height: "80%",
+              objectFit: "cover",
+              margin: "auto",
+            }}
+          />
+        </div>
       ),
     },
     {
@@ -299,11 +298,8 @@ function DataKamar() {
 
   return (
     <>
-      <Grid
-        container
-        style={{ position: "absolute", width: "90%", marginLeft: "3rem" }}
-      >
-        <Grid item xs={12} style={{ marginTop: "2rem" }}>
+      <Grid container style={{position: 'absolute', width: "90%", marginLeft: "3rem" }}>
+        <Grid item xs={12} style={{ margin: 'auto', marginTop: "2rem" }}>
           <Button
             color="primary"
             variant="contained"
@@ -328,14 +324,8 @@ function DataKamar() {
             Penghuni Kos
           </Button>
         </Grid>
-        <div style={{ height: 480, width: "90%" }}>
-          <DataGrid
-            rows={allRoom}
-            columns={columns}
-            pageSize={10}
-            rowsPerPageOptions={[10]}
-            checkboxSelection
-          />
+        <div className="responsive-table" style={{ height: 480, width: "90%" }}>
+          <DataGrid rows={allRoom} columns={columns} checkboxSelection />
         </div>
       </Grid>
     </>

@@ -162,7 +162,7 @@ export default function DataTableUser() {
   ];
   return (
     <>
-      <Grid height={"100vh"}>
+      <Grid height={"100vh"} width= "90%" margin= "auto">
         <Grid marginTop={"2rem"}>
           <Button
             color="primary"
@@ -172,7 +172,7 @@ export default function DataTableUser() {
             Pilih Kos
           </Button>
         </Grid>
-        <Grid style={{ height: "75vh", width: "100%", marginTop: "2rem" }}>
+        <Grid style={{ height: "75vh", marginTop: '10px', margin: "auto" }}>
           <DataGrid
             rows={allKos}
             columns={columns}
