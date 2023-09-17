@@ -173,14 +173,14 @@ function KamarDetail() {
 
   // console.log(state.kamarInfo.rumah)
   return (
-    <div style={{ margin: "auto", width: "80%", padding: '1rem', backgroundColor: "#F8F8FF"}}>
+    <div style={{height: 550, margin: "auto",  padding: '1rem'}}>
       <Grid
         container
-        width={"90%"}
-        height={"100%"}
+        width={"80%"}
         margin="auto"
         marginTop="1rem"
         border="px solid black"
+        backgroundColor= "#F8F8FF"
       >
         <Grid
           item

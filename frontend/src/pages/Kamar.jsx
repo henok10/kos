@@ -9,6 +9,7 @@ import {
   TableHead,
   TableRow,
   Paper,
+  Grid,
   Button,
 } from "@mui/material";
 
@@ -59,84 +60,86 @@ function Kamar() {
   }, [params.id]); // Tambahkan params.id sebagai dependency agar useEffect dipanggil ulang ketika params.id berubah
   console.log();
   return (
-    <TableContainer component={Paper}>
-      <Table sx={{ minWidth: 650 }} aria-label="simple table">
-        <TableHead>
-          <TableRow style={{backgroundColor: "#F8F8FF"}}>
-            <TableCell>Address room</TableCell>
-            <TableCell>Picture room</TableCell>
-            <TableCell>Status</TableCell>
-            <TableCell>Room size</TableCell>
-            <TableCell>Price(day)</TableCell>
-            <TableCell>Price(month)</TableCell>
-            <TableCell>Price(year)</TableCell>
-            <TableCell>Detail</TableCell>
-            <TableCell>Order</TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {allRoom.map((row) => (
-            <TableRow
-              key={row.name}
-              sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-            >
-              <TableCell component="th" scope="row">
-                {row.address_room}
-              </TableCell>
-              <TableCell>
-                {row.picture_room && (
-                  <img
-                    src={row.picture_room}
-                    alt="Room"
-                    style={{ maxWidth: "100px" }}
-                  />
-                )}
-              </TableCell>
-              <TableCell>
-                <div
-                  className={`${classes.buttonCell} ${
-                    row.barang_dipesan
-                      ? classes.yellowButton
-                      : classes.greyButton
-                  }`}
-                >
-                  {row.barang_dipesan ? "Sudah Dipesan" : "Belum Dipesan"}
-                </div>
-              </TableCell>
-              <TableCell>{row.room_size}</TableCell>
-              <TableCell>{row.price_day}</TableCell>
-              <TableCell>{row.price_month}</TableCell>
-              <TableCell>{row.price_year}</TableCell>
-              <TableCell>
-                {
-                  <Button
-                    variant="outlined"
-                    onClick={() => navigate(`/kamar-detail/${row.id}`)}
-                  >
-                    Detail
-                  </Button>
-                }
-              </TableCell>
-              <TableCell>
-                {/* Tambahkan kondisi untuk menonaktifkan tombol "Order" */}
-                {row.barang_dipesan ? (
-                  <Button variant="contained" disabled>
-                    Order
-                  </Button>
-                ) : (
-                  <Button
-                    variant="contained"
-                    onClick={() => navigate(`/order/${row.id}/${row.rumah}`)}
-                  >
-                    Order
-                  </Button>
-                )}
-              </TableCell>
+    <Grid container style={{ height: 480, marginTop: "0.5rem"  }}>
+      <TableContainer component={Paper}>
+        <Table sx={{ minWidth: 650}} aria-label="simple table">
+          <TableHead>
+            <TableRow style={{ backgroundColor: "#F8F8FF" }}>
+              <TableCell>Address room</TableCell>
+              <TableCell>Picture room</TableCell>
+              <TableCell>Status</TableCell>
+              <TableCell>Room size</TableCell>
+              <TableCell>Price(day)</TableCell>
+              <TableCell>Price(month)</TableCell>
+              <TableCell>Price(year)</TableCell>
+              <TableCell>Detail</TableCell>
+              <TableCell>Order</TableCell>
             </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </TableContainer>
+          </TableHead>
+          <TableBody>
+            {allRoom.map((row) => (
+              <TableRow
+                key={row.name}
+                sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+              >
+                <TableCell component="th" scope="row">
+                  {row.address_room}
+                </TableCell>
+                <TableCell>
+                  {row.picture_room && (
+                    <img
+                      src={row.picture_room}
+                      alt="Room"
+                      style={{ maxWidth: "100px" }}
+                    />
+                  )}
+                </TableCell>
+                <TableCell>
+                  <div
+                    className={`${classes.buttonCell} ${
+                      row.barang_dipesan
+                        ? classes.yellowButton
+                        : classes.greyButton
+                    }`}
+                  >
+                    {row.barang_dipesan ? "Sudah Dipesan" : "Belum Dipesan"}
+                  </div>
+                </TableCell>
+                <TableCell>{row.room_size}</TableCell>
+                <TableCell>{row.price_day}</TableCell>
+                <TableCell>{row.price_month}</TableCell>
+                <TableCell>{row.price_year}</TableCell>
+                <TableCell>
+                  {
+                    <Button
+                      variant="outlined"
+                      onClick={() => navigate(`/kamar-detail/${row.id}`)}
+                    >
+                      Detail
+                    </Button>
+                  }
+                </TableCell>
+                <TableCell>
+                  {/* Tambahkan kondisi untuk menonaktifkan tombol "Order" */}
+                  {row.barang_dipesan ? (
+                    <Button variant="contained" disabled>
+                      Order
+                    </Button>
+                  ) : (
+                    <Button
+                      variant="contained"
+                      onClick={() => navigate(`/order/${row.id}/${row.rumah}`)}
+                    >
+                      Order
+                    </Button>
+                  )}
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </TableContainer>
+    </Grid>
   );
 }
 

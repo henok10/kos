@@ -13,10 +13,6 @@ import {
   Paper,
   Button,
 } from "@mui/material";
-import html2canvas from "html2canvas";
-import { canvasToBlob } from "blob-util";
-import * as htmlToImage from "html-to-image";
-import { toPng } from "html-to-image";
 import ImageConverter from "../components/ImageConverter";
 
 // Komponen terpisah untuk mengkonversi elemen HTML menjadi gamb
@@ -62,87 +58,89 @@ export default function RiwayatTransaksi() {
 
   return (
     <>
-      <Grid container style={{ width: "90%", margin: "auto" }}>
-        <Grid
-          container
-          alignItems="center"
-          paddingLeft="1rem"
-          height="3rem"
-          backgroundColor="#1E90FF"
-        >
-          <Typography variant="h5" color="white" fontWeight= "bold">
-            Pemesanan Kamar Kos
-          </Typography>
-        </Grid>
+      <Grid style={{ height: 650 }}>
+        <Grid container style={{ width: "90%", margin: "auto", marginTop: '2rem' }}>
+          <Grid
+            container
+            alignItems="center"
+            paddingLeft="1rem"
+            height="3rem"
+            backgroundColor="#1E90FF"
+          >
+            <Typography variant="h5" color="white" fontWeight="bold">
+              Pemesanan Kamar Kos
+            </Typography>
+          </Grid>
 
-        <TableContainer component={Paper}>
-          <Table sx={{ minWidth: 650 }} aria-label="simple table">
-            <TableHead>
-              <TableRow>
-                <TableCell>Name</TableCell>
-                <TableCell>Nama Kos</TableCell>
-                <TableCell>Address Room</TableCell>
-                <TableCell>No. Telp</TableCell>
-                <TableCell>Frequensi Sewa</TableCell>
-                <TableCell>Total</TableCell>
-                <TableCell>Date</TableCell>
-                <TableCell>Status</TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {allKos.map((row) => (
-                <TableRow
-                  key={row.name}
-                  sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-                >
-                  <TableCell>{row.fullName}</TableCell>
-                  <TableCell>
-                    <Link to={`/listings/${row.rumah}`}>
-                      {row.listing_title}
-                    </Link>
-                  </TableCell>
-                  <TableCell>
-                    <Link to={`/kamar-detail/${row.kamar}`}>
-                      {row.addressRoom}
-                    </Link>
-                  </TableCell>
-                  <TableCell>{row.phoneNumber}</TableCell>
-                  <TableCell>{row.rentalFrequency}</TableCell>
-                  <TableCell>{row.nominal}</TableCell>
-                  <TableCell>{row.date}</TableCell>
-                  <TableCell>
-                    <Grid
-                      style={{
-                        display: 'flex',
-                        justifyContent: "space-between",
-                      }}
-                    >
-                      <ImageConverter transaction={row} />
-                      <Button
+          <TableContainer component={Paper}>
+            <Table sx={{ minWidth: 650 }} aria-label="simple table">
+              <TableHead>
+                <TableRow>
+                  <TableCell>Name</TableCell>
+                  <TableCell>Nama Kos</TableCell>
+                  <TableCell>Address Room</TableCell>
+                  <TableCell>No. Telp</TableCell>
+                  <TableCell>Frequensi Sewa</TableCell>
+                  <TableCell>Total</TableCell>
+                  <TableCell>Date</TableCell>
+                  <TableCell>Status</TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {allKos.map((row) => (
+                  <TableRow
+                    key={row.name}
+                    sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+                  >
+                    <TableCell>{row.fullName}</TableCell>
+                    <TableCell>
+                      <Link to={`/listings/${row.rumah}`}>
+                        {row.listing_title}
+                      </Link>
+                    </TableCell>
+                    <TableCell>
+                      <Link to={`/kamar-detail/${row.kamar}`}>
+                        {row.addressRoom}
+                      </Link>
+                    </TableCell>
+                    <TableCell>{row.phoneNumber}</TableCell>
+                    <TableCell>{row.rentalFrequency}</TableCell>
+                    <TableCell>{row.nominal}</TableCell>
+                    <TableCell>{row.date}</TableCell>
+                    <TableCell>
+                      <Grid
                         style={{
-                          padding: "4px 8px",
-                          borderRadius: "4px",
-                          width: '5rem',
-                          marginLeft: "2%", // Menggunakan marginLeft agar ada jarak antara elemen
-                          color: "white",
-                          fontWeight: "bold",
-                          textAlign: "center",
-                          backgroundColor: row.approve ? "green" : "orange",
+                          display: "flex",
+                          justifyContent: "space-between",
                         }}
                       >
-                        {row.approve !== undefined
-                          ? row.approve
-                            ? "Approve"
-                            : "Proses"
-                          : "Data not available"}
-                      </Button>
-                    </Grid>
-                  </TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </TableContainer>
+                        <ImageConverter transaction={row} />
+                        <Button
+                          style={{
+                            padding: "4px 8px",
+                            borderRadius: "4px",
+                            width: "5rem",
+                            marginLeft: "2%", // Menggunakan marginLeft agar ada jarak antara elemen
+                            color: "white",
+                            fontWeight: "bold",
+                            textAlign: "center",
+                            backgroundColor: row.approve ? "green" : "orange",
+                          }}
+                        >
+                          {row.approve !== undefined
+                            ? row.approve
+                              ? "Approve"
+                              : "Proses"
+                            : "Data not available"}
+                        </Button>
+                      </Grid>
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </TableContainer>
+        </Grid>
       </Grid>
     </>
   );

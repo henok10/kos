@@ -163,5 +163,9 @@ class FasilitasRumahCreate(generics.CreateAPIView):
     serializer_class = FasilitasRumahSerializer
     queryset = FasilitasRumah.objects.all()
 
+class PoiList(generics.ListAPIView):
+    serializer_class = PoiSerializer
+    queryset = Poi.objects.all()
+
 
   

@@ -298,7 +298,7 @@ function DataKamar() {
 
   return (
     <>
-      <Grid container style={{position: 'absolute', width: "90%", marginLeft: "3rem" }}>
+      <Grid container style={{position: 'absolute', display: 'contents', width: "90%", marginLeft: "3rem" }}>
         <Grid item xs={12} style={{ margin: 'auto', marginTop: "2rem" }}>
           <Button
             color="primary"

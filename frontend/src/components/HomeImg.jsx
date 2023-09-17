@@ -1,6 +1,6 @@
 import React from "react";
 import { makeStyles } from "@mui/styles";
-import city from "../data/minion.jpg";
+import city from "../data/minions.png";
 import Search from "./Search";
 
 const useStyles = makeStyles(() => ({
@@ -9,7 +9,7 @@ const useStyles = makeStyles(() => ({
     backgroundRepeat: "no-repeat",
     backgroundPosition: "center",
     backgroundSize: "cover",
-    height: "90vh",
+    height: "65vh",
     display: "flex",
     flexDirection: "column",
     justifyContent: "center",

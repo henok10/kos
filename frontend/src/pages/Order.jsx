@@ -136,7 +136,7 @@ function Order() {
         showCancelButton: true,
         confirmButtonColor: "#3085d6",
         cancelButtonColor: "#d33",
-        confirmButtonText: "Yes, approve it!",
+        confirmButtonText: "Yes, ordered it!",
       }).then(async (result) => {
         if (result.isConfirmed) {
           try {
@@ -145,7 +145,11 @@ function Order() {
               formData
             );
             await updateKamar(params.id, true);
-            console.log(response.data);
+            Swal.fire(
+              'Ordered!',
+              'Your ordered has been success.',
+              'success'
+            )
             dispatch({ type: "openTheSnack" });
           } catch (error) {
             console.error(error);

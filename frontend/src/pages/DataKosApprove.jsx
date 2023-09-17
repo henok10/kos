@@ -147,7 +147,11 @@ export default function DataTableApprove() {
           `https://mykos2.onrender.com/api/transaction/${id}/update`,
           { approve: newValue }
         );
-
+        Swal.fire(
+          'Approved!',
+          'Your kamar has been approve.',
+          'success'
+        )
         window.location.reload();
       } catch (error) {
         console.error(error);

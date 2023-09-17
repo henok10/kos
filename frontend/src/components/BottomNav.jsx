@@ -7,22 +7,18 @@ const BottomNav = () => {
   return (
     <Box sx={{ flexGrow: 1 }}>
       {/* Konten utama di sini */}
-      <Box sx={{ minHeight: "calc(100vh - 56px)", paddingBottom: "56px" }}>
+      <Box sx={{ bottom: 0, marginTop: '5rem', paddingBottom: "56px" }}>
         {/* Isi konten utama Anda di sini */}
       </Box>
 
       {/* Bottom Navigation */}
       <Paper
         sx={{
-          position: "static",
+          position: "absolute",
           bottom: 0,
           left: 0,
           right: 0,
           height: "56px",
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-          marginTop: "4rem",
         }}
       >
         <BottomNavigation

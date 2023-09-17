@@ -22,6 +22,7 @@ import ArrowCircleRightIcon from "@mui/icons-material/ArrowCircleRight";
 import RoomIcon from "@mui/icons-material/Room";
 import TheMapComponent from "../components/TheMapComponent";
 import { makeStyles } from "@mui/styles";
+import { choices } from "../components/Choice";
 
 const useStyles = makeStyles({
   sliderContainer: {
@@ -204,6 +205,22 @@ function ListingOwnerDetail() {
 
   const [currentPicture, setCurrentPicture] = useState(0);
 
+  const { choice_kamar, choice_rumah } = choices();
+
+  function getIconUrl(value) {
+    const kamarIcon = choice_kamar.find((item) => item.value === value);
+    const rumahIcon = choice_rumah.find((item) => item.value === value);
+
+    if (kamarIcon) {
+      return kamarIcon.icon;
+    } else if (rumahIcon) {
+      return rumahIcon.icon;
+    } else {
+      return ""; // Return a default icon URL or an empty string
+    }
+  }
+
+
   function NextPicture() {
     if (currentPicture === listingPictures.length - 1) {
       return setCurrentPicture(0);
@@ -284,7 +301,7 @@ function ListingOwnerDetail() {
                   fontSize: "18px",
                 }}
               >
-                Rp{state.listingInfo.price_per_month}/Month
+                Rp{state.listingInfo.price_month}/Month
               </Typography>
             </Grid>
           </Grid>
@@ -311,64 +328,41 @@ function ListingOwnerDetail() {
             ""
           )}
 
-          <Grid
-            container
-            style={{ padding: "1rem", borderBottom: "1px solid grey" }}
+<Grid
+            item
+            justifyContent="flex-start"
+            style={{
+              padding: "1rem",
+              borderBottom: "1px solid gray",
+              marginTop: "0.3rem",
+            }}
           >
-            <Typography variant="h6" style={{ fontSize: "16px" }}>
-              Fasilitas Kamar:
-            </Typography>
-            <Button
-              variant="outlined"
-              style={{ marginLeft: "20px" }}
-              onClick={() => navigate(`/listingupdate/${params.row.id}`)}
-            >
-              Tambahkan Fasilitas
-            </Button>
-            <Grid container marginTop={"1rem"}>
-              <Grid item xs={12} md={6} style={{ paddingRight: "1rem" }}>
-                {loadingFasilitas ? (
-                  <CircularProgress />
-                ) : errorFasilitas ? (
-                  <Typography variant="body1" color="error">
-                    {errorFasilitas}
-                  </Typography>
-                ) : allFasilitas.length === 0 ? (
-                  <Typography variant="body1">
-                    No facilities available.
-                  </Typography>
-                ) : (
-                  allFasilitas.slice(0, 4).map((listing, index) => (
-                    <Typography
-                      key={index}
-                      variant="body1"
-                      style={{ fontSize: "15px" }}
-                    >
-                      {listing.nama_fasilitas}
-                    </Typography>
-                  ))
-                )}
-              </Grid>
-              <Grid
-                item
-                xs={12}
-                md={6}
-                style={{
-                  display: "flex",
-                  flexDirection: "column",
-                  justifyContent: "flex-start",
-                }}
-              >
-                {/* Baris-baris selanjutnya ditampilkan di samping kanan */}
-                {allFasilitas.slice(4).map((listing, index) => (
-                  <Typography
-                    key={index}
-                    variant="body1"
-                    style={{ fontSize: "15px" }}
-                  >
-                    {listing.nama_fasilitas}
-                  </Typography>
-                ))}
+            <Grid>
+              <div>
+                <Typography variant="h6" style={{ fontSize: "16px" }}>
+                  Fasilitas :
+                </Typography>
+              </div>
+
+              <Grid container>
+                <Grid item xs={12} md={6} style={{ paddingRight: "1rem" }}>
+                  {allFasilitas.slice(0, 4).map((listing, index) => (
+                    <Box key={index} display="flex" alignItems="center">
+                      <img
+                        src={getIconUrl(listing.name)}
+                        alt={listing.name}
+                        style={{
+                          marginLeft: "0.5rem",
+                          width: "24px",
+                          height: "24px",
+                        }}
+                      />
+                      <Typography style={{ marginLeft: "6px" }}>
+                        {listing.name}
+                      </Typography>
+                    </Box>
+                  ))}
+                </Grid>
               </Grid>
             </Grid>
           </Grid>
@@ -512,12 +506,12 @@ function ListingOwnerDetail() {
             return (
               <div
                 key={poi.id}
-                style={{ marginBottom: "0.5rem", border: "1px solid black" }}
+                style={{ marginBottom: "0.5rem", borderBottom: "1px solid black" }}
               >
-                <Typography variant="h6">{poi.name}</Typography>
+                 <Typography variant="h6">{poi.name}</Typography>
                 <Typography variant="subtitle1">
                   {poi.type} |{" "}
-                  <span style={{ fontWeight: "bolder", color: "green" }}>
+                  <span style={{ fontWeight: "bolder", color: "black" }}>
                     {CalculateDistance()} Kilometers
                   </span>
                 </Typography>

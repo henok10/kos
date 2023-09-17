@@ -8,11 +8,12 @@ function HouseList() {
   const [allListings, setAllListings] = useState([]);
   const [dataIsLoading, setDataIsLoading] = useState(true);
   const [searchResults, setSearchResults] = useState([]);
-  const [filtered, setFiltered] = useState([]); // Perubahan: Mengganti nama state menjadi 'filtered'
+  const [filtered, setFiltered] = useState([]);
 
   useEffect(() => {
     const source = Axios.CancelToken.source();
-    async function GetAllListings() {
+
+    async function getAllListings() {
       try {
         const response = await Axios.get(
           "https://mykos2.onrender.com/api/listings/",
@@ -21,60 +22,54 @@ function HouseList() {
 
         setAllListings(response.data);
         setDataIsLoading(false);
-      } catch (error) {}
+      } catch (error) {
+        // Tangani error dengan baik di sini
+        console.error("Error fetching data: ", error);
+      }
     }
-    GetAllListings();
+
+    getAllListings();
+
     return () => {
       source.cancel();
     };
   }, []);
 
   useEffect(() => {
-    let filteredListings = [];
+    const filterListings = () => {
+      const filteredListings = allListings.filter((listing) => {
+        const cityAreaMatch =
+          !searchResults.cityArea ||
+          listing.borough
+            .toLowerCase()
+            .includes(searchResults.cityArea.toLowerCase());
 
-    if (
-      Array.isArray(searchResults.cityArea) ||
-      Array.isArray(searchResults.priceRange)
-    ) {
-      // Pemfilteran berdasarkan City/Area dan Price
-      filteredListings = allListings.filter((listing) => {
-        if (Array.isArray(searchResults.cityArea)) {
-          if (
-            !listing.cityArea
-              .toLowerCase()
-              .includes(searchResults.cityArea.toLowerCase())
-          ) {
-            return false;
-          }
-        }
+        const priceMatch =
+          !searchResults.priceRange ||
+          (parseInt(listing.price_month) >= searchResults.priceRange[0] &&
+            parseInt(listing.price_month) <= searchResults.priceRange[1]) ||
+          (parseInt(listing.price_day) >= searchResults.priceRange[0] &&
+            parseInt(listing.price_day) <= searchResults.priceRange[1]) ||
+          (parseInt(listing.price_year) >= searchResults.priceRange[0] &&
+            parseInt(listing.price_year) <= searchResults.priceRange[1]);
 
-        if (Array.isArray(searchResults.priceRange)) {
-          const price_month = parseInt(listing.price_month);
-          const price_day = parseInt(listing.price_day);
-          const price_year = parseInt(listing.price_year);
+        const poiMatch =
+          !searchResults.poi ||
+          searchResults.poi.length === 0 ||
+          listing.listing_pois_within_10km.some((poi) =>
+            poi.name.toLowerCase().includes(searchResults.poi.toLowerCase())
+          );
 
-          if (
-            (price_month < searchResults.priceRange[0] ||
-              price_month > searchResults.priceRange[1]) &&
-            (price_day < searchResults.priceRange[0] ||
-              price_day > searchResults.priceRange[1]) &&
-            (price_year < searchResults.priceRange[0] ||
-              price_year > searchResults.priceRange[1])
-          ) {
-            return false;
-          }
-        }
-
-        return true;
+        return cityAreaMatch && priceMatch && poiMatch;
       });
-    } else {
-      filteredListings = allListings;
-    }
 
-    setFiltered(filteredListings);
+      setFiltered(filteredListings);
+    };
+
+    filterListings();
   }, [allListings, searchResults]);
 
-  if (dataIsLoading === true) {
+  if (dataIsLoading) {
     return (
       <Grid
         container
@@ -90,9 +85,9 @@ function HouseList() {
   return (
     <>
       <HomeImg setSearchResults={setSearchResults} />
-      <Grid container width="80%" margin={"auto"}>
+      <Grid container width="80%" margin="auto">
         <Grid item xs={12}>
-          <Grid container spacing={1} marginTop="10rem">
+          <Grid container spacing={1} marginTop="17rem">
             <Box textAlign="center">
               <h1>Recent Rumah Kos Listed</h1>
               <p>
@@ -101,10 +96,8 @@ function HouseList() {
                 enim ad minim veniam.
               </p>
             </Box>
-            {/* Ubah properti yang dikirimkan menjadi filtered */}
             <Listing filtered={filtered} isLoading={dataIsLoading} />
           </Grid>
-          <div></div>
         </Grid>
       </Grid>
     </>
