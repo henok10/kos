@@ -1,6 +1,6 @@
 from rest_framework import generics, permissions, status
-from .serializers import ListingSerializer, TransactionSerializer, ReviewSerializer, KamarSerializer, FasilitasKamarSerializer, FasilitasRumahSerializer
-from listings.models import Rumah, Transaction, Review, Kamar, FasilitasKamar, FasilitasRumah
+from .serializers import ListingSerializer, TransactionSerializer, ReviewSerializer, KamarSerializer, FasilitasKamarSerializer, FasilitasRumahSerializer, PoiSerializer
+from listings.models import Rumah, Transaction, Review, Kamar, FasilitasKamar, FasilitasRumah, Poi
 from rest_framework import generics
 from rest_framework.permissions import IsAuthenticated
 from users.models import User, Customer, Owner
