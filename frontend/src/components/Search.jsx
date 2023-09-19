@@ -1,7 +1,9 @@
 // Search.jsx
 import React, { useState, useEffect } from "react";
 import { makeStyles } from "@mui/styles";
+import Axios from "axios";
 import Slider, { SliderThumb } from "@mui/material/Slider";
+import Autocomplete from "@mui/material/Autocomplete";
 import {
   Box,
   Button,
@@ -94,7 +96,8 @@ const useStyles = makeStyles(() => {
 function Search({ setSearchResults }) {
   const [cityArea, setCityArea] = useState("");
   const [poi, setPoi] = useState("");
-  const [poiList, setPoiList] = useState([])
+  const [poiList, setPoiList] = useState([]);
+  const [listingList, setListingList] = useState([]);
   const [priceRange, setPriceRange] = useState([0, 4000000]); // Nilai default
 
   const classes = useStyles();
@@ -116,12 +119,26 @@ function Search({ setSearchResults }) {
           `https://mykos2.onrender.com/api/poi-list`
         );
 
-       data = response.data
-       setPoiList(data)
+        const data = response.data;
+        setPoiList(data);
       } catch (e) {}
     }
     GetPoiList();
-  }, [params.rumah, dispatch]);
+  }, []);
+
+  useEffect(() => {
+    async function GetListingList() {
+      try {
+        const response = await Axios.get(
+          `https://mykos2.onrender.com/api/listings/`
+        );
+
+        const data = response.data;
+        setListingList(data);
+      } catch (e) {}
+    }
+    GetListingList();
+  }, []);
   function AirbnbThumbComponent(props) {
     const { children, ...other } = props;
     return (
@@ -172,7 +189,9 @@ function Search({ setSearchResults }) {
     <>
       <Container style={{}}>
         <Box className={classes.title}>
-          <Typography style={{ margin: "auto", textAlign: "center", marginTop: '5rem' }}>
+          <Typography
+            style={{ margin: "auto", textAlign: "center", marginTop: "5rem" }}
+          >
             <Typography className={classes.heading} variant="h1">
               Search Rumah Kos
             </Typography>
@@ -190,17 +209,21 @@ function Search({ setSearchResults }) {
                   City/area
                 </Typography>
                 <Box>
-                  <TextField
-                    id="outlined-basic"
+                  <Autocomplete
+                    id="area-select"
                     size="small"
                     fullWidth
                     value={cityArea}
-                    onChange={(e) => setCityArea(e.target.value)}
-                    select
-                  >
-                    <MenuItem value=""></MenuItem>
-                    <MenuItem value="tamalanrea">tamalanrea</MenuItem>
-                  </TextField>
+                    onChange={(e, newValue) => setCityArea(newValue)}
+                    options={listingList.map((listingItem) => listingItem.borough)}
+                    renderInput={(params) => (
+                      <TextField
+                        {...params}
+                        label="Pilih City/Area"
+                        variant="outlined"
+                      />
+                    )}
+                  />
                 </Box>
               </Box>
             </Grid>
@@ -211,15 +234,21 @@ function Search({ setSearchResults }) {
                   Point of Interest
                 </Typography>
                 <Box>
-                  <TextField
-                    id="outlined-basic"
+                  <Autocomplete
+                    id="poi-select"
                     size="small"
                     fullWidth
                     value={poi}
-                    onChange={(e) => setPoi(e.target.value)}
-                  >
-                   {poiList}
-                  </TextField>
+                    onChange={(e, newValue) => setPoi(newValue)}
+                    options={poiList.map((poiItem) => poiItem.name)}
+                    renderInput={(params) => (
+                      <TextField
+                        {...params}
+                        label="Pilih PoI"
+                        variant="outlined"
+                      />
+                    )}
+                  />
                 </Box>
               </Box>
             </Grid>
@@ -244,12 +273,7 @@ function Search({ setSearchResults }) {
               </Box>
             </Grid>
 
-            <Grid
-              item
-              xs={12}
-              sm={12}
-              md={3}
-            >
+            <Grid item xs={12} sm={12} md={3}>
               <Box className={classes.box}>
                 <Typography
                   className={classes.label}
@@ -261,7 +285,7 @@ function Search({ setSearchResults }) {
                 <Button
                   variant="outlined"
                   size="small"
-                  style={{ margin: "auto", display: "block", width: '8rem' }}
+                  style={{ margin: "auto", display: "block", width: "8rem" }}
                   color="primary"
                   onClick={handleSearch}
                 >

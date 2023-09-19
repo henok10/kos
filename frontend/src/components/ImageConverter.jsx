@@ -1,156 +1,105 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import html2canvas from "html2canvas";
 import { canvasToBlob } from "blob-util";
-import { Button } from "@mui/material";
+import {
+  Button,
+  Dialog,
+  DialogContent,
+  DialogActions,
+  IconButton,
+  Paper,
+  Typography,
+} from "@mui/material";
+import { makeStyles } from "@mui/styles";
+import GetAppIcon from "@mui/icons-material/GetApp"; // Import ikon unduh
+import { toPng } from "html-to-image";
+
+const useStyles = makeStyles(() => ({
+  receipt: {
+    padding: 2,
+    width: "25rem",
+    height: "100%",
+    margin: "auto",
+    marginTop: 3,
+  },
+  header: {
+    fontSize: "24px",
+    fontWeight: "bold",
+    textAlign: "center",
+  },
+  kamars: {
+    position: "relative",
+    border: "4px solid gray",
+    width: "90%",
+    margin: "auto",
+    marginTop: 10,
+    padding: 10,
+  },
+  label: {
+    display: "inline-block",
+    width: "150px",
+    fontWeight: "bold",
+  },
+
+  label2: {
+    fontSize: "12px",
+  },
+  kamar: {
+    marginTop: 3,
+    padding: "10px",
+  },
+  status: {
+    fontSize: "12px",
+    lineHeight: "1.2",
+  },
+  approved: {
+    color: "green",
+    fontWeight: "bold",
+  },
+  processing: {
+    color: "orange",
+    fontWeight: "bold",
+  },
+}));
 
 function ImageConverter({ transaction }) {
-  const convertToImage = async (element) => {
+  const classes = useStyles();
+  const [modalOpen, setModalOpen] = useState(false);
+  const [imageUrl, setImageUrl] = useState(null);
+  const elementRef = useRef(null);
+
+  console.log(elementRef);
+
+  const transactionDate = new Date(transaction.date);
+
+  const year = transactionDate.getFullYear();
+  const month = transactionDate.getMonth() + 1;
+  const day = transactionDate.getDate();
+
+  const formattedDate = `${year}-${month < 10 ? "0" : ""}${month}-${
+    day < 10 ? "0" : ""
+  }${day}`;
+
+  const handleDownloadClick = async () => {
     try {
-      const canvas = await html2canvas(element);
-      const blob = await canvasToBlob(canvas);
-      return URL.createObjectURL(blob);
+      setModalOpen(true);
     } catch (error) {
-      console.error("Error converting HTML to image", error);
-      return null;
+      console.error(error);
     }
   };
 
-  const handleDownloadClick = async () => {
-    console.log("Mengklik tombol unduh");
-    console.log(transaction.noRekening);
-    // Membuat elemen div baru dengan konten yang ingin Anda konversi menjadi gambar
-    const divToConvert = document.createElement("div");
+  console.log(imageUrl);
+  const handleCloseModal = () => {
+    setModalOpen(false);
+  };
 
-    const transactionDate = new Date(transaction.date);
-
-    // Mendapatkan tahun, bulan, dan tanggal dari objek Date
-    const year = transactionDate.getFullYear();
-    const month = transactionDate.getMonth() + 1; // Ingat bahwa indeks bulan dimulai dari 0, jadi tambahkan 1.
-    const day = transactionDate.getDate();
-
-    // Membuat string dengan format yang diinginkan (misalnya, "2023-09-08")
-    const formattedDate = `${year}-${month < 10 ? "0" : ""}${month}-${day < 10 ? "0" : ""}${day}`;
-
-    
-
-    divToConvert.innerHTML = `
-        <div class="receipt">
-          <h2>Payment Receipt</h2>
-          <h2>MyKoss</h2>
-          <div class='kamars'>
-              <p><strong>Transaction ID:</strong> ${transaction.id}</p>
-              <p><strong>Name:</strong> ${transaction.fullName}</p>
-              <p><strong>No Rekening Tujuan:</strong> ${
-                transaction.noRekening
-              }</p>
-              <p><strong>Frekuensi Sewa:</strong> ${
-                transaction.rentalFrequency
-              }</p>
-              <p><strong>Total Bayar:</strong> ${transaction.nominal}</p>
-          </div>
-          
-
-          <div class='kamar'>
-            <p>Alamat Kamar: ${transaction.addressRoom}</p>
-            <p>Alamar Rumah: ${transaction.listing_title}</p>
-            <p>Date: ${formattedDate}</p>
-            <p>Status: ${
-              transaction.approve
-                ? "<span class='approved'>Approved</span>"
-                : "<span class='processing'>Processing</span>"
-            }</p>
-          </div>
-         
-        </div>
-  
-          <style>
-              div {
-                width: 23rem;
-                background-color: #87CEFA;
-
-              }
-              div.receipt {
-                padding: 20px;
- 
-              }
-  
-              h2 {
-                  font-size: 20px;
-                  font-weight: bolt;
-                  text-align: center; 
-              }
-  
-              div.receipt div.kamars{
-                
-                display: fixed;
-                border: 1px solid gray;
-                width: 90%;
-                margin: auto;
-                margin-top: 30px;
-                padding: 10px;
-              }
-
-              div.receipt div.kamars p{
-                  // border-bottom: 1px solid gray
-              }
-
-              div.receipt div.kamar {
-                margin-top: 3rem;
-              }
-              div.receipt div.kamar p { 
-               
-                line-height: 0.2;
-                font-size: 12px;
-            }
-  
-              strong {
-                  font-weight: bold;
-              }
-  
-              .approved {
-                  color: green;
-                  font-weight: bold;
-              }
-  
-              .processing {
-                  color: orange;
-                  font-weight: bold;
-              }
-          </style>
-        `;
-
-    // Menambahkan elemen div ke dalam body dokumen
-    document.body.appendChild(divToConvert);
-
-    // Mengkonversi elemen div menjadi gambar
-    const scale = 1; // Faktor perbesaran kanvas, sesuaikan sesuai kebutuhan
-    convertToImage(divToConvert, transaction, scale)
-      .then((imageUrl) => {
-        console.log("Gambar diubah:", imageUrl);
-        if (imageUrl) {
-          const a = document.createElement("a");
-          a.href = imageUrl;
-          a.download = `receipt_${transaction.id}.png`;
-
-          // Menambahkan atribut 'download' agar pengguna dapat mengklik untuk mengunduh
-          a.setAttribute("download", `receipt_${transaction.id}.png`);
-
-          // Menambahkan tautan ke dokumen
-          document.body.appendChild(a);
-
-          // Mengklik tautan untuk mengunduh
-          a.click();
-
-          // Membersihkan URL objek setelah pengunduhan
-          URL.revokeObjectURL(imageUrl);
-
-          // Menghapus elemen div yang baru saja dibuat
-          document.body.removeChild(divToConvert);
-        }
-      })
-      .catch((error) => {
-        console.error(error);
-      });
+  const handleDownloadFromModal = () => {
+    html2canvas(elementRef.current).then((canvas) => {
+      const link = document.createElement("a");
+      link.download = "my-image-name.png";
+      link.href = canvas.toDataURL("image/png");
+      link.click();
+    });
   };
 
   return (
@@ -161,14 +110,81 @@ function ImageConverter({ transaction }) {
           padding: "4px 8px",
           borderRadius: "4px",
           marginRight: "2%",
-          //   color: "white",
           fontWeight: "bold",
           textAlign: "center",
         }}
         onClick={handleDownloadClick}
       >
-        unduh
+        Unduh
       </Button>
+
+      <div>
+        <Dialog open={modalOpen} onClose={handleCloseModal}>
+          <DialogContent id="modal-content">
+            <Paper ref={elementRef} className={classes.receipt} elevation={3}>
+              <Typography variant="h5" className={classes.header}>
+                Payment Receipt
+              </Typography>
+              <Typography variant="h5" textAlign="center">
+                MyKoss
+              </Typography>
+              <div className={classes.kamars}>
+                <Typography>
+                  <strong className={classes.label}>Transaction ID</strong>:{" "}
+                  {transaction.id}
+                </Typography>
+                <Typography>
+                  <strong className={classes.label}>Name</strong>:{" "}
+                  {transaction.fullName}
+                </Typography>
+                <Typography>
+                  <strong className={classes.label}>No Rekening Tujuan</strong>:{" "}
+                  {transaction.noRekening}
+                </Typography>
+                <Typography>
+                  <strong className={classes.label}>Frekuensi Sewa</strong>:{" "}
+                  {transaction.rentalFrequency}
+                </Typography>
+                <Typography>
+                  <strong className={classes.label}>Total Bayar</strong>:{" "}
+                  {transaction.nominal}
+                </Typography>
+              </div>
+              <div className={classes.kamar}>
+                <Typography className={classes.label2}>
+                  Nama Rumah: {transaction.listing_title}
+                </Typography>
+                <Typography className={classes.label2}>
+                  Alamat Rumah: {transaction.listing_title}
+                </Typography>
+                <Typography className={classes.label2}>
+                  Alamat Kamar: {transaction.addressRoom}
+                </Typography>
+
+                <Typography className={classes.label2}>
+                  Date: {formattedDate}
+                </Typography>
+                <Typography className={classes.label2}>
+                  Status:{" "}
+                  {transaction.approve ? (
+                    <span className={classes.approved}>Approved</span>
+                  ) : (
+                    <span className={classes.processing}>Processing</span>
+                  )}
+                </Typography>
+              </div>
+            </Paper>
+          </DialogContent>
+          <DialogActions>
+            <IconButton onClick={handleDownloadFromModal}>
+              <GetAppIcon />
+            </IconButton>
+            <Button onClick={handleCloseModal} variant="outlined">
+              Tutup
+            </Button>
+          </DialogActions>
+        </Dialog>
+      </div>
     </div>
   );
 }

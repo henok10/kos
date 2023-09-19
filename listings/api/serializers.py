@@ -70,6 +70,7 @@ class PoiSerializer(serializers.ModelSerializer):
         
 class TransactionSerializer(serializers.ModelSerializer):
     listing_title = serializers.ReadOnlyField(source='kamar.rumah.title')
+    addressKamar = serializers.ReadOnlyField(source='kamar.rumah.address')
     addressRoom = serializers.ReadOnlyField(source='kamar.address_room')
     rumah = serializers.ReadOnlyField(source='kamar.rumah.id')
     noRekening = serializers.ReadOnlyField(source='kamar.rumah.no_rekening')
@@ -78,7 +79,7 @@ class TransactionSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Transaction
-        fields = ['id', 'kamar', 'rumah', 'noRekening', 'listing_title', 'addressRoom', 'user', 'buktiTransfer', 'fullName', 'phoneNumber', 'rentalFrequency', 'nominal', 'date', 'approve']
+        fields = ['id', 'kamar', 'rumah', 'noRekening', 'listing_title', ' addressKamar', 'addressRoom', 'user', 'buktiTransfer', 'fullName', 'phoneNumber', 'rentalFrequency', 'nominal', 'date', 'approve']
 
 class ReviewSerializer(serializers.ModelSerializer):
     user_username = serializers.ReadOnlyField(source='user.username')
