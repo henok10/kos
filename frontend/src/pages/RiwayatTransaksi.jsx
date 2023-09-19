@@ -78,6 +78,7 @@ export default function RiwayatTransaksi() {
                 <TableRow>
                   <TableCell>Name</TableCell>
                   <TableCell>Nama Kos</TableCell>
+                  <TableCell>Alamat Kos</TableCell>
                   <TableCell>Address Room</TableCell>
                   <TableCell>No. Telp</TableCell>
                   <TableCell>Frequensi Sewa</TableCell>
@@ -98,6 +99,7 @@ export default function RiwayatTransaksi() {
                         {row.listing_title}
                       </Link>
                     </TableCell>
+                    <TableCell>{row.phoneNumber}</TableCell>
                     <TableCell>
                       <Link to={`/kamar-detail/${row.kamar}`}>
                         {row.addressRoom}

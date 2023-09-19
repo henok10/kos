@@ -16,11 +16,11 @@ import { toPng } from "html-to-image";
 
 const useStyles = makeStyles(() => ({
   receipt: {
-    padding: 2,
+    padding: 5,
     width: "25rem",
-    height: "100%",
+    height: "25rem",
     margin: "auto",
-    marginTop: 3,
+    paddingTop: 10,
   },
   header: {
     fontSize: "24px",
@@ -45,8 +45,19 @@ const useStyles = makeStyles(() => ({
     fontSize: "12px",
   },
   kamar: {
+    float: "left",
     marginTop: 3,
-    padding: "10px",
+    padding: "20px",
+  },
+
+  ttd: {
+    marginTop: 3,
+    padding: "20px",
+    justifyContent: "",
+    textAlign: "center",
+    lineHeight: "1.5",
+    float: "right",
+    width: "30%",
   },
   status: {
     fontSize: "12px",
@@ -147,32 +158,37 @@ function ImageConverter({ transaction }) {
                 </Typography>
                 <Typography>
                   <strong className={classes.label}>Total Bayar</strong>:{" "}
-                  {transaction.nominal}
+                  {transaction.nominal}.00
                 </Typography>
               </div>
-              <div className={classes.kamar}>
-                <Typography className={classes.label2}>
-                  Nama Rumah: {transaction.listing_title}
-                </Typography>
-                <Typography className={classes.label2}>
-                  Alamat Rumah: {transaction.listing_title}
-                </Typography>
-                <Typography className={classes.label2}>
-                  Alamat Kamar: {transaction.addressRoom}
-                </Typography>
+              <section>
+                <div className={classes.kamar}>
+                  <Typography className={classes.label2}>
+                    Nama Rumah: {transaction.listing_title}
+                  </Typography>
+                  <Typography className={classes.label2}>
+                    Alamat Kamar: {transaction.addressRoom}
+                  </Typography>
 
-                <Typography className={classes.label2}>
-                  Date: {formattedDate}
-                </Typography>
-                <Typography className={classes.label2}>
-                  Status:{" "}
-                  {transaction.approve ? (
-                    <span className={classes.approved}>Approved</span>
-                  ) : (
-                    <span className={classes.processing}>Processing</span>
-                  )}
-                </Typography>
-              </div>
+                  <Typography className={classes.label2}>
+                    Date: {formattedDate}
+                  </Typography>
+                  <Typography className={classes.label2}>
+                    Status:{" "}
+                    {transaction.approve ? (
+                      <span className={classes.approved}>Approved</span>
+                    ) : (
+                      <span className={classes.processing}>Processing</span>
+                    )}
+                  </Typography>
+                </div>
+                <div className={classes.ttd}>
+                  <Typography style={{ marginBottom: "25px" }}>
+                    Penerima
+                  </Typography>
+                  <Typography>{transaction.fullName}</Typography>
+                </div>
+              </section>
             </Paper>
           </DialogContent>
           <DialogActions>
