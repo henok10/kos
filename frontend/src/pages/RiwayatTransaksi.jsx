@@ -88,8 +88,21 @@ export default function RiwayatTransaksi() {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {allKos.map((row) => (
-                  <TableRow
+                {allKos.map((row) => {
+                  const transactionDate = new Date(row.date);
+
+                  const year = transactionDate.getFullYear();
+                  const month = transactionDate.getMonth() + 1;
+                  const day = transactionDate.getDate();
+                  const hours = transactionDate.getHours().toString().padStart(2, '0');
+                  const minutes = transactionDate.getMinutes().toString().padStart(2, '0');
+                
+                  const formattedDate = `${year}/${month < 10 ? "0" : ""}${month}/${
+                    day < 10 ? "0" : ""
+                  }${day}  ${hours}:${minutes}`;
+
+                  return(
+                    <TableRow
                     key={row.name}
                     sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
                   >
@@ -99,7 +112,7 @@ export default function RiwayatTransaksi() {
                         {row.listing_title}
                       </Link>
                     </TableCell>
-                    <TableCell>{row.phoneNumber}</TableCell>
+                    <TableCell>{row.addressKamar}</TableCell>
                     <TableCell>
                       <Link to={`/kamar-detail/${row.kamar}`}>
                         {row.addressRoom}
@@ -108,7 +121,10 @@ export default function RiwayatTransaksi() {
                     <TableCell>{row.phoneNumber}</TableCell>
                     <TableCell>{row.rentalFrequency}</TableCell>
                     <TableCell>{row.nominal}</TableCell>
-                    <TableCell>{row.date}</TableCell>
+                    <TableCell>
+                    {formattedDate}
+                    </TableCell>
+
                     <TableCell>
                       <Grid
                         style={{
@@ -138,7 +154,10 @@ export default function RiwayatTransaksi() {
                       </Grid>
                     </TableCell>
                   </TableRow>
-                ))}
+                  )
+
+                 
+                          })}
               </TableBody>
             </Table>
           </TableContainer>

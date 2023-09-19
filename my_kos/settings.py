@@ -16,8 +16,7 @@ from datetime import timedelta
 from django.conf import settings
 import cloudinary_storage
 import cloudinary
-# import cloudinary.uploader
-# import cloudinary.api
+from .jazzmin import JAZZMIN_SETTINGS
 
 if os.name == 'nt':
     VENV_BASE = os.environ['VIRTUAL_ENV']
@@ -232,7 +231,7 @@ SIMPLE_JWT = {
 }
 
 
-# try:
-#     from .server_settings import *
-# except ImportError:
-#     pass
+JAZZMIN_SETTINGS = JAZZMIN_SETTINGS
+JAZZMIN_UI_TWEAKS = {
+    "theme": "flatly",
+}

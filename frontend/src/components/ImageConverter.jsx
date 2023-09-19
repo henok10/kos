@@ -1,6 +1,5 @@
 import React, { useState, useRef } from "react";
 import html2canvas from "html2canvas";
-import { canvasToBlob } from "blob-util";
 import {
   Button,
   Dialog,
@@ -12,12 +11,11 @@ import {
 } from "@mui/material";
 import { makeStyles } from "@mui/styles";
 import GetAppIcon from "@mui/icons-material/GetApp"; // Import ikon unduh
-import { toPng } from "html-to-image";
 
 const useStyles = makeStyles(() => ({
   receipt: {
     padding: 5,
-    width: "25rem",
+    width: "35rem",
     height: "25rem",
     margin: "auto",
     paddingTop: 10,
@@ -37,17 +35,22 @@ const useStyles = makeStyles(() => ({
   },
   label: {
     display: "inline-block",
-    width: "150px",
+    width: "160px",
     fontWeight: "bold",
   },
 
   label2: {
     fontSize: "12px",
   },
+
+  rumahInfo: {
+    width: "100%",
+  },
   kamar: {
     float: "left",
     marginTop: 3,
     padding: "20px",
+    width: "50%",
   },
 
   ttd: {
@@ -55,9 +58,8 @@ const useStyles = makeStyles(() => ({
     padding: "20px",
     justifyContent: "",
     textAlign: "center",
-    lineHeight: "1.5",
     float: "right",
-    width: "30%",
+    width: "50%",
   },
   status: {
     fontSize: "12px",
@@ -76,7 +78,6 @@ const useStyles = makeStyles(() => ({
 function ImageConverter({ transaction }) {
   const classes = useStyles();
   const [modalOpen, setModalOpen] = useState(false);
-  const [imageUrl, setImageUrl] = useState(null);
   const elementRef = useRef(null);
 
   console.log(elementRef);
@@ -99,7 +100,6 @@ function ImageConverter({ transaction }) {
     }
   };
 
-  console.log(imageUrl);
   const handleCloseModal = () => {
     setModalOpen(false);
   };
@@ -107,7 +107,7 @@ function ImageConverter({ transaction }) {
   const handleDownloadFromModal = () => {
     html2canvas(elementRef.current).then((canvas) => {
       const link = document.createElement("a");
-      link.download = "my-image-name.png";
+      link.download = `${transaction.fullName}_${transaction.listing_title}.png`;
       link.href = canvas.toDataURL("image/png");
       link.click();
     });
@@ -161,7 +161,7 @@ function ImageConverter({ transaction }) {
                   {transaction.nominal}.00
                 </Typography>
               </div>
-              <section>
+              <section className={classes.rumahInfo}>
                 <div className={classes.kamar}>
                   <Typography className={classes.label2}>
                     Nama Rumah: {transaction.listing_title}
@@ -186,7 +186,9 @@ function ImageConverter({ transaction }) {
                   <Typography style={{ marginBottom: "25px" }}>
                     Penerima
                   </Typography>
-                  <Typography>{transaction.fullName}</Typography>
+                  <Typography>
+                    <strong>{transaction.fullName}</strong>
+                  </Typography>
                 </div>
               </section>
             </Paper>

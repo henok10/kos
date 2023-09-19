@@ -6,7 +6,7 @@ from django.contrib.gis.db import models
 from django.utils import timezone
 from django.contrib.gis.geos import Point
 from django.contrib.auth import get_user_model
-from users.models import Customer, Owner
+from users.models import Customer, Owner, User
 User = get_user_model()
 from cloudinary.models import CloudinaryField
 import os
@@ -44,25 +44,20 @@ class Rumah(models.Model):
     picture5 = models.ImageField(
         blank=True, null=True, upload_to=upload_to, max_length=455)
 
-    # tambahan atribut available_rooms
-    @property
-    def available_rooms(self):
-        transactions = self.transactions.filter(barang_dibeli=True)
-        num_items_bought = transactions.count()
-        return self.rooms - num_items_bought
-
     def __str__(self):
         return self.title
 
 class Kamar(models.Model):
     rumah = models.ForeignKey(Rumah, on_delete=models.CASCADE, blank=True, null=True, related_name='kamar')
-    price_day = models.DecimalField(max_digits=50, decimal_places=0, blank=True, null=True)
-    price_month = models.DecimalField(max_digits=50, decimal_places=0, blank=True, null=True)
-    price_year = models.DecimalField(max_digits=50, decimal_places=0, blank=True, null=True)
+    address_room = models.CharField(max_length=150, blank=True, null=True)
     picture_room = models.ImageField(
             blank=True, null=True, upload_to=upload_to, max_length=455)
     room_size = models.CharField(max_length=150, blank=True, null=True)
-    address_room = models.CharField(max_length=150, blank=True, null=True)
+    price_day = models.DecimalField(max_digits=50, decimal_places=0, blank=True, null=True)
+    price_month = models.DecimalField(max_digits=50, decimal_places=0, blank=True, null=True)
+    price_year = models.DecimalField(max_digits=50, decimal_places=0, blank=True, null=True)
+  
+    
     barang_dipesan = models.BooleanField(default=False)
     
     def __str__(self):
