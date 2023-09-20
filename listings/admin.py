@@ -20,7 +20,7 @@ class TransactionAdmin(admin.ModelAdmin):
 
 class ReviewInline(admin.TabularInline):
     model = Review
-    search_fields = ('rumah__title', 'user__username')
+    fields = ['rumah', 'user', 'comment', 'rate']
 
 class RumahAdmin(admin.ModelAdmin):
     list_display = ('title', 'user', 'date_posted')

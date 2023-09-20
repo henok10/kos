@@ -56,7 +56,7 @@ const colors = {
 };
 
 function Review() {
-  const customerId = useSelector((state) => state.auth.customerId);
+  const userId = useSelector((state) => state.auth.userId);
   const params = useParams();
   const classes = useStyles();
   const [comment, setComment] = useState("");
@@ -66,6 +66,8 @@ function Review() {
   const [hoverValue, setHoverValue] = useState(undefined);
   const stars = Array(5).fill(0);
 
+  console.log(userId)
+
   const handleSubmit = (event) => {
     event.preventDefault();
     axios
@@ -73,7 +75,7 @@ function Review() {
         comment: comment,
         rate: rate,
         rumah: params.id,
-        customer: customerId,
+        user: userId,
       })
       .then((response) => {
         setSuccess(true);

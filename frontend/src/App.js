@@ -36,6 +36,7 @@ import KamarAdd from "./pages/KamarAdd";
 
 
 function App() {
+  
   const [isSidebar, setIsSidebar] = useState(true);
   return (
           <div className="app">
