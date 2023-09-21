@@ -59,7 +59,6 @@ function TheMapComponent({ listingInfo }) {
         lineOptions: {
           styles: [{ color: "#6FA1EC", opacity: 1, weight: 6 }],
         },
-        // geocoder: L.Control.Geocoder,
         routeWhileDragging: true,
         draggableWaypoints: true,
         fitSelectedRoutes: true,

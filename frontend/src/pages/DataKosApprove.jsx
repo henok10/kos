@@ -206,7 +206,7 @@ export default function DataTableApprove() {
     {
       field: "approve",
       headerName: "Aksi",
-      width: 150,
+      width: 210,
       renderCell: (params) => {
         if (params.value === true) {
           return (
@@ -249,7 +249,7 @@ export default function DataTableApprove() {
   ];
   return (
     <>
-      <Grid height={"60%"} margin='auto' width='80%'>
+      <Grid height={"60%"} margin='auto' width='90%'>
         <Grid marginTop={"2rem"}>
           <Button
             color="primary"

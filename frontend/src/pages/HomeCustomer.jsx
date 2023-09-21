@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { getCustomerUser } from "../actions/auth";
 import { useDispatch, useSelector } from "react-redux";
-import HouseList from "../components/HomeList";
+import HomeImg from "../components/HomeImg";
 
 function CustomerHome() {
   const dispatch = useDispatch();
@@ -15,7 +15,7 @@ function CustomerHome() {
   console.log(isauthentication);
   return (
     <>
-      <HouseList />
+      <HomeImg />
     </>
   );
 }

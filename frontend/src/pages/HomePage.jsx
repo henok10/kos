@@ -1,10 +1,11 @@
 import React from "react";
-import HouseList from "../components/HomeList";
+import HomeImg from "../components/HomeImg";
+
 
 const HomePage = () => {
   return (
     <>
-      <HouseList />
+      <HomeImg />
     </>
   );
 };

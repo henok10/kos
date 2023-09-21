@@ -20,7 +20,6 @@ const useStyles = makeStyles(() => ({
   cardStyle: {
     marginTop: "0.5rem",
     marginLeft: "0.5rem",
-
     border: "4px solid white",
     position: "relative",
     height: "21rem",
@@ -79,7 +78,6 @@ export default function Listing({ filtered, isLoading }) {
       {filtered.slice(0, 9).map((listing) => {
         return (
           <Grid item xs={12} sm={6} md={4}>
-            <div></div>
             <Card key={listing.id} className={classes.cardStyle}>
               <CardMedia
                 // className={classes.pictureStyle}

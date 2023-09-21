@@ -14,7 +14,6 @@ import {
   MenuItem,
   TextField,
 } from "@mui/material";
-import { styled } from "@mui/material/styles";
 
 const useStyles = makeStyles(() => {
   const baseTypography = {
@@ -25,17 +24,15 @@ const useStyles = makeStyles(() => {
     title: {
       ...baseTypography,
       fontWeight: "bold",
-      fontSize: "32px",
       margin: "auto",
-      marginTop: "18rem",
       textAlign: "center",
       color: "white",
     },
     heading: {
       ...baseTypography,
       fontWeight: "bold",
-      fontSize: "48px",
-      marginTop: "10px",
+      textAlign: "center",
+      paddingTop: "10rem",
     },
     subtitle: {
       ...baseTypography,
@@ -44,17 +41,18 @@ const useStyles = makeStyles(() => {
       textAlign: "center",
     },
     form: {
-      marginTop: "50px",
-      paddingLeft: "40px",
-      paddingRight: "40px",
+      marginTop: "25px",
+      padding: "20px",
       margin: "auto",
-      width: "90%", // Lebar default saat layar penuh
-      height: "55%",
-      marginBottom: 0,
+      width: "90%",
+      height: "100%",
       backgroundColor: "white",
     },
     box: {
-      margin: "15px",
+      margin: "5px",
+      justifyContent: "center",
+      width: "90%",
+      padding: "5px",
     },
     label: {
       ...baseTypography,
@@ -93,7 +91,7 @@ const useStyles = makeStyles(() => {
   };
 });
 
-function Search({ setSearchResults }) {
+function Search({ setSearchResults, filtered, dataIsLoading }) {
   const [cityArea, setCityArea] = useState("");
   const [poi, setPoi] = useState("");
   const [poiList, setPoiList] = useState([]);
@@ -150,49 +148,22 @@ function Search({ setSearchResults }) {
       </SliderThumb>
     );
   }
-
-  const AirbnbSlider = styled(Slider)(({ theme }) => ({
-    color: "#3a8589",
-    height: 3,
-    padding: "13px 0",
-    "& .MuiSlider-thumb": {
-      height: 27,
-      width: 27,
-      backgroundColor: "#fff",
-      border: "1px solid currentColor",
-      "&:hover": {
-        boxShadow: "0 0 0 8px rgba(58, 133, 137, 0.16)",
-      },
-      "& .airbnb-bar": {
-        height: 9,
-        width: 1,
-        backgroundColor: "currentColor",
-        marginLeft: 1,
-        marginRight: 1,
-      },
-    },
-    "& .MuiSlider-track": {
-      height: 3,
-    },
-    "& .MuiSlider-rail": {
-      color: theme.palette.mode === "dark" ? "#bfbfbf" : "#d8d8d8",
-      opacity: theme.palette.mode === "dark" ? undefined : 1,
-      height: 3,
-    },
-  }));
-
-  // AirbnbThumbComponent.propTypes = {
-  //   children: PropTypes.node,
-  // };
-
   return (
-    <>
-      <Container style={{}}>
+    <Grid container marginBottom={0} marginTop="5rem">
+      <Grid item xs={12} sm={12} md={12} lg={12}>
         <Box className={classes.title}>
           <Typography
-            style={{ margin: "auto", textAlign: "center", marginTop: "5rem" }}
+            style={{
+              marginTop: "25rem",
+              margin: "auto",
+              textAlign: "center",
+            }}
           >
-            <Typography className={classes.heading} variant="h1">
+            <Typography
+              style={{ fontWeight: "bold" }}
+              className={classes.heading}
+              variant="h2"
+            >
               Search Rumah Kos
             </Typography>
             <Typography className={classes.subtitle} variant="subtitle1">
@@ -200,10 +171,11 @@ function Search({ setSearchResults }) {
             </Typography>
           </Typography>
         </Box>
-
+      </Grid>
+      <Grid item sm={12} md={12} lg={12} width="100%">
         <form className={classes.form}>
-          <Grid container spacing={2}>
-            <Grid item xs={12} sm={12} md={3}>
+          <Grid container spacing={1}>
+            <Grid item xs={6} sm={3} md={3}>
               <Box className={classes.box}>
                 <Typography className={classes.label} variant="body1">
                   City/area
@@ -215,7 +187,9 @@ function Search({ setSearchResults }) {
                     fullWidth
                     value={cityArea}
                     onChange={(e, newValue) => setCityArea(newValue)}
-                    options={listingList.map((listingItem) => listingItem.borough)}
+                    options={listingList.map(
+                      (listingItem) => listingItem.borough
+                    )}
                     renderInput={(params) => (
                       <TextField
                         {...params}
@@ -228,7 +202,7 @@ function Search({ setSearchResults }) {
               </Box>
             </Grid>
 
-            <Grid item xs={12} sm={12} md={3}>
+            <Grid item xs={6} sm={3} md={3}>
               <Box className={classes.box}>
                 <Typography className={classes.label} variant="body1">
                   Point of Interest
@@ -253,7 +227,7 @@ function Search({ setSearchResults }) {
               </Box>
             </Grid>
 
-            <Grid item xs={12} sm={12} md={3}>
+            <Grid item xs={6} sm={3} md={3}>
               <Box className={classes.box}>
                 <Typography className={classes.label} variant="body1">
                   Price
@@ -273,7 +247,7 @@ function Search({ setSearchResults }) {
               </Box>
             </Grid>
 
-            <Grid item xs={12} sm={12} md={3}>
+            <Grid item xs={6} sm={3} md={3}>
               <Box className={classes.box}>
                 <Typography
                   className={classes.label}
@@ -285,7 +259,11 @@ function Search({ setSearchResults }) {
                 <Button
                   variant="outlined"
                   size="small"
-                  style={{ margin: "auto", display: "block", width: "8rem" }}
+                  style={{
+                    margin: "auto",
+                    display: "block",
+                    width: "8rem",
+                  }}
                   color="primary"
                   onClick={handleSearch}
                 >
@@ -295,8 +273,8 @@ function Search({ setSearchResults }) {
             </Grid>
           </Grid>
         </form>
-      </Container>
-    </>
+      </Grid>
+    </Grid>
   );
 }
 

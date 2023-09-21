@@ -40,4 +40,12 @@ urlpatterns = [
      path('fasilitas-rumah/create', listings_api_views.FasilitasRumahCreate.as_view()),
      path('fasilitas-kamar/create', listings_api_views.FasilitasKamarCreate.as_view()),
      path('poi-list', listings_api_views.PoiList.as_view()),
+
+     path('rule-rumah/<int:pk>/update', listings_api_views.RuleRumahUpdate.as_view()),
+     path('rule-rumah/<int:rumah>/', listings_api_views.RuleRumahList.as_view()),
+     path('rule-rumah/create', listings_api_views.RuleRumahCreate.as_view()),
+
+     path('rule-kamar/<int:pk>/update', listings_api_views.RuleKamarUpdate.as_view()),
+     path('rule-kamar/<int:kamar>/', listings_api_views.RuleKamarList.as_view()),
+     path('rule-kamar/create', listings_api_views.RuleKamarCreate.as_view()),
 ]

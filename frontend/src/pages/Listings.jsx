@@ -30,9 +30,9 @@ import houseIconPng from "../data/Mapicons/house.png";
 
 const useStyles = makeStyles({
   cardStyle: {
-    marginTop: "0.5rem",
-    marginLeft: "0.5rem",
+    justifyContent: 'space-between',
     border: "4px solid white",
+    width: '98%',
     position: "relative",
     height: "21rem",
   },
@@ -105,21 +105,25 @@ function Listings() {
 
   function handleSearch(event) {
     event.preventDefault();
-    // const filteredData = allListings.filter((item) =>
-    //   item.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    //   item.description.toLowerCase().includes(searchTerm.toLowerCase())
-    // );
     setSearchResults(allListings);
+  }
+
+  function fuzzySearch(needle, haystack) {
+    // Split the search term into words
+    const words = needle.toLowerCase().split(' ');
+    
+    // Check if any of the words match any part of the haystack
+    return words.every(word => {
+      return haystack.toLowerCase().includes(word);
+    });
   }
 
   const filteredListings = allListings.filter((listing) => {
     return (
-      listing.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      listing.price_per_month
-        .toLowerCase()
-        .includes(searchTerm.toLowerCase()) ||
-      listing.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      listing.borough.toLowerCase().includes(searchTerm.toLowerCase())
+      fuzzySearch(searchTerm, listing.title) ||
+      // fuzzySearch(searchTerm, listing.price_month) ||
+      fuzzySearch(searchTerm, listing.description) ||
+      fuzzySearch(searchTerm, listing.borough)
     );
   });
 
@@ -146,6 +150,7 @@ function Listings() {
               sx={{
                 display: "flex",
                 alignItems: "center",
+                // width: '100%',
                 paddingLeft: "0.8rem",
               }}
               onSubmit={handleSearch}
@@ -154,7 +159,6 @@ function Listings() {
                 style={{ height: "100%" }}
                 id="outlined-basic"
                 placeholder="Silakan Cari Di Sini..."
-                size="small"
                 fullWidth
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}

@@ -1,6 +1,6 @@
 from rest_framework import generics, permissions, status
-from .serializers import ListingSerializer, TransactionSerializer, ReviewSerializer, KamarSerializer, FasilitasKamarSerializer, FasilitasRumahSerializer, PoiSerializer
-from listings.models import Rumah, Transaction, Review, Kamar, FasilitasKamar, FasilitasRumah, Poi
+from .serializers import ListingSerializer, TransactionSerializer, ReviewSerializer, KamarSerializer, FasilitasKamarSerializer, FasilitasRumahSerializer, PoiSerializer, RuleRumahSerializer, RuleKamarSerializer
+from listings.models import Rumah, Transaction, Review, Kamar, FasilitasKamar, FasilitasRumah, Poi, RuleKamar, RuleRumah
 from rest_framework import generics
 from rest_framework.permissions import IsAuthenticated
 from users.models import User, Customer, Owner
@@ -162,6 +162,46 @@ class FasilitasRumahList(generics.ListAPIView):
 class FasilitasRumahCreate(generics.CreateAPIView):
     serializer_class = FasilitasRumahSerializer
     queryset = FasilitasRumah.objects.all()
+
+
+
+class RuleRumahUpdate(generics.UpdateAPIView):
+    serializer_class = RuleRumahSerializer
+    queryset = RuleRumah.objects.all()
+  
+
+class RuleRumahList(generics.ListAPIView):
+    serializer_class = RuleRumahSerializer
+    def get_queryset(self):
+        rumah_id = self.kwargs['rumah']
+        rumah = Rumah.objects.get(id=rumah_id)
+        queryset = RuleRumah.objects.filter(rumah=rumah).order_by('aturan')
+        return queryset
+
+class RuleRumahCreate(generics.CreateAPIView):
+    serializer_class = RuleRumahSerializer
+    queryset = RuleRumah.objects.all()
+
+
+class RuleKamarUpdate(generics.UpdateAPIView):
+    serializer_class = RuleKamarSerializer
+    queryset = RuleKamar.objects.all()
+  
+
+class RuleKamarList(generics.ListAPIView):
+    serializer_class = RuleKamarSerializer
+    def get_queryset(self):
+        kamar_id = self.kwargs['kamar']
+        kamar = Kamar.objects.get(id=kamar_id)
+        queryset = RuleKamar.objects.filter(kamar=kamar).order_by('aturan')
+        return queryset
+
+class RuleKamarCreate(generics.CreateAPIView):
+    serializer_class = RuleRumahSerializer
+    queryset = RuleKamar.objects.all()
+
+
+
 
 class PoiList(generics.ListAPIView):
     serializer_class = PoiSerializer

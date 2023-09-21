@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { getOwnerUser } from "../actions/auth";
 import { useDispatch } from "react-redux";
-import HouseList from "../components/HomeList";
+import HomeImg from "../components/HomeImg";
 
 function OwnerHome() {
   const dispatch = useDispatch();
@@ -10,7 +10,7 @@ function OwnerHome() {
   }, [dispatch]);
   return (
     <>
-      <HouseList />
+      <HomeImg />
     </>
   );
 }
