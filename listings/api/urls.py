@@ -39,6 +39,10 @@ urlpatterns = [
      path('fasilitas-rumah/<int:rumah>/', listings_api_views.FasilitasRumahList.as_view()),
      path('fasilitas-rumah/create', listings_api_views.FasilitasRumahCreate.as_view()),
      path('fasilitas-kamar/create', listings_api_views.FasilitasKamarCreate.as_view()),
+     path('fasilitas-kamar/<int:pk>/delete',
+         listings_api_views.FasilitasKamarDelete.as_view()),
+     path('fasilitas-rumah/<int:pk>/delete',
+         listings_api_views.FasilitasRumahDelete.as_view()),
      path('poi-list', listings_api_views.PoiList.as_view()),
 
      path('rule-rumah/<int:pk>/update', listings_api_views.RuleRumahUpdate.as_view()),

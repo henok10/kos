@@ -163,6 +163,14 @@ class FasilitasRumahCreate(generics.CreateAPIView):
     serializer_class = FasilitasRumahSerializer
     queryset = FasilitasRumah.objects.all()
 
+class FasilitasKamarDelete(generics.DestroyAPIView):
+    serializer_class = FasilitasKamarSerializer
+    queryset = FasilitasKamar.objects.all()
+
+class FasilitasRumahDelete(generics.DestroyAPIView):
+    serializer_class = FasilitasRumahSerializer
+    queryset = FasilitasRumah.objects.all()
+
 
 
 class RuleRumahUpdate(generics.UpdateAPIView):
@@ -198,6 +206,14 @@ class RuleKamarList(generics.ListAPIView):
         return queryset
 
 class RuleKamarCreate(generics.CreateAPIView):
+    serializer_class = RuleKamarSerializer
+    queryset = RuleKamar.objects.all()
+
+class RuleRumahDelete(generics.DestroyAPIView):
+    serializer_class = RuleRumahSerializer
+    queryset = RuleRumah.objects.all()
+
+class RuleKamarDelete(generics.DestroyAPIView):
     serializer_class = RuleKamarSerializer
     queryset = RuleKamar.objects.all()
 

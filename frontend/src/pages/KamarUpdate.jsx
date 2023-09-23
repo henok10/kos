@@ -1,9 +1,11 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import Axios from "axios";
 import { useImmerReducer } from "use-immer";
 import { choices } from "../components/Choice";
-import Swal from 'sweetalert2';
+import Swal from "sweetalert2";
+import IconButton from "@mui/material/IconButton";
+import DeleteIcon from "@mui/icons-material/Delete";
 
 // MUI
 import { Grid, Typography, Button, TextField, Snackbar } from "@mui/material";
@@ -35,6 +37,7 @@ function KamarUpdate() {
   const params = useParams();
   const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
   const isOwner = useSelector((state) => state.auth.isOwner);
+  const [fasilitass, setFasilitass] = useState([]);
 
   useEffect(() => {
     if (!isAuthenticated) {
@@ -161,6 +164,15 @@ function KamarUpdate() {
           draft.newFacility = ""; // Reset the newFacility state after adding to facilities
         }
         break;
+
+      case "removeFacility":
+        draft.facilities.splice(action.indexToRemove, 1);
+        break;
+
+      case "removeFacilityInfo":
+        draft.fasilitasInfo.splice(action.indexToRemove, 1);
+        break;
+
       case "changeSendRequest":
         draft.sendRequest = draft.sendRequest + 1;
         break;
@@ -256,6 +268,20 @@ function KamarUpdate() {
     }
   };
 
+  function handleRemoveFacility(indexToRemove) {
+    dispatch({
+      type: "removeFacility",
+      indexToRemove,
+    });
+  }
+
+  const handleRemoveFacilityInfo = (indexToRemove) => {
+    dispatch({
+      type: "removeFacilityInfo",
+      indexToRemove,
+    });
+  };
+
   function FormSubmit(e) {
     e.preventDefault();
 
@@ -320,35 +346,29 @@ function KamarUpdate() {
     GetFasilitasInfo();
   }, [dispatch, params.id]);
 
-  const handleFacilityChange = async (event, index) => {
-    const newValue = event.target.value;
+  // Untuk mengubah fasilitas, Anda perlu membuat fungsi yang memperbarui fasilitas yang diperlukan dalam state dan kemudian memanggil fungsi updateFacilities dengan fasilitas yang diperbarui.
+  function handleFacilityChange(newValue, index) {
+    // Salin objek fasilitas yang akan diubah
+    const updatedFacilities = [...state.fasilitasInfo];
+    const updatedFacility = updatedFacilities[index];
 
-    try {
-      const updatedFacilities = state.fasilitasInfo.map((facility, i) =>
-        i === index ? { ...facility, name: newValue } : facility
-      );
+    // Buat salinan objek dengan nilai properti 'name' yang diubah
+    const updatedFacilityCopy = {
+      ...updatedFacility,
+      name: newValue,
+    };
 
-      await Axios.put(
-        `https://mykos2.onrender.com/api/fasilitas-kamar/${state.fasilitasInfo[index].id}/update`,
-        { name: newValue }
-      );
+    // Perbarui fasilitas di dalam array dengan salinan yang telah diubah
+    updatedFacilities[index] = updatedFacilityCopy;
 
-      dispatch({
-        type: "catchFasilitasChange",
-        index: index,
-        fasilitasChosen: newValue,
-      });
+    // Perbarui fasilitas di state dan panggil fungsi untuk memperbarui fasilitas di backend.
+    dispatch({
+      type: "catchFasilitasChange",
+      index: index,
+      fasilitasChosen: newValue,
+    });
 
-      dispatch({
-        type: "updateFacilities",
-        facilities: updatedFacilities,
-      });
-    } catch (error) {
-      console.error("Gagal mengupdate fasilitas:", error);
-    }
-  };
-
-  // .
+  }
 
   console.log(state.fasilitasInfo);
   useEffect(() => {
@@ -379,11 +399,16 @@ function KamarUpdate() {
           name: facility,
         }));
 
+        const facilitiesUpdate = state.fasilitasInfo.map((facilitas) => ({
+          name: facilitas.name,
+          id: facilitas.id,
+        }));
+
         const confirmUpdate = await Swal.fire({
-          title: 'Do you want to save the changes?',
+          title: "Do you want to save the changes?",
           showDenyButton: true,
           showCancelButton: true,
-          confirmButtonText: 'Save',
+          confirmButtonText: "Save",
           denyButtonText: `Don't save`,
         });
         if (confirmUpdate.isConfirmed) {
@@ -406,32 +431,40 @@ function KamarUpdate() {
                 }
               );
             }
-            Swal.fire('Saved!', '', 'success')
+            for (const facilitas of facilitiesUpdate) {
+              // Perbarui fasilitas dengan menggunakan Axios.put
+              console.log("Facilitas ID:", facilitas.id);
+              await Axios.put(
+                `https://mykos2.onrender.com/api/fasilitas-kamar/${facilitas.id}/update`,
+                { name: facilitas.name }
+              );
+            }
+
+            Swal.fire("Saved!", "", "success");
             dispatch({ type: "openTheSnack" });
           } catch (e) {
             dispatch({ type: "allowTheButton" });
           }
         } else if (confirmUpdate.isDenied) {
           // Handle the case where the user chooses not to save the changes
-          Swal.fire('Changes are not saved', '', 'info');
+          Swal.fire("Changes are not saved", "", "info");
         }
       }
 
       AddProperty();
     }
   }, [
-    state.sendRequest, 
-    params.id, 
-    dispatch, 
+    state.sendRequest,
+    params.id,
+    dispatch,
     state.addressRoomValue,
     state.priceDayValue,
     state.priceMonthValue,
     state.priceYearValue,
     state.roomSizeValue,
     state.facilities,
-    state.pictureRoomValue
+    state.pictureRoomValue,
   ]);
-
 
   useEffect(() => {
     if (state.openSnack) {
@@ -576,18 +609,27 @@ function KamarUpdate() {
           {state.fasilitasInfo.map((facility, index) => (
             <Grid
               item
-              xs={2.5}
+              xs={3.5}
               key={index}
               style={{ marginRight: "5px", marginTop: "10px" }}
             >
-              <Typography>{facility.name}</Typography>
+              <Typography>
+                {facility.name}{" "}
+                <IconButton
+                  onClick={() => handleRemoveFacilityInfo(index)}
+                  aria-label="Remove Facility Info"
+                  color="error"
+                >
+                  <DeleteIcon />
+                </IconButton>
+              </Typography>
               <TextField
                 id={`Facility-${index}`}
                 label="Fasilitas"
                 variant="standard"
                 fullWidth
                 value={facility.name}
-                onChange={(e) => handleFacilityChange(e, index)}
+                onChange={(e) => handleFacilityChange(e.target.value, index)}
                 select
                 SelectProps={{
                   native: true,
@@ -602,46 +644,71 @@ function KamarUpdate() {
             </Grid>
           ))}
         </Grid>
-
         {/* ## */}
 
-        <Grid item container xs={6}>
-          <TextField
-            id="newFacility"
-            label="Fasilitas Baru"
-            variant="standard"
-            fullWidth
-            value={state.newFacility}
-            onChange={handleFacilityAdd}
-            select
-            SelectProps={{
-              native: true,
-            }}
-          >
-            {choice_kamar.map((option) => (
-              <option key={option.value} value={option.value}>
-                {option.label}
-              </option>
-            ))}
-          </TextField>
-          <Button
-            variant="contained"
-            color="primary"
-            fullWidth
-            onClick={handleAddFacility}
-            style={{ marginTop: "5px" }}
-            disabled={!state.newFacility.trim()}
-          >
-            Tambahkan Fasilitas
-          </Button>
-        </Grid>
+        <Grid
+          item
+          container
+          xs={12}
+          justifyContent="space-between"
+          marginTop="2rem"
+        >
+          <Grid item xs={12} sm={12} md={3} lg={3}>
+            <TextField
+              id="newFacility"
+              label="Fasilitas Baru"
+              variant="standard"
+              fullWidth
+              value={state.newFacility}
+              onChange={handleFacilityAdd}
+              select
+              SelectProps={{
+                native: true,
+              }}
+            >
+              {choice_kamar.map((option) => (
+                <option key={option.value} value={option.value}>
+                  {option.label}
+                </option>
+              ))}
+            </TextField>
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={handleAddFacility}
+              style={{ marginTop: "5px", width: "6rem" }}
+              disabled={!state.newFacility.trim()}
+            >
+              Add
+            </Button>
+          </Grid>
 
-        <Grid item container>
-          {state.facilities.map((facility, index) => (
-            <Grid item xs={3} key={index}>
-              <Typography>{facility}</Typography>
+          <Grid item xs={12} sm={12} md={8} lg={8}>
+            <Grid item container>
+              {state.facilities.map((facility, index) => (
+                <Grid item xs={12} sm={12} md={6} lg={6} key={index}>
+                  <Grid item xs={6}>
+                    <Typography
+                      style={{
+                        justifyContent: "space-between",
+                        width: "15rem",
+                      }}
+                    >
+                      {facility}{" "}
+                      <IconButton
+                        onClick={() => handleRemoveFacility(index)}
+                        aria-label="Remove Facility"
+                        color="error"
+                      >
+                        <DeleteIcon />
+                        {/* You can use an appropriate delete icon */}
+                      </IconButton>
+                    </Typography>
+                  </Grid>
+                </Grid>
+              ))}
             </Grid>
-          ))}
+          </Grid>
         </Grid>
 
         <Grid item container>
@@ -678,7 +745,7 @@ function KamarUpdate() {
                       height: "4rem",
                       width: "3rem",
                     }}
-                    alt='gambar-ruangan'
+                    alt="gambar-ruangan"
                     src={state.kamarInfo.picture_room}
                   />
                 </Grid>
