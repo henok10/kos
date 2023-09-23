@@ -261,10 +261,24 @@ function KamarUpdate() {
     });
   }
 
+  function handleRuleAdd(event) {
+    dispatch({
+      type: "catchNewRule",
+      newRuleChosen: event.target.value,
+    });
+  }
+
   const handleAddFacility = () => {
     if (state.newFacility && state.newFacility.trim()) {
       dispatch({ type: "addFacility", newFacilityChosen: state.newFacility });
       dispatch({ type: "catchNewFacility", newFacilityChosen: "" });
+    }
+  };
+
+  const handleAddRule = () => {
+    if (state.newRule && state.newRule.trim()) {
+      dispatch({ type: "addRule", newRuleChosen: state.newRule });
+      dispatch({ type: "catchNewRule", newRuleChosen: "" });
     }
   };
 
@@ -275,12 +289,54 @@ function KamarUpdate() {
     });
   }
 
-  const handleRemoveFacilityInfo = (indexToRemove) => {
+  function handleRemoveRule(indexToRemove) {
     dispatch({
-      type: "removeFacilityInfo",
+      type: "removeRule",
       indexToRemove,
     });
-  };
+  }
+
+  async function deleteFacility(facilityId) {
+    try {
+      await Axios.delete(
+        `https://mykos2.onrender.com/api/fasilitas-kamar/${facilityId}/delete`
+      );
+      // Kemudian perbarui state atau lakukan tindakan lain yang sesuai
+      // Misalnya, dapat Anda hapus fasilitas dari state fasilitasInfo
+      // atau perbarui tampilan fasilitas.
+      const updatedFasilitasInfo = state.fasilitasInfo.filter(
+        (facility) => facility.id !== facilityId
+      );
+      dispatch({
+        type: "catchFasilitasInfo",
+        fasilitasObject: updatedFasilitasInfo,
+      });
+    } catch (error) {
+      // Handle error jika terjadi kesalahan saat menghapus fasilitas
+      console.error("Error deleting facility:", error);
+    }
+  }
+
+  async function deleteRule(ruleId) {
+    try {
+      await Axios.delete(
+        `https://mykos2.onrender.com/api/fasilitas-kamar/${facilityId}/delete`
+      );
+      // Kemudian perbarui state atau lakukan tindakan lain yang sesuai
+      // Misalnya, dapat Anda hapus fasilitas dari state fasilitasInfo
+      // atau perbarui tampilan fasilitas.
+      const updatedFasilitasInfo = state.fasilitasInfo.filter(
+        (facility) => facility.id !== facilityId
+      );
+      dispatch({
+        type: "catchFasilitasInfo",
+        fasilitasObject: updatedFasilitasInfo,
+      });
+    } catch (error) {
+      // Handle error jika terjadi kesalahan saat menghapus fasilitas
+      console.error("Error deleting facility:", error);
+    }
+  }
 
   function FormSubmit(e) {
     e.preventDefault();
@@ -346,6 +402,22 @@ function KamarUpdate() {
     GetFasilitasInfo();
   }, [dispatch, params.id]);
 
+  useEffect(() => {
+    async function GetRuleInfo() {
+      try {
+        const response = await Axios.get(
+          `https://mykos2.onrender.com/api/rule-kamar/${params.id}/`
+        );
+
+        dispatch({
+          type: "catchRuleInfo",
+          ruleObject: response.data,
+        });
+      } catch (e) {}
+    }
+    GetRuleInfo();
+  }, [dispatch, params.id]);
+
   // Untuk mengubah fasilitas, Anda perlu membuat fungsi yang memperbarui fasilitas yang diperlukan dalam state dan kemudian memanggil fungsi updateFacilities dengan fasilitas yang diperbarui.
   function handleFacilityChange(newValue, index) {
     // Salin objek fasilitas yang akan diubah
@@ -367,7 +439,6 @@ function KamarUpdate() {
       index: index,
       fasilitasChosen: newValue,
     });
-
   }
 
   console.log(state.fasilitasInfo);
@@ -404,6 +475,15 @@ function KamarUpdate() {
           id: facilitas.id,
         }));
 
+        const rulesArray = state.rules.map((rule) => ({
+          aturan: rule,
+        }));
+
+        const rulesUpdate = state.ruleInfo.map((ruless) => ({
+          aturan: ruless.aturan,
+          id: ruless.id,
+        }));
+
         const confirmUpdate = await Swal.fire({
           title: "Do you want to save the changes?",
           showDenyButton: true,
@@ -437,6 +517,24 @@ function KamarUpdate() {
               await Axios.put(
                 `https://mykos2.onrender.com/api/fasilitas-kamar/${facilitas.id}/update`,
                 { name: facilitas.name }
+              );
+            }
+
+            for (const rule of rulesArray) {
+              await Axios.post(
+                "https://mykos2.onrender.com/api/fasilitas-kamar/create",
+                {
+                  kamar: kamarId,
+                  aturan: rule.aturan,
+                }
+              );
+            }
+            for (const ruless of rulesUpdate) {
+              // Perbarui fasilitas dengan menggunakan Axios.put
+              // console.log("Facilitas ID:", facilitas.id);
+              await Axios.put(
+                `https://mykos2.onrender.com/api/fasilitas-kamar/${ruless.id}/update`,
+                { aturan: ruless.aturan }
               );
             }
 
@@ -609,14 +707,14 @@ function KamarUpdate() {
           {state.fasilitasInfo.map((facility, index) => (
             <Grid
               item
-              xs={3.5}
+              xs={5.5}
               key={index}
               style={{ marginRight: "5px", marginTop: "10px" }}
             >
               <Typography>
                 {facility.name}{" "}
                 <IconButton
-                  onClick={() => handleRemoveFacilityInfo(index)}
+                  onClick={() => deleteFacility(facility.id)}
                   aria-label="Remove Facility Info"
                   color="error"
                 >
@@ -710,6 +808,101 @@ function KamarUpdate() {
             </Grid>
           </Grid>
         </Grid>
+
+        {/*  */}
+
+        <Typography style={{ marginTop: "1rem" }}>Aturan Kamar Kos : </Typography>
+        <Grid item xs={12} container justifyContent="space-between">
+          {state.RuleInfo.map((rule, index) => (
+            <Grid
+              item
+              xs={5.5}
+              key={index}
+              style={{ marginRight: "5px", marginTop: "10px" }}
+            >
+              <Typography>
+                {rule.name}{" "}
+                <IconButton
+                  onClick={() => deleteRule(rule.id)}
+                  aria-label="Remove Facility Info"
+                  color="error"
+                >
+                  <DeleteIcon />
+                </IconButton>
+              </Typography>
+              <TextField
+                id={`Facility-${index}`}
+                label="Fasilitas"
+                variant="standard"
+                fullWidth
+                value={rule.name}
+                onChange={(e) => handleRuleChange(e.target.value, index)}
+              >
+
+              </TextField>
+            </Grid>
+          ))}
+        </Grid>
+        {/* ## */}
+
+        <Grid
+          item
+          container
+          xs={12}
+          justifyContent="space-between"
+          marginTop="2rem"
+        >
+          <Grid item xs={12} sm={12} md={3} lg={3}>
+            <TextField
+              id="newRule"
+              label="Aturan Baru"
+              variant="standard"
+              fullWidth
+              value={state.newRule}
+              onChange={handleRuleAdd}
+            >
+
+            </TextField>
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={handleAddRule}
+              style={{ marginTop: "5px", width: "6rem" }}
+              disabled={!state.newRule.trim()}
+            >
+              Add
+            </Button>
+          </Grid>
+
+          <Grid item xs={12} sm={12} md={8} lg={8}>
+            <Grid item container>
+              {state.rules.map((rule, index) => (
+                <Grid item xs={12} sm={12} md={6} lg={6} key={index}>
+                  <Grid item xs={6}>
+                    <Typography
+                      style={{
+                        justifyContent: "space-between",
+                        width: "15rem",
+                      }}
+                    >
+                      {facility}{" "}
+                      <IconButton
+                        onClick={() => handleRemoveRule(index)}
+                        aria-label="Remove Facility"
+                        color="error"
+                      >
+                        <DeleteIcon />
+                        {/* You can use an appropriate delete icon */}
+                      </IconButton>
+                    </Typography>
+                  </Grid>
+                </Grid>
+              ))}
+            </Grid>
+          </Grid>
+        </Grid>
+
+        {/*  */}
 
         <Grid item container>
           <Grid item xs={3}>
