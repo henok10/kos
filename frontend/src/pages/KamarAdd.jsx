@@ -4,6 +4,8 @@ import Axios from "axios";
 import { useImmerReducer } from "use-immer";
 import { choices } from "../components/Choice";
 import Swal from "sweetalert2";
+import IconButton from "@mui/material/IconButton";
+import DeleteIcon from "@mui/icons-material/Delete";
 
 // MUI
 import { Grid, Typography, Button, TextField, Snackbar } from "@mui/material";
@@ -56,6 +58,8 @@ function KamarAdd() {
     roomSizeValue: "",
     facilities: [],
     newFacility: "", // State untuk menyimpan fasilitas baru yang akan dimasukkan
+    rules: [],
+    newRule: "",
     pictureRoomValue: [],
     sendRequest: 0,
     openSnack: false,
@@ -126,12 +130,31 @@ function KamarAdd() {
         draft.newFacility = action.newFacilityChosen;
         break;
 
+      case "catchNewRule":
+        draft.newRule = action.newRuleChosen;
+        break;
+
       case "addFacility":
         if (action.newFacilityChosen.trim()) {
           draft.facilities.push(action.newFacilityChosen.trim());
           draft.newFacility = ""; // Reset the newFacility state after adding to facilities
         }
         break;
+
+      case "addRule":
+        if (action.newRuleChosen.trim()) {
+          draft.rules.push(action.newRuleChosen.trim());
+          draft.newRule = ""; // Reset the newFacility state after adding to facilities
+        }
+        break;
+
+      case "removeFacility":
+        draft.facilities.splice(action.indexToRemove, 1);
+        break;
+      case "removeRule":
+        draft.rules.splice(action.indexToRemove, 1);
+        break;
+
       case "changeSendRequest":
         draft.sendRequest = draft.sendRequest + 1;
         break;
@@ -227,6 +250,34 @@ function KamarAdd() {
     }
   };
 
+  function handleRuleChange(event) {
+    dispatch({
+      type: "catchNewRule",
+      newRuleChosen: event.target.value,
+    });
+  }
+
+  const handleAddRule = () => {
+    if (state.newRule && state.newRule.trim()) {
+      dispatch({ type: "addRule", newRuleChosen: state.newRule });
+      dispatch({ type: "catchNewRule", newRuleChosen: "" });
+    }
+  };
+
+  function handleRemoveFacility(indexToRemove) {
+    dispatch({
+      type: "removeFacility",
+      indexToRemove,
+    });
+  }
+
+  function handleRemoveRule(indexToRemove) {
+    dispatch({
+      type: "removeRule",
+      indexToRemove,
+    });
+  }
+
   function FormSubmit(e) {
     e.preventDefault();
 
@@ -274,11 +325,12 @@ function KamarAdd() {
         const facilitiesArray = state.facilities.map((facility) => ({
           name: facility,
         }));
-        // formData.append("fasilitaskamar_set", JSON.stringify(facilitiesArray));
-        // const confirmAdd = window.confirm(
-        //   "Are you sure you want to add this Kamar?"
-        // );
-        // if (confirmAdd) {
+console.log(state.rules)
+        const rulesArray = state.rules.map((rule) => ({
+          aturan: rule,
+        }));
+        
+  
         Swal.fire({
           title: "Are you sure?",
           text: "Are you sure you want to add this Kamar?",
@@ -305,6 +357,19 @@ function KamarAdd() {
                   {
                     kamar: kamarId,
                     name: facility.name,
+                  }
+                );
+              }
+
+
+              for (const rule of rulesArray) {
+                console.log(rule)
+                await Axios.post(
+                  "https://mykos2.onrender.com/api/rule-kamar/create",
+                  {
+                    kamar: kamarId,
+                    aturan: rule.aturan,
+                    
                   }
                 );
               }
@@ -485,43 +550,100 @@ function KamarAdd() {
             helperText={state.roomSizeErrors.errorMessage}
           />
         </Grid>
-        <Grid item container xs={6}>
-          <TextField
-            id="newFacility"
-            label="Fasilitas Baru"
-            variant="standard"
-            fullWidth
-            value={state.newFacility}
-            onChange={handleFacilityChange}
-            select
-            SelectProps={{
-              native: true,
-            }}
-          >
-            {choice_kamar.map((option) => (
-              <option key={option.value} value={option.value}>
-                {option.label}
-              </option>
-            ))}
-          </TextField>
-          <Button
-            variant="contained"
-            color="primary"
-            fullWidth
-            onClick={handleAddFacility}
-            style={{ marginTop: "5px" }}
-            disabled={!state.newFacility.trim()}
-          >
-            Tambahkan Fasilitas
-          </Button>
+        <Grid item container xs={12} justifyContent="space-between">
+          <Grid item xs={12} sm={12} md={5} lg={5}>
+            <TextField
+              id="newFacility"
+              label="Fasilitas Baru"
+              variant="standard"
+              fullWidth
+              value={state.newFacility}
+              onChange={handleFacilityChange}
+              select
+              SelectProps={{
+                native: true,
+              }}
+            >
+              {choice_kamar.map((option) => (
+                <option key={option.value} value={option.value}>
+                  {option.label}
+                </option>
+              ))}
+            </TextField>
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={handleAddFacility}
+              style={{ marginTop: "5px", width: "7rem" }}
+              disabled={!state.newFacility.trim()}
+            >
+              Add
+            </Button>
+          </Grid>
+          <Grid item xs={12} sm={12} md={6} lg={6}>
+            <Grid item container>
+              {state.facilities.map((facility, index) => (
+                <Grid item xs={12} sm={12} md={6} lg={6} key={index}>
+                  <Grid item xs={6} justifyContent="space-between">
+                    <Typography>
+                      {facility}{" "}
+                      <IconButton
+                        onClick={() => handleRemoveFacility(index)}
+                        aria-label="Remove Facility"
+                        color="secondary"
+                      >
+                        <DeleteIcon />{" "}
+                        {/* You can use an appropriate delete icon */}
+                      </IconButton>
+                    </Typography>
+                  </Grid>
+                </Grid>
+              ))}
+            </Grid>
+          </Grid>
         </Grid>
 
-        <Grid item container>
-          {state.facilities.map((facility, index) => (
-            <Grid item xs={3} key={index}>
-              <Typography>{facility}</Typography>
+        <Grid item container xs={12} justifyContent="space-between">
+          <Grid item xs={12} sm={12} md={5} lg={5}>
+            <TextField
+              id="newRule"
+              label="Rule Baru"
+              variant="standard"
+              fullWidth
+              value={state.newRule}
+              onChange={handleRuleChange}
+            ></TextField>
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={handleAddRule}
+              style={{ marginTop: "5px", width: "7rem" }}
+              disabled={!state.newRule.trim()}
+            >
+              Add
+            </Button>
+          </Grid>
+          <Grid item xs={12} sm={12} md={6} lg={6}>
+            <Grid item container>
+              {state.rules.map((rule, index) => (
+                <Grid item xs={12} sm={12} md={12} lg={12} key={index}>
+                  <Grid item xs={6} justifyContent="space-between">
+                    <Typography>
+                      {rule}{" "}
+                      <IconButton
+                        onClick={() => handleRemoveRule(index)}
+                        aria-label="Remove Rule Kamar"
+                        color="secondary"
+                      >
+                        <DeleteIcon />{" "}
+                        {/* You can use an appropriate delete icon */}
+                      </IconButton>
+                    </Typography>
+                  </Grid>
+                </Grid>
+              ))}
             </Grid>
-          ))}
+          </Grid>
         </Grid>
 
         <Grid item container></Grid>

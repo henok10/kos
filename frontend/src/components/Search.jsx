@@ -42,23 +42,23 @@ const useStyles = makeStyles(() => {
     },
     form: {
       marginTop: "25px",
-      padding: "20px",
+      padding: "15px",
       margin: "auto",
       width: "90%",
       height: "100%",
       backgroundColor: "white",
     },
     box: {
-      margin: "5px",
-      justifyContent: "center",
-      width: "90%",
+      // margin: "auto",
+      // justifyContent: "center",
+      width: "100%",
       padding: "5px",
     },
     label: {
       ...baseTypography,
       fontWeight: "bold",
       fontSize: "16px",
-      margin: "10px 0",
+      // margin: "10px 0",
       color: "lightblue",
     },
     textField: {
@@ -175,7 +175,7 @@ function Search({ setSearchResults, filtered, dataIsLoading }) {
       <Grid item sm={12} md={12} lg={12} width="100%">
         <form className={classes.form}>
           <Grid container spacing={1}>
-            <Grid item xs={6} sm={3} md={3}>
+            <Grid item xs={6} sm={6} md={3} lg={3}>
               <Box className={classes.box}>
                 <Typography className={classes.label} variant="body1">
                   City/area
@@ -202,7 +202,7 @@ function Search({ setSearchResults, filtered, dataIsLoading }) {
               </Box>
             </Grid>
 
-            <Grid item xs={6} sm={3} md={3}>
+            <Grid item xs={6} sm={6} md={3} lg={3}>
               <Box className={classes.box}>
                 <Typography className={classes.label} variant="body1">
                   Point of Interest
@@ -227,7 +227,7 @@ function Search({ setSearchResults, filtered, dataIsLoading }) {
               </Box>
             </Grid>
 
-            <Grid item xs={6} sm={3} md={3}>
+            <Grid item xs={6} sm={6} md={3} lg={3}>
               <Box className={classes.box}>
                 <Typography className={classes.label} variant="body1">
                   Price
@@ -247,7 +247,7 @@ function Search({ setSearchResults, filtered, dataIsLoading }) {
               </Box>
             </Grid>
 
-            <Grid item xs={6} sm={3} md={3}>
+            <Grid item xs={6} sm={6} md={3} lg={3}>
               <Box className={classes.box}>
                 <Typography
                   className={classes.label}

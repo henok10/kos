@@ -11,7 +11,7 @@ const Register = () => {
         </Link>
       </div>
       <div className="flex-fill text-center">
-        <h3>Signup as a property owner</h3>
+        <h3>Signup as a pemilik kos</h3>
         <Link to="/owner/signup" className="btn btn-warning">
           Signup
         </Link>

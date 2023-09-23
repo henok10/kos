@@ -63,7 +63,7 @@ const CustomerSignup = ({
     return <Navigate to="/customer/home" />;
   }
   return (
-    <div className="container" style={{ marginTop: "5rem", width: "60%" }}>
+    <div className="container" style={{ marginTop: "5rem", width: "50%" }}>
       <Grid item container justifyContent="center">
         <Typography variant="h4">SIGNUP AS A CUSTOMER</Typography>
       </Grid>
@@ -84,26 +84,28 @@ const CustomerSignup = ({
                 label="Username"
                 name="username"
                 variant="outlined"
+                size="small"
                 fullWidth
                 value={username}
                 onChange={(e) => handleChange(e)}
               />
             </Grid>
 
-            <Grid item container style={{ marginTop: "1rem" }}>
+            <Grid item container style={{ marginTop: "10px" }}>
               {errors.email && <p style={{ color: "red" }}>{errors.email}</p>}
               <TextField
                 id="email"
                 label="Email"
                 name="email"
                 variant="outlined"
+                size="small"
                 fullWidth
                 type="email"
                 value={email}
                 onChange={(e) => handleChange(e)}
               />
             </Grid>
-            <Grid item container style={{ marginTop: "1rem" }}>
+            <Grid item container style={{ marginTop: "10px" }}>
               {errors.password && (
                 <p style={{ color: "red" }}>{errors.password}</p>
               )}
@@ -112,13 +114,14 @@ const CustomerSignup = ({
                 label="Password"
                 name="password"
                 variant="outlined"
+                size="small"
                 fullWidth
                 type="password"
                 value={password}
                 onChange={(e) => handleChange(e)}
               />
             </Grid>
-            <Grid item container style={{ marginTop: "1rem" }}>
+            <Grid item container style={{ marginTop: "10px" }}>
               {errors.password2 && (
                 <p style={{ color: "red" }}>{errors.password2}</p>
               )}
@@ -127,6 +130,7 @@ const CustomerSignup = ({
                 label="Confirm password"
                 name="password2"
                 variant="outlined"
+                size="small"
                 fullWidth
                 type="password"
                 value={password2}

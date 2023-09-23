@@ -197,7 +197,7 @@ class RuleKamarList(generics.ListAPIView):
         return queryset
 
 class RuleKamarCreate(generics.CreateAPIView):
-    serializer_class = RuleRumahSerializer
+    serializer_class = RuleKamarSerializer
     queryset = RuleKamar.objects.all()
 
 

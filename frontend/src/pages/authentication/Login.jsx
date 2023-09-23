@@ -12,7 +12,7 @@ import { Validation } from "./validation";
 
 const useStyles = makeStyles({
   formContainer: {
-    width: "70%",
+    width: "60%",
     marginLeft: "auto",
     marginRight: "auto",
     marginTop: "3rem",
@@ -90,6 +90,7 @@ function Login({ login, isAuthenticated, isCustomer, isOwner, clearErrors }) {
                 <TextField
                   id="email"
                   label="Email"
+                  size="small"
                   fullWidth
                   name="email"
                   variant="outlined"
@@ -104,6 +105,7 @@ function Login({ login, isAuthenticated, isCustomer, isOwner, clearErrors }) {
                 <TextField
                   id="password"
                   label="Password"
+                  size="small"
                   fullWidth
                   name="password"
                   variant="outlined"
@@ -122,9 +124,13 @@ function Login({ login, isAuthenticated, isCustomer, isOwner, clearErrors }) {
                   marginLeft: "auto",
                   marginRight: "auto",
                 }}
-                disabled={Object.keys(errors).length > 0} // Menonaktifkan tombol jika ada kesalahan
               >
-                <Button variant="contained" fullWidth type="submit">
+                <Button
+                  variant="contained"
+                  fullWidth
+                  type="submit"
+                  disabled={Object.keys(errors).length > 0}
+                >
                   SIGN IN
                 </Button>
               </Grid>

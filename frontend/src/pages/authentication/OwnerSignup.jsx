@@ -57,7 +57,7 @@ const OwnerSignup = ({ create_owneruser, isAuthenticated, isOwner }) => {
     return <Navigate to="/owner/home" />;
   }
   return (
-    <div className="container" style={{ marginTop: "5rem", width: "60%" }}>
+    <div className="container" style={{ marginTop: "5rem", width: "50%" }}>
       <Grid item container justifyContent="center">
         <Typography variant="h4">SIGNUP AS A PEMILIK KOS</Typography>
       </Grid>
@@ -78,6 +78,7 @@ const OwnerSignup = ({ create_owneruser, isAuthenticated, isOwner }) => {
                 label="Username"
                 name="username"
                 variant="outlined"
+                size="small"
                 fullWidth
                 value={username}
                 onChange={(e) => handleChange(e)}
@@ -91,6 +92,7 @@ const OwnerSignup = ({ create_owneruser, isAuthenticated, isOwner }) => {
                 label="Email"
                 name="email"
                 variant="outlined"
+                size="small"
                 fullWidth
                 type="email"
                 value={email}
@@ -107,6 +109,7 @@ const OwnerSignup = ({ create_owneruser, isAuthenticated, isOwner }) => {
                 label="Password"
                 name="password"
                 variant="outlined"
+                size="small"
                 fullWidth
                 type="password"
                 value={password}
@@ -122,6 +125,7 @@ const OwnerSignup = ({ create_owneruser, isAuthenticated, isOwner }) => {
                 label="Confirm password"
                 name="password2"
                 variant="outlined"
+                size="small"
                 fullWidth
                 type="password"
                 value={password2}
