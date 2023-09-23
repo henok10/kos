@@ -183,6 +183,7 @@ class RuleRumahCreate(generics.CreateAPIView):
     queryset = RuleRumah.objects.all()
 
 
+
 class RuleKamarUpdate(generics.UpdateAPIView):
     serializer_class = RuleKamarSerializer
     queryset = RuleKamar.objects.all()
