@@ -325,7 +325,7 @@ function KamarAdd() {
         const facilitiesArray = state.facilities.map((facility) => ({
           name: facility,
         }));
-console.log(state.rules)
+
         const rulesArray = state.rules.map((rule) => ({
           aturan: rule,
         }));
@@ -584,7 +584,7 @@ console.log(state.rules)
             <Grid item container>
               {state.facilities.map((facility, index) => (
                 <Grid item xs={12} sm={12} md={6} lg={6} key={index}>
-                  <Grid item xs={6} justifyContent="space-between">
+                  <Grid item xs={6} justifyContent="space-between" width= "15rem">
                     <Typography>
                       {facility}{" "}
                       <IconButton

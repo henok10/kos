@@ -4,6 +4,8 @@ import Axios from "axios";
 import { useImmerReducer } from "use-immer";
 import { choices } from "../components/Choice";
 import Swal from "sweetalert2";
+import IconButton from "@mui/material/IconButton";
+import DeleteIcon from "@mui/icons-material/Delete";
 // MUI
 import { Grid, Typography, Button, TextField, Snackbar } from "@mui/material";
 import { makeStyles } from "@mui/styles";
@@ -45,7 +47,7 @@ function ListingAdd() {
 
   const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
   const isOwner = useSelector((state) => state.auth.isOwner);
-  
+
   useEffect(() => {
     if (!isAuthenticated) {
       navigate("/login");
@@ -68,6 +70,8 @@ function ListingAdd() {
     no_rekeningValue: "",
     facilities: [],
     newFacility: "", // State untuk menyimpan fasilitas baru yang akan dimasukkan
+    rules: [],
+    newRule: "",
     picture1Value: [],
     picture2Value: [],
     picture3Value: [],
@@ -146,6 +150,28 @@ function ListingAdd() {
           draft.facilities.push(action.newFacilityChosen.trim());
           draft.newFacility = ""; // Reset the newFacility state after adding to facilities
         }
+        break;
+
+      case "removeFacility":
+        draft.facilities.splice(action.indexToRemove, 1);
+        break;
+
+      case "catchNewRule":
+        draft.newRule = action.newRuleChosen;
+        break;
+
+      case "addRule":
+        if (action.newRuleChosen.trim()) {
+          draft.rules.push(action.newRuleChosen.trim());
+          draft.newRule = ""; // Reset the newFacility state after adding to facilities
+        }
+        break;
+      case "removeRule":
+        draft.rules.splice(action.indexToRemove, 1);
+        break;
+
+      case "catchNewRule":
+        draft.newRule = action.newRuleChosen;
         break;
 
       case "catchLatitudeChange":
@@ -265,9 +291,7 @@ function ListingAdd() {
         draft.priceMonthErrors.errorMessage = "This field must not be empty";
         break;
 
-
       default:
-
         break;
     }
   }
@@ -303,6 +327,34 @@ function ListingAdd() {
       dispatch({ type: "catchNewFacility", newFacilityChosen: "" });
     }
   };
+
+  function handleRemoveFacility(indexToRemove) {
+    dispatch({
+      type: "removeFacility",
+      indexToRemove,
+    });
+  }
+
+  function handleRuleChange(event) {
+    dispatch({
+      type: "catchNewRule",
+      newRuleChosen: event.target.value,
+    });
+  }
+
+  const handleAddRule = () => {
+    if (state.newRule && state.newRule.trim()) {
+      dispatch({ type: "addRule", newRuleChosen: state.newRule });
+      dispatch({ type: "catchNewRule", newRuleChosen: "" });
+    }
+  };
+
+  function handleRemoveRule(indexToRemove) {
+    dispatch({
+      type: "removeRule",
+      indexToRemove,
+    });
+  }
 
   function FormSubmit(e) {
     e.preventDefault();
@@ -363,6 +415,11 @@ function ListingAdd() {
           )?.icon;
           return { name: facility, icon };
         });
+
+        const rulesArray = state.rules.map((rule) => ({
+          aturan: rule,
+        }));
+
         Swal.fire({
           title: "Are you sure?",
           text: "Are you sure you want to add this Rumah?",
@@ -373,55 +430,65 @@ function ListingAdd() {
           confirmButtonText: "Yes, add it!",
         }).then(async (result) => {
           if (result.isConfirmed) {
-          try {
-            const rumahResponse = await Axios.post(
-              "https://mykos2.onrender.com/api/listings/create/",
-              formData
-            );
-
-            const rumahId = rumahResponse.data.id;
-
-            for (const facility of facilitiesArray) {
-              await Axios.post(
-                "https://mykos2.onrender.com/api/fasilitas-rumah/create",
-                {
-                  rumah: rumahId,
-                  name: facility.name,
-                }
+            try {
+              const rumahResponse = await Axios.post(
+                "https://mykos2.onrender.com/api/listings/create/",
+                formData
               );
-            }
 
-            Swal.fire({
-              position: "center",
-              icon: "success",
-              title: "Rumah telah berhasil disimpan",
-              showConfirmButton: false,
-              timer: 2000,
-            });
-  
-            dispatch({ type: "openTheSnack" });
-          } catch (e) {
-            // Menampilkan notifikasi kesalahan jika terjadi kesalahan
-            Swal.fire({
-              position: "center",
-              icon: "error",
-              title: "Terjadi kesalahan saat menyimpan Rumah",
-              showConfirmButton: false,
-              timer: 2000,
-            });
-            dispatch({ type: "allowTheButton" });
+              const rumahId = rumahResponse.data.id;
+
+              for (const facility of facilitiesArray) {
+                await Axios.post(
+                  "https://mykos2.onrender.com/api/fasilitas-rumah/create",
+                  {
+                    rumah: rumahId,
+                    name: facility.name,
+                  }
+                );
+              }
+              for (const rule of rulesArray) {
+                console.log(rule);
+                await Axios.post(
+                  "https://mykos2.onrender.com/api/rule-rumah/create",
+                  {
+                    rumah: rumahId,
+                    aturan: rule.aturan,
+                  }
+                );
+              }
+
+              Swal.fire({
+                position: "center",
+                icon: "success",
+                title: "Rumah telah berhasil disimpan",
+                showConfirmButton: false,
+                timer: 2000,
+              });
+
+              dispatch({ type: "openTheSnack" });
+            } catch (e) {
+              // Menampilkan notifikasi kesalahan jika terjadi kesalahan
+              Swal.fire({
+                position: "center",
+                icon: "error",
+                title: "Terjadi kesalahan saat menyimpan Rumah",
+                showConfirmButton: false,
+                timer: 2000,
+              });
+              dispatch({ type: "allowTheButton" });
+            }
           }
-        }
-      });
+        });
       }
       AddProperty();
     }
   }, [
-    state.sendRequest, 
-    dispatch, 
-    state.picture1Value, 
-    state.picture2Value, 
-    state.picture3Value, 
+    state.sendRequest,
+    dispatch,
+    state.picture1Value,
+    state.picture2Value,
+    state.picture3Value,
     state.picture4Value,
     state.longitudeValue,
     state.latitudeValue,
@@ -432,8 +499,7 @@ function ListingAdd() {
     state.addressValue,
     state.boroughValue,
     state.facilities,
-    userId
-
+    userId,
   ]);
 
   function SubmitButtonDisplay() {
@@ -665,9 +731,15 @@ function ListingAdd() {
             />
           </Grid>
         </Grid>
-
-        <Grid item container>
-          <Grid item container xs={6}>
+        <Typography style={{ marginTop: "1rem" }}>Fasilitas : </Typography>
+        <Grid
+          item
+          container
+          xs={12}
+          justifyContent="space-between"
+          marginTop="2rem"
+        >
+          <Grid item xs={12} sm={12} md={5} lg={5}>
             <TextField
               id="newFacility"
               label="Fasilitas Baru"
@@ -689,26 +761,79 @@ function ListingAdd() {
             <Button
               variant="contained"
               color="primary"
-              fullWidth
               onClick={handleAddFacility}
-              style={{ marginTop: "5px" }}
+              style={{ marginTop: "5px", width: "7rem" }}
               disabled={!state.newFacility.trim()}
             >
-              Tambahkan Fasilitas
+              Add
             </Button>
           </Grid>
-          <Grid item container>
-            {state.facilities.map((facility, index) => (
-              <Grid item xs={3} key={index}>
-                {
-                  choices().choice_kamar.find((item) => item.value === facility)
-                    ?.icon
-                }
-                <Typography>{facility}</Typography>
-              </Grid>
-            ))}
+          <Grid item xs={12} sm={12} md={6} lg={6}>
+            <Grid item container>
+              {state.facilities.map((facility, index) => (
+                <Grid item xs={12} sm={12} md={6} lg={6} key={index}>
+                  <Grid item xs={6} justifyContent="space-between">
+                    <Typography style={{ width: "15rem" }}>
+                      {facility}{" "}
+                      <IconButton
+                        onClick={() => handleRemoveFacility(index)}
+                        aria-label="Remove Facility"
+                        color="secondary"
+                      >
+                        <DeleteIcon />{" "}
+                        {/* You can use an appropriate delete icon */}
+                      </IconButton>
+                    </Typography>
+                  </Grid>
+                </Grid>
+              ))}
+            </Grid>
           </Grid>
         </Grid>
+
+        <Grid item container xs={12} justifyContent="space-between">
+          <Grid item xs={12} sm={12} md={5} lg={5}>
+            <TextField
+              id="newRule"
+              label="Rule Baru"
+              variant="standard"
+              fullWidth
+              value={state.newRule}
+              onChange={handleRuleChange}
+            ></TextField>
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={handleAddRule}
+              style={{ marginTop: "5px", width: "7rem" }}
+              disabled={!state.newRule.trim()}
+            >
+              Add
+            </Button>
+          </Grid>
+          <Grid item xs={12} sm={12} md={6} lg={6}>
+            <Grid item container>
+              {state.rules.map((rule, index) => (
+                <Grid item xs={12} sm={12} md={12} lg={12} key={index}>
+                  <Grid item xs={6} justifyContent="space-between">
+                    <Typography>
+                      {rule}{" "}
+                      <IconButton
+                        onClick={() => handleRemoveRule(index)}
+                        aria-label="Remove Rule Kamar"
+                        color="secondary"
+                      >
+                        <DeleteIcon />{" "}
+                        {/* You can use an appropriate delete icon */}
+                      </IconButton>
+                    </Typography>
+                  </Grid>
+                </Grid>
+              ))}
+            </Grid>
+          </Grid>
+        </Grid>
+
         <Grid item container>
           <Grid item xs={6}>
             <Grid

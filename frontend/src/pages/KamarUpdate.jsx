@@ -59,9 +59,13 @@ function KamarUpdate() {
     priceYearValue: "",
     roomSizeValue: "",
     fasilitasInfo: [],
+    ruleInfo: [],
     nameFasilitasValue: "",
+    nameRuleValue: "",
     facilities: [],
-    newFacility: "", // State untuk menyimpan fasilitas baru yang akan dimasukkan
+    rules: [],
+    newFacility: "",
+    newRule: "", // State untuk menyimpan fasilitas baru yang akan dimasukkan
     pictureRoomValue: [],
     sendRequest: 0,
     openSnack: false,
@@ -126,6 +130,10 @@ function KamarUpdate() {
         draft.newFacility = action.newFacilityChosen;
         break;
 
+      case "catchNewRule":
+        draft.newRule = action.newRuleChosen;
+        break;
+
       case "catchKamarInfo":
         draft.kamarInfo = action.kamarObject;
         draft.addressRoomValue = action.kamarObject.address_room;
@@ -145,18 +153,18 @@ function KamarUpdate() {
         draft.nameFasilitasValue = action.fasilitasObject.name;
         break;
 
-      case "editFacility":
-        draft.editingIndex = action.index;
-        draft.editingFacility = action.editedFacility;
+      case "catchRuleInfo":
+        draft.ruleInfo = action.ruleObject;
+        draft.nameRuleValue = action.ruleObject.aturan;
         break;
 
       case "catchFasilitasChange":
         draft.fasilitasInfo[action.index].name = action.fasilitasChosen;
         break;
 
-      // case "updateFacilities":
-      // 	draft.facilities = action.facilities;
-      // 	break;
+      case "catchRuleChange":
+        draft.ruleInfo[action.index].aturan = action.ruleChosen;
+        break;
 
       case "addFacility":
         if (action.newFacilityChosen.trim()) {
@@ -165,8 +173,19 @@ function KamarUpdate() {
         }
         break;
 
+      case "addRule":
+        if (action.newRuleChosen.trim()) {
+          draft.rules.push(action.newRuleChosen.trim());
+          draft.newRule = ""; // Reset the newFacility state after adding to facilities
+        }
+        break;
+
       case "removeFacility":
         draft.facilities.splice(action.indexToRemove, 1);
+        break;
+
+      case "removeRule":
+        draft.rules.splice(action.indexToRemove, 1);
         break;
 
       case "removeFacilityInfo":
@@ -320,17 +339,17 @@ function KamarUpdate() {
   async function deleteRule(ruleId) {
     try {
       await Axios.delete(
-        `https://mykos2.onrender.com/api/fasilitas-kamar/${facilityId}/delete`
+        `https://mykos2.onrender.com/api/rule-kamar/${ruleId}/delete`
       );
       // Kemudian perbarui state atau lakukan tindakan lain yang sesuai
       // Misalnya, dapat Anda hapus fasilitas dari state fasilitasInfo
       // atau perbarui tampilan fasilitas.
-      const updatedFasilitasInfo = state.fasilitasInfo.filter(
-        (facility) => facility.id !== facilityId
+      const updatedRuleInfo = state.ruleInfo.filter(
+        (rule) => rule.id !== ruleId
       );
       dispatch({
-        type: "catchFasilitasInfo",
-        fasilitasObject: updatedFasilitasInfo,
+        type: "catchRuleInfo",
+        ruleObject: updatedRuleInfo,
       });
     } catch (error) {
       // Handle error jika terjadi kesalahan saat menghapus fasilitas
@@ -441,7 +460,31 @@ function KamarUpdate() {
     });
   }
 
+  function handleRuleChange(newValue, index) {
+    // Salin objek fasilitas yang akan diubah
+    const updatedRules = [...state.ruleInfo];
+    const updatedRule = updatedRules[index];
+
+    // Buat salinan objek dengan nilai properti 'name' yang diubah
+    const updatedRuleCopy = {
+      ...updatedRule,
+      name: newValue,
+    };
+
+    // Perbarui fasilitas di dalam array dengan salinan yang telah diubah
+    updatedRules[index] = updatedRuleCopy;
+
+    // Perbarui fasilitas di state dan panggil fungsi untuk memperbarui fasilitas di backend.
+    dispatch({
+      type: "catchRuleChange",
+      index: index,
+      ruleChosen: newValue,
+    });
+  }
+
   console.log(state.fasilitasInfo);
+  console.log(state.ruleInfo);
+
   useEffect(() => {
     if (state.sendRequest) {
       async function AddProperty() {
@@ -522,7 +565,7 @@ function KamarUpdate() {
 
             for (const rule of rulesArray) {
               await Axios.post(
-                "https://mykos2.onrender.com/api/fasilitas-kamar/create",
+                "https://mykos2.onrender.com/api/rule-kamar/create",
                 {
                   kamar: kamarId,
                   aturan: rule.aturan,
@@ -533,7 +576,7 @@ function KamarUpdate() {
               // Perbarui fasilitas dengan menggunakan Axios.put
               // console.log("Facilitas ID:", facilitas.id);
               await Axios.put(
-                `https://mykos2.onrender.com/api/fasilitas-kamar/${ruless.id}/update`,
+                `https://mykos2.onrender.com/api/rule-kamar/${ruless.id}/update`,
                 { aturan: ruless.aturan }
               );
             }
@@ -811,9 +854,11 @@ function KamarUpdate() {
 
         {/*  */}
 
-        <Typography style={{ marginTop: "1rem" }}>Aturan Kamar Kos : </Typography>
+        <Typography style={{ marginTop: "1rem" }}>
+          Aturan Kamar Kos :{" "}
+        </Typography>
         <Grid item xs={12} container justifyContent="space-between">
-          {state.RuleInfo.map((rule, index) => (
+          {state.ruleInfo.map((rule, index) => (
             <Grid
               item
               xs={5.5}
@@ -821,7 +866,7 @@ function KamarUpdate() {
               style={{ marginRight: "5px", marginTop: "10px" }}
             >
               <Typography>
-                {rule.name}{" "}
+                {rule.aturan}{" "}
                 <IconButton
                   onClick={() => deleteRule(rule.id)}
                   aria-label="Remove Facility Info"
@@ -835,11 +880,9 @@ function KamarUpdate() {
                 label="Fasilitas"
                 variant="standard"
                 fullWidth
-                value={rule.name}
+                value={rule.aturan}
                 onChange={(e) => handleRuleChange(e.target.value, index)}
-              >
-
-              </TextField>
+              ></TextField>
             </Grid>
           ))}
         </Grid>
@@ -860,9 +903,7 @@ function KamarUpdate() {
               fullWidth
               value={state.newRule}
               onChange={handleRuleAdd}
-            >
-
-            </TextField>
+            ></TextField>
             <Button
               variant="contained"
               color="primary"
@@ -885,7 +926,7 @@ function KamarUpdate() {
                         width: "15rem",
                       }}
                     >
-                      {facility}{" "}
+                      {rule}{" "}
                       <IconButton
                         onClick={() => handleRemoveRule(index)}
                         aria-label="Remove Facility"

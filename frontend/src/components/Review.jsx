@@ -22,7 +22,6 @@ const useStyles = makeStyles((theme) => ({
   submitButton: {
     marginTop: "1rem",
     width: "50%",
-    // marginTop: theme.spacing(2),
   },
   container: {
     display: "flex",
@@ -129,7 +128,7 @@ function Review() {
             );
           })}
         </div>
-        <div style={{ margin: "20px" }}>
+        <div style={{ margin: "20px",  marginTop:"1rem" }}>
           <FormControl className={classes.textarea}>
             <TextField
               id="comment"
@@ -139,7 +138,7 @@ function Review() {
               variant="outlined"
               value={comment}
               onChange={(e) => setComment(e.target.value)}
-              marginTop="1rem"
+             
             />
           </FormControl>
         </div>

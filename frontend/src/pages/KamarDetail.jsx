@@ -8,8 +8,7 @@ import { choices } from "../components/Choice";
 
 // MUI
 import { Grid, Typography, CircularProgress, Box, Paper } from "@mui/material";
-import ArrowCircleLeftIcon from "@mui/icons-material/ArrowCircleLeft";
-import ArrowCircleRightIcon from "@mui/icons-material/ArrowCircleRight";
+import ErrorIcon from "@mui/icons-material/Error";
 
 const useStyles = makeStyles({
   sliderContainer: {
@@ -47,6 +46,7 @@ function KamarDetail() {
   const classes = useStyles();
   const params = useParams();
   const [allFasilitas, setAllFasilitas] = useState([]);
+  const [allRule, setAllRule] = useState([]);
   const initialState = {
     dataIsLoading: true,
     kamarInfo: "",
@@ -125,6 +125,21 @@ function KamarDetail() {
   }, [state.kamarInfo]);
   console.log(allFasilitas);
 
+  useEffect(() => {
+    if (state.kamarInfo) {
+      async function GetRuleInfo() {
+        try {
+          const response = await Axios.get(
+            `https://mykos2.onrender.com/api/rule-kamar/${state.kamarInfo.id}/`
+          );
+          const data = response.data;
+          setAllRule(data);
+        } catch (e) {}
+      }
+      GetRuleInfo();
+    }
+  }, [params.id]);
+
   const kamarPictures = [
     state.kamarInfo.picture_room,
     // state.kamarInfo.picture2,
@@ -173,34 +188,15 @@ function KamarDetail() {
 
   // console.log(state.kamarInfo.rumah)
   return (
-    <div style={{height: 550, margin: "auto",  padding: '1rem'}}>
+    <div style={{ height: 550, margin: "auto", padding: "1rem" }}>
       <Grid
         container
         width={"80%"}
         margin="auto"
         marginTop="1rem"
-        border="px solid black"
-        backgroundColor= "#F8F8FF"
+        backgroundColor="#F8F8FF"
       >
-        <Grid
-          item
-          lg={5}
-          md={5}
-          sm={12}
-          xs={12}
-          width={"100%"}
-          // height={'60%'}
-        >
-          <img
-            src={state.kamarInfo.picture_room}
-            alt="kamar"
-            style={{
-              width: "98%",
-            }}
-          />
-        </Grid>
-
-        <Grid item lg={7} md={7} sm={12} xs={12} >
+        <Grid item lg={7} md={7} sm={12} xs={12}>
           <Grid
             style={{
               padding: "1rem",
@@ -225,10 +221,15 @@ function KamarDetail() {
               paddingLeft: "1rem",
             }}
           >
-            <Typography variant="h6" style={{ fontSize: "16px",  display: 'inline' }}>
-              Alamat Kamar : 
+            <Typography
+              variant="h6"
+              style={{ fontSize: "16px", display: "inline" }}
+            >
+              Alamat Kamar :
             </Typography>
-            <p style={{display: 'inline', marginLeft: '4px'}}>{state.kamarInfo.address_room}</p>
+            <p style={{ display: "inline", marginLeft: "4px" }}>
+              {state.kamarInfo.address_room}
+            </p>
           </Grid>
 
           <Grid
@@ -237,15 +238,20 @@ function KamarDetail() {
               paddingLeft: "1rem",
             }}
           >
-            <Typography variant="h6" style={{ fontSize: "16px", display: 'inline' }}>
-              Ukuran Kamar : 
+            <Typography
+              variant="h6"
+              style={{ fontSize: "16px", display: "inline" }}
+            >
+              Ukuran Kamar :
             </Typography>
-            <p style={{display: 'inline', marginLeft: '4px'}} >{state.kamarInfo.room_size}</p>
+            <p style={{ display: "inline", marginLeft: "4px" }}>
+              {state.kamarInfo.room_size}
+            </p>
           </Grid>
 
           <Grid container style={{ paddingLeft: "1rem" }}>
             <Typography variant="h6" style={{ fontSize: "16px" }}>
-              Fasilitas Kamar 
+              Fasilitas Kamar :
             </Typography>
             <Grid container>
               <Grid item xs={12} md={6} style={{ paddingRight: "1rem" }}>
@@ -268,6 +274,59 @@ function KamarDetail() {
               </Grid>
             </Grid>
           </Grid>
+
+          <Grid
+            item
+            style={{
+              padding: "1rem",
+              marginTop: "0.3rem",
+            }}
+          >
+            <Grid>
+              <div>
+                <Typography variant="h6" style={{ fontSize: "16px" }}>
+                  Peraturan Kamar Kos :
+                </Typography>
+              </div>
+
+              <Grid container>
+                <Grid item xs={12} md={12} style={{ paddingRight: "1rem" }}>
+                  {allRule.slice(0, 4).map((rule, index) => (
+                    <Box key={index} display="flex" alignItems="center">
+                      <ErrorIcon
+                        style={{
+                          marginLeft: "0.5rem",
+                          width: "24px",
+                          height: "24px",
+                        }}
+                      />
+                      <Typography style={{ marginLeft: "6px" }}>
+                        {rule.aturan}
+                      </Typography>
+                    </Box>
+                  ))}
+                </Grid>
+              </Grid>
+            </Grid>
+          </Grid>
+        </Grid>
+        <Grid
+          item
+          lg={5}
+          md={5}
+          sm={12}
+          xs={12}
+          width={"100%"}
+          // height={'60%'}
+        >
+          <img
+            src={state.kamarInfo.picture_room}
+            alt="kamar"
+            style={{
+              width: "98%",
+              border: "25px solid #F8F8FF",
+            }}
+          />
         </Grid>
       </Grid>
     </div>

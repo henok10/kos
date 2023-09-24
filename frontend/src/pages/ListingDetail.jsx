@@ -14,6 +14,7 @@ import { useImmerReducer } from "use-immer";
 import stadiumIconPng from "../data/Mapicons/stadium.png";
 import hospitalIconPng from "../data/Mapicons/hospital.png";
 import universityIconPng from "../data/Mapicons/university.png";
+import ErrorIcon from "@mui/icons-material/Error";
 // React Leaflet
 import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
 import { Icon } from "leaflet";
@@ -80,6 +81,7 @@ function ListingDetail() {
   const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
   const isCustomer = useSelector((state) => state.auth.isCustomer);
   const [allFasilitas, setAllFasilitas] = useState([]);
+  const [allRule, setAllRule] = useState([]);
   const [allKamar, setAllKamar] = useState([]);
 
   useEffect(() => {
@@ -221,6 +223,19 @@ function ListingDetail() {
   }, [params.id]);
 
   useEffect(() => {
+    async function GetRuleInfo() {
+      try {
+        const response = await Axios.get(
+          `https://mykos2.onrender.com/api/rule-rumah/${params.id}/`
+        );
+        const data = response.data;
+        setAllRule(data);
+      } catch (e) {}
+    }
+    GetRuleInfo();
+  }, [params.id]);
+
+  useEffect(() => {
     async function GetAllKamar() {
       try {
         const totalRoomsByListing = {};
@@ -325,15 +340,7 @@ function ListingDetail() {
     setSelectedOption(event.target.value);
   };
 
-  // let priceText = "";
 
-  // if (selectedOption === "bulan") {
-  //   priceText = `Harga Rp${state.listingInfo.price_month}/bulan`;
-  // } else if (selectedOption === "hari") {
-  //   priceText = `Harga Rp${state.listingInfo.price_day}/hari`;
-  // } else if (selectedOption === "tahun") {
-  //   priceText = `Harga Rp${state.listingInfo.price_year}/tahun`;
-  // }
 
   useEffect(() => {
     if (state.openSnack) {
@@ -357,7 +364,14 @@ function ListingDetail() {
   }
   return (
     <>
-      <Grid item style={{ marginTop: "1rem", marginBottom: "0.5rem", marginLeft: '5rem' }}>
+      <Grid
+        item
+        style={{
+          marginTop: "1rem",
+          marginBottom: "0.5rem",
+          marginLeft: "5rem",
+        }}
+      >
         <Breadcrumbs aria-label="breadcrumb">
           <Link
             underline="hover"
@@ -373,250 +387,297 @@ function ListingDetail() {
           </Typography>
         </Breadcrumbs>
       </Grid>
-    
-    <div style={{ margin: "auto", width: "80%", marginBottom: "2rem", marginTop: '1rem' }}>
-    
-      {/* information */}
-      <Grid container>
-        <Grid
-          item
-          lg={7.5}
-          md={7.5}
-          sm={12}
-          xs={12}
-          width={"100%"}
-          backgroundColor="#F8F8FF"
-        >
+
+      <div
+        style={{
+          margin: "auto",
+          width: "80%",
+          marginBottom: "2rem",
+          marginTop: "1rem",
+        }}
+      >
+        {/* information */}
+        <Grid container>
           <Grid
             item
-            container
-            style={{
-              padding: "1rem",
-              borderBottom: "1px solid gray",
-              // marginTop: "1rem",
-              width: "100%",
-            }}
+            lg={7.5}
+            md={7.5}
+            sm={12}
+            xs={12}
+            width={"100%"}
+            backgroundColor="#F8F8FF"
           >
-            <Grid item container xs={12} direction="column" spacing={1}>
-              <Grid item>
-                <Typography variant="h6">{state.listingInfo.title}</Typography>
-              </Grid>
-              <Grid item>
-                <Typography varaiant="h6">
-                  <RoomIcon /> {state.listingInfo.borough} | {formattedDate}
-                </Typography>
-              </Grid>
-            </Grid>
-          </Grid>
-
-          {/* Alamat */}
-
-          <Grid
-            item
-            style={{
-              padding: "1rem",
-              borderBottom: "1px solid gray",
-              marginTop: "0.3rem",
-            }}
-          >
-            <Typography variant="h6" style={{ fontSize: "16px" }}>
-              Alamat :
-            </Typography>
-            {state.listingInfo.address ? (
-              <Typography variant="body1" style={{ fontSize: "15px" }}>
-                {state.listingInfo.address}
-              </Typography>
-            ) : (
-              ""
-            )}
-          </Grid>
-
-          <Grid
-            item
-            style={{
-              padding: "1rem",
-              borderBottom: "1px solid gray",
-              marginTop: "0.3rem",
-            }}
-          >
-            <Typography variant="h6" style={{ fontSize: "16px" }}>
-              No Rekening :
-            </Typography>
-            {state.listingInfo.no_rekening ? (
-              <Typography variant="body1" style={{ fontSize: "15px" }}>
-                {state.listingInfo.no_rekening}
-              </Typography>
-            ) : (
-              ""
-            )}
-          </Grid>
-          <Grid
-            item
-            container
-            style={{
-              padding: "1rem",
-              borderBottom: "1px solid gray",
-              marginTop: "0.3rem",
-              width: "100%",
-            }}
-          >
-            <div>
-              <Typography variant="h6" style={{ fontSize: "16px" }}>
-                Kamar Yang Tersedia :
-              </Typography>
-              <Typography variant="body1" style={{ fontSize: "15px" }}>
-                {kamarKosong} Rooms
-              </Typography>
-            </div>
-          </Grid>
-
-          <Grid
-            item
-            justifyContent="flex-start"
-            style={{
-              padding: "1rem",
-              borderBottom: "1px solid gray",
-              marginTop: "0.3rem",
-            }}
-          >
-            <Grid>
-              <div>
-                <Typography variant="h6" style={{ fontSize: "16px" }}>
-                  Fasilitas :
-                </Typography>
-              </div>
-
-              <Grid container>
-                <Grid item xs={12} md={6} style={{ paddingRight: "1rem" }}>
-                  {allFasilitas.slice(0, 4).map((listing, index) => (
-                    <Box key={index} display="flex" alignItems="center">
-                      <img
-                        src={getIconUrl(listing.name)}
-                        alt={listing.name}
-                        style={{
-                          marginLeft: "0.5rem",
-                          width: "24px",
-                          height: "24px",
-                        }}
-                      />
-                      <Typography style={{ marginLeft: "6px" }}>
-                        {listing.name}
-                      </Typography>
-                    </Box>
-                  ))}
+            <Grid
+              item
+              container
+              style={{
+                padding: "1rem",
+                borderBottom: "1px solid gray",
+                // marginTop: "1rem",
+                width: "100%",
+              }}
+            >
+              <Grid item container xs={12} direction="column" spacing={1}>
+                <Grid item>
+                  <Typography variant="h6">
+                    {state.listingInfo.title}
+                  </Typography>
+                </Grid>
+                <Grid item>
+                  <Typography varaiant="h6">
+                    <RoomIcon /> {state.listingInfo.borough} | {formattedDate}
+                  </Typography>
                 </Grid>
               </Grid>
             </Grid>
-          </Grid>
-          <Grid>
-            {/* Description */}
-            {state.listingInfo.description ? (
-              <Grid
-                item
-                style={{
-                  padding: "1rem",
-                  marginTop: "0.3rem",
-                }}
-              >
-                <Typography variant="h6" style={{ fontSize: "16px" }}>
-                  Description :
-                </Typography>
-                <Typography variant="body1" style={{ fontSize: "15px" }}>
-                  {state.listingInfo.description}
-                </Typography>
-              </Grid>
-            ) : (
-              ""
-            )}
-          </Grid>
-        </Grid>
 
-        <Grid
-          item
-          lg={4.5}
-          md={4.5}
-          sm={12}
-          xs={12}
-          width={"100%"}
-          style={{ paddingLeft: "0.5rem" }}
-        >
-          {/* Image slider */}
-          <Box position="sticky" top="0">
-            <Paper
-              style={{ border: "2px solid white", backgroundColor: "#F8F8FF" }}
+            {/* Alamat */}
+
+            <Grid
+              item
+              style={{
+                padding: "1rem",
+                borderBottom: "1px solid gray",
+                marginTop: "0.3rem",
+              }}
             >
-              {listingPictures.length > 0 ? (
-                <Box>
-                  <Grid
-                    item
-                    container
-                    justifyContent="center"
-                    className={classes.sliderContainer}
-                  >
-                    {listingPictures.map((picture, index) => {
-                      return (
-                        <div key={index}>
-                          {index === currentPicture ? (
-                            <img
-                              src={picture}
-                              alt="gambarrumah"
-                              style={{
-                                width: "100%",
-                                height: "100%",
-                                objectFit: "cover", // Adjusts image to cover the container while maintaining aspect ratio
-                              }}
-                            />
-                          ) : (
-                            ""
-                          )}
-                        </div>
-                      );
-                    })}
-                    <ArrowCircleLeftIcon
-                      onClick={PreviousPicture}
-                      className={classes.leftArrow}
-                    />
-                    <ArrowCircleRightIcon
-                      onClick={NextPicture}
-                      className={classes.rightArrow}
-                    />
-                  </Grid>
-                </Box>
+              <Typography variant="h6" style={{ fontSize: "16px" }}>
+                Alamat :
+              </Typography>
+              {state.listingInfo.address ? (
+                <Typography variant="body1" style={{ fontSize: "15px" }}>
+                  {state.listingInfo.address}
+                </Typography>
               ) : (
                 ""
               )}
-            </Paper>
-            <Paper
+            </Grid>
+
+            <Grid
+              item
               style={{
-                width: "100%",
-                marginTop: "0.5rem",
-                padding: "0.5rem",
-                backgroundColor: "#F8F8FF",
+                padding: "1rem",
+                borderBottom: "1px solid gray",
+                marginTop: "0.3rem",
               }}
             >
-              <Grid item container xs={12} alignItems="center">
-                <Typography
-                  variant="h6"
+              <Typography variant="h6" style={{ fontSize: "16px" }}>
+                No Rekening :
+              </Typography>
+              {state.listingInfo.no_rekening ? (
+                <Typography variant="body1" style={{ fontSize: "15px" }}>
+                  {state.listingInfo.no_rekening}
+                </Typography>
+              ) : (
+                ""
+              )}
+            </Grid>
+            <Grid
+              item
+              container
+              style={{
+                padding: "1rem",
+                borderBottom: "1px solid gray",
+                marginTop: "0.3rem",
+                width: "100%",
+              }}
+            >
+              <div>
+                <Typography variant="h6" style={{ fontSize: "16px" }}>
+                  Kamar Yang Tersedia :
+                </Typography>
+                <Typography variant="body1" style={{ fontSize: "15px" }}>
+                  {kamarKosong} Rooms
+                </Typography>
+              </div>
+            </Grid>
+
+            <Grid
+              item
+              justifyContent="flex-start"
+              style={{
+                padding: "1rem",
+                borderBottom: "1px solid gray",
+                marginTop: "0.3rem",
+              }}
+            >
+              <Grid>
+                <div>
+                  <Typography variant="h6" style={{ fontSize: "16px" }}>
+                    Fasilitas :
+                  </Typography>
+                </div>
+
+                <Grid container>
+                  <Grid item xs={12} md={6} style={{ paddingRight: "1rem", width: "100%"}}>
+                    {allFasilitas.slice(0, 4).map((listing, index) => (
+                      <Box key={index} display="flex" alignItems="center">
+                        <img
+                          src={getIconUrl(listing.name)}
+                          alt={listing.name}
+                          style={{
+                            marginLeft: "0.5rem",
+                            width: "24px",
+                            height: "24px",
+                          }}
+                        />
+                        <Typography style={{ marginLeft: "6px" }}>
+                          {listing.name}
+                        </Typography>
+                      </Box>
+                    ))}
+                  </Grid>
+                </Grid>
+              </Grid>
+            </Grid>
+
+            <Grid
+              item
+
+              style={{
+                padding: "1rem",
+                borderBottom: "1px solid gray",
+                marginTop: "0.3rem"
+              }}
+            >
+              <Grid>
+                <div>
+                  <Typography variant="h6" style={{ fontSize: "16px" }}>
+                    Peraturan Rumah Kos :
+                  </Typography>
+                </div>
+
+                <Grid container>
+                  <Grid item xs={12} md={12} style={{ paddingRight: "1rem" }}>
+                    {allRule.slice(0, 4).map((rule, index) => (
+                      <Box key={index} display="flex" alignItems="center">
+                        <ErrorIcon
+                          style={{
+                            marginLeft: "0.5rem",
+                            width: "24px",
+                            height: "24px",
+                          }}
+                        />
+                        <Typography style={{ marginLeft: "6px" }}>
+                          {rule.aturan}
+                        </Typography>
+                      </Box>
+                    ))}
+                  </Grid>
+                </Grid>
+              </Grid>
+            </Grid>
+
+            <Grid>
+              {/* Description */}
+              {state.listingInfo.description ? (
+                <Grid
+                  item
                   style={{
-                    fontWeight: "bolder",
-                    color: "black",
-                    fontSize: "14px",
-                    padding: "8px",
+                    padding: "1rem",
+                    marginTop: "0.3rem",
                   }}
                 >
-                  {selectedOption === "bulan" && (
-                    <div>Harga Rp{state.listingInfo.price_month}/bulan</div>
-                  )}
-                  {selectedOption === "hari" && (
-                    <div>Harga Rp{state.listingInfo.price_day}/hari</div>
-                  )}
-                  {selectedOption === "tahun" && (
-                    <div>Harga Rp{state.listingInfo.price_year}/tahun</div>
-                  )}
+                  <Typography variant="h6" style={{ fontSize: "16px" }}>
+                    Description :
+                  </Typography>
+                  <Typography variant="body1" style={{ fontSize: "15px" }}>
+                    {state.listingInfo.description}
+                  </Typography>
+                </Grid>
+              ) : (
+                ""
+              )}
+            </Grid>
+          </Grid>
 
-                  
-                </Typography>
-                <TextField
+          <Grid
+            item
+            lg={4.5}
+            md={4.5}
+            sm={12}
+            xs={12}
+            width={"100%"}
+            style={{ paddingLeft: "0.5rem" }}
+          >
+            {/* Image slider */}
+            <Box position="sticky" top="0">
+              <Paper
+                style={{
+                  border: "2px solid white",
+                  backgroundColor: "#F8F8FF",
+                }}
+              >
+                {listingPictures.length > 0 ? (
+                  <Box>
+                    <Grid
+                      item
+                      container
+                      justifyContent="center"
+                      className={classes.sliderContainer}
+                    >
+                      {listingPictures.map((picture, index) => {
+                        return (
+                          <div key={index}>
+                            {index === currentPicture ? (
+                              <img
+                                src={picture}
+                                alt="gambarrumah"
+                                style={{
+                                  width: "100%",
+                                  height: "100%",
+                                  objectFit: "cover", // Adjusts image to cover the container while maintaining aspect ratio
+                                }}
+                              />
+                            ) : (
+                              ""
+                            )}
+                          </div>
+                        );
+                      })}
+                      <ArrowCircleLeftIcon
+                        onClick={PreviousPicture}
+                        className={classes.leftArrow}
+                      />
+                      <ArrowCircleRightIcon
+                        onClick={NextPicture}
+                        className={classes.rightArrow}
+                      />
+                    </Grid>
+                  </Box>
+                ) : (
+                  ""
+                )}
+              </Paper>
+              <Paper
+                style={{
+                  width: "100%",
+                  marginTop: "0.5rem",
+                  padding: "0.5rem",
+                  backgroundColor: "#F8F8FF",
+                }}
+              >
+                <Grid item container xs={12} alignItems="center">
+                  <Typography
+                    variant="h6"
+                    style={{
+                      fontWeight: "bolder",
+                      color: "black",
+                      fontSize: "14px",
+                      padding: "8px",
+                    }}
+                  >
+                    {selectedOption === "bulan" && (
+                      <div>Harga Rp{state.listingInfo.price_month}/bulan</div>
+                    )}
+                    {selectedOption === "hari" && (
+                      <div>Harga Rp{state.listingInfo.price_day}/hari</div>
+                    )}
+                    {selectedOption === "tahun" && (
+                      <div>Harga Rp{state.listingInfo.price_year}/tahun</div>
+                    )}
+                  </Typography>
+                  <TextField
                     id="standard-select-currency"
                     value={selectedOption}
                     onChange={handleOptionChange}
@@ -638,171 +699,184 @@ function ListingDetail() {
                     <option value="bulan">Bulan</option>
                     <option value="tahun">Tahun</option>
                   </TextField>
-              </Grid>
+                </Grid>
 
-              <Grid
-                item
-                container
-                marginTop={"1rem"}
-                justifyContent="space-between"
-              >
-                <Button
-                  variant="outlined"
-                  color="primary"
-                  size="small"
-                  // onClick={() => navigate(`/order/${state.listingInfo.id}`)}
-                  onClick={() =>
-                    navigate(`/pesan_kamar/${state.listingInfo.id}`)
-                  }
-                  style={{ width: "48%" }}
+                <Grid
+                  item
+                  container
+                  marginTop={"1rem"}
+                  justifyContent="space-between"
                 >
-                  Pesan Kamar
-                </Button>
-                <Button
-                  onClick={handleWhatsApp}
-                  variant="outlined"
-                  color="success"
-                  size="small"
-                  style={{ marginLeft: "0.5rem", width: "48%" }}
-                >
-                  Chat Pemilik Kos
-                </Button>
-              </Grid>
-            </Paper>
-          </Box>
+                  <Button
+                    variant="outlined"
+                    color="primary"
+                    size="small"
+                    // onClick={() => navigate(`/order/${state.listingInfo.id}`)}
+                    onClick={() =>
+                      navigate(`/pesan_kamar/${state.listingInfo.id}`)
+                    }
+                    style={{ width: "48%" }}
+                  >
+                    Pesan Kamar
+                  </Button>
+                  <Button
+                    onClick={handleWhatsApp}
+                    variant="outlined"
+                    color="success"
+                    size="small"
+                    style={{ marginLeft: "0.5rem", width: "48%" }}
+                  >
+                    Chat Pemilik Kos
+                  </Button>
+                </Grid>
+              </Paper>
+            </Box>
+          </Grid>
         </Grid>
-      </Grid>
 
-      {/* Map */}
-      <Grid
-        item
-        container
-        style={{ marginTop: "1rem" }}
-        spacing={1}
-        justifyContent="space-between"
-      >
-        <Grid item lg={3} md={3} sm={12} xs={12} style={{ overflow: "auto" }}>
-          {state.listingInfo.listing_pois_within_10km.slice(0, 4).map((poi) => {
-            function DegreeToRadian(coordinate) {
-              return (coordinate * Math.PI) / 180;
-            }
-
-            function CalculateDistance() {
-              const latitude1 = DegreeToRadian(state.listingInfo.latitude);
-              const longitude1 = DegreeToRadian(state.listingInfo.longitude);
-
-              const latitude2 = DegreeToRadian(poi.location.coordinates[0]);
-              const longitude2 = DegreeToRadian(poi.location.coordinates[1]);
-              // The formula
-              const lonDiff = longitude2 - longitude1;
-              const R = 6371000 / 1000;
-
-              const dist =
-                Math.acos(
-                  Math.sin(latitude1) * Math.sin(latitude2) +
+        {/* Map */}
+        <Grid
+          item
+          container
+          style={{ marginTop: "1rem" }}
+          spacing={1}
+          justifyContent="space-between"
+        >
+          <Grid item lg={3} md={3} sm={12} xs={12} style={{ overflow: "auto" }}>
+            {state.listingInfo.listing_pois_within_10km
+              .slice(0, 4)
+              .map((poi) => {
+                function DegreeToRadian(coordinate) {
+                  return (coordinate * Math.PI) / 180;
+                }
+    
+                function CalculateDistance() {
+                  const latitude1 = DegreeToRadian(state.listingInfo.latitude);
+                  const longitude1 = DegreeToRadian(state.listingInfo.longitude);
+    
+                  const latitude2 = DegreeToRadian(poi.location.coordinates[0]);
+                  const longitude2 = DegreeToRadian(poi.location.coordinates[1]);
+                  // The formula
+                  const latDiff = latitude2 - latitude1;
+                  const lonDiff = longitude2 - longitude1;
+                  const R = 6371000 / 1000;
+    
+                  const a =
+                    Math.sin(latDiff / 2) * Math.sin(latDiff / 2) +
                     Math.cos(latitude1) *
                       Math.cos(latitude2) *
-                      Math.cos(lonDiff)
-                ) * R;
-              return dist.toFixed(2);
-            }
-            return (
-              <div
-                key={poi.id}
-                style={{
-                  marginBottom: "0.5rem",
-                  borderBottom: "1px solid black",
-                }}
-              >
-                <Typography variant="h6">{poi.name}</Typography>
-                <Typography variant="subtitle1">
-                  {poi.type} |{" "}
-                  <span style={{ fontWeight: "bolder", color: "black" }}>
-                    {CalculateDistance()} Kilometers
-                  </span>
-                </Typography>
-              </div>
-            );
-          })}
-          <Button
-            onClick={GoogleMapsShortcut}
-            style={{
-              backgroundColor: "#4CAF50",
-              color: "white",
-              fontSize: "16px",
-              padding: "10px 20px",
-              marginTop: "0.5rem",
-              borderRadius: "5px",
-              cursor: "pointer",
-            }}
-            startIcon={<AssistantDirectionIcon />}
-          >
-            google maps
-          </Button>
-        </Grid>
-        <Grid item lg={9} md={9} sm={12} xs={12} style={{ height: "35rem" }}>
-          <MapContainer
-            center={[state.listingInfo.latitude, state.listingInfo.longitude]}
-            zoom={16}
-            scrollWheelZoom={true}
-          >
-            <TileLayer
-              attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-              url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-            />
-            {state.listingInfo.listing_pois_within_10km.map((poi) => {
-              function PoiIcon() {
-                if (poi.type === "Stadium") {
-                  return stadiumIcon;
-                } else if (poi.type === "Hospital") {
-                  return hospitalIcon;
-                } else if (poi.type === "University") {
-                  return universityIcon;
+                      Math.sin(lonDiff / 2) *
+                      Math.sin(lonDiff / 2);
+                  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+    
+                  const d = R * c;
+    
+                  const dist =
+                    Math.acos(
+                      Math.sin(latitude1) * Math.sin(latitude2) +
+                        Math.cos(latitude1) *
+                          Math.cos(latitude2) *
+                          Math.cos(lonDiff)
+                    ) * R;
+                  return dist.toFixed(2);
                 }
-              }
-              return (
-                <Marker
-                  key={poi.id}
-                  position={[
-                    poi.location.coordinates[0],
-                    poi.location.coordinates[1],
-                  ]}
-                  icon={PoiIcon()}
-                >
-                  <Popup>{poi.name}</Popup>
-                </Marker>
-              );
-            })}
+                return (
+                  <div
+                    key={poi.id}
+                    style={{
+                      marginBottom: "0.5rem",
+                      borderBottom: "1px solid black",
+                    }}
+                  >
+                    <Typography variant="h6">{poi.name}</Typography>
+                    <Typography variant="subtitle1">
+                      {poi.type} |{" "}
+                      <span style={{ fontWeight: "bolder", color: "black" }}>
+                        {CalculateDistance()} Kilometers
+                      </span>
+                    </Typography>
+                  </div>
+                );
+              })}
+            <Button
+              onClick={GoogleMapsShortcut}
+              style={{
+                backgroundColor: "#4CAF50",
+                color: "white",
+                fontSize: "16px",
+                padding: "10px 20px",
+                marginTop: "0.5rem",
+                borderRadius: "5px",
+                cursor: "pointer",
+              }}
+              startIcon={<AssistantDirectionIcon />}
+            >
+              google maps
+            </Button>
+          </Grid>
+          <Grid item lg={9} md={9} sm={12} xs={12} style={{ height: "35rem" }}>
+            <MapContainer
+              center={[state.listingInfo.latitude, state.listingInfo.longitude]}
+              zoom={16}
+              scrollWheelZoom={true}
+            >
+              <TileLayer
+                attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+              />
+              {state.listingInfo.listing_pois_within_10km.map((poi) => {
+                function PoiIcon() {
+                  if (poi.type === "Stadium") {
+                    return stadiumIcon;
+                  } else if (poi.type === "Hospital") {
+                    return hospitalIcon;
+                  } else if (poi.type === "University") {
+                    return universityIcon;
+                  }
+                }
+                return (
+                  <Marker
+                    key={poi.id}
+                    position={[
+                      poi.location.coordinates[0],
+                      poi.location.coordinates[1],
+                    ]}
+                    icon={PoiIcon()}
+                  >
+                    <Popup>{poi.name}</Popup>
+                  </Marker>
+                );
+              })}
 
-            <TheMapComponent listingInfo={state.listingInfo} />
-          </MapContainer>
+              <TheMapComponent listingInfo={state.listingInfo} />
+            </MapContainer>
+          </Grid>
         </Grid>
-      </Grid>
-      <Grid
-        item
-        container
-        width={"60%"}
-        margin={"auto"}
-        borderTop={"1px solid gray"}
-        marginTop={"1rem"}
-      >
-        <Grid width={"80%"} margin={"auto"}>
-          <Typography
-            variant={"h4"}
-            style={{ marginTop: "2rem", textAlign: "center" }}
-          >
-            Review
-          </Typography>
-          <Box padding={"2px"} border={"2px solid white"}>
-            <Review />
-          </Box>
-          <Box style={{ width: "100%", marginTop: "2rem" }}>
-            <ReviewMessage />
-          </Box>
+        <Grid
+          item
+          container
+          width={"60%"}
+          margin={"auto"}
+          borderTop={"1px solid gray"}
+          marginTop={"1rem"}
+        >
+          <Grid width={"80%"} margin={"auto"}>
+            <Typography
+              variant={"h4"}
+              style={{ marginTop: "2rem", textAlign: "center" }}
+            >
+              Review
+            </Typography>
+            <Box padding={"2px"} border={"2px solid white"}>
+              <Review />
+            </Box>
+            <Box style={{ width: "100%", marginTop: "2rem" }}>
+              <ReviewMessage />
+            </Box>
+          </Grid>
+          <Box style={{ borderBottom: "1px solid gray", width: "100%" }} />
         </Grid>
-        <Box style={{ borderBottom: "1px solid gray", width: "100%" }} />
-      </Grid>
-    </div>
+      </div>
     </>
   );
 }

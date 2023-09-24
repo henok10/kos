@@ -35,7 +35,7 @@ function Topbar() {
   );
 
   return (
-    <AppBar position="flex" color="transparent" elevation={0}>
+    <AppBar position="static" color="transparent" elevation={0}>
       <Toolbar style={{ display: "flex", justifyContent: "space-between" }}>
         <Box
           style={{

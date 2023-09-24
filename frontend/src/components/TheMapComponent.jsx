@@ -26,8 +26,12 @@ function TheMapComponent({ listingInfo }) {
       );
     }
   }, [map]);
+  
 
   useEffect(() => {
+    console.log("map:", map);
+    console.log("userLocation:", userLocation);
+    console.log("listingInfo:", listingInfo);
     if (map && userLocation && listingInfo) {
       const waypoints = [
         {
@@ -42,7 +46,7 @@ function TheMapComponent({ listingInfo }) {
 
       // Remove previous routing control, if it exists
       if (routingControlRef.current) {
-        routingControlRef.current.remove();
+        map.removeControl(routingControlRef.current);
       }
 
       const routingControl = L.Routing.control({
@@ -62,7 +66,7 @@ function TheMapComponent({ listingInfo }) {
         routeWhileDragging: true,
         draggableWaypoints: true,
         fitSelectedRoutes: true,
-        showAlternatives: true,
+        // showAlternatives: true,
         show: false,
       });
 

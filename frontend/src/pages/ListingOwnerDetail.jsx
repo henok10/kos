@@ -23,6 +23,7 @@ import RoomIcon from "@mui/icons-material/Room";
 import TheMapComponent from "../components/TheMapComponent";
 import { makeStyles } from "@mui/styles";
 import { choices } from "../components/Choice";
+import ErrorIcon from "@mui/icons-material/Error";
 
 const useStyles = makeStyles({
   sliderContainer: {
@@ -61,6 +62,7 @@ function ListingOwnerDetail() {
   const navigate = useNavigate();
   const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
   const isOwner = useSelector((state) => state.auth.isOwner);
+  const [allRule, setAllRule] = useState([]);
 
   useEffect(() => {
     if (!isAuthenticated) {
@@ -195,6 +197,19 @@ function ListingOwnerDetail() {
   }, [state.listingInfo]);
   console.log(state.listingInfo);
 
+  useEffect(() => {
+    async function GetRuleInfo() {
+      try {
+        const response = await Axios.get(
+          `https://mykos2.onrender.com/api/rule-rumah/${params.id}/`
+        );
+        const data = response.data;
+        setAllRule(data);
+      } catch (e) {}
+    }
+    GetRuleInfo();
+  }, [params.id]);
+
   const listingPictures = [
     state.listingInfo.picture1,
     state.listingInfo.picture2,
@@ -219,7 +234,6 @@ function ListingOwnerDetail() {
       return ""; // Return a default icon URL or an empty string
     }
   }
-
 
   function NextPicture() {
     if (currentPicture === listingPictures.length - 1) {
@@ -328,7 +342,7 @@ function ListingOwnerDetail() {
             ""
           )}
 
-<Grid
+          <Grid
             item
             justifyContent="flex-start"
             style={{
@@ -359,6 +373,42 @@ function ListingOwnerDetail() {
                       />
                       <Typography style={{ marginLeft: "6px" }}>
                         {listing.name}
+                      </Typography>
+                    </Box>
+                  ))}
+                </Grid>
+              </Grid>
+            </Grid>
+          </Grid>
+
+          <Grid
+            item
+            style={{
+              padding: "1rem",
+              borderBottom: "1px solid gray",
+              marginTop: "0.3rem",
+            }}
+          >
+            <Grid>
+              <div>
+                <Typography variant="h6" style={{ fontSize: "16px" }}>
+                  Peraturan Rumah Kos :
+                </Typography>
+              </div>
+
+              <Grid container>
+                <Grid item xs={12} md={12} style={{ paddingRight: "1rem" }}>
+                  {allRule.slice(0, 4).map((rule, index) => (
+                    <Box key={index} display="flex" alignItems="center">
+                      <ErrorIcon
+                        style={{
+                          marginLeft: "0.5rem",
+                          width: "24px",
+                          height: "24px",
+                        }}
+                      />
+                      <Typography style={{ marginLeft: "6px" }}>
+                        {rule.aturan}
                       </Typography>
                     </Box>
                   ))}
@@ -506,9 +556,12 @@ function ListingOwnerDetail() {
             return (
               <div
                 key={poi.id}
-                style={{ marginBottom: "0.5rem", borderBottom: "1px solid black" }}
+                style={{
+                  marginBottom: "0.5rem",
+                  borderBottom: "1px solid black",
+                }}
               >
-                 <Typography variant="h6">{poi.name}</Typography>
+                <Typography variant="h6">{poi.name}</Typography>
                 <Typography variant="subtitle1">
                   {poi.type} |{" "}
                   <span style={{ fontWeight: "bolder", color: "black" }}>

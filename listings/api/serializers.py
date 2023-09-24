@@ -85,7 +85,7 @@ class ReviewSerializer(serializers.ModelSerializer):
     user_username = serializers.ReadOnlyField(source='user.username')
     class Meta:
         model = Review
-        fields = ['user', 'rumah', 'rate', 'comment', 'create_at', 'user_username']
+        fields = ['id', 'user', 'rumah', 'rate', 'comment', 'create_at', 'user_username']
 
 
 class FasilitasKamarSerializer(serializers.ModelSerializer):

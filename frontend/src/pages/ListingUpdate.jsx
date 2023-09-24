@@ -4,16 +4,12 @@ import Axios from "axios";
 import { useImmerReducer } from "use-immer";
 import { useSelector } from "react-redux";
 import { choices } from "../components/Choice";
-import Swal from 'sweetalert2';
+import Swal from "sweetalert2";
+import IconButton from "@mui/material/IconButton";
+import DeleteIcon from "@mui/icons-material/Delete";
 
 // MUI
-import {
-  Grid,
-  Typography,
-  Button,
-  TextField,
-  Snackbar,
-} from "@mui/material";
+import { Grid, Typography, Button, TextField, Snackbar } from "@mui/material";
 import { makeStyles } from "@mui/styles";
 
 const useStyles = makeStyles({
@@ -42,7 +38,6 @@ const useStyles = makeStyles({
   },
 });
 
-
 function ListingUpdate(props) {
   const userId = useSelector((state) => state.auth.userId);
   const params = useParams();
@@ -51,7 +46,7 @@ function ListingUpdate(props) {
   const { choice_rumah } = choices();
   const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
   const isOwner = useSelector((state) => state.auth.isOwner);
-  
+
   useEffect(() => {
     if (!isAuthenticated) {
       navigate("/login");
@@ -81,6 +76,10 @@ function ListingUpdate(props) {
     fasilitasInfo: [],
     facilities: [],
     newFacility: "",
+    ruleInfo: [],
+    nameRuleValue: "",
+    rules: [],
+    newRule: "",
     sendRequest: 0,
     openSnack: false,
     disabledBtn: false,
@@ -159,6 +158,35 @@ function ListingUpdate(props) {
           draft.newFacility = ""; // Reset the newFacility state after adding to facilities
         }
         break;
+
+      case "catchRuleChange":
+        draft.ruleInfo[action.index].aturan = action.ruleChosen;
+        break;
+
+      case "catchNewRule":
+        draft.newRule = action.newRuleChosen;
+        break;
+
+      case "removeRule":
+        draft.rules.splice(action.indexToRemove, 1);
+        break;
+
+      case "removeFacility":
+        draft.facilities.splice(action.indexToRemove, 1);
+        break;
+
+      case "addRule":
+        if (action.newRuleChosen.trim()) {
+          draft.rules.push(action.newRuleChosen.trim());
+          draft.newRule = ""; // Reset the newFacility state after adding to facilities
+        }
+        break;
+
+      case "catchRuleInfo":
+        draft.ruleInfo = action.ruleObject;
+        draft.nameRuleValue = action.ruleObject.aturan;
+        break;
+
       case "changeSendRequest":
         draft.sendRequest = draft.sendRequest + 1;
         break;
@@ -192,7 +220,6 @@ function ListingUpdate(props) {
         break;
 
       default:
-        
         break;
     }
   }
@@ -210,6 +237,76 @@ function ListingUpdate(props) {
       dispatch({ type: "catchNewFacility", newFacilityChosen: "" });
     }
   };
+
+  const handleAddRule = () => {
+    if (state.newRule && state.newRule.trim()) {
+      dispatch({ type: "addRule", newRuleChosen: state.newRule });
+      dispatch({ type: "catchNewRule", newRuleChosen: "" });
+    }
+  };
+
+  function handleRuleAdd(event) {
+    dispatch({
+      type: "catchNewRule",
+      newRuleChosen: event.target.value,
+    });
+  }
+
+  function handleRemoveFacility(indexToRemove) {
+    dispatch({
+      type: "removeFacility",
+      indexToRemove,
+    });
+  }
+
+  function handleRemoveRule(indexToRemove) {
+    dispatch({
+      type: "removeRule",
+      indexToRemove,
+    });
+  }
+
+  async function deleteFacility(facilityId) {
+    try {
+      await Axios.delete(
+        `https://mykos2.onrender.com/api/fasilitas-rumah/${facilityId}/delete`
+      );
+      // Kemudian perbarui state atau lakukan tindakan lain yang sesuai
+      // Misalnya, dapat Anda hapus fasilitas dari state fasilitasInfo
+      // atau perbarui tampilan fasilitas.
+      const updatedFasilitasInfo = state.fasilitasInfo.filter(
+        (facility) => facility.id !== facilityId
+      );
+      dispatch({
+        type: "catchFasilitasInfo",
+        fasilitasObject: updatedFasilitasInfo,
+      });
+    } catch (error) {
+      // Handle error jika terjadi kesalahan saat menghapus fasilitas
+      console.error("Error deleting facility:", error);
+    }
+  }
+
+  async function deleteRule(ruleId) {
+    try {
+      await Axios.delete(
+        `https://mykos2.onrender.com/api/rule-rumah/${ruleId}/delete`
+      );
+      // Kemudian perbarui state atau lakukan tindakan lain yang sesuai
+      // Misalnya, dapat Anda hapus fasilitas dari state fasilitasInfo
+      // atau perbarui tampilan fasilitas.
+      const updatedRuleInfo = state.ruleInfo.filter(
+        (rule) => rule.id !== ruleId
+      );
+      dispatch({
+        type: "catchRuleInfo",
+        ruleObject: updatedRuleInfo,
+      });
+    } catch (error) {
+      // Handle error jika terjadi kesalahan saat menghapus fasilitas
+      console.error("Error deleting facility:", error);
+    }
+  }
 
   const [state, dispatch] = useImmerReducer(ReducerFuction, initialState);
 
@@ -251,35 +348,66 @@ function ListingUpdate(props) {
     }
     GetFasilitasInfo();
   }, [params.id, dispatch]);
-  console.log(params.id);
-  const handleFacilityChange = async (event, index) => {
-    const newValue = event.target.value;
 
-    try {
-      const updatedFacilities = state.fasilitasInfo.map((facility, i) =>
-        i === index ? { ...facility, name: newValue } : facility
-      );
+  useEffect(() => {
+    async function GetRuleInfo() {
+      try {
+        const response = await Axios.get(
+          `https://mykos2.onrender.com/api/rule-rumah/${params.id}/`
+        );
 
-      await Axios.put(
-        `https://mykos2.onrender.com/api/fasilitas-rumah/${state.fasilitasInfo[index].id}/update`,
-        { name: newValue }
-      );
-
-      dispatch({
-        type: "catchFasilitasChange",
-        index: index,
-        fasilitasChosen: newValue,
-      });
-
-      dispatch({
-        type: "updateFacilities",
-        facilities: updatedFacilities,
-      });
-    } catch (error) {
-      console.error("Gagal mengupdate fasilitas:", error);
+        dispatch({
+          type: "catchRuleInfo",
+          ruleObject: response.data,
+        });
+      } catch (e) {}
     }
-  };
+    GetRuleInfo();
+  }, [dispatch, params.id]);
+  console.log(params.id);
+  function handleFacilityChange(newValue, index) {
+    // Salin objek fasilitas yang akan diubah
+    const updatedFacilities = [...state.fasilitasInfo];
+    const updatedFacility = updatedFacilities[index];
 
+    // Buat salinan objek dengan nilai properti 'name' yang diubah
+    const updatedFacilityCopy = {
+      ...updatedFacility,
+      name: newValue,
+    };
+
+    // Perbarui fasilitas di dalam array dengan salinan yang telah diubah
+    updatedFacilities[index] = updatedFacilityCopy;
+
+    // Perbarui fasilitas di state dan panggil fungsi untuk memperbarui fasilitas di backend.
+    dispatch({
+      type: "catchFasilitasChange",
+      index: index,
+      fasilitasChosen: newValue,
+    });
+  }
+
+  function handleRuleChange(newValue, index) {
+    // Salin objek fasilitas yang akan diubah
+    const updatedRules = [...state.ruleInfo];
+    const updatedRule = updatedRules[index];
+
+    // Buat salinan objek dengan nilai properti 'name' yang diubah
+    const updatedRuleCopy = {
+      ...updatedRule,
+      name: newValue,
+    };
+
+    // Perbarui fasilitas di dalam array dengan salinan yang telah diubah
+    updatedRules[index] = updatedRuleCopy;
+
+    // Perbarui fasilitas di state dan panggil fungsi untuk memperbarui fasilitas di backend.
+    dispatch({
+      type: "catchRuleChange",
+      index: index,
+      ruleChosen: newValue,
+    });
+  }
   useEffect(() => {
     if (state.sendRequest) {
       async function UpdateProperty() {
@@ -389,56 +517,97 @@ function ListingUpdate(props) {
         const facilitiesArray = state.facilities.map((facility) => ({
           name: facility,
         }));
-        
+
+        const facilitiesUpdate = state.fasilitasInfo.map((facilitas) => ({
+          name: facilitas.name,
+          id: facilitas.id,
+        }));
+
+        const rulesArray = state.rules.map((rule) => ({
+          aturan: rule,
+        }));
+
+        const rulesUpdate = state.ruleInfo.map((ruless) => ({
+          aturan: ruless.aturan,
+          id: ruless.id,
+        }));
+
         const confirmUpdate = await Swal.fire({
-          title: 'Do you want to save the changes?',
+          title: "Do you want to save the changes?",
           showDenyButton: true,
           showCancelButton: true,
-          confirmButtonText: 'Save',
+          confirmButtonText: "Save",
           denyButtonText: `Don't save`,
         });
         if (confirmUpdate.isConfirmed) {
-        try {
-          const response = await Axios.patch(
-            `https://mykos2.onrender.com/api/listings/${params.id}/update/`,
-            formData
-          );
-
-          // Now, use the created Kamar instance's ID to associate the FasilitasKamar instances
-          const rumahId = response.data.id;
-
-          for (const facility of facilitiesArray) {
-            await Axios.post(
-              "https://mykos2.onrender.com/api/fasilitas-rumah/create",
-              {
-                rumah: rumahId,
-                name: facility.name,
-              }
+          try {
+            const response = await Axios.patch(
+              `https://mykos2.onrender.com/api/listings/${params.id}/update/`,
+              formData
             );
-          }
-          Swal.fire('Saved!', '', 'success')
-          dispatch({ type: "openTheSnack" });
-        } catch (e) {
-          dispatch({ type: "allowTheButton" });
-        }
-      } else if (confirmUpdate.isDenied) {
-        // Handle the case where the user chooses not to save the changes
-        Swal.fire('Changes are not saved', '', 'info');
-      }
 
+            // Now, use the created Kamar instance's ID to associate the FasilitasKamar instances
+            const rumahId = response.data.id;
+
+            for (const facility of facilitiesArray) {
+              await Axios.post(
+                "https://mykos2.onrender.com/api/fasilitas-rumah/create",
+                {
+                  rumah: rumahId,
+                  name: facility.name,
+                }
+              );
+            }
+
+            for (const facilitas of facilitiesUpdate) {
+              // Perbarui fasilitas dengan menggunakan Axios.put
+              console.log("Facilitas ID:", facilitas.id);
+              await Axios.put(
+                `https://mykos2.onrender.com/api/fasilitas-rumah/${facilitas.id}/update`,
+                { name: facilitas.name }
+              );
+            }
+
+            for (const rule of rulesArray) {
+              await Axios.post(
+                "https://mykos2.onrender.com/api/rule-rumah/create",
+                {
+                  rumah: rumahId,
+                  aturan: rule.aturan,
+                }
+              );
+            }
+
+            for (const ruless of rulesUpdate) {
+              // Perbarui fasilitas dengan menggunakan Axios.put
+              // console.log("Facilitas ID:", facilitas.id);
+              await Axios.put(
+                `https://mykos2.onrender.com/api/rule-rumah/${ruless.id}/update`,
+                { aturan: ruless.aturan }
+              );
+            }
+            Swal.fire("Saved!", "", "success");
+            dispatch({ type: "openTheSnack" });
+          } catch (e) {
+            dispatch({ type: "allowTheButton" });
+          }
+        } else if (confirmUpdate.isDenied) {
+          // Handle the case where the user chooses not to save the changes
+          Swal.fire("Changes are not saved", "", "info");
+        }
       }
       UpdateProperty();
     }
   }, [
-    state.sendRequest, 
-    params.id, 
-    dispatch, 
-    userId, 
-    state.picture4Value, 
-    state.picture1Value, 
-    state.picture3Value, 
-    state.picture2Value, 
-    state.boroughValue, 
+    state.sendRequest,
+    params.id,
+    dispatch,
+    userId,
+    state.picture4Value,
+    state.picture1Value,
+    state.picture3Value,
+    state.picture2Value,
+    state.boroughValue,
     state.longitudeValue,
     state.latitudeValue,
     state.no_rekeningValue,
@@ -448,7 +617,7 @@ function ListingUpdate(props) {
     state.titleValue,
     state.facilities,
     state.priceDayValue,
-    state.propertyStatusValue
+    state.propertyStatusValue,
   ]);
 
   useEffect(() => {
@@ -605,18 +774,27 @@ function ListingUpdate(props) {
           {state.fasilitasInfo.map((facility, index) => (
             <Grid
               item
-              xs={2.5}
+              xs={5.5}
               key={index}
               style={{ marginRight: "5px", marginTop: "10px" }}
             >
-              <Typography>{facility.name}</Typography>
+              <Typography>
+                {facility.name}{" "}
+                <IconButton
+                  onClick={() => deleteFacility(facility.id)}
+                  aria-label="Remove Facility Info"
+                  color="error"
+                >
+                  <DeleteIcon />
+                </IconButton>
+              </Typography>
               <TextField
                 id={`Facility-${index}`}
                 label="Fasilitas"
                 variant="standard"
                 fullWidth
                 value={facility.name}
-                onChange={(e) => handleFacilityChange(e, index)}
+                onChange={(e) => handleFacilityChange(e.target.value, index)}
                 select
                 SelectProps={{
                   native: true,
@@ -663,12 +841,119 @@ function ListingUpdate(props) {
           </Button>
         </Grid>
 
-        <Grid item container>
-          {state.facilities.map((facility, index) => (
-            <Grid item xs={3} key={index}>
-              <Typography>{facility}</Typography>
+        <Grid item xs={12} sm={12} md={8} lg={8}>
+          <Grid item container>
+            {state.facilities.map((facility, index) => (
+              <Grid item xs={12} sm={12} md={6} lg={6} key={index}>
+                <Grid item xs={6}>
+                  <Typography
+                    style={{
+                      justifyContent: "space-between",
+                      width: "15rem",
+                    }}
+                  >
+                    {facility}{" "}
+                    <IconButton
+                      onClick={() => handleRemoveFacility(index)}
+                      aria-label="Remove Facility"
+                      color="error"
+                    >
+                      <DeleteIcon />
+                      {/* You can use an appropriate delete icon */}
+                    </IconButton>
+                  </Typography>
+                </Grid>
+              </Grid>
+            ))}
+          </Grid>
+        </Grid>
+
+        <Typography style={{ marginTop: "1rem" }}>
+          Aturan Kamar Kos :{" "}
+        </Typography>
+        <Grid item xs={12} container justifyContent="space-between">
+          {state.ruleInfo.map((rule, index) => (
+            <Grid
+              item
+              xs={5.5}
+              key={index}
+              style={{ marginRight: "5px", marginTop: "10px" }}
+            >
+              <Typography>
+                {rule.aturan}{" "}
+                <IconButton
+                  onClick={() => deleteRule(rule.id)}
+                  aria-label="Remove Facility Info"
+                  color="error"
+                >
+                  <DeleteIcon />
+                </IconButton>
+              </Typography>
+              <TextField
+                id={`Rule${index}`}
+                label="Peraturan"
+                variant="standard"
+                fullWidth
+                value={rule.aturan}
+                onChange={(e) => handleRuleChange(e.target.value, index)}
+              ></TextField>
             </Grid>
           ))}
+        </Grid>
+
+        <Grid
+          item
+          container
+          xs={12}
+          justifyContent="space-between"
+          marginTop="2rem"
+        >
+          <Grid item xs={12} sm={12} md={3} lg={3}>
+            <TextField
+              id="newRule"
+              label="Aturan Baru"
+              variant="standard"
+              fullWidth
+              value={state.newRule}
+              onChange={handleRuleAdd}
+            ></TextField>
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={handleAddRule}
+              style={{ marginTop: "5px", width: "6rem" }}
+              disabled={!state.newRule.trim()}
+            >
+              Add
+            </Button>
+          </Grid>
+
+          <Grid item xs={12} sm={12} md={8} lg={8}>
+            <Grid item container>
+              {state.rules.map((rule, index) => (
+                <Grid item xs={12} sm={12} md={6} lg={6} key={index}>
+                  <Grid item xs={6}>
+                    <Typography
+                      style={{
+                        justifyContent: "space-between",
+                        width: "15rem",
+                      }}
+                    >
+                      {rule}{" "}
+                      <IconButton
+                        onClick={() => handleRemoveRule(index)}
+                        aria-label="Remove Facility"
+                        color="error"
+                      >
+                        <DeleteIcon />
+                        {/* You can use an appropriate delete icon */}
+                      </IconButton>
+                    </Typography>
+                  </Grid>
+                </Grid>
+              ))}
+            </Grid>
+          </Grid>
         </Grid>
 
         <Grid item container>
@@ -739,7 +1024,6 @@ function ListingUpdate(props) {
                 marginRight: "auto",
                 width: "50%",
               }}
-             
             >
               <Button
                 variant="contained"

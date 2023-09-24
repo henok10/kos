@@ -21,7 +21,6 @@ const useStyles = makeStyles((theme) => ({
   submitButton: {
     marginTop: "1rem",
     width: "50%",
-    // marginTop: theme.spacing(2),
   },
   container: {
     display: "flex",
@@ -73,7 +72,7 @@ function ReviewMessage() {
     }
     GetReviewInfo();
   }, [params.id]);
-  console.log(allReviews.user_username);
+
   const totalReviews = allReviews.length;
   const totalStars = allReviews.reduce((sum, review) => sum + review.rate, 0);
   const averageRating = totalReviews > 0 ? totalStars / totalReviews : 0;
@@ -90,6 +89,7 @@ function ReviewMessage() {
       </Grid>
     );
   }
+  console.log(allReviews.id)
   return (
     <>
       <Grid>

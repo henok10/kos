@@ -28,12 +28,11 @@ const BottomNav = () => {
           alignItems: "center", // Mengatur vertikal alignment ke tengah
         }}
       >
-        <BottomNavigation
-          showLabels
+        {/* <BottomNavigation
           value={value}
           onChange={(e, newValue) => setValue(newValue)}
           sx={{ width: "100%" }}
-        >
+        > */}
           <Typography
             variant="caption"
             sx={{
@@ -46,7 +45,7 @@ const BottomNav = () => {
             &copy;{new Date().getFullYear()} KOS SAYA | All rights reserved |
             Terms Of Service | Privacy
           </Typography>
-        </BottomNavigation>
+        {/* </BottomNavigation> */}
       </Paper>
     </Box>
   );
