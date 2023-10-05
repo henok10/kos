@@ -47,7 +47,6 @@ export default function RiwayatTransaksi() {
 
         setAllKos(response.data);
         const listings = response.data.filter((listings) => listings.listing);
-        console.log(listings);
       } catch (error) {}
     }
     GetAllKos();
@@ -103,7 +102,7 @@ export default function RiwayatTransaksi() {
 
                   return(
                     <TableRow
-                    key={row.name}
+                    key={row.id}
                     sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
                   >
                     <TableCell>{row.fullName}</TableCell>

@@ -22,7 +22,6 @@ const useStyles = makeStyles({
     width: "80%",
     marginLeft: "auto",
     marginRight: "auto",
-    // marginTop: "3rem",
     border: "5px solid white",
     padding: "3rem",
   },
@@ -36,7 +35,6 @@ const useStyles = makeStyles({
     backgroundColor: "primary",
     color: "white",
     fontSize: "0.8rem",
-    marginLeft: "1rem",
   },
 });
 
@@ -158,7 +156,16 @@ function ProfileUpdate(props) {
       }
       UpdateProfile();
     }
-  }, [state.sendRequest, dispatch, userId, state.profilePictureValue, state.phoneNumberValue, state.agencyNameValue, state.addressValue, state.bioValue]);
+  }, [
+    state.sendRequest,
+    dispatch,
+    userId,
+    state.profilePictureValue,
+    state.phoneNumberValue,
+    state.agencyNameValue,
+    state.addressValue,
+    state.bioValue,
+  ]);
 
   useEffect(() => {
     if (state.openSnack) {
@@ -187,16 +194,9 @@ function ProfileUpdate(props) {
       );
     } else if (typeof state.profilePictureValue === "string") {
       return (
-        <Grid
-          item
-          style={{
-            marginTop: "0.5rem",
-            marginRight: "auto",
-            marginLeft: "auto",
-          }}
-        >
+        <Grid>
           <img
-            alt='profile'
+            alt="profile"
             src={props.userProfile.profilePic}
             style={{ height: "5rem", width: "5rem" }}
           />
@@ -210,7 +210,7 @@ function ProfileUpdate(props) {
       <Paper style={{ width: "90%" }}>
         <div className={classes.formContainer}>
           <form onSubmit={FormSubmit}>
-            <Grid item container justifyContent="center">
+            <Grid item textAlign="center">
               <Typography variant="h4">MY PROFILE</Typography>
             </Grid>
 
@@ -280,27 +280,31 @@ function ProfileUpdate(props) {
               />
             </Grid>
 
-            <Grid item container>
+            <Grid
+              item
+              container
+              style={{
+                marginTop: "1rem",
+              }}
+            >
               {ProfilePictureDisplay()}
             </Grid>
 
             <Grid
               item
               container
-              xs={6}
+              xs={8}
               style={{
                 marginTop: "1rem",
-                marginLeft: "auto",
-                marginRight: "auto",
+                // margin: "auto"
               }}
             >
               <Button
                 variant="contained"
                 component="label"
-                fullWidth
                 className={classes.picturesBtn}
               >
-                PROFILE PICTURE
+                PICTURE
                 <input
                   type="file"
                   accept="image/png, image/gif, image/jpeg"

@@ -12,6 +12,7 @@ import {
   Grid,
   Button,
 } from "@mui/material";
+import { useSelector } from "react-redux";
 
 import { makeStyles } from "@mui/styles";
 
@@ -40,7 +41,19 @@ function Kamar() {
   const classes = useStyles();
   const navigate = useNavigate();
   const params = useParams();
+  const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
+  const isCustomer = useSelector((state) => state.auth.isCustomer);
   const [allRoom, setAllRoom] = useState([]);
+
+  useEffect(() => {
+    if (!isAuthenticated) {
+      navigate("/login");
+    }
+  }, [isAuthenticated, navigate]);
+
+  if (!isCustomer) {
+    navigate("/");
+  }
 
   useEffect(() => {
     async function GetAllRoom() {
@@ -79,7 +92,7 @@ function Kamar() {
           <TableBody>
             {allRoom.map((row) => (
               <TableRow
-                key={row.name}
+                key={row.id}
                 sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
               >
                 <TableCell component="th" scope="row">

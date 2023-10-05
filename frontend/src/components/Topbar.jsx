@@ -47,9 +47,9 @@ function Topbar() {
           <Button color="inherit" onClick={() => navigate("/")}>
             <Typography variant="h5">Kos Saya</Typography>
           </Button>
-          <Button color="inherit" onClick={() => navigate("/syarat_ketentuan")}>
+          {/* <Button color="inherit" onClick={() => navigate("/syarat_ketentuan")}>
             Syarat dan Ketentuan
-          </Button>
+          </Button> */}
         </Box>
         <Box style={{ backgroundColor: "red" }} />
         {isAuthenticated ? authLinks : publicLinks}

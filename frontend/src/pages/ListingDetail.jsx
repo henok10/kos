@@ -78,21 +78,21 @@ const useStyles = makeStyles({
 
 function ListingDetail() {
   const navigate = useNavigate();
-  const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
-  const isCustomer = useSelector((state) => state.auth.isCustomer);
+  // const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
+  // const isCustomer = useSelector((state) => state.auth.isCustomer);
   const [allFasilitas, setAllFasilitas] = useState([]);
   const [allRule, setAllRule] = useState([]);
   const [allKamar, setAllKamar] = useState([]);
 
-  useEffect(() => {
-    if (!isAuthenticated) {
-      navigate("/login");
-    }
-  }, [isAuthenticated, navigate]);
+  // useEffect(() => {
+  //   if (!isAuthenticated) {
+  //     navigate("/login");
+  //   }
+  // }, [isAuthenticated, navigate]);
 
-  if (!isCustomer) {
-    navigate("/");
-  }
+  // if (!isCustomer) {
+  //   navigate("/");
+  // }
 
   const classes = useStyles();
   const params = useParams();
@@ -855,9 +855,7 @@ function ListingDetail() {
         <Grid
           item
           container
-          width={"60%"}
           margin={"auto"}
-          borderTop={"1px solid gray"}
           marginTop={"1rem"}
         >
           <Grid width={"80%"} margin={"auto"}>

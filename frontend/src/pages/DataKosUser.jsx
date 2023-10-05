@@ -127,7 +127,6 @@ export default function DataTableUser() {
     }
   };
 
-  console.log(allKos);
   const columns = [
     { field: "fullName", headerName: "Name", width: 200 },
     { field: "addressRoom", headerName: "No. Kamar", width: 100 },

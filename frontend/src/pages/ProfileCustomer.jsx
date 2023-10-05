@@ -98,15 +98,14 @@ function ProfileCustomer() {
     } else {
       return (
         <Card
-          container
-          direction="column"
-          alignItems="center"
-          justifyContent="center"
+          direction="column"   
           style={{
             width: "50%",
             marginLeft: "auto",
             marginRight: "auto",
+            justifyContent:"center",
             padding: "5px",
+            alignItems:"center"
           }}
         >
           <CardMedia
@@ -153,7 +152,7 @@ function ProfileCustomer() {
 
   return (
     <>
-      <Grid item container width="100%">
+      <Grid container item  width="100%">
         <Grid item lg={6} md={6} sm={12} xs={12} marginTop={"2rem"}>
           <div>{WelcomeDisplay()}</div>
           <Button

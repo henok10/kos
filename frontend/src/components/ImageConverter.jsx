@@ -45,12 +45,14 @@ const useStyles = makeStyles(() => ({
 
   rumahInfo: {
     width: "100%",
+    fontSize: "12px",
   },
   kamar: {
     float: "left",
     marginTop: 3,
     padding: "20px",
     width: "50%",
+    fontSize: "12px",
   },
 
   ttd: {
@@ -79,8 +81,6 @@ function ImageConverter({ transaction }) {
   const classes = useStyles();
   const [modalOpen, setModalOpen] = useState(false);
   const elementRef = useRef(null);
-
-  console.log(elementRef);
 
   const transactionDate = new Date(transaction.date);
 

@@ -113,15 +113,13 @@ function ProfileOwner() {
     } else {
       return (
         <Card
-          container
           direction="column"
-          alignItems="center"
-          justifyContent="center"
           style={{
             width: "50%",
             marginLeft: "auto",
             marginRight: "auto",
             padding: "5px",
+            alignItems:"center"
           }}
         >
           <CardMedia

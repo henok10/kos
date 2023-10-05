@@ -615,6 +615,30 @@ function ListingAdd() {
               helperText={state.no_rekeningErrors.errorMessage}
             />
           </Grid>
+
+          <Grid item xs={5} style={{ marginTop: "1rem" }}>
+            <TextField
+              id="borough"
+              label="Borough*"
+              variant="standard"
+              fullWidth
+              value={state.boroughValue}
+              onChange={(e) =>
+                dispatch({
+                  type: "catchBoroughChange",
+                  boroughChosen: e.target.value,
+                })
+              }
+              onBlur={(e) =>
+                dispatch({
+                  type: "catchBoroughErrors",
+                  boroughChosen: e.target.value,
+                })
+              }
+              error={state.boroughErrors.hasErrors ? true : false}
+              helperText={state.boroughErrors.errorMessage}
+            ></TextField>
+          </Grid>
         </Grid>
         <Grid item container>
           <Grid item xs={12} style={{ marginTop: "1rem" }}>
@@ -666,31 +690,6 @@ function ListingAdd() {
             error={state.descriptionErrors.hasErrors ? true : false}
             helperText={state.descriptionErrors.errorMessage}
           />
-        </Grid>
-        <Grid item container justifyContent="center">
-          <Grid item xs={5} style={{ marginTop: "1rem" }}>
-            <TextField
-              id="borough"
-              label="Borough*"
-              variant="standard"
-              fullWidth
-              value={state.boroughValue}
-              onChange={(e) =>
-                dispatch({
-                  type: "catchBoroughChange",
-                  boroughChosen: e.target.value,
-                })
-              }
-              onBlur={(e) =>
-                dispatch({
-                  type: "catchBoroughErrors",
-                  boroughChosen: e.target.value,
-                })
-              }
-              error={state.boroughErrors.hasErrors ? true : false}
-              helperText={state.boroughErrors.errorMessage}
-            ></TextField>
-          </Grid>
         </Grid>
 
         {/* Map */}

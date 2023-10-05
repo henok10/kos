@@ -3,7 +3,7 @@ import { makeStyles } from "@mui/styles";
 import city from "../data/minions.png";
 import Search from "./Search";
 import Axios from "axios";
-import { Grid, CircularProgress, Box } from "@mui/material";
+import { Grid, CircularProgress, Box, Typography } from "@mui/material";
 import Listing from "./HomeListing";
 
 const useStyles = makeStyles(() => ({
@@ -44,8 +44,7 @@ const HomeImg = () => {
         setAllListings(response.data);
         setDataIsLoading(false);
       } catch (error) {
-        // Tangani error dengan baik di sini
-        console.error("Error fetching data: ", error);
+
       }
     }
 
@@ -99,7 +98,7 @@ const HomeImg = () => {
   }
   return (
     <>
-      <Grid contained >
+      <Grid container>
         <Grid item xs={12} className={classes.hero}>
           <Search
             setSearchResults={setSearchResults}
@@ -113,14 +112,16 @@ const HomeImg = () => {
             width="80%"
             margin="auto"
             position="relative"
-            marginTop="10rem"
+            marginTop="8rem"
           >
-            <h1>Recent Rumah Kos Listed</h1>
-            <p>
+            <Typography variant="h4">Recent Rumah Kos Listed</Typography>
+
+            <Typography variant="body">
+              {" "}
               Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
               eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
               enim ad minim veniam.
-            </p>
+            </Typography>
           </Grid>
           <Grid container width="80%" margin="auto">
             <Listing filtered={filtered} isLoading={dataIsLoading} />

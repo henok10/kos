@@ -219,7 +219,7 @@ function ProfileUpdateCustomer(props) {
       <Paper style={{ width: "97%" }}>
         <div className={classes.formContainer}>
           <form onSubmit={FormSubmit}>
-            <Grid item container justifyContent="center">
+            <Grid textAlign="center">
               <Typography variant="h4">MY PROFILE</Typography>
             </Grid>
 
@@ -303,7 +303,7 @@ function ProfileUpdateCustomer(props) {
                 marginRight: "auto",
               }}
             >
-              <Button variant="outlined" component="label" fullWidth>
+              <Button variant="outlined" component="label">
                 UPLOAD PICTURE
                 <input
                   type="file"

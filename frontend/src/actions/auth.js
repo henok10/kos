@@ -40,8 +40,7 @@ function isTokenExpired(token) {
 export const getCustomerUser = () => (dispatch, getState) => {
   const access_token = getState().auth.access_token;
   const isCustomer = getState().auth.isCustomer;
-  console.log(isCustomer);
-  console.log(access_token);
+
   const config = {
     headers: {
       "Content-type": "application/json",
@@ -68,7 +67,6 @@ export const getCustomerUser = () => (dispatch, getState) => {
     });
 };
 
-console.log(CUSTOMER_USER_LOADED);
 
 // check token and load freelance user
 export const getOwnerUser = () => (dispatch, getState) => {
@@ -79,8 +77,7 @@ export const getOwnerUser = () => (dispatch, getState) => {
       "Content-Type": "application/json",
     },
   };
-  console.log(isOwner);
-  console.log(access_token);
+
   if (access_token && isOwner) {
     config.headers["Authorization"] = `Bearer ${access_token}`;
   }
@@ -219,12 +216,6 @@ export const login =
       });
   };
 
-// export const LoginError = (error) => ({
-//   type: LOGIN_FAILED,
-//   payload: error
-// });
-
-console.log(LOGIN_SUCCESS);
 
 // Fungsi logout yang akan dijalankan saat token kedaluwarsa atau pengguna logout manual
 export const logout = () => (dispatch, getState) => {
@@ -241,7 +232,6 @@ export const logout = () => (dispatch, getState) => {
   } else {
     // Token belum kedaluwarsa, lakukan logout dengan melakukan permintaan logout ke backend
     const refresh_token = getState().auth.refresh_token;
-    console.log(access_token);
 
     const config = {
       headers: {
@@ -353,7 +343,7 @@ export const reset_password =
         // Authorization: `Bearer ${access}`
       },
     };
-    //   console.log(access)
+
     const body = JSON.stringify({ id, token, password, password2 });
 
     try {

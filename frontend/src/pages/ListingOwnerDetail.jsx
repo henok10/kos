@@ -195,7 +195,7 @@ function ListingOwnerDetail() {
       GetFasilitasInfo();
     }
   }, [state.listingInfo]);
-  console.log(state.listingInfo);
+
 
   useEffect(() => {
     async function GetRuleInfo() {

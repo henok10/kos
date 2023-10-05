@@ -96,7 +96,7 @@ function Search({ setSearchResults, filtered, dataIsLoading }) {
   const [poi, setPoi] = useState("");
   const [poiList, setPoiList] = useState([]);
   const [listingList, setListingList] = useState([]);
-  const [priceRange, setPriceRange] = useState([0, 4000000]); // Nilai default
+  const [priceRange, setPriceRange] = useState([1000000, 4000000]); // Nilai default
 
   const classes = useStyles();
 
@@ -152,7 +152,7 @@ function Search({ setSearchResults, filtered, dataIsLoading }) {
     <Grid container marginBottom={0} marginTop="5rem">
       <Grid item xs={12} sm={12} md={12} lg={12}>
         <Box className={classes.title}>
-          <Typography
+          <Box
             style={{
               marginTop: "25rem",
               margin: "auto",
@@ -169,7 +169,7 @@ function Search({ setSearchResults, filtered, dataIsLoading }) {
             <Typography className={classes.subtitle} variant="subtitle1">
               Find new &amp; featured property located in your local city.
             </Typography>
-          </Typography>
+          </Box>
         </Box>
       </Grid>
       <Grid item sm={12} md={12} lg={12} width="100%">
@@ -187,9 +187,11 @@ function Search({ setSearchResults, filtered, dataIsLoading }) {
                     fullWidth
                     value={cityArea}
                     onChange={(e, newValue) => setCityArea(newValue)}
-                    options={listingList.map(
-                      (listingItem) => listingItem.borough
-                    )}
+                    options={[
+                      ...new Set(
+                        listingList.map((listingItem) => listingItem.borough)
+                      ),
+                    ]}
                     renderInput={(params) => (
                       <TextField
                         {...params}
@@ -214,7 +216,11 @@ function Search({ setSearchResults, filtered, dataIsLoading }) {
                     fullWidth
                     value={poi}
                     onChange={(e, newValue) => setPoi(newValue)}
-                    options={poiList.map((poiItem) => poiItem.name)}
+                    options={[
+                      ...new Set(
+                        poiList.map((poiItem) => poiItem.name)
+                      ),
+                    ]}
                     renderInput={(params) => (
                       <TextField
                         {...params}
@@ -240,7 +246,6 @@ function Search({ setSearchResults, filtered, dataIsLoading }) {
                   max={10000000}
                   step={500000}
                   size="small"
-                  aria-label="Small"
                   valueLabelDisplay="auto"
                   slots={{ thumb: AirbnbThumbComponent }}
                 />

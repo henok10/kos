@@ -30,11 +30,12 @@ import houseIconPng from "../data/Mapicons/house.png";
 
 const useStyles = makeStyles({
   cardStyle: {
-    justifyContent: 'space-between',
+    overflow: "hidden",
     border: "4px solid white",
-    width: '98%',
+    width: "98%",
     position: "relative",
     height: "21rem",
+    marginBottom: "0.5rem"
   },
 
   pictureStyle: {
@@ -45,7 +46,7 @@ const useStyles = makeStyles({
     fontSize: "14px",
     fontWeight: "bold",
     color: "skyblue",
-    height: "2rem",
+    height: "8px",
   },
 });
 function Listings() {
@@ -70,14 +71,15 @@ function Listings() {
         return draft;
     }
   }
-
-  const [state, dispatch] = useImmerReducer(ReducerFuction, initialState);
-
-  function TheMapComponent() {
+  function TheMapComponents() {
     const map = useMap();
-    dispatch({ type: "getMap", mapData: map });
+    useEffect(() => {
+      dispatch({ type: "getMap", mapData: map });
+    }, [map]);
     return null;
   }
+
+  const [state, dispatch] = useImmerReducer(ReducerFuction, initialState);
 
   const [allListings, setAllListings] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
@@ -110,10 +112,10 @@ function Listings() {
 
   function fuzzySearch(needle, haystack) {
     // Split the search term into words
-    const words = needle.toLowerCase().split(' ');
-    
+    const words = needle.toLowerCase().split(" ");
+
     // Check if any of the words match any part of the haystack
-    return words.every(word => {
+    return words.every((word) => {
       return haystack.toLowerCase().includes(word);
     });
   }
@@ -142,8 +144,8 @@ function Listings() {
 
   return (
     <>
-      <Grid container paddingTop={"0.5rem"}>
-        <Grid item lg={5.5} md={5.5} sm={12}>
+      <Grid container paddingTop={"0.5rem"} display= "flex" boxSizing="border-box">
+        <Grid item lg={5.5} md={5.5} sm={12} >
           <Grid item xs={12} padding="0.5rem">
             <Paper
               component="form"
@@ -172,7 +174,7 @@ function Listings() {
           <Grid container padding="0.5rem" spacing={0}>
             {filteredListings.slice(0, 10).map((listing) => {
               return (
-                <Grid item xs={12} sm={6} md={6}>
+                <Grid item key={listing.id} xs={12} sm={6} md={6}>
                   <Card key={listing.id} className={classes.cardStyle}>
                     <CardMedia
                       className={classes.pictureStyle}
@@ -195,12 +197,14 @@ function Listings() {
                       action={
                         <IconButton
                           aria-label="settings"
-                          onClick={() =>
-                            state.mapInstance.flyTo(
-                              [listing.latitude, listing.longitude],
-                              18
-                            )
-                          }
+                          onClick={() => {
+                            if (state.mapInstance) {
+                              state.mapInstance.flyTo(
+                                [listing.latitude, listing.longitude],
+                                18
+                              );
+                            }
+                          }}
                         >
                           <RoomIcon />
                         </IconButton>
@@ -211,9 +215,9 @@ function Listings() {
                         gutterBottom
                         variant="body4"
                         component="div"
-                        style={{ fontSize: "10px" }}
+                        style={{ fontSize: "13px" }}
                       >
-                        {listing.address.substring(0, 100)}
+                        {listing.address.substring(0, 90)}...
                       </Typography>
                     </CardContent>
                     <CardActions
@@ -266,7 +270,6 @@ function Listings() {
                     attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
                     url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                   />
-                  <TheMapComponent />
 
                   {allListings.map((listing) => {
                     return (
@@ -305,6 +308,7 @@ function Listings() {
                       </Marker>
                     );
                   })}
+                  <TheMapComponents />
                 </MapContainer>
               </div>
             </Box>

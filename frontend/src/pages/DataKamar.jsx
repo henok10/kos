@@ -48,7 +48,7 @@ function DataKamar() {
 
     GetAllRoom();
   }, [params.id]); // Tambah
-  console.log(allRoom);
+
 
   async function updateApprove(id, newValue) {
     try {
@@ -215,7 +215,7 @@ function DataKamar() {
         const approveStatus =
           approveData && approveData.length > 0 ? approveData[0].approve : null;
 
-        console.log(approveStatus);
+
         return (
           <div
             style={{
@@ -310,8 +310,8 @@ function DataKamar() {
           <Button
             color="primary"
             variant="contained"
-            marginLeft="0.5rem"
-            style={{ margin: "0.5rem" }}
+            
+            style={{ margin: "0.5rem", marginLeft:"0.5rem" }}
             onClick={() => navigate(`/datakosApprove/${params.id}`)}
           >
             Pesan

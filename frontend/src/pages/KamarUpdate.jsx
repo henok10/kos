@@ -33,11 +33,13 @@ const useStyles = makeStyles({
 function KamarUpdate() {
   const { choice_kamar } = choices();
   const classes = useStyles();
-  const navigate = useNavigate();
+ 
   const params = useParams();
+  
+  const [fasilitass, setFasilitass] = useState([]);
+  const navigate = useNavigate();
   const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
   const isOwner = useSelector((state) => state.auth.isOwner);
-  const [fasilitass, setFasilitass] = useState([]);
 
   useEffect(() => {
     if (!isAuthenticated) {

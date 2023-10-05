@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import Axios from "axios";
 import { makeStyles } from "@mui/styles";
 import { useImmerReducer } from "use-immer";
 import RoomIcon from "@mui/icons-material/Room";
 import { choices } from "../components/Choice";
-
+import { useSelector } from "react-redux";
 // MUI
 import { Grid, Typography, CircularProgress, Box, Paper } from "@mui/material";
 import ErrorIcon from "@mui/icons-material/Error";
@@ -44,9 +44,17 @@ const useStyles = makeStyles({
 
 function KamarDetail() {
   const classes = useStyles();
+  const navigate = useNavigate();
   const params = useParams();
   const [allFasilitas, setAllFasilitas] = useState([]);
   const [allRule, setAllRule] = useState([]);
+  const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
+  useEffect(() => {
+    if (!isAuthenticated) {
+      navigate("/login");
+    }
+  }, [isAuthenticated, navigate]);
+
   const initialState = {
     dataIsLoading: true,
     kamarInfo: "",
@@ -123,7 +131,6 @@ function KamarDetail() {
       GetFasilitasInfo();
     }
   }, [state.kamarInfo]);
-  console.log(allFasilitas);
 
   useEffect(() => {
     if (state.kamarInfo) {
@@ -186,7 +193,18 @@ function KamarDetail() {
     }
   }
 
-  // console.log(state.kamarInfo.rumah)
+  if (state.dataIsLoading === true) {
+    return (
+      <Grid
+        container
+        justifyContent="center"
+        alignItems="center"
+        style={{ height: "100vh" }}
+      >
+        <CircularProgress />
+      </Grid>
+    );
+  } 
   return (
     <div style={{ height: 550, margin: "auto", padding: "1rem" }}>
       <Grid

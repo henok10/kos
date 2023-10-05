@@ -26,12 +26,8 @@ function TheMapComponent({ listingInfo }) {
       );
     }
   }, [map]);
-  
 
   useEffect(() => {
-    console.log("map:", map);
-    console.log("userLocation:", userLocation);
-    console.log("listingInfo:", listingInfo);
     if (map && userLocation && listingInfo) {
       const waypoints = [
         {
@@ -49,29 +45,32 @@ function TheMapComponent({ listingInfo }) {
         map.removeControl(routingControlRef.current);
       }
 
-      const routingControl = L.Routing.control({
-        waypoints,
-        createMarker: function (i, waypoint, n) {
-          const marker = L.marker(waypoint.latLng, {
-            draggable: true,
-          });
+      // Use setTimeout to ensure that the component has finished rendering
+      setTimeout(() => {
+        const routingControl = L.Routing.control({
+          waypoints,
+          createMarker: function (i, waypoint, n) {
+            const marker = L.marker(waypoint.latLng, {
+              draggable: true,
+            });
 
-          marker.bindPopup(waypoint.name);
+            marker.bindPopup(waypoint.name);
 
-          return marker;
-        },
-        lineOptions: {
-          styles: [{ color: "#6FA1EC", opacity: 1, weight: 6 }],
-        },
-        routeWhileDragging: true,
-        draggableWaypoints: true,
-        fitSelectedRoutes: true,
-        // showAlternatives: true,
-        show: false,
-      });
+            return marker;
+          },
+          lineOptions: {
+            styles: [{ color: "#6FA1EC", opacity: 1, weight: 6 }],
+          },
+          routeWhileDragging: true,
+          draggableWaypoints: true,
+          fitSelectedRoutes: true,
+          // showAlternatives: true,
+          show: false,
+        });
 
-      routingControl.addTo(map);
-      routingControlRef.current = routingControl; // Save the reference to the routing control
+        routingControl.addTo(map);
+        routingControlRef.current = routingControl; // Save the reference to the routing control
+      }, 0); // Use a minimal timeout
     }
   }, [map, userLocation, listingInfo]);
 

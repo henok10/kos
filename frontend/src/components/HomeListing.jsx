@@ -77,7 +77,7 @@ export default function Listing({ filtered, isLoading }) {
     <>
       {filtered.slice(0, 9).map((listing) => {
         return (
-          <Grid item xs={12} sm={6} md={4}>
+          <Grid item key={listing.id} xs={12} sm={6} md={4}>
             <Card key={listing.id} className={classes.cardStyle}>
               <CardMedia
                 // className={classes.pictureStyle}

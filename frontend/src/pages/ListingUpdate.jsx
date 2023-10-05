@@ -667,18 +667,18 @@ function ListingUpdate(props) {
               }
             ></TextField>
           </Grid>
-          <Grid item xs={5} style={{ marginTop: "1rem" }}>
+
+          <Grid item xs={5} container style={{ marginTop: "1rem" }}>
             <TextField
-              id="price"
-              type="number"
-              label="Harga per Bulan"
+              id="borough"
+              label="Borough"
               variant="standard"
               fullWidth
-              value={state.priceMonthValue}
+              value={state.boroughValue}
               onChange={(e) =>
                 dispatch({
-                  type: "catchPriceMonthChange",
-                  priceMonthChosen: e.target.value,
+                  type: "catchBoroughChange",
+                  boroughChosen: e.target.value,
                 })
               }
             />
@@ -719,23 +719,7 @@ function ListingUpdate(props) {
             />
           </Grid>
         </Grid>
-        <Grid item container justifyContent={"center"}>
-          <Grid item xs={8} container style={{ marginTop: "1rem" }}>
-            <TextField
-              id="borough"
-              label="Borough"
-              variant="standard"
-              fullWidth
-              value={state.boroughValue}
-              onChange={(e) =>
-                dispatch({
-                  type: "catchBoroughChange",
-                  boroughChosen: e.target.value,
-                })
-              }
-            />
-          </Grid>
-        </Grid>
+
         <Grid item container justifyContent={"space-between"}>
           <Grid item xs={5} container style={{ marginTop: "1rem" }}>
             <TextField

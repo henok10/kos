@@ -33,18 +33,12 @@ const useStyles = makeStyles((theme) => ({
     flexDirection: "row",
   },
   textarea: {
-    display: "flex",
-    // border: "1px solid #a9a9a9",
-    borderRadius: 5,
-    padding: 10,
-    // margin: "20px",
     minHeight: 100,
-    width: 600,
+    width: '300px',
   },
   button: {
     border: "1px solid #a9a9a9",
     borderRadius: 5,
-    width: 300,
     padding: 10,
   },
 }));
@@ -65,7 +59,6 @@ function Review() {
   const [hoverValue, setHoverValue] = useState(undefined);
   const stars = Array(5).fill(0);
 
-  console.log(userId)
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -134,6 +127,7 @@ function Review() {
               id="comment"
               label="What's your experience?"
               multiline
+              fullWidth
               rows={4}
               variant="outlined"
               value={comment}

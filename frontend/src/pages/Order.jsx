@@ -113,7 +113,6 @@ function Order() {
     },
     [dispatch]
   );
-  console.log(params.rumah);
   const handleSubmit = useCallback(
     async (e) => {
       e.preventDefault();
@@ -292,7 +291,6 @@ function Order() {
                   variant="outlined"
                   fullWidth
                   size="small"
-                  marginTop="1rem"
                   value={state.rentalFrequencyValue}
                   onChange={handleChange}
                   name="rentalFrequencyValue"

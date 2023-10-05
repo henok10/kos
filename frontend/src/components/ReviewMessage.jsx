@@ -28,7 +28,7 @@ const useStyles = makeStyles((theme) => ({
     alignItems: "center",
   },
   stars: {
-    display: "flex",
+    // display: "flex",
     flexDirection: "row",
   },
   textarea: {
@@ -89,7 +89,7 @@ function ReviewMessage() {
       </Grid>
     );
   }
-  console.log(allReviews.id)
+
   return (
     <>
       <Grid>
@@ -141,9 +141,9 @@ function ReviewMessage() {
                   return (
                     <FaStar
                       key={index}
-                      fontSize="small"
+                      fontSize="10px"
                       style={{
-                        marginRight: 10,
+                        marginRight: 2,
                         color: filled ? colors.orange : colors.grey,
                       }}
                     />

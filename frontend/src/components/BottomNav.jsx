@@ -42,8 +42,7 @@ const BottomNav = () => {
               textAlign: "center", // Mengatur alignment text ke tengah
             }}
           >
-            &copy;{new Date().getFullYear()} KOS SAYA | All rights reserved |
-            Terms Of Service | Privacy
+            &copy;{new Date().getFullYear()} KOS SAYA | All rights reserved 
           </Typography>
         {/* </BottomNavigation> */}
       </Paper>

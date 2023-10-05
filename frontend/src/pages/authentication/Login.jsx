@@ -3,12 +3,25 @@ import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { login, clearErrors } from "../../actions/auth";
 import { NavLink, Navigate, useNavigate } from "react-router-dom";
+import Snackbar from "@mui/material/Snackbar";
+import MuiAlert from "@mui/material/Alert";
 
 // MUI
-import { Grid, Typography, Button, TextField } from "@mui/material";
+import {
+  Grid,
+  Typography,
+  Button,
+  TextField,
+  Container,
+  Alert,
+  Avatar,
+  Box,
+} from "@mui/material";
 import { makeStyles } from "@mui/styles";
 import { useSelector } from "react-redux";
 import { Validation } from "./validation";
+import LockIcon from "@mui/icons-material/Lock";
+import { Visibility, VisibilityOff } from "@mui/icons-material";
 
 const useStyles = makeStyles({
   formContainer: {
@@ -41,6 +54,8 @@ function Login({ login, isAuthenticated, isCustomer, isOwner, clearErrors }) {
   });
   const { email, password } = user;
   const [errors, setErrors] = useState({});
+  const [isShowPassword, setIsShowPassword] = useState(false);
+  const [openSnackbar, setOpenSnackbar] = useState(false);
 
   useEffect(() => {
     // Dispatch aksi CLEAR_ERRORS saat komponen dimuat ulang
@@ -63,6 +78,8 @@ function Login({ login, isAuthenticated, isCustomer, isOwner, clearErrors }) {
       // Hanya melakukan login jika tidak ada kesalahan validasi
       clearErrors();
       login(logins);
+    } else {
+      setOpenSnackbar(true); // Menampilkan Snackbar jika terdapat kesalahan
     }
   };
 
@@ -73,88 +90,151 @@ function Login({ login, isAuthenticated, isCustomer, isOwner, clearErrors }) {
   } else {
     // console.log(clearErrors())
     return (
-      <div className={classes.formContainer}>
-        <div className="row">
-          <div className="col-md-6 mx-auto">
-            <Grid item container justifyContent="center">
-              <Typography variant="h4">SIGN IN</Typography>
-            </Grid>
-            {loginError && (
-              <Typography variant="body1" color="error">
-                {loginError}
-              </Typography>
-            )}
-            <form onSubmit={handleLoginSubmit}>
-              <Grid item container style={{ marginTop: "1rem" }}>
-                {errors.email && <p style={{ color: "red" }}>{errors.email}</p>}
-                <TextField
-                  id="email"
-                  label="Email"
-                  size="small"
-                  fullWidth
-                  name="email"
-                  variant="outlined"
-                  value={user.email}
-                  onChange={loginChange}
-                />
-              </Grid>
-              <Grid item container style={{ marginTop: "1rem" }}>
-                {errors.password && (
-                  <p style={{ color: "red" }}>{errors.password}</p>
-                )}
-                <TextField
-                  id="password"
-                  label="Password"
-                  size="small"
-                  fullWidth
-                  name="password"
-                  variant="outlined"
-                  type="password"
-                  value={user.password}
-                  onChange={loginChange}
-                />
-              </Grid>
-              <NavLink to="/sendpasswordresetemail">Forgot Password ?</NavLink>
-              <Grid
-                item
-                container
-                xs={8}
-                style={{
-                  marginTop: "1rem",
-                  marginLeft: "auto",
-                  marginRight: "auto",
-                }}
-              >
-                <Button
-                  variant="contained"
-                  fullWidth
-                  type="submit"
-                  disabled={Object.keys(errors).length > 0}
-                >
-                  SIGN IN
-                </Button>
-              </Grid>
-            </form>
+      <Container
+        maxWidth="xs"
+        style={{ display: "flex", position: "relative" }}
+      >
+        {/* <Alert variant="outlined" severity="warning">
+          This is a warning alert — check it out!
+        </Alert> */}
+        <Box
+          style={{
+            display: "flex",
+            position: "absolute",
+            top: 5,
+            width: "80%",
+            left: 70,
+          }}
+        >
+          {loginError && (
+            <Alert variant="outlined" severity="warning">
+              <p>{loginError}</p>
+            </Alert>
+          )}
+        </Box>
 
-            <Grid
-              item
-              container
-              justifyContent="center"
-              style={{ marginTop: "1rem" }}
+        <Box
+          style={{
+            display: "flex",
+            alignItems: "center",
+            flexDirection: "column",
+            margin: "5rem auto",
+            width: "80%",
+          }}
+          onSubmit={handleLoginSubmit}
+          component="form"
+        >
+          <Avatar sx={{ backgroundColor: "secondary.main" }}>
+            <LockIcon />
+          </Avatar>
+          <Typography style={{ marginBottom: "1rem" }} variant="h4">
+            Sign In
+          </Typography>
+
+          {errors.email && (
+            <p style={{ color: "red", height: "5px", alignSelf: "self-start" }}>
+              {errors.email}
+            </p>
+          )}
+          <Grid
+            item
+            container
+            style={{ display: "flex", marginBottom: "1rem", marginTop: "5px" }}
+          >
+            <TextField
+              id="email"
+              label="Email"
+              size="small"
+              fullWidth
+              // required
+              autoFocus
+              type="text"
+              name="email"
+              variant="outlined"
+              value={user.email}
+              onChange={loginChange}
+            />
+          </Grid>
+          {errors.password && (
+            <p style={{ color: "red", height: "5px", alignSelf: "self-start" }}>
+              {errors.password}
+            </p>
+          )}
+          <Grid
+            item
+            container
+            style={{ display: "flex", position: "relative", marginTop: "5px" }}
+          >
+            <TextField
+              id="password"
+              label="Password"
+              size="small"
+              fullWidth
+              // required
+              autoFocus
+              name="password"
+              variant="outlined"
+              type={isShowPassword ? "text" : "password"}
+              value={user.password}
+              onChange={loginChange}
+            />
+            <div
+              style={{
+                display: "flex",
+                position: "absolute",
+                right: 15,
+                top: 10,
+                cursor: "pointer",
+              }}
+              onClick={() => setIsShowPassword(!isShowPassword)}
             >
-              <Typography variant="small">
-                Don't have an account yet?{" "}
-                <span
-                  onClick={() => navigate("/")}
-                  style={{ cursor: "pointer", color: "green" }}
-                >
-                  SIGN UP
-                </span>
-              </Typography>
-            </Grid>
-          </div>
-        </div>
-      </div>
+              {isShowPassword ? (
+                <Visibility fontSize="small" />
+              ) : (
+                <VisibilityOff fontSize="small" />
+              )}
+            </div>
+          </Grid>
+          <NavLink to="/sendpasswordresetemail">Forgot Password ?</NavLink>
+          <Grid
+            item
+            container
+            xs={8}
+            style={{
+              // marginTop: "1rem",
+              // marginLeft: "auto",
+              // marginRight: "auto",
+              margin: "1rem auto 0",
+            }}
+          >
+            <Button
+              variant="contained"
+              fullWidth
+              type="submit"
+              disabled={Object.keys(errors).length > 0}
+            >
+              SIGN IN
+            </Button>
+          </Grid>
+
+          <Grid
+            item
+            container
+            justifyContent="center"
+            style={{ marginTop: "1rem" }}
+          >
+            <Typography variant="small">
+              Don't have an account yet?{" "}
+              <span
+                onClick={() => navigate("/")}
+                style={{ cursor: "pointer", color: "green" }}
+              >
+                SIGN UP
+              </span>
+            </Typography>
+          </Grid>
+        </Box>
+      </Container>
     );
   }
 }
