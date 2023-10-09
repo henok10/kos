@@ -49,6 +49,7 @@ export const authReducer=(state=initialState, action)=>{
             return {
                 ...state,
                 ...action.payload,
+                userId: action.payload.user_id,
                 isAuthenticated:true,
                 isCustomer:action.payload.user.is_customer,
                 isOwner:action.payload.user.is_owner,
@@ -61,6 +62,7 @@ export const authReducer=(state=initialState, action)=>{
             return {
                 ...state,
                 ...action.payload,
+                userId: action.payload.user_id,
                 isAuthenticated:true,
                 isCustomer:action.payload.user.is_customer,
                 isOwner:action.payload.user.is_owner,
@@ -69,6 +71,8 @@ export const authReducer=(state=initialState, action)=>{
         case CUSTOMER_USER_LOADED:
             return{
                 ...state,
+                ...action.payload,
+                userId: action.payload.user_id,
                 isAuthenticated:true,
                 isCustomer:true,
                 user:action.payload,
@@ -77,6 +81,8 @@ export const authReducer=(state=initialState, action)=>{
         case  OWNER_USER_LOADED:
             return {
                 ...state,
+                ...action.payload,
+                userId: action.payload.user_id,
                 isAuthenticated:true,
                 isOwner: true,
                 user:action.payload,

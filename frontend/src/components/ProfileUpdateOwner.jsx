@@ -40,6 +40,7 @@ const useStyles = makeStyles({
 
 function ProfileUpdate(props) {
   const userId = useSelector((state) => state.auth.userId);
+  console.log(userId)
   const classes = useStyles();
   const navigate = useNavigate();
 

@@ -22,6 +22,7 @@ import {
 
 function ProfileOwner() {
   const userId = useSelector((state) => state.auth.userId);
+  console.log(userId)
   const navigate = useNavigate();
   const username = useSelector((state) => state.auth.username);
   const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
