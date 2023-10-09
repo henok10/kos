@@ -36,6 +36,7 @@ class CustomerSignupView(generics.GenericAPIView):
         return Response({
             "user": UserSerializer(user, context=self.get_serializer_context()).data,
             "token": token,
+            'user_id': user_id,
             'access_token':  access_token,
             'refresh_token': refresh_token,
             "message": "account created successfully"
@@ -55,6 +56,7 @@ class OwnerSignupView(generics.GenericAPIView):
         return Response({
             "user": UserSerializer(user, context=self.get_serializer_context()).data,
             "token": token,
+            'user_id': user_id,
             'access_token':  access_token,
             'refresh_token': refresh_token,
             "message": "account created successfully"
