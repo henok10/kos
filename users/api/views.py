@@ -30,6 +30,7 @@ class CustomerSignupView(generics.GenericAPIView):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         user = serializer.save()
+        user_id = user.pk
         token = get_tokens_for_user(user)
         access_token = token['access']
         refresh_token = token['refresh']
@@ -50,6 +51,7 @@ class OwnerSignupView(generics.GenericAPIView):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         user = serializer.save()
+        user_id = user.pk
         token = get_tokens_for_user(user)
         access_token = token['access']
         refresh_token = token['refresh']
