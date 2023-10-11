@@ -223,6 +223,56 @@ function Order() {
     }
   }
 
+  function SubmitButtonDisplay() {
+    if (
+      isAuthenticated &&
+      state.fullNameValue !== null &&
+      state.fullNameValue !== "" &&
+      state.phoneNumberValue !== null &&
+      state.phoneNumberValue !== ""
+    ) {
+      return (
+        <Button
+          variant="contained"
+          fullWidth
+          type="submit"
+          className={classes.loginBtn}
+          disabled={state.disabledBtn}
+        >
+          SUBMIT
+        </Button>
+      );
+    } else if (
+      isAuthenticated &&
+      (state.fullNameValue === null ||
+        state.fullNameValue === "" ||
+        state.phoneNumberValue === null ||
+        state.phoneNumberValue === "")
+    ) {
+      return (
+        <Button
+          variant="outlined"
+          fullWidth
+          className={classes.loginBtn}
+          onClick={() => navigate("/profileCustomer")}
+        >
+          COMPLETE YOUR PROFILE TO ORDER KAMAR
+        </Button>
+      );
+    } else if (!isAuthenticated) {
+      return (
+        <Button
+          variant="outlined"
+          fullWidth
+          onClick={() => navigate("/login")}
+          className={classes.loginBtn}
+        >
+          SIGN IN TO ADD A PROPERTY
+        </Button>
+      );
+    }
+  }
+
 
   useEffect(() => {
     if (state.openSnack) {
@@ -351,14 +401,7 @@ function Order() {
               <Grid
                 style={{ marginTop: "1rem" }}
               >
-                <Button
-                  variant="contained"
-                  className={classes.loginBtn}
-                  type="submit"
-                  disabled={state.sendRequest}
-                >
-                  Order
-                </Button>
+                {SubmitButtonDisplay()}
               </Grid>
               <Grid
                 item

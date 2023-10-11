@@ -1,15 +1,15 @@
 {
   "files": {
     "main.css": "/static/css/main.64212e03.css",
-    "main.js": "/static/js/main.3ee5b900.js",
+    "main.js": "/static/js/main.8c8af748.js",
     "static/media/minions.png": "/static/media/minions.129e7776c6f6cb7cfa9b.png",
     "static/media/mikos.png": "/static/media/mikos.8feb3d546dbf8d8e07c9.png",
     "index.html": "/index.html",
     "main.64212e03.css.map": "/static/css/main.64212e03.css.map",
-    "main.3ee5b900.js.map": "/static/js/main.3ee5b900.js.map"
+    "main.8c8af748.js.map": "/static/js/main.8c8af748.js.map"
   },
   "entrypoints": [
     "static/css/main.64212e03.css",
-    "static/js/main.3ee5b900.js"
+    "static/js/main.8c8af748.js"
   ]
 }

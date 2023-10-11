@@ -228,6 +228,7 @@ function ProfileUpdateCustomer(props) {
                 id="fullName"
                 label="Full Name*"
                 variant="standard"
+                required
                 fullWidth
                 value={state.fullNameValue}
                 onChange={(e) =>
@@ -244,6 +245,7 @@ function ProfileUpdateCustomer(props) {
                 id="phoneNumber"
                 label="Phone Number*"
                 variant="standard"
+                required
                 fullWidth
                 value={state.phoneNumberValue}
                 onChange={(e) =>
@@ -260,6 +262,7 @@ function ProfileUpdateCustomer(props) {
                 id="address"
                 label="Address*"
                 variant="standard"
+                required
                 fullWidth
                 value={state.addressValue}
                 onChange={(e) =>
@@ -277,6 +280,7 @@ function ProfileUpdateCustomer(props) {
                 label="Date Of Birth"
                 variant="standard"
                 type="date"
+                required
                 rows={6}
                 fullWidth
                 value={state.dateOfBirthValue}
