@@ -73,9 +73,9 @@ function Kamar() {
   }, [params.id]); // Tambahkan params.id sebagai dependency agar useEffect dipanggil ulang ketika params.id berubah
   console.log();
   return (
-    <Grid container style={{ height: 480, marginTop: "0.5rem"  }}>
+    <Grid container style={{ width: "90%",margin: "2rem auto", height: 480 }}>
       <TableContainer component={Paper}>
-        <Table sx={{ minWidth: 650}} aria-label="simple table">
+        <Table sx={{ minWidth: 650 }} aria-label="simple table">
           <TableHead>
             <TableRow style={{ backgroundColor: "#F8F8FF" }}>
               <TableCell>Address room</TableCell>
@@ -119,9 +119,25 @@ function Kamar() {
                   </div>
                 </TableCell>
                 <TableCell>{row.room_size}</TableCell>
-                <TableCell>{row.price_day}</TableCell>
-                <TableCell>{row.price_month}</TableCell>
-                <TableCell>{row.price_year}</TableCell>
+                <TableCell>
+                  {typeof row.price_day === "string"
+                    ? `Rp${parseInt(row.price_day, 10).toLocaleString("id-ID")}`
+                    : "Harga tidak tersedia"}
+                </TableCell>
+                <TableCell>
+                  {typeof row.price_month === "string"
+                    ? `Rp${parseInt(row.price_month, 10).toLocaleString(
+                        "id-ID"
+                      )}`
+                    : "Harga tidak tersedia"}
+                </TableCell>
+                <TableCell>
+                 {typeof row.price_year === "string"
+                    ? `Rp${parseInt(row.price_year, 10).toLocaleString(
+                        "id-ID"
+                      )}`
+                    : "Harga tidak tersedia"}
+                </TableCell>
                 <TableCell>
                   {
                     <Button

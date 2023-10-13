@@ -7,9 +7,11 @@ const BottomNav = () => {
   return (
     <Box
       sx={{
-        display: "flex",
+        // display: "flex",
+        position: "static",
         flexDirection: "column",
-        minHeight: "100vh",
+        marginTop: 0,
+        bottom: 0
       }}
     >
       {/* Konten utama di sini */}

@@ -58,7 +58,10 @@ export default function RiwayatTransaksi() {
   return (
     <>
       <Grid style={{ height: 650 }}>
-        <Grid container style={{ width: "90%", margin: "auto", marginTop: '2rem' }}>
+        <Grid
+          container
+          style={{ width: "90%", margin: "auto", marginTop: "5rem" }}
+        >
           <Grid
             container
             alignItems="center"
@@ -93,70 +96,87 @@ export default function RiwayatTransaksi() {
                   const year = transactionDate.getFullYear();
                   const month = transactionDate.getMonth() + 1;
                   const day = transactionDate.getDate();
-                  const hours = transactionDate.getHours().toString().padStart(2, '0');
-                  const minutes = transactionDate.getMinutes().toString().padStart(2, '0');
-                
-                  const formattedDate = `${year}/${month < 10 ? "0" : ""}${month}/${
-                    day < 10 ? "0" : ""
-                  }${day}  ${hours}:${minutes}`;
+                  const hours = transactionDate
+                    .getHours()
+                    .toString()
+                    .padStart(2, "0");
+                  const minutes = transactionDate
+                    .getMinutes()
+                    .toString()
+                    .padStart(2, "0");
 
-                  return(
+                  const formattedDate = `${year}/${
+                    month < 10 ? "0" : ""
+                  }${month}/${day < 10 ? "0" : ""}${day}  ${hours}:${minutes}`;
+
+                  function formatPrice(price) {
+                    if (typeof price !== "number") {
+                      return "Harga tidak tersedia";
+                    }
+                    return `Rp${price.toLocaleString("id-ID")}`;
+                  }
+
+                  console.log(typeof row.nominal);
+
+                  return (
                     <TableRow
-                    key={row.id}
-                    sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-                  >
-                    <TableCell>{row.fullName}</TableCell>
-                    <TableCell>
-                      <Link to={`/listings/${row.rumah}`}>
-                        {row.listing_title}
-                      </Link>
-                    </TableCell>
-                    <TableCell>{row.addressKamar}</TableCell>
-                    <TableCell>
-                      <Link to={`/kamar-detail/${row.kamar}`}>
-                        {row.addressRoom}
-                      </Link>
-                    </TableCell>
-                    <TableCell>{row.phoneNumber}</TableCell>
-                    <TableCell>{row.rentalFrequency}</TableCell>
-                    <TableCell>{row.nominal}</TableCell>
-                    <TableCell>
-                    {formattedDate}
-                    </TableCell>
+                      key={row.id}
+                      sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+                    >
+                      <TableCell>{row.fullName}</TableCell>
+                      <TableCell>
+                        <Link to={`/listings/${row.rumah}`}>
+                          {row.listing_title}
+                        </Link>
+                      </TableCell>
+                      <TableCell>{row.addressKamar}</TableCell>
+                      <TableCell>
+                        <Link to={`/kamar-detail/${row.kamar}`}>
+                          {row.addressRoom}
+                        </Link>
+                      </TableCell>
+                      <TableCell>{row.phoneNumber}</TableCell>
+                      <TableCell>{row.rentalFrequency}</TableCell>
+                      <TableCell>
+                        {typeof row.nominal === "string"
+                          ? `Rp${parseInt(row.nominal, 10).toLocaleString(
+                              "id-ID"
+                            )}`
+                          : "Harga tidak tersedia"}
+                      </TableCell>
+                      <TableCell>{formattedDate}</TableCell>
 
-                    <TableCell>
-                      <Grid
-                        style={{
-                          display: "flex",
-                          justifyContent: "space-between",
-                        }}
-                      >
-                        <ImageConverter transaction={row} />
-                        <Button
+                      <TableCell>
+                        <Grid
                           style={{
-                            padding: "4px 8px",
-                            borderRadius: "4px",
-                            width: "5rem",
-                            marginLeft: "2%", // Menggunakan marginLeft agar ada jarak antara elemen
-                            color: "white",
-                            fontWeight: "bold",
-                            textAlign: "center",
-                            backgroundColor: row.approve ? "green" : "orange",
+                            display: "flex",
+                            justifyContent: "space-between",
                           }}
                         >
-                          {row.approve !== undefined
-                            ? row.approve
-                              ? "Approve"
-                              : "Proses"
-                            : "Data not available"}
-                        </Button>
-                      </Grid>
-                    </TableCell>
-                  </TableRow>
-                  )
-
-                 
-                          })}
+                          <ImageConverter transaction={row} />
+                          <Button
+                            style={{
+                              padding: "4px 8px",
+                              borderRadius: "4px",
+                              width: "5rem",
+                              marginLeft: "2%", // Menggunakan marginLeft agar ada jarak antara elemen
+                              color: "white",
+                              fontWeight: "bold",
+                              textAlign: "center",
+                              backgroundColor: row.approve ? "green" : "orange",
+                            }}
+                          >
+                            {row.approve !== undefined
+                              ? row.approve
+                                ? "Approve"
+                                : "Proses"
+                              : "Data not available"}
+                          </Button>
+                        </Grid>
+                      </TableCell>
+                    </TableRow>
+                  );
+                })}
               </TableBody>
             </Table>
           </TableContainer>

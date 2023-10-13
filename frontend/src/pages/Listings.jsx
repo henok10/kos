@@ -35,7 +35,7 @@ const useStyles = makeStyles({
     width: "98%",
     position: "relative",
     height: "21rem",
-    marginBottom: "0.5rem"
+    marginBottom: "0.5rem",
   },
 
   pictureStyle: {
@@ -144,8 +144,14 @@ function Listings() {
 
   return (
     <>
-      <Grid container paddingTop={"0.5rem"} display= "flex" boxSizing="border-box">
-        <Grid item lg={5.5} md={5.5} sm={12} >
+      <Grid
+        container
+        paddingTop={"0.5rem"}
+        display="flex"
+        boxSizing="border-box"
+        marginTop={5}
+      >
+        <Grid item lg={5.5} md={5.5} sm={12}>
           <Grid item xs={12} padding="0.5rem">
             <Paper
               component="form"
@@ -174,7 +180,7 @@ function Listings() {
           <Grid container padding="0.5rem" spacing={0}>
             {filteredListings.slice(0, 10).map((listing) => {
               return (
-                <Grid item key={listing.id} xs={12} sm={6} md={6}>
+                <Grid item key={listing.id} xs={6} sm={6} md={12} lg={6}>
                   <Card key={listing.id} className={classes.cardStyle}>
                     <CardMedia
                       className={classes.pictureStyle}
@@ -239,8 +245,13 @@ function Listings() {
                           className={classes.priceLabel}
                           component="span"
                         >
-                          Rp{listing.price_month}/bulan
+                          {listing.price_month
+                            ? `Rp${listing.price_month.toLocaleString(
+                                "id-ID"
+                              )}/bulan`
+                            : "Harga tidak tersedia"}
                         </Typography>
+
                         <Button
                           variant="contained"
                           color="primary"

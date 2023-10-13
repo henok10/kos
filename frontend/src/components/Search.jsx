@@ -21,36 +21,17 @@ const useStyles = makeStyles(() => {
   };
 
   return {
-    title: {
-      ...baseTypography,
-      fontWeight: "bold",
-      margin: "auto",
-      textAlign: "center",
-      color: "white",
-    },
-    heading: {
-      ...baseTypography,
-      fontWeight: "bold",
-      textAlign: "center",
-      paddingTop: "10rem",
-    },
-    subtitle: {
-      ...baseTypography,
-      fontSize: "16px",
-      margin: "auto",
-      textAlign: "center",
-    },
     form: {
+      display: "flex",
+      alignItems: "center",
       marginTop: "25px",
-      padding: "15px",
+      padding: "35px",
       margin: "auto",
       width: "90%",
-      height: "100%",
+      borderRadius: "30px",
       backgroundColor: "white",
     },
     box: {
-      // margin: "auto",
-      // justifyContent: "center",
       width: "100%",
       padding: "5px",
     },
@@ -149,33 +130,11 @@ function Search({ setSearchResults, filtered, dataIsLoading }) {
     );
   }
   return (
-    <Grid container marginBottom={0} marginTop="5rem">
-      <Grid item xs={12} sm={12} md={12} lg={12}>
-        <Box className={classes.title}>
-          <Box
-            style={{
-              marginTop: "25rem",
-              margin: "auto",
-              textAlign: "center",
-            }}
-          >
-            <Typography
-              style={{ fontWeight: "bold" }}
-              className={classes.heading}
-              variant="h2"
-            >
-              Search Rumah Kos
-            </Typography>
-            <Typography className={classes.subtitle} variant="subtitle1">
-              Find new &amp; featured property located in your local city.
-            </Typography>
-          </Box>
-        </Box>
-      </Grid>
+    <Grid container marginBottom={0}>
       <Grid item sm={12} md={12} lg={12} width="100%">
         <form className={classes.form}>
           <Grid container spacing={1}>
-            <Grid item xs={6} sm={6} md={3} lg={3}>
+            <Grid item xs={12} sm={6} md={6} lg={3}>
               <Box className={classes.box}>
                 <Typography className={classes.label} variant="body1">
                   City/area
@@ -185,9 +144,10 @@ function Search({ setSearchResults, filtered, dataIsLoading }) {
                     id="area-select"
                     size="small"
                     fullWidth
-                    value={cityArea}
+                    value={cityArea  || ""}
                     onChange={(e, newValue) => setCityArea(newValue)}
                     options={[
+                      "", // Tambahkan opsi kosong
                       ...new Set(
                         listingList.map((listingItem) => listingItem.borough)
                       ),
@@ -204,7 +164,7 @@ function Search({ setSearchResults, filtered, dataIsLoading }) {
               </Box>
             </Grid>
 
-            <Grid item xs={6} sm={6} md={3} lg={3}>
+            <Grid item xs={12} sm={6} md={6} lg={3}>
               <Box className={classes.box}>
                 <Typography className={classes.label} variant="body1">
                   Point of Interest
@@ -214,12 +174,11 @@ function Search({ setSearchResults, filtered, dataIsLoading }) {
                     id="poi-select"
                     size="small"
                     fullWidth
-                    value={poi}
+                    value={poi || ""} // Menambahkan opsi kosong jika poi kosong
                     onChange={(e, newValue) => setPoi(newValue)}
                     options={[
-                      ...new Set(
-                        poiList.map((poiItem) => poiItem.name)
-                      ),
+                      "", // Tambahkan opsi kosong
+                      ...new Set(poiList.map((poiItem) => poiItem.name)),
                     ]}
                     renderInput={(params) => (
                       <TextField
@@ -233,7 +192,7 @@ function Search({ setSearchResults, filtered, dataIsLoading }) {
               </Box>
             </Grid>
 
-            <Grid item xs={6} sm={6} md={3} lg={3}>
+            <Grid item xs={12} sm={6} md={6} lg={3}>
               <Box className={classes.box}>
                 <Typography className={classes.label} variant="body1">
                   Price
@@ -252,7 +211,7 @@ function Search({ setSearchResults, filtered, dataIsLoading }) {
               </Box>
             </Grid>
 
-            <Grid item xs={6} sm={6} md={3} lg={3}>
+            <Grid item xs={12} sm={6} md={6} lg={3}>
               <Box className={classes.box}>
                 <Typography
                   className={classes.label}

@@ -1,164 +1,171 @@
-import { useState } from "react";
-import { ProSidebar, Menu, MenuItem } from "react-pro-sidebar";
-import { Box, IconButton, Typography } from "@mui/material";
-import { useSelector } from "react-redux";
+import { useState, useEffect } from "react";
+import { useProSidebar, Sidebar, Menu, MenuItem } from "react-pro-sidebar";
+import { logout } from "../actions/auth";
+import { Box, Grid, IconButton, Button, Typography } from "@mui/material";
+import { useSelector, useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
-import "react-pro-sidebar/dist/css/styles.css";
 import HomeIcon from "@mui/icons-material/Home";
 import AccountBoxIcon from "@mui/icons-material/AccountBox";
 import FolderIcon from "@mui/icons-material/Folder";
-import MenuOutlinedIcon from "@mui/icons-material/MenuOutlined";
+import LoginIcon from "@mui/icons-material/Login";
+import LogoutIcon from "@mui/icons-material/Logout";
 import PageviewIcon from "@mui/icons-material/Pageview";
 import Shop2Icon from "@mui/icons-material/Shop2";
 
-const Item = ({ title, to, icon, selected, setSelected }) => {
+function AuthLinks() {
+  const dispatch = useDispatch();
   return (
-    <MenuItem
-      active={selected === title}
-      style={{
-        color: "grey",
-      }}
-      onClick={() => setSelected(title)}
-      icon={icon}
-    >
-      <Typography>{title}</Typography>
-      <Link to={to} />
+    <MenuItem onClick={() => dispatch(logout())} icon={<LogoutIcon />}>
+      Logout
     </MenuItem>
   );
-};
+}
 
-const Sidebar = () => {
-  const [isCollapsed, setIsCollapsed] = useState(true);
+function PublicLinks() {
+  return (
+    <MenuItem component={<Link to="/login" />} icon={<LoginIcon />}>
+      Login
+    </MenuItem>
+  );
+}
+
+function SidebarNav() {
+  const [isCollapsed, setIsCollapsed] = useState(false);
   const [selected, setSelected] = useState("Dashboard");
+  const dispatch = useDispatch();
   const isCustomer = useSelector((state) => state.auth.isCustomer);
   const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
+  useEffect(() => {
+    // Gunakan media query untuk mendeteksi perangkat Android
+    const isAndroid = /Android/i.test(navigator.userAgent);
+
+    if (isAndroid) {
+      setIsCollapsed(false); // Sidebar akan tetap terbuka untuk perangkat Android
+    } else {
+      setIsCollapsed(true); // Sidebar akan terlipat untuk perangkat lainnya
+    }
+  }, []);
 
   return (
-    <Box
-      sx={{
-        display: "flex",
-        position: "sticky",
-        top: 0,
-        bottom: 0,
-        height: "100%",
+    <Sidebar
+      defaultCollapsed={isCollapsed}
+      style={{
+        top: 60, // Adjust the top position as needed
+        height: "100vh",
+        backgroundColor: "white",
       }}
+      breakPoint="md"
+      // backgroundColor="white"
     >
-      <Box
-        sx={{
-          "& .pro-sidebar-inner": {
-            background: `white !important`,
-            position: "sticky",
-            left: 0,
-            height: "100%",
-            overflow: "auto",
-            width: "100%",
-          },
-          "& .pro-icon-wrapper": {
-            backgroundColor: "transparent !important",
-          },
-          "& .pro-inner-item": {
-            padding: "5px 30px 5px 20px !important",
-          },
-          "& .pro-inner-item:hover": {
-            color: "#868dfb !important",
-          },
-          "& .pro-menu-item.active": {
-            color: "#6870fa !important",
+      <Menu
+        menuItemStyles={{
+          button: ({ level, active, disabled }) => {
+            return {
+              backgroundColor: active ? "white" : undefined,
+            };
           },
         }}
       >
-        <ProSidebar
-          collapsed={isCollapsed}
-          width={"230px"}
-          position="static"
-          top="0"
+        <Grid
+          height="100%"
+          display="flex"
+          flexDirection="column"
+          justifyContent="space-between"
         >
-          <Menu iconShape="square">
-            {/* LOGO AND MENU ICON */}
+          <Box fontSize={"12px"} justifyContent={"center"} paddingTop={5}>
             <MenuItem
-              onClick={() => setIsCollapsed(!isCollapsed)}
-              icon={isCollapsed ? <MenuOutlinedIcon /> : undefined}
-              style={{
-                margin: "0px 0 20px 0",
-                color: "grey",
-              }}
+              // title="Dashboard"
+              fontSize="10px"
+              // to="/"
+              component={<Link to="/" />}
+              icon={<HomeIcon />}
+              // selected={selected}
+              // setSelected={setSelected}
             >
-              {!isCollapsed && (
-                <Box
-                  display="flex"
-                  justifyContent="space-between"
-                  alignItems="center"
-                  ml="15px"
-                >
-                  <Typography variant="h6" color="grey">
-                    KOS SAYA
-                  </Typography>
-                  <IconButton onClick={() => setIsCollapsed(!isCollapsed)}>
-                    <MenuOutlinedIcon />
-                  </IconButton>
-                </Box>
-              )}
+              <Typography>Dashboard</Typography>
             </MenuItem>
 
-            <Box paddingLeft={isCollapsed ? undefined : "2%"} fontSize={"12px"}>
-              <Item
-                title="Dashboard"
-                fontSize="10px"
-                to="/"
-                icon={<HomeIcon />}
-                selected={selected}
-                setSelected={setSelected}
-              />
-
-              {!isCustomer && isAuthenticated && (
-                <Item
-                  title="Data Rumah Kos"
-                  to="/datakos"
-                  icon={<FolderIcon />}
-                  selected={selected}
-                  setSelected={setSelected}
-                />
-              )}
-              {isCustomer && isAuthenticated && (
-                <Item
-                  title="Pencarian Rumah Kos"
-                  to="/listings"
-                  icon={<PageviewIcon />}
-                  selected={selected}
-                  setSelected={setSelected}
-                />
-              )}
-              {!isAuthenticated && (
-                <Item
-                  title="Pencarian Rumah Kos"
-                  to="/listings"
-                  icon={<PageviewIcon />}
-                  selected={selected}
-                  setSelected={setSelected}
-                />
-              )}
-              <Item
-                title="Profile"
-                to="/profileOwner"
+            {!isCustomer && isAuthenticated && (
+              <MenuItem
+                active={window.location.pathname === "/datakos"}
+                component={<Link to="/datakos" />}
+                icon={<FolderIcon />}
+                // selected={selected}
+                // setSelected={setSelected}
+              >
+                <Typography>Data Rumah Kos</Typography>
+              </MenuItem>
+            )}
+            {isCustomer && isAuthenticated && (
+              <MenuItem
+                // title="Pencarian Rumah Kos"
+                active={window.location.pathname === "/listings"}
+                component={<Link to="/listings" />}
+                icon={<PageviewIcon />}
+                // selected={selected}
+                // setSelected={setSelected}
+              >
+                <Typography>Pencarian Rumah Kos</Typography>
+              </MenuItem>
+            )}
+            {!isAuthenticated && (
+              <MenuItem
+                // title="Pencarian Rumah Kos"
+                active={window.location.pathname === "/listings"}
+                component={<Link to="/listings" />}
+                icon={<PageviewIcon />}
+                // selected={selected}
+                // setSelected={setSelected}
+              >
+                <Typography>Pencarian Rumah Kos</Typography>
+              </MenuItem>
+            )}
+            {isCustomer && isAuthenticated && (
+              <MenuItem
+                // title="Profile"
+                active={window.location.pathname === "/profileCustomer"}
+                component={<Link to="/profileCustomer" />}
+                // to="/profileCustomer"
                 icon={<AccountBoxIcon />}
-                selected={selected}
-                setSelected={setSelected}
-              />
-              {isCustomer && isAuthenticated && (
-                <Item
-                  title="Riwayat Pemesanan"
-                  to="/riwayatTransaksi"
-                  icon={<Shop2Icon />}
-                  selected={selected}
-                  setSelected={setSelected}
-                />
-              )}
-            </Box>
-          </Menu>
-        </ProSidebar>
-      </Box>
-    </Box>
-  );
-};
+                // selected={selected}
+                // setSelected={setSelected}
+              >
+                <Typography>Profile</Typography>
+              </MenuItem>
+            )}
+            {!isCustomer && isAuthenticated && (
+              <MenuItem
+                // title="Profile"
+                active={window.location.pathname === "/profileOwner"}
+                component={<Link to="/profileOwner" />}
+                icon={<AccountBoxIcon />}
+                // selected={selected}
+                // setSelected={setSelected}
+              >
+                <Typography>Profile</Typography>
+              </MenuItem>
+            )}
+            {isCustomer && isAuthenticated && (
+              <MenuItem
+                // title="Riwayat Pemesanan"
+                active={window.location.pathname === "/riwayatTransaksi"}
+                component={<Link to="/riwayatTransaksi" />}
+                icon={<Shop2Icon />}
+                // selected={selected}
+                // setSelected={setSelected}
+              >
+                <Typography>Riwayat Pemesanan</Typography>
+              </MenuItem>
+            )}
+          </Box>
 
-export default Sidebar;
+          <Box style={{ display: "flex", position: "relative", top: 250 }}>
+            {isAuthenticated ? <AuthLinks /> : <PublicLinks />}
+          </Box>
+        </Grid>
+      </Menu>
+    </Sidebar>
+  );
+}
+
+export default SidebarNav;

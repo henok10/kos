@@ -340,8 +340,6 @@ function ListingDetail() {
     setSelectedOption(event.target.value);
   };
 
-
-
   useEffect(() => {
     if (state.openSnack) {
       setTimeout(() => {
@@ -365,35 +363,11 @@ function ListingDetail() {
   return (
     <>
       <Grid
-        item
-        style={{
-          marginTop: "1rem",
-          marginBottom: "0.5rem",
-          marginLeft: "5rem",
-        }}
-      >
-        <Breadcrumbs aria-label="breadcrumb">
-          <Link
-            underline="hover"
-            color="inherit"
-            onClick={() => navigate("/listings")}
-            style={{ cursor: "pointer" }}
-          >
-            Rumah
-          </Link>
-
-          <Typography color="text.primary">
-            {state.listingInfo.title}
-          </Typography>
-        </Breadcrumbs>
-      </Grid>
-
-      <div
         style={{
           margin: "auto",
           width: "80%",
           marginBottom: "2rem",
-          marginTop: "1rem",
+          marginTop: "2rem",
         }}
       >
         {/* information */}
@@ -509,7 +483,12 @@ function ListingDetail() {
                 </div>
 
                 <Grid container>
-                  <Grid item xs={12} md={6} style={{ paddingRight: "1rem", width: "100%"}}>
+                  <Grid
+                    item
+                    xs={12}
+                    md={6}
+                    style={{ paddingRight: "1rem", width: "100%" }}
+                  >
                     {allFasilitas.slice(0, 4).map((listing, index) => (
                       <Box key={index} display="flex" alignItems="center">
                         <img
@@ -533,11 +512,10 @@ function ListingDetail() {
 
             <Grid
               item
-
               style={{
                 padding: "1rem",
                 borderBottom: "1px solid gray",
-                marginTop: "0.3rem"
+                marginTop: "0.3rem",
               }}
             >
               <Grid>
@@ -668,13 +646,36 @@ function ListingDetail() {
                     }}
                   >
                     {selectedOption === "bulan" && (
-                      <div>Harga Rp{state.listingInfo.price_month}/bulan</div>
+                      <div>
+                        Harga Rp
+                        {state.listingInfo.price_month
+                          ? `Rp${state.listingInfo.price_month.toLocaleString(
+                              "id-ID"
+                            )}/bulan`
+                          : "Harga tidak tersedia"}
+                      </div>
                     )}
                     {selectedOption === "hari" && (
-                      <div>Harga Rp{state.listingInfo.price_day}/hari</div>
+                      <div>
+                        Harga Rp
+                        {state.listingInfo.price_day
+                          ? `Rp${state.listingInfo.price_month.toLocaleString(
+                              "id-ID"
+                            )}/hari`
+                          : "Harga tidak tersedia"}
+                        i
+                      </div>
                     )}
                     {selectedOption === "tahun" && (
-                      <div>Harga Rp{state.listingInfo.price_year}/tahun</div>
+                      <div>
+                        Harga Rp
+                        {state.listingInfo.price_year
+                          ? `Rp${state.listingInfo.price_month.toLocaleString(
+                              "id-ID"
+                            )}/tahun`
+                          : "Harga tidak tersedia"}
+                        /tahun
+                      </div>
                     )}
                   </Typography>
                   <TextField
@@ -749,18 +750,22 @@ function ListingDetail() {
                 function DegreeToRadian(coordinate) {
                   return (coordinate * Math.PI) / 180;
                 }
-    
+
                 function CalculateDistance() {
                   const latitude1 = DegreeToRadian(state.listingInfo.latitude);
-                  const longitude1 = DegreeToRadian(state.listingInfo.longitude);
-    
+                  const longitude1 = DegreeToRadian(
+                    state.listingInfo.longitude
+                  );
+
                   const latitude2 = DegreeToRadian(poi.location.coordinates[0]);
-                  const longitude2 = DegreeToRadian(poi.location.coordinates[1]);
+                  const longitude2 = DegreeToRadian(
+                    poi.location.coordinates[1]
+                  );
                   // The formula
                   const latDiff = latitude2 - latitude1;
                   const lonDiff = longitude2 - longitude1;
                   const R = 6371000 / 1000;
-    
+
                   const a =
                     Math.sin(latDiff / 2) * Math.sin(latDiff / 2) +
                     Math.cos(latitude1) *
@@ -768,9 +773,9 @@ function ListingDetail() {
                       Math.sin(lonDiff / 2) *
                       Math.sin(lonDiff / 2);
                   const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-    
+
                   const d = R * c;
-    
+
                   const dist =
                     Math.acos(
                       Math.sin(latitude1) * Math.sin(latitude2) +
@@ -852,12 +857,7 @@ function ListingDetail() {
             </MapContainer>
           </Grid>
         </Grid>
-        <Grid
-          item
-          container
-          margin={"auto"}
-          marginTop={"1rem"}
-        >
+        <Grid item container margin={"auto"} marginTop={"1rem"}>
           <Grid width={"80%"} margin={"auto"}>
             <Typography
               variant={"h4"}
@@ -874,7 +874,7 @@ function ListingDetail() {
           </Grid>
           <Box style={{ borderBottom: "1px solid gray", width: "100%" }} />
         </Grid>
-      </div>
+      </Grid>
     </>
   );
 }

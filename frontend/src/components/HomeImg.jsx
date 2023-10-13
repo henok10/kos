@@ -1,27 +1,52 @@
 import React, { useState, useEffect } from "react";
 import { makeStyles } from "@mui/styles";
-import city from "../data/minions.png";
+// import city from "../data/minions.png";
+import image from "../data/image.jpeg";
 import Search from "./Search";
 import Axios from "axios";
 import { Grid, CircularProgress, Box, Typography } from "@mui/material";
 import Listing from "./HomeListing";
 
-const useStyles = makeStyles(() => ({
-  hero: {
-    backgroundImage: `url(${city})`,
-    backgroundRepeat: "no-repeat",
-    backgroundPosition: "center",
-    backgroundSize: "cover",
-    height: "65vh",
-    display: "flex",
-    // flexDirection: "column",
-    justifyContent: "center",
-    alignItems: "center", // Tambahkan ini agar elemen <Search /> berada di tengah
-  },
-  searchWrapper: {
-    marginTop: "240px", // Atur jarak antara gambar dan elemen <Search />
-  },
-}));
+const useStyles = makeStyles(() => {
+  const baseTypography = {
+    fontFamily: "Arial, sans-serif",
+  };
+
+  return {
+    hero: {
+      backgroundImage: `url(${image})`,
+      backgroundRepeat: "no-repeat",
+      backgroundPosition: "center",
+      backgroundSize: "cover",
+      width: "100%",
+      height: "65vh",
+      display: "flex",
+      justifyContent: "center",
+      alignItems: "center", // Menengahkan elemen <Search />
+    },
+    searchWrapper: {
+      marginTop: "240px", // Atur jarak antara gambar dan elemen <Search />
+    },
+    title: {
+      ...baseTypography,
+      fontWeight: "bold",
+      margin: "auto",
+      textAlign: "center",
+      color: "white",
+    },
+    heading: {
+      ...baseTypography,
+      fontWeight: "bold",
+      textAlign: "center",
+    },
+    subtitle: {
+      ...baseTypography,
+      fontSize: "16px",
+      margin: "auto",
+      textAlign: "center",
+    },
+  };
+});
 
 const HomeImg = () => {
   // Ganti setSearchTerm menjadi setSearchResults
@@ -43,9 +68,7 @@ const HomeImg = () => {
 
         setAllListings(response.data);
         setDataIsLoading(false);
-      } catch (error) {
-
-      }
+      } catch (error) {}
     }
 
     getAllListings();
@@ -91,7 +114,7 @@ const HomeImg = () => {
 
   if (dataIsLoading) {
     return (
-      <Grid container justifyContent="center" alignItems="center" height="100%">
+      <Grid container style={{display:"flex", justifyContent:"center", margin: "auto", alignItems:"center", height:"100%"}}>
         <CircularProgress />
       </Grid>
     );
@@ -100,27 +123,57 @@ const HomeImg = () => {
     <>
       <Grid container>
         <Grid item xs={12} className={classes.hero}>
+          <Grid item xs={12} sm={12} md={12} lg={12}>
+            <Box className={classes.title}>
+              <Box
+                style={{
+                  marginTop: "25rem",
+                  margin: "auto",
+                  textAlign: "center",
+                }}
+              >
+                <Typography
+                  style={{ fontWeight: "bold" }}
+                  className={classes.heading}
+                  variant="h2"
+                >
+                  Search Rumah Kos
+                </Typography>
+                <Typography className={classes.subtitle} variant="subtitle1">
+                  Find new &amp; featured property located in your local city.
+                </Typography>
+              </Box>
+            </Box>
+          </Grid>
+        </Grid>
+        <Grid
+          style={{
+            display: "flex",
+            margin: "-5rem auto 0",
+            justifyContent: "center",
+            width: "90%",
+          }}
+        >
           <Search
             setSearchResults={setSearchResults}
             filtered={filtered}
             isLoading={dataIsLoading}
           />{" "}
         </Grid>
+
         <Grid item xs={12}>
           <Grid
             textAlign="center"
             width="80%"
             margin="auto"
-            position="relative"
-            marginTop="8rem"
+            // position="relative"
+            marginTop="5rem"
           >
             <Typography variant="h4">Recent Rumah Kos Listed</Typography>
 
             <Typography variant="body">
               {" "}
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-              eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
-              enim ad minim veniam.
+              Mencari tempat tinggal sementara dengan nyaman dan sesuai kebutuhan
             </Typography>
           </Grid>
           <Grid container width="80%" margin="auto">

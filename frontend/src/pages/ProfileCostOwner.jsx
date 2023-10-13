@@ -168,10 +168,10 @@ function ProfileOwner() {
   return (
     <>
       <Grid item container width="100%">
-        <Grid item lg={6} md={6} sm={12} xs={12} marginTop={"2rem"}>
+        <Grid item lg={6} md={6} sm={12} xs={12} marginTop={"5rem"}>
           <div>{WelcomeDisplay()}</div>
         </Grid>
-        <Grid item lg={6} md={6} sm={12} xs={12} marginTop={"2rem"}>
+        <Grid item lg={6} md={6} sm={12} xs={12} marginTop={"5rem"}>
           <ProfileUpdate userProfile={state.userProfile} />
         </Grid>
       </Grid>

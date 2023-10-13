@@ -113,10 +113,12 @@ export default function Listing({ filtered, isLoading }) {
               >
                 <Box
                   width="100%"
-                  style={{ display: "flex", justifyContent: "space-between" }}
+                  style={{ display: "flex", justifyContent: "space-between", gap: 10 }}
                 >
                   <Typography className={classes.priceLabel} component="span">
-                    Rp{listing.price_month}/bulan
+                    {listing.price_month
+                      ? `Rp${listing.price_month.toLocaleString("id-ID")}/bulan`
+                      : "Harga tidak tersedia"}
                   </Typography>
                   <Button
                     variant="contained"
