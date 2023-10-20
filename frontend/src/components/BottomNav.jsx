@@ -5,50 +5,30 @@ const BottomNav = () => {
   const [value, setValue] = useState(0);
 
   return (
-    <Box
+    <Paper
       sx={{
-        // display: "flex",
         position: "static",
-        flexDirection: "column",
-        marginTop: 0,
-        bottom: 0
+        marginTop: 5,
+        height: "56px",
+        display: "flex",
+        justifyContent: "center", // Mengatur bottom navigation ke tengah
+        alignItems: "center", // Mengatur vertikal alignment ke tengah
       }}
     >
-      {/* Konten utama di sini */}
-      <Box sx={{ flexGrow: 1 }}>{/* Isi konten utama Anda di sini */}</Box>
-
-      {/* Bottom Navigation */}
-      <Paper
+      <Typography
+        variant="caption"
         sx={{
-          position: "relative",
-          bottom: 0,
-          left: 0,
-          right: 0,
-          height: "56px",
-          display: "flex",
-          justifyContent: "center", // Mengatur bottom navigation ke tengah
-          alignItems: "center", // Mengatur vertikal alignment ke tengah
+          whiteSpace: "nowrap",
+          overflow: "hidden",
+          textOverflow: "ellipsis",
+          textAlign: "center", // Mengatur alignment text ke tengah
         }}
       >
-        {/* <BottomNavigation
-          value={value}
-          onChange={(e, newValue) => setValue(newValue)}
-          sx={{ width: "100%" }}
-        > */}
-          <Typography
-            variant="caption"
-            sx={{
-              whiteSpace: "nowrap",
-              overflow: "hidden",
-              textOverflow: "ellipsis",
-              textAlign: "center", // Mengatur alignment text ke tengah
-            }}
-          >
-            &copy;{new Date().getFullYear()} KOS SAYA | All rights reserved 
-          </Typography>
-        {/* </BottomNavigation> */}
-      </Paper>
-    </Box>
+        &copy;{new Date().getFullYear()} KOS SAYA | All rights reserved
+      </Typography>
+      {/* </BottomNavigation> */}
+    </Paper>
+    // </Box>
   );
 };
 

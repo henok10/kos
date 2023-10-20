@@ -21,6 +21,7 @@ import {
   CLEAR_ERRORS,
   CLEAR_SUCCESS,
 } from "../actions/types";
+import Swal from 'sweetalert2'; 
 
 // Fungsi untuk mendapatkan waktu kedaluwarsa token dari token JWT
 function getTokenExpirationDate(token) {
@@ -60,6 +61,7 @@ export const getCustomerUser = () => (dispatch, getState) => {
         payload: res.data,
       });
     })
+    
     .catch((err) => {
       dispatch({
         type: CUSTOMER_USER_FAILED,
@@ -89,6 +91,7 @@ export const getOwnerUser = () => (dispatch, getState) => {
         type: OWNER_USER_LOADED,
         payload: res.data,
       });
+   
     })
     .catch((err) => {
       dispatch({
@@ -117,8 +120,14 @@ export const create_customeruser =
           type: REGISTER_CUSER_SUCCESS,
           payload: res.data,
         });
+        Swal.fire({
+          title: 'Successful!',
+          text: 'You have successfully created a customer account.',
+          icon: 'success',
+        });
         console.log(res.data);
       })
+      
       .catch((err) => {
         if (err.response && err.response.data && err.response.data.email) {
           // The server sent an error message for the email field
@@ -130,6 +139,11 @@ export const create_customeruser =
           dispatch({
             type: REGISTER_CUSER_FAILED,
             payload: "An error occurred during signup: " + err.message,
+          });
+          Swal.fire({
+            title: 'Error',
+            text: 'An error occurred while processing your account.',
+            icon: 'error',
           });
         }
         throw err; // Throw the error for the error case
@@ -152,6 +166,11 @@ export const create_owneruser =
         dispatch({
           type: REGISTER_FUSER_SUCCESS,
           payload: res.data,
+        });
+        Swal.fire({
+          title: 'Successful!',
+          text: 'You have successfully created a owner account.',
+          icon: 'success',
         });
         console.log(res.data);
       })
@@ -195,6 +214,11 @@ export const login =
         dispatch({
           type: LOGIN_SUCCESS,
           payload: response.data,
+        });
+        Swal.fire({
+          title: 'Login',
+          text: 'you have successfully logged in.',
+          icon: 'success',
         });
         // dispatch(getCustomerUser());
       })
@@ -253,9 +277,15 @@ export const logout = () => (dispatch, getState) => {
         dispatch({
           type: LOGOUT_SUCCESS,
         });
+        Swal.fire({
+          title: 'Logout!',
+          text: 'you have successfully logged out.',
+          icon: 'success',
+        });
       })
       .catch((err) => {
         console.log(err.response.data);
+        
       });
   }
 };
@@ -307,6 +337,11 @@ export const change_user_password =
       dispatch({
         type: PASSWORD_CHANGE_SUCCESS,
         payload: "Password changed successfully!",
+      });
+      Swal.fire({
+        title: 'Successful!',
+        text: 'you have successfully changed your password.',
+        icon: 'success',
       });
     } catch (err) {
       // Handle errors and dispatch appropriate actions

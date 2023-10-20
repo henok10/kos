@@ -7,6 +7,7 @@ import {
   TableCell,
   TableContainer,
   TableHead,
+  CircularProgress,
   TableRow,
   Paper,
   Grid,
@@ -44,6 +45,7 @@ function Kamar() {
   const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
   const isCustomer = useSelector((state) => state.auth.isCustomer);
   const [allRoom, setAllRoom] = useState([]);
+  const [dataIsLoading, setDataIsLoading] = useState(true);
 
   useEffect(() => {
     if (!isAuthenticated) {
@@ -63,6 +65,7 @@ function Kamar() {
         );
         const data = response.data;
         setAllRoom(data);
+        setDataIsLoading(false);
       } catch (error) {
         // Tangani error jika diperlukan
         console.error("Error:", error);
@@ -71,9 +74,20 @@ function Kamar() {
 
     GetAllRoom();
   }, [params.id]); // Tambahkan params.id sebagai dependency agar useEffect dipanggil ulang ketika params.id berubah
-  console.log();
+  if (dataIsLoading === true) {
+    return (
+      <Grid
+        container
+        justifyContent="center"
+        alignItems="center"
+        style={{ height: "100vh" }}
+      >
+        <CircularProgress />
+      </Grid>
+    );
+  }
   return (
-    <Grid container style={{ width: "90%",margin: "2rem auto", height: 480 }}>
+    <Grid container style={{ width: "90%",margin: "2rem auto", height: "100%" }}>
       <TableContainer component={Paper}>
         <Table sx={{ minWidth: 650 }} aria-label="simple table">
           <TableHead>

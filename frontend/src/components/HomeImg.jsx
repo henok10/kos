@@ -114,7 +114,7 @@ const HomeImg = () => {
 
   if (dataIsLoading) {
     return (
-      <Grid container style={{display:"flex", justifyContent:"center", margin: "auto", alignItems:"center", height:"100%"}}>
+      <Grid container style={{display:"flex", justifyContent:"center", margin: "auto", alignItems:"center", height:"100vh"}}>
         <CircularProgress />
       </Grid>
     );

@@ -84,7 +84,7 @@ export default function DataTable() {
         const numItemsBoughtByListingId = {};
         for (const listingId of listingIds) {
           const response = await Axios.get(
-            `https://mykos2.onrender.com/api/transaction/${listingIds}/user`
+            `https://mykos2.onrender.com/api/transaction/${listingId}/user`
           );
           const data = response.data;
           const numItemsBought = data.filter(
@@ -112,9 +112,10 @@ export default function DataTable() {
     const kamarDibeli = numItemsBoughtByListingId[listingId] || 0;
     const kamarKosong = totalKamar - kamarDibeli;
     kamarKosongByListingId[listingId] = kamarKosong;
+    console.log(kamarKosong);
   }
 
-  // console.log(kamarKosongByListingId);
+  
   async function DeleteHandler(id) {
     const swalWithBootstrapButtons = Swal.mixin({
       customClass: {

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Grid, TextField, Button, Alert, Typography } from "@mui/material";
+import { Grid, TextField, Box,  Button, Alert, Typography } from "@mui/material";
 import PropTypes from "prop-types";
 import { useDispatch, useSelector, connect } from "react-redux";
 import { clearErrors, clearSuccess } from "../../actions/auth";
@@ -56,10 +56,16 @@ const ChangePassword = ({
   console.log(changeSuccess);
   console.log(success);
   return (
-    <Grid contained width={"40%"} margin="auto" height="100%">
+    <Grid contained width={"40%"} margin="4rem auto" height="100%">
+      <Box width="100%"display="flex" justifyContent={"center"} flexDirection={"column"}>
       <Typography variant="h5" marginTop={"2rem"} textAlign={"center"}>
         Reset Password Anda
       </Typography>
+      <Typography variant="body"  textAlign={"center"} color="primary">
+        masukkan sandi baru dan konfirmasi
+      </Typography>
+      </Box>
+    
 
       <form onSubmit={onSubmit} style={{ marginTop: "2rem" }}>
         {success && (

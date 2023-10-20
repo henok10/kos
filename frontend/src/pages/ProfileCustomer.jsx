@@ -112,7 +112,7 @@ function ProfileCustomer() {
         >
           <CardMedia
             style={{
-              display: "block",
+              display: "flex",
               margin: "auto",
               height: "10rem",
               width: "10rem",
@@ -154,7 +154,7 @@ function ProfileCustomer() {
 
   return (
     <>
-      <Grid container item  width="100%">
+      <Grid container item  width="80%" margin="auto">
         <Grid item lg={6} md={6} sm={12} xs={12} marginTop={"5rem"}>
           <div>{WelcomeDisplay()}</div>
           <Button

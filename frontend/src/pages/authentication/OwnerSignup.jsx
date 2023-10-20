@@ -57,9 +57,9 @@ const OwnerSignup = ({ create_owneruser, isAuthenticated, isOwner }) => {
     return <Navigate to="/owner/home" />;
   }
   return (
-    <div className="container" style={{ marginTop: "5rem", width: "50%" }}>
+    <div className="container" style={{ marginTop: "5rem", width: "50%", height: "100%"}}>
       <Grid item container justifyContent="center">
-        <Typography variant="h4">SIGNUP AS A PEMILIK KOS</Typography>
+        <Typography variant="h5" style={{fontWeight: "bold"}}>SIGNUP AS A PEMILIK KOS</Typography>
       </Grid>
       <div className="row">
         <div className="col-md-8 mx-auto">

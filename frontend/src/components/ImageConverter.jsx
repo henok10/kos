@@ -132,7 +132,7 @@ function ImageConverter({ transaction }) {
       <div>
         <Dialog open={modalOpen} onClose={handleCloseModal}>
           <DialogContent id="modal-content">
-            <Paper ref={elementRef} className={classes.receipt} elevation={3}>
+            <Paper ref={elementRef} className={classes.receipt} elevation={0}>
               <Typography variant="h5" className={classes.header}>
                 Payment Receipt
               </Typography>
@@ -158,7 +158,11 @@ function ImageConverter({ transaction }) {
                 </Typography>
                 <Typography>
                   <strong className={classes.label}>Total Bayar</strong>:{" "}
-                  {transaction.nominal}.00
+                  {typeof transaction.nomina === "string"
+                    ? `Rp${parseInt(transaction.nomina, 10).toLocaleString(
+                        "id-ID"
+                      )}`
+                    : "Harga tidak tersedia"}
                 </Typography>
               </div>
               <section className={classes.rumahInfo}>

@@ -7,6 +7,7 @@ import {
   Table,
   TableBody,
   TableCell,
+  CircularProgress,
   TableContainer,
   TableHead,
   TableRow,
@@ -23,6 +24,7 @@ export default function RiwayatTransaksi() {
   const isCustomer = useSelector((state) => state.auth.isCustomer);
   const [allKos, setAllKos] = useState([]);
   const userId = useSelector((state) => state.auth.userId);
+  const [dataIsLoading, setDataIsLoading] = useState(true);
 
   useEffect(() => {
     if (!isAuthenticated) {
@@ -46,7 +48,7 @@ export default function RiwayatTransaksi() {
         );
 
         setAllKos(response.data);
-        const listings = response.data.filter((listings) => listings.listing);
+        setDataIsLoading(false);
       } catch (error) {}
     }
     GetAllKos();
@@ -55,12 +57,25 @@ export default function RiwayatTransaksi() {
     };
   }, [userId]);
 
+  if (dataIsLoading === true) {
+    return (
+      <Grid
+        container
+        justifyContent="center"
+        alignItems="center"
+        style={{ height: "100vh" }}
+      >
+        <CircularProgress />
+      </Grid>
+    );
+  }
+
   return (
     <>
       <Grid style={{ height: 650 }}>
         <Grid
           container
-          style={{ width: "90%", margin: "auto", marginTop: "5rem" }}
+          style={{ width: "90%", margin: "auto", marginTop: "2rem" }}
         >
           <Grid
             container

@@ -17,6 +17,7 @@ import {
   CircularProgress,
   Card,
   CardMedia,
+  Button,
   CardContent,
 } from "@mui/material";
 
@@ -167,9 +168,16 @@ function ProfileOwner() {
 
   return (
     <>
-      <Grid item container width="100%">
+      <Grid item container width="90%" margin="auto">
         <Grid item lg={6} md={6} sm={12} xs={12} marginTop={"5rem"}>
           <div>{WelcomeDisplay()}</div>
+          <Button
+            variant="outlined"
+            style={{ marginTop: "4rem" }}
+            onClick={() => navigate(`/changePassword`)}
+          >
+            Change Password
+          </Button>
         </Grid>
         <Grid item lg={6} md={6} sm={12} xs={12} marginTop={"5rem"}>
           <ProfileUpdate userProfile={state.userProfile} />

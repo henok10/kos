@@ -92,7 +92,7 @@ function Login({ login, isAuthenticated, isCustomer, isOwner, clearErrors }) {
     return (
       <Container
         maxWidth="xs"
-        style={{ display: "flex", position: "relative" }}
+        style={{ display: "flex", position: "relative", height: "100%" }}
       >
         {/* <Alert variant="outlined" severity="warning">
           This is a warning alert — check it out!
@@ -148,7 +148,7 @@ function Login({ login, isAuthenticated, isCustomer, isOwner, clearErrors }) {
               fullWidth
               // required
               autoFocus
-              type="text"
+              type="email"
               name="email"
               variant="outlined"
               value={user.email}
@@ -198,12 +198,12 @@ function Login({ login, isAuthenticated, isCustomer, isOwner, clearErrors }) {
           <NavLink to="/sendpasswordresetemail">Forgot Password ?</NavLink>
           <Grid
             item
-            container
             xs={8}
             style={{
               // marginTop: "1rem",
               // marginLeft: "auto",
               // marginRight: "auto",
+              width: "10rem",
               margin: "1rem auto 0",
             }}
           >

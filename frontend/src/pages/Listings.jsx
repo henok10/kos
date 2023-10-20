@@ -71,6 +71,7 @@ function Listings() {
         return draft;
     }
   }
+  
   function TheMapComponents() {
     const map = useMap();
     useEffect(() => {
@@ -149,7 +150,7 @@ function Listings() {
         paddingTop={"0.5rem"}
         display="flex"
         boxSizing="border-box"
-        marginTop={5}
+        marginTop={2}
       >
         <Grid item lg={5.5} md={5.5} sm={12}>
           <Grid item xs={12} padding="0.5rem">
@@ -180,7 +181,7 @@ function Listings() {
           <Grid container padding="0.5rem" spacing={0}>
             {filteredListings.slice(0, 10).map((listing) => {
               return (
-                <Grid item key={listing.id} xs={6} sm={6} md={12} lg={6}>
+                <Grid item key={listing.id} xs={12} sm={6} md={12} lg={6}>
                   <Card key={listing.id} className={classes.cardStyle}>
                     <CardMedia
                       className={classes.pictureStyle}

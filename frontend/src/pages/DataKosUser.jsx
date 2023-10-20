@@ -5,6 +5,7 @@ import React, { useEffect, useState } from "react";
 import Axios from "axios";
 import { useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
+import ImageConverter from "../components/ImageConverter";
 import Swal from "sweetalert2";
 
 export default function DataTableUser() {
@@ -137,17 +138,20 @@ export default function DataTableUser() {
     {
       field: "barang_dibeli",
       headerName: "Aksi",
-      width: 150,
+      width: 250,
       renderCell: (params) => {
         const kamar = params.row.kamar;
         return (
-          <div>
+          <div style={{display: "flex", justifyContent: "space-between"}}>
+            <ImageConverter transaction={params.row} />
             <Button
               variant="contained"
               color="secondary"
               style={{
                 backgroundColor: "red",
                 color: "white",
+                padding: "4px 8px",
+                width: "5rem",
                 marginLeft: "0.2rem",
               }}
               onClick={() => handleDelete(params.id, kamar)}

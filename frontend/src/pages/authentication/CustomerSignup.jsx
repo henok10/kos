@@ -1,9 +1,8 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { connect, useDispatch, useSelector } from "react-redux";
 import PropTypes from "prop-types";
-import { create_customeruser } from "../../actions/auth";
+import { create_customeruser, clearErrors } from "../../actions/auth";
 import { Navigate, useNavigate } from "react-router-dom";
-import { clearErrors } from "../../actions/auth";
 import { Validation } from "./validation";
 
 // MUI
@@ -20,6 +19,7 @@ const CustomerSignup = ({
   create_customeruser,
   isAuthenticated,
   isCustomer,
+  clearErrors
 }) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -38,6 +38,11 @@ const CustomerSignup = ({
       ...customer,
       [e.target.name]: e.target.value,
     });
+
+  useEffect(() => {
+    // Dispatch aksi CLEAR_ERRORS saat komponen dimuat ulang
+    clearErrors();
+  }, [clearErrors]);
 
   const { username, email, password, password2, tc } = customer;
 
@@ -63,9 +68,9 @@ const CustomerSignup = ({
     return <Navigate to="/customer/home" />;
   }
   return (
-    <div className="container" style={{ marginTop: "5rem", width: "50%" }}>
-      <Grid item container justifyContent="center">
-        <Typography variant="h4">SIGNUP AS A CUSTOMER</Typography>
+    <div className="container" style={{ marginTop: "5rem", width: "50%", height: '100%' }}>
+      <Grid item container justifyContent="center" >
+        <Typography variant="h5" style={{fontWeight: "bold"}}>SIGNUP AS A CUSTOMER</Typography>
       </Grid>
       <div className="row">
         <div className="col-md-8 mx-auto">
@@ -210,6 +215,4 @@ const mapStateToProps = (state) => ({
   isCustomer: state.auth.isCustomer,
 });
 
-export default connect(mapStateToProps, { create_customeruser })(
-  CustomerSignup
-);
+export default connect(mapStateToProps, { create_customeruser, clearErrors})(CustomerSignup);

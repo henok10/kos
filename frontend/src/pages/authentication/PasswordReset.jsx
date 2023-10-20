@@ -51,7 +51,7 @@ const ResetPassword = ({ reset_password, clearErrors, clearSuccess }) => {
   };
   console.log(success);
   return (
-    <Grid contained width={"40%"} margin="auto" height="100%">
+    <Grid contained width={"40%"} margin="4rem auto" height="100%">
       <Typography variant="h5" marginTop={"2rem"} textAlign={"center"}>
         Reset Password Anda
       </Typography>

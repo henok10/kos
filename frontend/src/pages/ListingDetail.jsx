@@ -43,6 +43,7 @@ import { choices } from "../components/Choice";
 import { makeStyles } from "@mui/styles";
 import Review from "../components/Review";
 import ReviewMessage from "../components/ReviewMessage";
+import HandleWhatsApp from "../components/SendMessage";
 
 const useStyles = makeStyles({
   sliderContainer: {
@@ -78,21 +79,11 @@ const useStyles = makeStyles({
 
 function ListingDetail() {
   const navigate = useNavigate();
-  // const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
+  const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
   // const isCustomer = useSelector((state) => state.auth.isCustomer);
   const [allFasilitas, setAllFasilitas] = useState([]);
   const [allRule, setAllRule] = useState([]);
   const [allKamar, setAllKamar] = useState([]);
-
-  // useEffect(() => {
-  //   if (!isAuthenticated) {
-  //     navigate("/login");
-  //   }
-  // }, [isAuthenticated, navigate]);
-
-  // if (!isCustomer) {
-  //   navigate("/");
-  // }
 
   const classes = useStyles();
   const params = useParams();
@@ -317,22 +308,9 @@ function ListingDetail() {
 
   function GoogleMapsShortcut() {
     const url = `https://www.google.com/maps/search/?api=1&query=${state.listingInfo.latitude},${state.listingInfo.longitude}`;
+
     window.open(url, "_blank");
   }
-  const handleWhatsApp = () => {
-    const phoneNumber = state.phoneNumbers;
-    const message = encodeURIComponent(
-      `Halo, saya ingin memesan kamar kos (${state.listingInfo.title})`
-    );
-    const formattedPhoneNumber = phoneNumber.startsWith("0")
-      ? `62${phoneNumber.substr(1)}`
-      : phoneNumber;
-    console.log(formattedPhoneNumber);
-    window.open(
-      `https://wa.me/${formattedPhoneNumber}?text=${message}`,
-      "_blank"
-    );
-  };
 
   const [selectedOption, setSelectedOption] = useState("bulan"); // Nilai default adalah 'bulan'
 
@@ -720,15 +698,10 @@ function ListingDetail() {
                   >
                     Pesan Kamar
                   </Button>
-                  <Button
-                    onClick={handleWhatsApp}
-                    variant="outlined"
-                    color="success"
-                    size="small"
-                    style={{ marginLeft: "0.5rem", width: "48%" }}
-                  >
-                    Chat Pemilik Kos
-                  </Button>
+                  <HandleWhatsApp
+                    listingInfo={state.listingInfo}
+                    phoneNumbers={state.phoneNumbers}
+                  />
                 </Grid>
               </Paper>
             </Box>

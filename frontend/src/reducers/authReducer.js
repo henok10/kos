@@ -190,6 +190,7 @@ export const authReducer=(state=initialState, action)=>{
             return {
                 ...state,
                 error: null,
+                success: null
             };
         case CLEAR_SUCCESS:
             return {

@@ -29,37 +29,50 @@ function PublicLinks() {
   );
 }
 
+const Item = ({ title, to, icon, selected, setSelected }) => {
+  return (
+    <MenuItem
+      active={selected === title}
+      fontSize="10px"
+      onClick={() => setSelected(title)}
+      component={<Link to={to} />}
+      icon={icon}
+    >
+      <Typography>{title}</Typography>
+    </MenuItem>
+  );
+};
+
 function SidebarNav() {
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [selected, setSelected] = useState("Dashboard");
   const dispatch = useDispatch();
   const isCustomer = useSelector((state) => state.auth.isCustomer);
   const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
+  const { collapseSidebar } = useProSidebar();
+
   useEffect(() => {
-    // Gunakan media query untuk mendeteksi perangkat Android
+    // Use media query to detect Android devices
     const isAndroid = /Android/i.test(navigator.userAgent);
 
     if (isAndroid) {
-      setIsCollapsed(false); // Sidebar akan tetap terbuka untuk perangkat Android
+      setIsCollapsed(false); // Sidebar will remain open for Android devices
     } else {
-      setIsCollapsed(true); // Sidebar akan terlipat untuk perangkat lainnya
+      setIsCollapsed(true); // Sidebar will collapse for other devices
     }
   }, []);
 
   return (
     <Sidebar
+      // className="fixed-sidebar"s
       defaultCollapsed={isCollapsed}
-      style={{
-        top: 60, // Adjust the top position as needed
-        height: "100vh",
-        backgroundColor: "white",
-      }}
+      style={{ height: "100%", top: "auto" }}
       breakPoint="md"
       // backgroundColor="white"
     >
       <Menu
         menuItemStyles={{
-          button: ({ level, active, disabled }) => {
+          button: ({ level, active }) => {
             return {
               backgroundColor: active ? "white" : undefined,
             };
@@ -67,99 +80,82 @@ function SidebarNav() {
         }}
       >
         <Grid
-          height="100%"
-          display="flex"
-          flexDirection="column"
-          justifyContent="space-between"
+          style={{
+            display: "flex",
+            flexDirection: "column", // Corrected typo here
+            justifyContent: "space-between",
+            height: "100%",
+          }}
         >
-          <Box fontSize={"12px"} justifyContent={"center"} paddingTop={5}>
-            <MenuItem
-              // title="Dashboard"
-              fontSize="10px"
-              // to="/"
-              component={<Link to="/" />}
+          <Box fontSize={"12px"} paddingTop={10} style={{ flex: 1 }}>
+            <Item
               icon={<HomeIcon />}
-              // selected={selected}
-              // setSelected={setSelected}
-            >
-              <Typography>Dashboard</Typography>
-            </MenuItem>
+              title="Dashboard"
+              to="/"
+              selected={selected}
+              setSelected={setSelected}
+            />
 
             {!isCustomer && isAuthenticated && (
-              <MenuItem
-                active={window.location.pathname === "/datakos"}
-                component={<Link to="/datakos" />}
+              <Item
+                title="Data Rumah Kos"
+                to="/datakos"
                 icon={<FolderIcon />}
-                // selected={selected}
-                // setSelected={setSelected}
-              >
-                <Typography>Data Rumah Kos</Typography>
-              </MenuItem>
+                selected={selected}
+                setSelected={setSelected}
+              />
             )}
             {isCustomer && isAuthenticated && (
-              <MenuItem
-                // title="Pencarian Rumah Kos"
-                active={window.location.pathname === "/listings"}
-                component={<Link to="/listings" />}
+              <Item
+                title="Pencarian Rumah Kos"
+                to="/listings"
                 icon={<PageviewIcon />}
-                // selected={selected}
-                // setSelected={setSelected}
-              >
-                <Typography>Pencarian Rumah Kos</Typography>
-              </MenuItem>
+                selected={selected}
+                setSelected={setSelected}
+              />
             )}
             {!isAuthenticated && (
-              <MenuItem
-                // title="Pencarian Rumah Kos"
-                active={window.location.pathname === "/listings"}
-                component={<Link to="/listings" />}
+              <Item
+                title="Pencarian Rumah Kos"
+                to="/listings"
                 icon={<PageviewIcon />}
-                // selected={selected}
-                // setSelected={setSelected}
-              >
-                <Typography>Pencarian Rumah Kos</Typography>
-              </MenuItem>
+                selected={selected}
+                setSelected={setSelected}
+              />
             )}
             {isCustomer && isAuthenticated && (
-              <MenuItem
-                // title="Profile"
-                active={window.location.pathname === "/profileCustomer"}
-                component={<Link to="/profileCustomer" />}
+              <Item
+                title="Profile"
+                to="/profileCustomer"
                 // to="/profileCustomer"
                 icon={<AccountBoxIcon />}
-                // selected={selected}
-                // setSelected={setSelected}
+                selected={selected}
+                setSelected={setSelected}
               >
                 <Typography>Profile</Typography>
-              </MenuItem>
+              </Item>
             )}
             {!isCustomer && isAuthenticated && (
-              <MenuItem
-                // title="Profile"
-                active={window.location.pathname === "/profileOwner"}
-                component={<Link to="/profileOwner" />}
+              <Item
+                title="Profile"
+                to="/profileOwner"
                 icon={<AccountBoxIcon />}
-                // selected={selected}
-                // setSelected={setSelected}
-              >
-                <Typography>Profile</Typography>
-              </MenuItem>
+                selected={selected}
+                setSelected={setSelected}
+              />
             )}
             {isCustomer && isAuthenticated && (
-              <MenuItem
-                // title="Riwayat Pemesanan"
-                active={window.location.pathname === "/riwayatTransaksi"}
-                component={<Link to="/riwayatTransaksi" />}
+              <Item
+                title="Riwayat Pemesanan"
+                to="/riwayatTransaksi"
                 icon={<Shop2Icon />}
-                // selected={selected}
-                // setSelected={setSelected}
-              >
-                <Typography>Riwayat Pemesanan</Typography>
-              </MenuItem>
+                selected={selected}
+                setSelected={setSelected}
+             />
             )}
           </Box>
 
-          <Box style={{ display: "flex", position: "relative", top: 250 }}>
+          <Box style={{ display: "flex", position: "relative" }}>
             {isAuthenticated ? <AuthLinks /> : <PublicLinks />}
           </Box>
         </Grid>

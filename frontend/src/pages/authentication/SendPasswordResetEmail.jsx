@@ -45,7 +45,7 @@ const SendPasswordResetEmail = ({ sendPasswordResetEmail }) => {
   }
 
   return (
-    <Grid contained marginTop={"2rem"} width="40%" margin="auto" height="100%">
+    <Grid contained marginTop={"2rem"} width="40%" margin="2rem auto" height="100%">
       <Typography variant="h5" style={{ textAlign: "center" }}>
         Request Password Reset
       </Typography>
