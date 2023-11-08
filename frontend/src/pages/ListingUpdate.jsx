@@ -269,7 +269,7 @@ function ListingUpdate(props) {
   async function deleteFacility(facilityId) {
     try {
       await Axios.delete(
-        `https://mykos2.onrender.com/api/fasilitas-rumah/${facilityId}/delete`
+        `https://mikos03.onrender.com/api/fasilitas-rumah/${facilityId}/delete`
       );
       // Kemudian perbarui state atau lakukan tindakan lain yang sesuai
       // Misalnya, dapat Anda hapus fasilitas dari state fasilitasInfo
@@ -290,7 +290,7 @@ function ListingUpdate(props) {
   async function deleteRule(ruleId) {
     try {
       await Axios.delete(
-        `https://mykos2.onrender.com/api/rule-rumah/${ruleId}/delete`
+        `https://mikos03.onrender.com/api/rule-rumah/${ruleId}/delete`
       );
       // Kemudian perbarui state atau lakukan tindakan lain yang sesuai
       // Misalnya, dapat Anda hapus fasilitas dari state fasilitasInfo
@@ -320,7 +320,7 @@ function ListingUpdate(props) {
     async function GetListingInfo() {
       try {
         const response = await Axios.get(
-          `https://mykos2.onrender.com/api/listings/${params.id}/`
+          `https://mikos03.onrender.com/api/listings/${params.id}/`
         );
 
         dispatch({
@@ -337,7 +337,7 @@ function ListingUpdate(props) {
     async function GetFasilitasInfo() {
       try {
         const response = await Axios.get(
-          `https://mykos2.onrender.com/api/fasilitas-rumah/${params.id}/`
+          `https://mikos03.onrender.com/api/fasilitas-rumah/${params.id}/`
         );
 
         dispatch({
@@ -353,7 +353,7 @@ function ListingUpdate(props) {
     async function GetRuleInfo() {
       try {
         const response = await Axios.get(
-          `https://mykos2.onrender.com/api/rule-rumah/${params.id}/`
+          `https://mikos03.onrender.com/api/rule-rumah/${params.id}/`
         );
 
         dispatch({
@@ -542,7 +542,7 @@ function ListingUpdate(props) {
         if (confirmUpdate.isConfirmed) {
           try {
             const response = await Axios.patch(
-              `https://mykos2.onrender.com/api/listings/${params.id}/update/`,
+              `https://mikos03.onrender.com/api/listings/${params.id}/update/`,
               formData
             );
 
@@ -551,7 +551,7 @@ function ListingUpdate(props) {
 
             for (const facility of facilitiesArray) {
               await Axios.post(
-                "https://mykos2.onrender.com/api/fasilitas-rumah/create",
+                "https://mikos03.onrender.com/api/fasilitas-rumah/create",
                 {
                   rumah: rumahId,
                   name: facility.name,
@@ -563,14 +563,14 @@ function ListingUpdate(props) {
               // Perbarui fasilitas dengan menggunakan Axios.put
               console.log("Facilitas ID:", facilitas.id);
               await Axios.put(
-                `https://mykos2.onrender.com/api/fasilitas-rumah/${facilitas.id}/update`,
+                `https://mikos03.onrender.com/api/fasilitas-rumah/${facilitas.id}/update`,
                 { name: facilitas.name }
               );
             }
 
             for (const rule of rulesArray) {
               await Axios.post(
-                "https://mykos2.onrender.com/api/rule-rumah/create",
+                "https://mikos03.onrender.com/api/rule-rumah/create",
                 {
                   rumah: rumahId,
                   aturan: rule.aturan,
@@ -582,7 +582,7 @@ function ListingUpdate(props) {
               // Perbarui fasilitas dengan menggunakan Axios.put
               // console.log("Facilitas ID:", facilitas.id);
               await Axios.put(
-                `https://mykos2.onrender.com/api/rule-rumah/${ruless.id}/update`,
+                `https://mikos03.onrender.com/api/rule-rumah/${ruless.id}/update`,
                 { aturan: ruless.aturan }
               );
             }

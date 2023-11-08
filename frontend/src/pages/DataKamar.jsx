@@ -31,7 +31,7 @@ function DataKamar() {
     async function GetAllRoom() {
       try {
         const response = await Axios.get(
-          `https://mykos2.onrender.com/api/kamar/${params.id}/`
+          `https://mikos03.onrender.com/api/kamar/${params.id}/`
         );
         const data = response.data;
         setAllRoom(data);
@@ -52,7 +52,7 @@ function DataKamar() {
 
   async function updateApprove(id, newValue) {
     try {
-      await Axios.patch(`https://mykos2.onrender.com/api/kamar/${id}/update/`, {
+      await Axios.patch(`https://mikos03.onrender.com/api/kamar/${id}/update/`, {
         barang_dipesan: newValue,
       });
       window.location.reload();
@@ -75,7 +75,7 @@ function DataKamar() {
         try {
           await updateApprove(id, false);
           await Axios.delete(
-            `https://mykos2.onrender.com/api/transaction/${id}/delete/kamar`
+            `https://mikos03.onrender.com/api/transaction/${id}/delete/kamar`
           );
 
           // Refresh halaman hanya ketika kedua operasi berhasil
@@ -109,7 +109,7 @@ function DataKamar() {
     if (result.isConfirmed) {
       try {
         await Axios.delete(
-          `https://mykos2.onrender.com/api/kamar/${id}/delete/`
+          `https://mikos03.onrender.com/api/kamar/${id}/delete/`
         );
         swalWithBootstrapButtons
           .fire("Deleted!", "Your file has been deleted.", "success")

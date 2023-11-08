@@ -140,7 +140,7 @@ function Order() {
         if (result.isConfirmed) {
           try {
             const response = await Axios.post(
-              `https://mykos2.onrender.com/api/transaction/create`,
+              `https://mikos03.onrender.com/api/transaction/create`,
               formData
             );
             await updateKamar(params.id, true);
@@ -175,7 +175,7 @@ function Order() {
     async function GetProfileInfo() {
       try {
         const response = await Axios.get(
-          `https://mykos2.onrender.com/api/profiles/customer/${userId}/`
+          `https://mikos03.onrender.com/api/profiles/customer/${userId}/`
         );
 
         dispatch({
@@ -198,7 +198,7 @@ function Order() {
     async function GetRumahInfo() {
       try {
         const response = await Axios.get(
-          `https://mykos2.onrender.com/api/listings/${params.rumah}/`
+          `https://mikos03.onrender.com/api/listings/${params.rumah}/`
         );
 
         dispatch({
@@ -214,7 +214,7 @@ function Order() {
 
   async function updateKamar(id, newValue) {
     try {
-      await Axios.patch(`https://mykos2.onrender.com/api/kamar/${id}/update/`, {
+      await Axios.patch(`https://mikos03.onrender.com/api/kamar/${id}/update/`, {
         barang_dipesan: newValue,
       });
       // window.location.reload();

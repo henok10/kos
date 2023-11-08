@@ -37,7 +37,7 @@ export default function DataTable() {
     async function GetAllKos() {
       try {
         const response = await Axios.get(
-          `https://mykos2.onrender.com/api/listings/${userId}/list`
+          `https://mikos03.onrender.com/api/listings/${userId}/list`
         );
         const data = response.data;
         const listingIds = data.map((listing) => parseInt(listing.id));
@@ -61,7 +61,7 @@ export default function DataTable() {
         const totalRoomsByListing = {};
         for (const listingId of listingIds) {
           const response = await Axios.get(
-            `https://mykos2.onrender.com/api/kamar/${listingId}/`
+            `https://mikos03.onrender.com/api/kamar/${listingId}/`
           );
           const dataKamar = response.data;
           const totalRooms = dataKamar.length;
@@ -84,7 +84,7 @@ export default function DataTable() {
         const numItemsBoughtByListingId = {};
         for (const listingId of listingIds) {
           const response = await Axios.get(
-            `https://mykos2.onrender.com/api/transaction/${listingId}/user`
+            `https://mikos03.onrender.com/api/transaction/${listingId}/user`
           );
           const data = response.data;
           const numItemsBought = data.filter(
@@ -137,7 +137,7 @@ export default function DataTable() {
   
     if (result.isConfirmed) {
       try {
-        await Axios.delete(`https://mykos2.onrender.com/api/listings/${id}/delete/`);
+        await Axios.delete(`https://mikos03.onrender.com/api/listings/${id}/delete/`);
         swalWithBootstrapButtons.fire(
           'Deleted!',
           'Your file has been deleted.',

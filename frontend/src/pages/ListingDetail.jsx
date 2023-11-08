@@ -153,7 +153,7 @@ function ListingDetail() {
     async function GetKamarInfo() {
       try {
         const response = await Axios.get(
-          `https://mykos2.onrender.com/api/listings/${params.id}/`
+          `https://mikos03.onrender.com/api/listings/${params.id}/`
         );
 
         dispatch({
@@ -171,7 +171,7 @@ function ListingDetail() {
       async function GetListingInfo() {
         try {
           const response = await Axios.get(
-            `https://mykos2.onrender.com/api/profiles/owner/${state.listingInfo.user}/`
+            `https://mikos03.onrender.com/api/profiles/owner/${state.listingInfo.user}/`
           );
           dispatch({
             type: "catchUserProfileInfo",
@@ -192,7 +192,7 @@ function ListingDetail() {
     async function GetAllOrderKos() {
       try {
         const response = await Axios.get(
-          `https://mykos2.onrender.com/api/transaction/${params.id}/user`
+          `https://mikos03.onrender.com/api/transaction/${params.id}/user`
         );
         const data = response.data;
       } catch (error) {}
@@ -204,7 +204,7 @@ function ListingDetail() {
     async function GetFasilitasInfo() {
       try {
         const response = await Axios.get(
-          `https://mykos2.onrender.com/api/fasilitas-rumah/${params.id}/`
+          `https://mikos03.onrender.com/api/fasilitas-rumah/${params.id}/`
         );
         const data = response.data;
         setAllFasilitas(data);
@@ -217,7 +217,7 @@ function ListingDetail() {
     async function GetRuleInfo() {
       try {
         const response = await Axios.get(
-          `https://mykos2.onrender.com/api/rule-rumah/${params.id}/`
+          `https://mikos03.onrender.com/api/rule-rumah/${params.id}/`
         );
         const data = response.data;
         setAllRule(data);
@@ -231,7 +231,7 @@ function ListingDetail() {
       try {
         const totalRoomsByListing = {};
         const response = await Axios.get(
-          `https://mykos2.onrender.com/api/kamar/${params.id}/`
+          `https://mikos03.onrender.com/api/kamar/${params.id}/`
         );
         const dataKamar = response.data;
         const totalRooms = dataKamar.length;

@@ -34,7 +34,7 @@ export default function DataTableUser() {
     async function GetAllKos() {
       try {
         const response = await Axios.get(
-          `https://mykos2.onrender.com/api/transaction/${params.id}/user`
+          `https://mikos03.onrender.com/api/transaction/${params.id}/user`
         );
 
         setAllKos(response.data);
@@ -49,7 +49,7 @@ export default function DataTableUser() {
   async function updateApprove(id, newValue) {
     try {
       const response = await Axios.patch(
-        `https://mykos2.onrender.com/api/kamar/${id}/update/`,
+        `https://mikos03.onrender.com/api/kamar/${id}/update/`,
         {
           barang_dipesan: newValue,
         }
@@ -64,7 +64,7 @@ export default function DataTableUser() {
   async function updateKamars(kamar, newValue) {
     try {
       const response = await Axios.patch(
-        `https://mykos2.onrender.com/api/kamar/${kamar}/update/`,
+        `https://mikos03.onrender.com/api/kamar/${kamar}/update/`,
         {
           barang_dipesan: newValue,
         }
@@ -100,7 +100,7 @@ export default function DataTableUser() {
         await updateApprove(id, false);
         await updateKamars(kamar, false)
         await Axios.delete(
-          `https://mykos2.onrender.com/api/transaction/${id}/delete`
+          `https://mikos03.onrender.com/api/transaction/${id}/delete`
         );
 
         swalWithBootstrapButtons.fire(

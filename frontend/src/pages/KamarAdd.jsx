@@ -344,7 +344,7 @@ function KamarAdd() {
             try {
               // First, create the Kamar instance
               const kamarResponse = await Axios.post(
-                "https://mykos2.onrender.com/api/kamar/create",
+                "https://mikos03.onrender.com/api/kamar/create",
                 formData
               );
 
@@ -353,7 +353,7 @@ function KamarAdd() {
 
               for (const facility of facilitiesArray) {
                 await Axios.post(
-                  "https://mykos2.onrender.com/api/fasilitas-kamar/create",
+                  "https://mikos03.onrender.com/api/fasilitas-kamar/create",
                   {
                     kamar: kamarId,
                     name: facility.name,
@@ -365,7 +365,7 @@ function KamarAdd() {
               for (const rule of rulesArray) {
                 console.log(rule)
                 await Axios.post(
-                  "https://mykos2.onrender.com/api/rule-kamar/create",
+                  "https://mikos03.onrender.com/api/rule-kamar/create",
                   {
                     kamar: kamarId,
                     aturan: rule.aturan,

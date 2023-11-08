@@ -61,7 +61,7 @@ function Kamar() {
     async function GetAllRoom() {
       try {
         const response = await Axios.get(
-          `https://mykos2.onrender.com/api/kamar/${params.id}/`
+          `https://mikos03.onrender.com/api/kamar/${params.id}/`
         );
         const data = response.data;
         setAllRoom(data);

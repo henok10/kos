@@ -145,7 +145,7 @@ function ProfileUpdateCustomer(props) {
         if (confirmUpdate) {
           try {
             await Axios.patch(
-              `https://mykos2.onrender.com/api/profiles/customer/${userId}/update/`,
+              `https://mikos03.onrender.com/api/profiles/customer/${userId}/update/`,
               formData
             );
 

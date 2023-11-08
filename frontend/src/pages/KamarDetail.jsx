@@ -85,7 +85,7 @@ function KamarDetail() {
     async function GetKamarInfo() {
       try {
         const response = await Axios.get(
-          `https://mykos2.onrender.com/api/kamar/${params.id}/detail/`
+          `https://mikos03.onrender.com/api/kamar/${params.id}/detail/`
         );
 
         dispatch({
@@ -102,7 +102,7 @@ function KamarDetail() {
       async function GetListingInfo() {
         try {
           const response = await Axios.get(
-            `https://mykos2.onrender.com/api/listings/${state.kamarInfo.rumah}/`
+            `https://mikos03.onrender.com/api/listings/${state.kamarInfo.rumah}/`
           );
 
           dispatch({
@@ -121,7 +121,7 @@ function KamarDetail() {
       async function GetFasilitasInfo() {
         try {
           const response = await Axios.get(
-            `https://mykos2.onrender.com/api/fasilitas-kamar/${state.kamarInfo.id}/`
+            `https://mikos03.onrender.com/api/fasilitas-kamar/${state.kamarInfo.id}/`
           );
 
           const data = response.data;
@@ -137,7 +137,7 @@ function KamarDetail() {
       async function GetRuleInfo() {
         try {
           const response = await Axios.get(
-            `https://mykos2.onrender.com/api/rule-kamar/${state.kamarInfo.id}/`
+            `https://mikos03.onrender.com/api/rule-kamar/${state.kamarInfo.id}/`
           );
           const data = response.data;
           setAllRule(data);

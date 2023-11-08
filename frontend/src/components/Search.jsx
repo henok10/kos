@@ -95,7 +95,7 @@ function Search({ setSearchResults, filtered, dataIsLoading }) {
     async function GetPoiList() {
       try {
         const response = await Axios.get(
-          `https://mykos2.onrender.com/api/poi-list`
+          `https://mikos03.onrender.com/api/poi-list`
         );
 
         const data = response.data;
@@ -109,7 +109,7 @@ function Search({ setSearchResults, filtered, dataIsLoading }) {
     async function GetListingList() {
       try {
         const response = await Axios.get(
-          `https://mykos2.onrender.com/api/listings/`
+          `https://mikos03.onrender.com/api/listings/`
         );
 
         const data = response.data;

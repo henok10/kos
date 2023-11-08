@@ -63,7 +63,7 @@ function Review() {
   const handleSubmit = (event) => {
     event.preventDefault();
     axios
-      .post("https://mykos2.onrender.com/api/review/create", {
+      .post("https://mikos03.onrender.com/api/review/create", {
         comment: comment,
         rate: rate,
         rumah: params.id,

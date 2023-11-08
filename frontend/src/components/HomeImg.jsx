@@ -62,7 +62,7 @@ const HomeImg = () => {
     async function getAllListings() {
       try {
         const response = await Axios.get(
-          "https://mykos2.onrender.com/api/listings/",
+          "https://mikos03.onrender.com/api/listings/",
           { cancelToken: source.token }
         );
 

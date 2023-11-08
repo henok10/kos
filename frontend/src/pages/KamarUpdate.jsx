@@ -320,7 +320,7 @@ function KamarUpdate() {
   async function deleteFacility(facilityId) {
     try {
       await Axios.delete(
-        `https://mykos2.onrender.com/api/fasilitas-kamar/${facilityId}/delete`
+        `https://mikos03.onrender.com/api/fasilitas-kamar/${facilityId}/delete`
       );
       // Kemudian perbarui state atau lakukan tindakan lain yang sesuai
       // Misalnya, dapat Anda hapus fasilitas dari state fasilitasInfo
@@ -341,7 +341,7 @@ function KamarUpdate() {
   async function deleteRule(ruleId) {
     try {
       await Axios.delete(
-        `https://mykos2.onrender.com/api/rule-kamar/${ruleId}/delete`
+        `https://mikos03.onrender.com/api/rule-kamar/${ruleId}/delete`
       );
       // Kemudian perbarui state atau lakukan tindakan lain yang sesuai
       // Misalnya, dapat Anda hapus fasilitas dari state fasilitasInfo
@@ -395,7 +395,7 @@ function KamarUpdate() {
     async function GetKamarInfo() {
       try {
         const response = await Axios.get(
-          `https://mykos2.onrender.com/api/kamar/${params.id}/detail/`
+          `https://mikos03.onrender.com/api/kamar/${params.id}/detail/`
         );
 
         dispatch({
@@ -411,7 +411,7 @@ function KamarUpdate() {
     async function GetFasilitasInfo() {
       try {
         const response = await Axios.get(
-          `https://mykos2.onrender.com/api/fasilitas-kamar/${params.id}/`
+          `https://mikos03.onrender.com/api/fasilitas-kamar/${params.id}/`
         );
 
         dispatch({
@@ -427,7 +427,7 @@ function KamarUpdate() {
     async function GetRuleInfo() {
       try {
         const response = await Axios.get(
-          `https://mykos2.onrender.com/api/rule-kamar/${params.id}/`
+          `https://mikos03.onrender.com/api/rule-kamar/${params.id}/`
         );
 
         dispatch({
@@ -540,7 +540,7 @@ function KamarUpdate() {
           try {
             // First, create the Kamar instance
             const kamarResponse = await Axios.patch(
-              `https://mykos2.onrender.com/api/kamar/${params.id}/update/`,
+              `https://mikos03.onrender.com/api/kamar/${params.id}/update/`,
               formData
             );
 
@@ -549,7 +549,7 @@ function KamarUpdate() {
 
             for (const facility of facilitiesArray) {
               await Axios.post(
-                "https://mykos2.onrender.com/api/fasilitas-kamar/create",
+                "https://mikos03.onrender.com/api/fasilitas-kamar/create",
                 {
                   kamar: kamarId,
                   name: facility.name,
@@ -560,14 +560,14 @@ function KamarUpdate() {
               // Perbarui fasilitas dengan menggunakan Axios.put
               console.log("Facilitas ID:", facilitas.id);
               await Axios.put(
-                `https://mykos2.onrender.com/api/fasilitas-kamar/${facilitas.id}/update`,
+                `https://mikos03.onrender.com/api/fasilitas-kamar/${facilitas.id}/update`,
                 { name: facilitas.name }
               );
             }
 
             for (const rule of rulesArray) {
               await Axios.post(
-                "https://mykos2.onrender.com/api/rule-kamar/create",
+                "https://mikos03.onrender.com/api/rule-kamar/create",
                 {
                   kamar: kamarId,
                   aturan: rule.aturan,
@@ -578,7 +578,7 @@ function KamarUpdate() {
               // Perbarui fasilitas dengan menggunakan Axios.put
               // console.log("Facilitas ID:", facilitas.id);
               await Axios.put(
-                `https://mykos2.onrender.com/api/rule-kamar/${ruless.id}/update`,
+                `https://mikos03.onrender.com/api/rule-kamar/${ruless.id}/update`,
                 { aturan: ruless.aturan }
               );
             }

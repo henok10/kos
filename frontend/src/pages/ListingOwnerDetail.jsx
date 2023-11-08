@@ -140,7 +140,7 @@ function ListingOwnerDetail() {
     async function GetListingInfo() {
       try {
         const response = await Axios.get(
-          `https://mykos2.onrender.com/api/listings/${params.id}/`
+          `https://mikos03.onrender.com/api/listings/${params.id}/`
         );
 
         dispatch({
@@ -158,7 +158,7 @@ function ListingOwnerDetail() {
       async function GetProfileInfo() {
         try {
           const response = await Axios.get(
-            `https://mykos2.onrender.com/api/profiles/owner/${state.listingInfo.user}/`
+            `https://mikos03.onrender.com/api/profiles/owner/${state.listingInfo.user}/`
           );
 
           dispatch({
@@ -181,7 +181,7 @@ function ListingOwnerDetail() {
       async function GetFasilitasInfo() {
         try {
           const response = await Axios.get(
-            `https://mykos2.onrender.com/api/fasilitas-rumah/${state.listingInfo.id}/`
+            `https://mikos03.onrender.com/api/fasilitas-rumah/${state.listingInfo.id}/`
           );
 
           const data = response.data;
@@ -201,7 +201,7 @@ function ListingOwnerDetail() {
     async function GetRuleInfo() {
       try {
         const response = await Axios.get(
-          `https://mykos2.onrender.com/api/rule-rumah/${params.id}/`
+          `https://mikos03.onrender.com/api/rule-rumah/${params.id}/`
         );
         const data = response.data;
         setAllRule(data);

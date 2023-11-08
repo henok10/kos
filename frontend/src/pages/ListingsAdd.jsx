@@ -303,7 +303,7 @@ function ListingAdd() {
     async function GetProfileInfo() {
       try {
         const response = await Axios.get(
-          `https://mykos2.onrender.com/api/profiles/owner/${userId}/`
+          `https://mikos03.onrender.com/api/profiles/owner/${userId}/`
         );
 
         dispatch({
@@ -432,7 +432,7 @@ function ListingAdd() {
           if (result.isConfirmed) {
             try {
               const rumahResponse = await Axios.post(
-                "https://mykos2.onrender.com/api/listings/create/",
+                "https://mikos03.onrender.com/api/listings/create/",
                 formData
               );
 
@@ -440,7 +440,7 @@ function ListingAdd() {
 
               for (const facility of facilitiesArray) {
                 await Axios.post(
-                  "https://mykos2.onrender.com/api/fasilitas-rumah/create",
+                  "https://mikos03.onrender.com/api/fasilitas-rumah/create",
                   {
                     rumah: rumahId,
                     name: facility.name,
@@ -450,7 +450,7 @@ function ListingAdd() {
               for (const rule of rulesArray) {
                 console.log(rule);
                 await Axios.post(
-                  "https://mykos2.onrender.com/api/rule-rumah/create",
+                  "https://mikos03.onrender.com/api/rule-rumah/create",
                   {
                     rumah: rumahId,
                     aturan: rule.aturan,

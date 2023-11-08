@@ -63,7 +63,7 @@ function ReviewMessage() {
     async function GetReviewInfo() {
       try {
         const response = await axios.get(
-          `https://mykos2.onrender.com/api/review/${params.id}/`
+          `https://mikos03.onrender.com/api/review/${params.id}/`
         );
 
         setAllReviews(response.data);

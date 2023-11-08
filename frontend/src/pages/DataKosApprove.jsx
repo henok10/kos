@@ -51,7 +51,7 @@ export default function DataTableApprove() {
     async function GetAllKos() {
       try {
         const response = await Axios.get(
-          `https://mykos2.onrender.com/api/transaction/${params.id}/list`
+          `https://mikos03.onrender.com/api/transaction/${params.id}/list`
         );
 
         setAllKos(response.data);
@@ -67,7 +67,7 @@ export default function DataTableApprove() {
   async function updateKamars(kamar, newValue) {
     try {
       const response = await Axios.patch(
-        `https://mykos2.onrender.com/api/kamar/${kamar}/update/`,
+        `https://mikos03.onrender.com/api/kamar/${kamar}/update/`,
         {
           barang_dipesan: newValue,
         }
@@ -102,7 +102,7 @@ export default function DataTableApprove() {
       try {
         await updateKamars(kamar, false)
         await Axios.delete(
-          `https://mykos2.onrender.com/api/transaction/${id}/delete`
+          `https://mikos03.onrender.com/api/transaction/${id}/delete`
         );
         
         swalWithBootstrapButtons.fire(
@@ -144,7 +144,7 @@ export default function DataTableApprove() {
       if (result.isConfirmed) {
       try {
         await Axios.patch(
-          `https://mykos2.onrender.com/api/transaction/${id}/update`,
+          `https://mikos03.onrender.com/api/transaction/${id}/update`,
           { approve: newValue }
         );
         Swal.fire(
