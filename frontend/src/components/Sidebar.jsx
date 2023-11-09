@@ -48,6 +48,7 @@ function SidebarNav() {
   const [selected, setSelected] = useState("Dashboard");
   const dispatch = useDispatch();
   const isCustomer = useSelector((state) => state.auth.isCustomer);
+  const isOwner = useSelector((state) => state.auth.isOwner);
   const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
   const { collapseSidebar } = useProSidebar();
 
@@ -88,15 +89,35 @@ function SidebarNav() {
           }}
         >
           <Box fontSize={"12px"} paddingTop={10} style={{ flex: 1 }}>
-            <Item
-              icon={<HomeIcon />}
-              title="Dashboard"
-              to="/"
-              selected={selected}
-              setSelected={setSelected}
-            />
+            {!isAuthenticated && (
+              <Item
+                icon={<HomeIcon />}
+                title="Dashboard"
+                to="/"
+                selected={selected}
+                setSelected={setSelected}
+              />
+            )}
+            {isOwner && isAuthenticated && (
+              <Item
+                icon={<HomeIcon />}
+                title="Dashboard"
+                to="/owner/home"
+                selected={selected}
+                setSelected={setSelected}
+              />
+            )}
+            {isCustomer && isAuthenticated && (
+              <Item
+                icon={<HomeIcon />}
+                title="Dashboard"
+                to="/customer/home"
+                selected={selected}
+                setSelected={setSelected}
+              />
+            )}
 
-            {!isCustomer && isAuthenticated && (
+            {isOwner && isAuthenticated && (
               <Item
                 title="Data Rumah Kos"
                 to="/datakos"
@@ -135,7 +156,7 @@ function SidebarNav() {
                 <Typography>Profile</Typography>
               </Item>
             )}
-            {!isCustomer && isAuthenticated && (
+            {isOwner && isAuthenticated && (
               <Item
                 title="Profile"
                 to="/profileOwner"
@@ -151,7 +172,7 @@ function SidebarNav() {
                 icon={<Shop2Icon />}
                 selected={selected}
                 setSelected={setSelected}
-             />
+              />
             )}
           </Box>
 

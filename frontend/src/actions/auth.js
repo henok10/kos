@@ -54,7 +54,7 @@ export const getCustomerUser = () => (dispatch, getState) => {
   }
 
   axios
-    .get("https://mykos2.onrender.com/api/customer/dashboard", config)
+    .get("https://mikos03.onrender.com/api/customer/dashboard", config)
     .then((res) => {
       dispatch({
         type: CUSTOMER_USER_LOADED,
@@ -85,7 +85,7 @@ export const getOwnerUser = () => (dispatch, getState) => {
   }
 
   axios
-    .get("https://mykos2.onrender.com/api/owner/dashboard", config)
+    .get("https://mikos03.onrender.com/api/owner/dashboard", config)
     .then((res) => {
       dispatch({
         type: OWNER_USER_LOADED,
@@ -114,7 +114,7 @@ export const create_customeruser =
 
     // Return the axios promise
     return axios
-      .post("https://mykos2.onrender.com/api/signup/customer/", body, config)
+      .post("https://mikos03.onrender.com/api/signup/customer/", body, config)
       .then((res) => {
         dispatch({
           type: REGISTER_CUSER_SUCCESS,
@@ -161,7 +161,7 @@ export const create_owneruser =
     const body = JSON.stringify({ username, email, password, password2, tc });
 
     axios
-      .post("https://mykos2.onrender.com/api/signup/owner/", body, config)
+      .post("https://mikos03.onrender.com/api/signup/owner/", body, config)
       .then((res) => {
         dispatch({
           type: REGISTER_FUSER_SUCCESS,
@@ -209,7 +209,7 @@ export const login =
     const body = JSON.stringify({ email, password });
 
     axios
-      .post("https://mykos2.onrender.com/api/login/", body, config)
+      .post("https://mikos03.onrender.com/api/login/", body, config)
       .then((response) => {
         dispatch({
           type: LOGIN_SUCCESS,
@@ -272,7 +272,7 @@ export const logout = () => (dispatch, getState) => {
     };
 
     axios
-      .post("https://mykos2.onrender.com/api/logout/", data, config)
+      .post("https://mikos03.onrender.com/api/logout/", data, config)
       .then((res) => {
         dispatch({
           type: LOGOUT_SUCCESS,
@@ -301,7 +301,7 @@ export const sendPasswordResetEmail = (email) => async (dispatch) => {
 
   try {
     await axios.post(
-      `https://mykos2.onrender.com/api/send-reset-password-email/`,
+      `https://mikos03.onrender.com/api/send-reset-password-email/`,
       body,
       config
     );
@@ -330,7 +330,7 @@ export const change_user_password =
 
     try {
       await axios.post(
-        `https://mykos2.onrender.com/api/changepassword/`,
+        `https://mikos03.onrender.com/api/changepassword/`,
         body,
         config
       );
@@ -383,7 +383,7 @@ export const reset_password =
 
     try {
       await axios.post(
-        `https://mykos2.onrender.com/api/reset-password/${id}/${token}/`,
+        `https://mikos03.onrender.com/api/reset-password/${id}/${token}/`,
         body,
         config
       );
