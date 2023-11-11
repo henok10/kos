@@ -12,6 +12,27 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import { Grid, Typography, Button, TextField, Snackbar } from "@mui/material";
 import { makeStyles } from "@mui/styles";
 
+const areaOptions = [
+  {
+    value: "",
+    label: "",
+  },
+  { value: "Biringkanaya", label: "Biringkanaya" },
+  { value: "Bontoala", label: "Bontoala" },
+  { value: "Makassar", label: "Makassar" },
+  { value: "Mamajang", label: "Mamajang" },
+  { value: "Manggala", label: "Manggala" },
+  { value: "Mariso", label: "Mariso" },
+  { value: "Panakkukang", label: "Panakkukang" },
+  { value: "Rappocini", label: "Rappocini" },
+  { value: "Tallo", label: "Tallo" },
+  { value: "Tamalanrea", label: "Tamalanrea" },
+  { value: "Tamalate", label: "Tamalate" },
+  { value: "Ujung Pandang", label: "Ujung Pandang" },
+  { value: "Ujung Tanah", label: "Ujung Tanah" },
+  { value: "Wajo", label: "Wajo" },
+];
+
 const useStyles = makeStyles({
   formContainer: {
     width: "75%",
@@ -681,7 +702,17 @@ function ListingUpdate(props) {
                   boroughChosen: e.target.value,
                 })
               }
-            />
+              select
+              SelectProps={{
+                native: true,
+              }}
+            >
+              {areaOptions.map((option) => (
+                <option key={option.value} value={option.value}>
+                  {option.label}
+                </option>
+              ))}
+            </TextField>
           </Grid>
         </Grid>
 

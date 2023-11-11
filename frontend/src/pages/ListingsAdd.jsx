@@ -39,6 +39,27 @@ const useStyles = makeStyles({
   },
 });
 
+const areaOptions = [
+  {
+    value: "",
+    label: "",
+  },
+  { value: "Biringkanaya", label: "Biringkanaya" },
+  { value: "Bontoala", label: "Bontoala" },
+  { value: "Makassar", label: "Makassar" },
+  { value: "Mamajang", label: "Mamajang" },
+  { value: "Manggala", label: "Manggala" },
+  { value: "Mariso", label: "Mariso" },
+  { value: "Panakkukang", label: "Panakkukang" },
+  { value: "Rappocini", label: "Rappocini" },
+  { value: "Tallo", label: "Tallo" },
+  { value: "Tamalanrea", label: "Tamalanrea" },
+  { value: "Tamalate", label: "Tamalate" },
+  { value: "Ujung Pandang", label: "Ujung Pandang" },
+  { value: "Ujung Tanah", label: "Ujung Tanah" },
+  { value: "Wajo", label: "Wajo" },
+];
+
 function ListingAdd() {
   const { choice_rumah } = choices();
   const userId = useSelector((state) => state.auth.userId);
@@ -619,7 +640,7 @@ function ListingAdd() {
           <Grid item xs={5} style={{ marginTop: "1rem" }}>
             <TextField
               id="borough"
-              label="Borough*"
+              label="Area*"
               variant="standard"
               fullWidth
               value={state.boroughValue}
@@ -637,7 +658,17 @@ function ListingAdd() {
               }
               error={state.boroughErrors.hasErrors ? true : false}
               helperText={state.boroughErrors.errorMessage}
-            ></TextField>
+              select
+              SelectProps={{
+                native: true,
+              }}
+            >
+              {areaOptions.map((option) => (
+                <option key={option.value} value={option.value}>
+                  {option.label}
+                </option>
+              ))}
+            </TextField>
           </Grid>
         </Grid>
         <Grid item container>

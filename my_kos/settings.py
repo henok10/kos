@@ -64,8 +64,8 @@ INSTALLED_APPS = [
     'rest_framework_gis',
     'corsheaders',
     'oauth2_provider',
-    'users.apps.UsersConfig',
-    'listings.apps.ListingsConfig',
+    'appUsers.apps.AppUsersConfig',
+    'appRumah.apps.AppRumahConfig',
     'rest_framework_simplejwt',
     'rest_framework_simplejwt.token_blacklist'
 ]
@@ -176,7 +176,7 @@ DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-AUTH_USER_MODEL = 'users.User'
+AUTH_USER_MODEL = 'appUsers.User'
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'

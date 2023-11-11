@@ -5,6 +5,7 @@ import { useDispatch } from "react-redux";
 import HomeImg from "../components/HomeImg";
 import { useSelector } from "react-redux";
 import { Grid, Box, Card, CardContent, Typography } from "@mui/material";
+import HouseIcon from '@mui/icons-material/House';
 
 function OwnerHome() {
   const navigate = useNavigate();
@@ -28,13 +29,13 @@ function OwnerHome() {
   return (
     <>
       {/* <HomeImg /> */}
-      <Grid container>
+      <Grid container style={{width: "100%", height: "100vh", padding: "2rem"}}>
         <Grid>
-          <Card>
+          <Card sx={{ minWidth: 89 + "%", height: 150 }}>
             <CardContent>
-              <Typography variant="h5">
-                Rumah Kos
-              </Typography>
+             <div>
+              <HouseIcon />
+             </div>
               <Typography gutterBottom variant="body2" color="secondary">
                 1 unit
               </Typography>

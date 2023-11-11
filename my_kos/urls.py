@@ -2,8 +2,8 @@ from django.contrib import admin
 from django.urls import path, include, re_path
 from django.conf import settings
 from django.conf.urls.static import static
-from listings.api import views as listings_api_views
-from users.api import views as users_api_views
+from appRumah.api import views as listings_api_views
+from appUsers.api import views as users_api_views
 from django.views.generic import TemplateView
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 from . import views
@@ -14,8 +14,8 @@ import cloudinary_storage
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', views.index, name='index'),
-    path('api/', include('users.api.urls')),
-    path('api/', include('listings.api.urls')),
+    path('api/', include('appUsers.api.urls')),
+    path('api/', include('appRumah.api.urls')),
 
     path('auth/', include('djoser.urls')),
     path('auth/', include('djoser.urls.jwt')),
