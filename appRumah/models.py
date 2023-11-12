@@ -179,8 +179,3 @@ class RuleRumah(models.Model):
         Rumah, on_delete=models.CASCADE, blank=True, null=True, related_name='rulerumah')
     aturan = models.CharField(max_length=100)
 
-
-class RuleKamar(models.Model):
-    kamar = models.ForeignKey(
-        Kamar, on_delete=models.CASCADE, blank=True, null=True, related_name='rulekamar')
-    aturan = models.CharField(max_length=100)

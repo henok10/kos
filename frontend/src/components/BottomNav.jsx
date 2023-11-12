@@ -24,7 +24,7 @@ const BottomNav = () => {
           textAlign: "center", // Mengatur alignment text ke tengah
         }}
       >
-        &copy;{new Date().getFullYear()} KOS SAYA | All rights reserved
+        &copy;{new Date().getFullYear()} MIKOS | All rights reserved
       </Typography>
       {/* </BottomNavigation> */}
     </Paper>

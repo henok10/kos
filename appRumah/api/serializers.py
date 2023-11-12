@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from appRumah.models import Rumah, Poi, Transaction, Review, Kamar, FasilitasKamar, FasilitasRumah, RuleRumah, RuleKamar
+from appRumah.models import Rumah, Poi, Transaction, Review, Kamar, FasilitasKamar, FasilitasRumah, RuleRumah
 from appUsers.models import Customer
 from django.contrib.gis.measure import D
 from django.contrib.gis.geos import Point
@@ -103,10 +103,10 @@ class RuleRumahSerializer(serializers.ModelSerializer):
         model = RuleRumah
         fields = '__all__'
 
-class RuleKamarSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = RuleKamar
-        fields = '__all__'
+# class RuleKamarSerializer(serializers.ModelSerializer):
+#     class Meta:
+#         model = RuleKamar
+#         fields = '__all__'
 
 class TransactionsSerializer(serializers.ModelSerializer):
     class Meta:
@@ -115,7 +115,7 @@ class TransactionsSerializer(serializers.ModelSerializer):
 
 class KamarSerializer(serializers.ModelSerializer):
     fasilitaskamar = FasilitasKamarSerializer(many=True, read_only=True)   
-    rulekamar = RuleKamarSerializer(many=True, read_only=True)
+    # rulekamar = RuleKamarSerializer(many=True, read_only=True)
     approvekamar = serializers.SerializerMethodField()
 
     def get_approvekamar(self, obj):
@@ -124,4 +124,4 @@ class KamarSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Kamar
-        fields = ['id', 'rumah', 'fasilitaskamar', 'rulekamar', 'approvekamar', 'price_day', 'price_month', 'price_year', 'picture_room', 'room_size', 'address_room', 'barang_dipesan']
+        fields = ['id', 'rumah', 'fasilitaskamar', 'approvekamar', 'price_day', 'price_month', 'price_year', 'picture_room', 'room_size', 'address_room', 'barang_dipesan']

@@ -250,20 +250,6 @@ function KamarAdd() {
     }
   };
 
-  function handleRuleChange(event) {
-    dispatch({
-      type: "catchNewRule",
-      newRuleChosen: event.target.value,
-    });
-  }
-
-  const handleAddRule = () => {
-    if (state.newRule && state.newRule.trim()) {
-      dispatch({ type: "addRule", newRuleChosen: state.newRule });
-      dispatch({ type: "catchNewRule", newRuleChosen: "" });
-    }
-  };
-
   function handleRemoveFacility(indexToRemove) {
     dispatch({
       type: "removeFacility",
@@ -326,11 +312,6 @@ function KamarAdd() {
           name: facility,
         }));
 
-        const rulesArray = state.rules.map((rule) => ({
-          aturan: rule,
-        }));
-        
-  
         Swal.fire({
           title: "Are you sure?",
           text: "Are you sure you want to add this Kamar?",
@@ -357,19 +338,6 @@ function KamarAdd() {
                   {
                     kamar: kamarId,
                     name: facility.name,
-                  }
-                );
-              }
-
-
-              for (const rule of rulesArray) {
-                console.log(rule)
-                await Axios.post(
-                  "https://mikos03.onrender.com/api/rule-kamar/create",
-                  {
-                    kamar: kamarId,
-                    aturan: rule.aturan,
-                    
                   }
                 );
               }
@@ -584,7 +552,12 @@ function KamarAdd() {
             <Grid item container>
               {state.facilities.map((facility, index) => (
                 <Grid item xs={12} sm={12} md={6} lg={6} key={index}>
-                  <Grid item xs={6} justifyContent="space-between" width= "15rem">
+                  <Grid
+                    item
+                    xs={6}
+                    justifyContent="space-between"
+                    width="15rem"
+                  >
                     <Typography>
                       {facility}{" "}
                       <IconButton
@@ -602,51 +575,6 @@ function KamarAdd() {
             </Grid>
           </Grid>
         </Grid>
-
-        <Grid item container xs={12} justifyContent="space-between">
-          <Grid item xs={12} sm={12} md={5} lg={5}>
-            <TextField
-              id="newRule"
-              label="Rule Baru"
-              variant="standard"
-              fullWidth
-              value={state.newRule}
-              onChange={handleRuleChange}
-            ></TextField>
-            <Button
-              variant="contained"
-              color="primary"
-              onClick={handleAddRule}
-              style={{ marginTop: "5px", width: "7rem" }}
-              disabled={!state.newRule.trim()}
-            >
-              Add
-            </Button>
-          </Grid>
-          <Grid item xs={12} sm={12} md={6} lg={6}>
-            <Grid item container>
-              {state.rules.map((rule, index) => (
-                <Grid item xs={12} sm={12} md={12} lg={12} key={index}>
-                  <Grid item xs={6} justifyContent="space-between">
-                    <Typography>
-                      {rule}{" "}
-                      <IconButton
-                        onClick={() => handleRemoveRule(index)}
-                        aria-label="Remove Rule Kamar"
-                        color="secondary"
-                      >
-                        <DeleteIcon />{" "}
-                        {/* You can use an appropriate delete icon */}
-                      </IconButton>
-                    </Typography>
-                  </Grid>
-                </Grid>
-              ))}
-            </Grid>
-          </Grid>
-        </Grid>
-
-        <Grid item container></Grid>
         <Grid item container>
           <Grid item xs={3}>
             <Grid

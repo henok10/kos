@@ -33,9 +33,9 @@ const useStyles = makeStyles({
 function KamarUpdate() {
   const { choice_kamar } = choices();
   const classes = useStyles();
- 
+
   const params = useParams();
-  
+
   const [fasilitass, setFasilitass] = useState([]);
   const navigate = useNavigate();
   const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
@@ -338,27 +338,6 @@ function KamarUpdate() {
     }
   }
 
-  async function deleteRule(ruleId) {
-    try {
-      await Axios.delete(
-        `https://mikos03.onrender.com/api/rule-kamar/${ruleId}/delete`
-      );
-      // Kemudian perbarui state atau lakukan tindakan lain yang sesuai
-      // Misalnya, dapat Anda hapus fasilitas dari state fasilitasInfo
-      // atau perbarui tampilan fasilitas.
-      const updatedRuleInfo = state.ruleInfo.filter(
-        (rule) => rule.id !== ruleId
-      );
-      dispatch({
-        type: "catchRuleInfo",
-        ruleObject: updatedRuleInfo,
-      });
-    } catch (error) {
-      // Handle error jika terjadi kesalahan saat menghapus fasilitas
-      console.error("Error deleting facility:", error);
-    }
-  }
-
   function FormSubmit(e) {
     e.preventDefault();
 
@@ -423,22 +402,6 @@ function KamarUpdate() {
     GetFasilitasInfo();
   }, [dispatch, params.id]);
 
-  useEffect(() => {
-    async function GetRuleInfo() {
-      try {
-        const response = await Axios.get(
-          `https://mikos03.onrender.com/api/rule-kamar/${params.id}/`
-        );
-
-        dispatch({
-          type: "catchRuleInfo",
-          ruleObject: response.data,
-        });
-      } catch (e) {}
-    }
-    GetRuleInfo();
-  }, [dispatch, params.id]);
-
   // Untuk mengubah fasilitas, Anda perlu membuat fungsi yang memperbarui fasilitas yang diperlukan dalam state dan kemudian memanggil fungsi updateFacilities dengan fasilitas yang diperbarui.
   function handleFacilityChange(newValue, index) {
     // Salin objek fasilitas yang akan diubah
@@ -461,31 +424,6 @@ function KamarUpdate() {
       fasilitasChosen: newValue,
     });
   }
-
-  function handleRuleChange(newValue, index) {
-    // Salin objek fasilitas yang akan diubah
-    const updatedRules = [...state.ruleInfo];
-    const updatedRule = updatedRules[index];
-
-    // Buat salinan objek dengan nilai properti 'name' yang diubah
-    const updatedRuleCopy = {
-      ...updatedRule,
-      name: newValue,
-    };
-
-    // Perbarui fasilitas di dalam array dengan salinan yang telah diubah
-    updatedRules[index] = updatedRuleCopy;
-
-    // Perbarui fasilitas di state dan panggil fungsi untuk memperbarui fasilitas di backend.
-    dispatch({
-      type: "catchRuleChange",
-      index: index,
-      ruleChosen: newValue,
-    });
-  }
-
-  console.log(state.fasilitasInfo);
-  console.log(state.ruleInfo);
 
   useEffect(() => {
     if (state.sendRequest) {
@@ -518,15 +456,6 @@ function KamarUpdate() {
         const facilitiesUpdate = state.fasilitasInfo.map((facilitas) => ({
           name: facilitas.name,
           id: facilitas.id,
-        }));
-
-        const rulesArray = state.rules.map((rule) => ({
-          aturan: rule,
-        }));
-
-        const rulesUpdate = state.ruleInfo.map((ruless) => ({
-          aturan: ruless.aturan,
-          id: ruless.id,
         }));
 
         const confirmUpdate = await Swal.fire({
@@ -562,24 +491,6 @@ function KamarUpdate() {
               await Axios.put(
                 `https://mikos03.onrender.com/api/fasilitas-kamar/${facilitas.id}/update`,
                 { name: facilitas.name }
-              );
-            }
-
-            for (const rule of rulesArray) {
-              await Axios.post(
-                "https://mikos03.onrender.com/api/rule-kamar/create",
-                {
-                  kamar: kamarId,
-                  aturan: rule.aturan,
-                }
-              );
-            }
-            for (const ruless of rulesUpdate) {
-              // Perbarui fasilitas dengan menggunakan Axios.put
-              // console.log("Facilitas ID:", facilitas.id);
-              await Axios.put(
-                `https://mikos03.onrender.com/api/rule-kamar/${ruless.id}/update`,
-                { aturan: ruless.aturan }
               );
             }
 
@@ -855,95 +766,6 @@ function KamarUpdate() {
         </Grid>
 
         {/*  */}
-
-        <Typography style={{ marginTop: "1rem" }}>
-          Aturan Kamar Kos :{" "}
-        </Typography>
-        <Grid item xs={12} container justifyContent="space-between">
-          {state.ruleInfo.map((rule, index) => (
-            <Grid
-              item
-              xs={5.5}
-              key={index}
-              style={{ marginRight: "5px", marginTop: "10px" }}
-            >
-              <Typography>
-                {rule.aturan}{" "}
-                <IconButton
-                  onClick={() => deleteRule(rule.id)}
-                  aria-label="Remove Facility Info"
-                  color="error"
-                >
-                  <DeleteIcon />
-                </IconButton>
-              </Typography>
-              <TextField
-                id={`Facility-${index}`}
-                label="Fasilitas"
-                variant="standard"
-                fullWidth
-                value={rule.aturan}
-                onChange={(e) => handleRuleChange(e.target.value, index)}
-              ></TextField>
-            </Grid>
-          ))}
-        </Grid>
-        {/* ## */}
-
-        <Grid
-          item
-          container
-          xs={12}
-          justifyContent="space-between"
-          marginTop="2rem"
-        >
-          <Grid item xs={12} sm={12} md={3} lg={3}>
-            <TextField
-              id="newRule"
-              label="Aturan Baru"
-              variant="standard"
-              fullWidth
-              value={state.newRule}
-              onChange={handleRuleAdd}
-            ></TextField>
-            <Button
-              variant="contained"
-              color="primary"
-              onClick={handleAddRule}
-              style={{ marginTop: "5px", width: "6rem" }}
-              disabled={!state.newRule.trim()}
-            >
-              Add
-            </Button>
-          </Grid>
-
-          <Grid item xs={12} sm={12} md={8} lg={8}>
-            <Grid item container>
-              {state.rules.map((rule, index) => (
-                <Grid item xs={12} sm={12} md={6} lg={6} key={index}>
-                  <Grid item xs={6}>
-                    <Typography
-                      style={{
-                        justifyContent: "space-between",
-                        width: "15rem",
-                      }}
-                    >
-                      {rule}{" "}
-                      <IconButton
-                        onClick={() => handleRemoveRule(index)}
-                        aria-label="Remove Facility"
-                        color="error"
-                      >
-                        <DeleteIcon />
-                        {/* You can use an appropriate delete icon */}
-                      </IconButton>
-                    </Typography>
-                  </Grid>
-                </Grid>
-              ))}
-            </Grid>
-          </Grid>
-        </Grid>
 
         {/*  */}
 
