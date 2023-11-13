@@ -158,8 +158,8 @@ function ImageConverter({ transaction }) {
                 </Typography>
                 <Typography>
                   <strong className={classes.label}>Total Bayar</strong>:{" "}
-                  {typeof transaction.nomina === "string"
-                    ? `Rp${parseInt(transaction.nomina, 10).toLocaleString(
+                  {typeof transaction.nominal === "string"
+                    ? `Rp${parseInt(transaction.nominal, 10).toLocaleString(
                         "id-ID"
                       )}`
                     : "Harga tidak tersedia"}

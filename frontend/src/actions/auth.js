@@ -242,7 +242,7 @@ export const login =
 
 
 // Fungsi logout yang akan dijalankan saat token kedaluwarsa atau pengguna logout manual
-export const logout = () => (dispatch, getState) => {
+export const logout = () => async (dispatch, getState) => {
   // Cek apakah token sudah kedaluwarsa
   const access_token = getState().auth.access_token;
 
@@ -270,7 +270,14 @@ export const logout = () => (dispatch, getState) => {
     const data = {
       refresh_token: refresh_token,
     };
+    const confirmUpdate = await Swal.fire({
+      title: 'Do you want to Logout??',
+      showCancelButton: true,
+      confirmButtonText: 'Logout',
+    });
 
+    if (confirmUpdate.isConfirmed) {
+      try {
     axios
       .post("https://mikos03.onrender.com/api/logout/", data, config)
       .then((res) => {
@@ -287,6 +294,12 @@ export const logout = () => (dispatch, getState) => {
         console.log(err.response.data);
         
       });
+
+    } catch (error) {
+      // Handle errors during the logout process
+      console.error('Logout failed:', error);
+    }
+  }
   }
 };
 

@@ -4,7 +4,14 @@ import { getOwnerUser } from "../actions/auth";
 import { useDispatch } from "react-redux";
 import HomeImg from "../components/HomeImg";
 import { useSelector } from "react-redux";
-import { Grid, Box, Card, CardContent, Typography, CircularProgress } from "@mui/material";
+import {
+  Grid,
+  Box,
+  Card,
+  CardContent,
+  Typography,
+  CircularProgress,
+} from "@mui/material";
 import HouseIcon from "@mui/icons-material/House";
 import Axios from "axios";
 
@@ -16,6 +23,7 @@ function OwnerHome() {
   const [dataIsLoading, setDataIsLoading] = useState(true);
   const [allKos, setAllKos] = useState([]);
   const [allKamar, setAllKamar] = useState([]);
+  const [allPerson, setAllPerson] = useState([]);
   const [dataKos, setDataKos] = useState([]);
   useEffect(() => {
     if (!isAuthenticated) {
@@ -63,10 +71,27 @@ function OwnerHome() {
         const data = response.data;
         const totalKamar = data.length;
         setAllKamar(totalKamar);
-        setDataIsLoading(false);
       } catch (error) {}
     }
     GetAllKamar();
+    return () => {
+      source.cancel();
+    };
+  }, [userId]);
+
+  useEffect(() => {
+    const source = Axios.CancelToken.source();
+    async function GetAllPerson() {
+      try {
+        const response = await Axios.get(
+          `https://mikos03.onrender.com/api/transaction/${userId}/listu`
+        );
+        const data = response.data;
+        const totalPerson = data.length;
+        setAllPerson(totalPerson);
+      } catch (error) {}
+    }
+    GetAllPerson();
     return () => {
       source.cancel();
     };
@@ -96,12 +121,14 @@ function OwnerHome() {
         container
         style={{
           // flexDirection: "row",
+          display: "flex",
+          justifyContent: "space-between",
           width: "100%",
           height: "100vh",
           padding: "0 2rem",
         }}
       >
-        <Grid item xs={3} style={{ gap: 15 }}>
+        <Grid item xs={12} sm={12} md={3} lg={3} style={{ gap: 15 }}>
           <Grid item xs={12}>
             <Card sx={{ height: 80, width: 265, marginTop: "0.5rem" }}>
               <CardContent style={{ height: 100 }}>
@@ -212,9 +239,11 @@ function OwnerHome() {
                     >
                       Penghuni Kos
                     </Typography>
-                    <Typography gutterBottom variant="body2">
-                      1 person
-                    </Typography>
+                    {allPerson && (
+                      <Typography gutterBottom variant="body2">
+                        {allPerson} orang
+                      </Typography>
+                    )}
                   </Grid>
                   <Grid
                     item
@@ -281,22 +310,30 @@ function OwnerHome() {
             </Card>
           </Grid>
         </Grid>
-        <Grid
-          item
-          xs={8}
-          paddingTop="2rem"
-          width="80%"
-          margin="0 auto"
-          height="10rem"
-          backgroundColor="#e3f2fd"
-          borderRadius="40px"
-        >
-          <Typography variant="h6" style={{ textAlign: "center" }}>
-            Hai, <strong>{dataKos}</strong>
-          </Typography>
-          <Typography variant="h6" style={{ textAlign: "center" }}>
-            Selamat Datang Di Website Mikos untuk Pemilik Kos
-          </Typography>
+        <Grid item xs={12} sm={12} md={8} lg={8} width="100%">
+          <Grid container>
+            <Box
+              style={{
+                display: "flex",
+                width: "80%",
+                height: "10rem",
+                flexDirection: "column",
+                backgroundColor: "#e3f2fd",
+                borderRadius: "40px",
+                margin: "auto",
+                justifyContent: "center",
+                alignContent: "center",
+                // paddingTop: "2rem"
+              }}
+            >
+              <Typography variant="h6" style={{ textAlign: "center" }}>
+                Hai, <strong>{dataKos}</strong>
+              </Typography>
+              <Typography variant="h6" style={{ textAlign: "center" }}>
+                Selamat Datang Di Website Mikos untuk Pemilik Kos
+              </Typography>
+            </Box>
+          </Grid>
         </Grid>
       </Grid>
     </>

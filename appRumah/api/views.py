@@ -53,10 +53,10 @@ class TransactionList(generics.ListAPIView):
     serializer_class = TransactionSerializer
 
     def get_queryset(self):
-        rumah_id = self.kwargs['rumah']
-        rumah = Rumah.objects.get(id=rumah_id)
+        user_id = self.kwargs['user']
+        users = User.objects.get(id=user_id)
         queryset = Transaction.objects.filter(
-            kamar__rumah=rumah, approve=False).order_by('-date')
+            kamar__rumah__user=users, approve=True).order_by('-id')
         return queryset
 
 
