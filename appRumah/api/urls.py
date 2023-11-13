@@ -11,7 +11,7 @@ urlpatterns = [
     path('listings/<int:pk>/update/',
          listings_api_views.ListingUpdate.as_view()),
     path('transaction/<int:rumah>/list',
-         listings_api_views.TransactionList.as_view()),
+         listings_api_views.TransactionBeforeApprove.as_view()),
     path('transaction/<int:user>/listu',
          listings_api_views.TransactionList.as_view()),
     path('transaction/<int:user>/listorder',

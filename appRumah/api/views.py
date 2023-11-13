@@ -69,6 +69,16 @@ class TransactionListOrder(generics.ListAPIView):
             kamar__rumah__user=users, approve=False).order_by('-id')
         return queryset
 
+class TransactionBeforeApprove(generics.ListAPIView):
+    serializer_class = TransactionSerializer
+
+    def get_queryset(self):
+        rumah_id = self.kwargs['rumah']
+        rumah = Rumah.objects.get(id=rumah_id)
+        queryset = Transaction.objects.filter(
+            kamar__rumah=rumah, approve=False).order_by('-date')
+        return queryset
+
 
 class TransactionUpdate(generics.UpdateAPIView):
     serializer_class = TransactionSerializer
