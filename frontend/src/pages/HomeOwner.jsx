@@ -306,7 +306,7 @@ function OwnerHome() {
                     >
                       transaction message
                     </Typography>
-                    {allOrder ? (
+                    {allOrder? (
                       <Typography gutterBottom variant="body2">
                         {allOrder} message
                       </Typography>
