@@ -7,6 +7,9 @@ from appUsers.models import User, Customer, Owner
 from rest_framework.response import Response
 
 
+from django.shortcuts import get_object_or_404 
+
+
 class ListingList(generics.ListAPIView):
     queryset = Rumah.objects.all().order_by('date_posted')
     serializer_class = ListingSerializer
@@ -155,9 +158,22 @@ class KamarUserList(generics.ListAPIView):
     serializer_class = KamarSerializer
     def get_queryset(self):
         user_id = self.kwargs['user']
-        rumah = Rumah.objects.get(id=rumah_id)
-        queryset = Kamar.objects.filter(rumah=rumah).order_by('address_room')
+        users = User.objects.get(id=user_id)
+        queryset = Kamar.objects.filter(rumah__user=users).order_by('id')
         return queryset
+
+# class KamarUserList(generics.ListAPIView):
+#     serializer_class = KamarSerializer
+
+#     def get_queryset(self):
+#         user_id = self.kwargs['user']
+
+#         # Menggunakan get_list_or_404 untuk menangani jika Rumah tidak ditemukan
+#         rumah = get_object_or_404(Rumah.objects.filter(user=user_id).order_by('id'))
+
+#         # Mengubah filter menjadi rumah, bukan rumah.user
+#         queryset = Kamar.objects.filter(rumah=rumah).order_by('address_room')
+#         return queryset
 
 class KamarUpdate(generics.UpdateAPIView):
     queryset = Kamar.objects.all()

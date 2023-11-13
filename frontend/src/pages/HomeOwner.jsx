@@ -15,6 +15,7 @@ function OwnerHome() {
   const userId = useSelector((state) => state.auth.userId);
   const [dataIsLoading, setDataIsLoading] = useState(true);
   const [allKos, setAllKos] = useState([]);
+  const [allKamar, setAllKamar] = useState([]);
   const [dataKos, setDataKos] = useState([]);
   useEffect(() => {
     if (!isAuthenticated) {
@@ -52,7 +53,25 @@ function OwnerHome() {
       source.cancel();
     };
   }, [userId]);
-  
+  useEffect(() => {
+    const source = Axios.CancelToken.source();
+    async function GetAllKamar() {
+      try {
+        const response = await Axios.get(
+          `https://mikos03.onrender.com/api/kamar/${userId}/user`
+        );
+        const data = response.data;
+        const totalKamar = data.length;
+        setAllKamar(totalKamar);
+        setDataIsLoading(false);
+      } catch (error) {}
+    }
+    GetAllKamar();
+    return () => {
+      source.cancel();
+    };
+  }, [userId]);
+
   if (dataIsLoading === true) {
     return (
       <Grid
@@ -148,9 +167,11 @@ function OwnerHome() {
                     >
                       Kamar Kos
                     </Typography>
-                    <Typography gutterBottom variant="body2">
-                      1 rooms
-                    </Typography>
+                    {allKamar && (
+                      <Typography gutterBottom variant="body2">
+                        {allKamar} kamar
+                      </Typography>
+                    )}
                   </Grid>
                   <Grid
                     item

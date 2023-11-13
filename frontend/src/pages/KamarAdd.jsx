@@ -385,7 +385,7 @@ function KamarAdd() {
   useEffect(() => {
     if (state.openSnack) {
       setTimeout(() => {
-        navigate("/datakos");
+        navigate(`/data-kamar/${params.id}`);
       }, 1500);
     }
   }, [state.openSnack, navigate]);
