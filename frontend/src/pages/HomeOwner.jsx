@@ -24,6 +24,7 @@ function OwnerHome() {
   const [allKos, setAllKos] = useState([]);
   const [allKamar, setAllKamar] = useState([]);
   const [allPerson, setAllPerson] = useState([]);
+  const [allOrder, setAllOrder] = useState([]);
   const [dataKos, setDataKos] = useState([]);
   useEffect(() => {
     if (!isAuthenticated) {
@@ -71,6 +72,7 @@ function OwnerHome() {
         const data = response.data;
         const totalKamar = data.length;
         setAllKamar(totalKamar);
+        setDataIsLoading(false);
       } catch (error) {}
     }
     GetAllKamar();
@@ -89,9 +91,29 @@ function OwnerHome() {
         const data = response.data;
         const totalPerson = data.length;
         setAllPerson(totalPerson);
+        setDataIsLoading(false);
       } catch (error) {}
     }
     GetAllPerson();
+    return () => {
+      source.cancel();
+    };
+  }, [userId]);
+
+  useEffect(() => {
+    const source = Axios.CancelToken.source();
+    async function GetAllOrder() {
+      try {
+        const response = await Axios.get(
+          `https://mikos03.onrender.com/api/transaction/${userId}/listorder`
+        );
+        const data = response.data;
+        const totalOrder = data.length;
+        setAllOrder(totalOrder);
+        setDataIsLoading(false);
+      } catch (error) {}
+    }
+    GetAllOrder();
     return () => {
       source.cancel();
     };
@@ -284,9 +306,15 @@ function OwnerHome() {
                     >
                       transaction message
                     </Typography>
-                    <Typography gutterBottom variant="body2">
-                      1 message
-                    </Typography>
+                    {allOrder ? (
+                      <Typography gutterBottom variant="body2">
+                        {allOrder} message
+                      </Typography>
+                    ) : (
+                      <Typography gutterBottom variant="body2">
+                        0 message
+                      </Typography>
+                    )}
                   </Grid>
                   <Grid
                     item
