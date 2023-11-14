@@ -32,6 +32,7 @@ function Order() {
   const isCustomer = useSelector((state) => state.auth.isCustomer);
   const userId = useSelector((state) => state.auth.userId);
   const customerId = useSelector((state) => state.auth.customerId);
+  const isOwner = useSelector((state) => state.auth.isOwner);
   const params = useParams();
 
   useEffect(() => {
@@ -42,9 +43,15 @@ function Order() {
 
   useEffect(() => {
     if (!isCustomer) {
-      navigate("/");
+      navigate("/login");
     }
   }, [isCustomer, navigate]);
+
+  useEffect(() => {
+    if (isOwner) {
+      navigate("/owner/home");
+    }
+  }, [isOwner, navigate]);
 
   const initialState = {
     fullNameValue: "",

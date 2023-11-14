@@ -88,6 +88,15 @@ function ListingDetail() {
   const classes = useStyles();
   const params = useParams();
 
+  const isOwner = useSelector((state) => state.auth.isOwner);
+
+
+  useEffect(() => {
+    if (isOwner) {
+      navigate("/owner/home");
+    }
+  }, [isOwner, navigate]);
+
   const stadiumIcon = new Icon({
     iconUrl: stadiumIconPng,
     iconSize: [40, 40],

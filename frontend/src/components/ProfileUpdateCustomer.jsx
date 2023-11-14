@@ -18,7 +18,7 @@ import { makeStyles } from "@mui/styles";
 
 const useStyles = makeStyles({
   formContainer: {
-    width: "95%",
+    width: "100%",
     marginLeft: "auto",
     marginRight: "auto",
     padding: "3rem",

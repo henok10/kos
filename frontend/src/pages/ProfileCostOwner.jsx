@@ -41,6 +41,14 @@ function ProfileOwner() {
     }
   }, [isCustomer, navigate]);
 
+  const isOwner = useSelector((state) => state.auth.isOwner);
+
+  useEffect(() => {
+    if (!isOwner) {
+      navigate("/login");
+    }
+  }, [isOwner, navigate]);
+
   const initialState = {
     userProfile: {
       agencyName: "",

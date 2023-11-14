@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import Axios from "axios";
 import { useImmerReducer } from "use-immer";
 import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
 // React leaflet
 import { MapContainer, TileLayer, Marker, Popup, useMap } from "react-leaflet";
 import { Icon } from "leaflet";
@@ -52,6 +53,16 @@ const useStyles = makeStyles({
 function Listings() {
   const navigate = useNavigate();
   const classes = useStyles();
+  const isOwner = useSelector((state) => state.auth.isOwner);
+
+
+  useEffect(() => {
+    if (isOwner) {
+      navigate("/owner/home");
+    }
+  }, [isOwner, navigate]);
+
+ 
 
   const houseIcon = new Icon({
     iconUrl: houseIconPng,

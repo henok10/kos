@@ -2,6 +2,7 @@ import React from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { logout } from "../actions/auth";
+import { makeStyles } from "@mui/styles";
 import {
   Button,
   Typography,
@@ -10,12 +11,21 @@ import {
   Toolbar,
   Avatar,
   Box,
+  Grid,
+  useMediaQuery,
+  useTheme,
 } from "@mui/material";
 import { useProSidebar } from "react-pro-sidebar";
 import SettingsIcon from "@mui/icons-material/Settings";
 import MenuIcon from "@mui/icons-material/Menu";
 import mikos from "../data/mikos.png";
 import mikos1 from "../data/mikos.png";
+
+const useStyles = makeStyles((theme) => ({
+  hidden: {
+    display: 'none',
+  },
+}));
 
 function Topbar() {
   const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
@@ -24,18 +34,23 @@ function Topbar() {
   const navigate = useNavigate();
   const email = useSelector((state) => state.auth.email);
   const username = useSelector((state) => state.auth.username);
-  console.log(username)
+  const classes = useStyles();
+  const theme = useTheme();
+  const isLargeScreen = useMediaQuery(theme.breakpoints.up("sm"));
+
+  console.log(username);
 
   const authLinks = (
-    <Box sx={{ m: "auto", display: "flex" }}>
+    <Grid sx={{ m: "auto", display: "flex" }}>
       <div style={{ marginRight: "10px" }}>
         <Avatar alt="" src="/static/images/avatar/1.jpg" />
       </div>
-      <div style={{}}>
-        <span>{username}</span>
-        <span>{email}</span>
-      </div>
-    </Box>
+      <Grid style={{ margin: "auto 1px" }}>
+        <span className={isLargeScreen ? "username" : classes.hidden}>
+          {username}
+        </span>
+      </Grid>
+    </Grid>
   );
 
   const publicLinks = (

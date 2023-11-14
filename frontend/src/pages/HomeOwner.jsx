@@ -152,7 +152,7 @@ function OwnerHome() {
       >
         <Grid item xs={12} sm={12} md={3} lg={3} style={{ gap: 15 }}>
           <Grid item xs={12}>
-            <Card sx={{ height: 80, width: 265, marginTop: "0.5rem" }}>
+            <Card sx={{ height: 80, maxWidth: 265, marginTop: "0.5rem" }}>
               <CardContent style={{ height: 100 }}>
                 <Grid
                   container
@@ -197,7 +197,7 @@ function OwnerHome() {
                 </Grid>
               </CardContent>
             </Card>
-            <Card sx={{ height: 80, width: 265, marginTop: "0.5rem" }}>
+            <Card sx={{ height: 80, maxWidth: 265, marginTop: "0.5rem" }}>
               <CardContent style={{ height: 100 }}>
                 <Grid
                   container
@@ -242,7 +242,7 @@ function OwnerHome() {
                 </Grid>
               </CardContent>
             </Card>
-            <Card sx={{ height: 80, width: 265, marginTop: "0.5rem" }}>
+            <Card sx={{ height: 80, maxWidth: 265, marginTop: "0.5rem" }}>
               <CardContent style={{ height: 100 }}>
                 <Grid
                   container
@@ -287,7 +287,7 @@ function OwnerHome() {
                 </Grid>
               </CardContent>
             </Card>
-            <Card sx={{ height: 80, width: 265, marginTop: "0.5rem" }}>
+            <Card sx={{ height: 80, maxWidth: 265, marginTop: "0.5rem" }}>
               <CardContent style={{ height: 100 }}>
                 <Grid
                   container
@@ -338,7 +338,7 @@ function OwnerHome() {
             </Card>
           </Grid>
         </Grid>
-        <Grid item xs={12} sm={12} md={8} lg={8} width="100%">
+        <Grid item xs={12} sm={12} md={9} lg={9} width="95%">
           <Grid container>
             <Box
               style={{

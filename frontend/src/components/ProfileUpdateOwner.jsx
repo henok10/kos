@@ -19,7 +19,7 @@ import { makeStyles } from "@mui/styles";
 
 const useStyles = makeStyles({
   formContainer: {
-    width: "80%",
+    width: "100%",
     marginLeft: "auto",
     marginRight: "auto",
     border: "5px solid white",
@@ -208,7 +208,7 @@ function ProfileUpdate(props) {
 
   return (
     <>
-      <Paper style={{ width: "90%" }}>
+      <Paper style={{ width: "95%" }}>
         <div className={classes.formContainer}>
           <form onSubmit={FormSubmit}>
             <Grid item textAlign="center">
