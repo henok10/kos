@@ -88,6 +88,7 @@ class UserLoginView(APIView):
                 'refresh_token': refresh_token,
                 'msg': 'Login Success',
                 'email': user.email,
+                'username': user.username,
                 'is_customer': is_customer,
                 'is_owner': is_owner,
                 'owner_id': serializer.data.get('owner_id'),
@@ -159,6 +160,10 @@ class OwnerOnlyView(generics.RetrieveAPIView):
 
 
 class UserList(generics.ListAPIView):
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
+
+class UserDetail(generics.RetrieveAPIView):
     queryset = User.objects.all()
     serializer_class = UserSerializer
 

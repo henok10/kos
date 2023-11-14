@@ -91,7 +91,7 @@ function SidebarNav() {
           <Box fontSize={"12px"} paddingTop={10} style={{ flex: 1 }}>
             {!isAuthenticated && (
               <Item
-                icon={<HomeIcon />}
+                icon={<HomeIcon style={{fill: "gray"}}/>}
                 title="Dashboard"
                 to="/"
                 selected={selected}
@@ -100,7 +100,7 @@ function SidebarNav() {
             )}
             {isOwner && isAuthenticated && (
               <Item
-                icon={<HomeIcon />}
+                icon={<HomeIcon style={{fill: "gray"}}/>}
                 title="Dashboard"
                 to="/owner/home"
                 selected={selected}
@@ -109,7 +109,7 @@ function SidebarNav() {
             )}
             {isCustomer && isAuthenticated && (
               <Item
-                icon={<HomeIcon />}
+                icon={<HomeIcon  style={{fill: "gray"}}/>}
                 title="Dashboard"
                 to="/customer/home"
                 selected={selected}
@@ -121,7 +121,7 @@ function SidebarNav() {
               <Item
                 title="Data Rumah Kos"
                 to="/datakos"
-                icon={<FolderIcon />}
+                icon={<FolderIcon  style={{fill: "gray"}}/>}
                 selected={selected}
                 setSelected={setSelected}
               />
@@ -130,7 +130,7 @@ function SidebarNav() {
               <Item
                 title="Pencarian Rumah Kos"
                 to="/listings"
-                icon={<PageviewIcon />}
+                icon={<PageviewIcon style={{fill: "gray"}} />}
                 selected={selected}
                 setSelected={setSelected}
               />
@@ -139,7 +139,7 @@ function SidebarNav() {
               <Item
                 title="Pencarian Rumah Kos"
                 to="/listings"
-                icon={<PageviewIcon />}
+                icon={<PageviewIcon style={{fill: "gray"}} />}
                 selected={selected}
                 setSelected={setSelected}
               />
@@ -149,7 +149,7 @@ function SidebarNav() {
                 title="Profile"
                 to="/profileCustomer"
                 // to="/profileCustomer"
-                icon={<AccountBoxIcon />}
+                icon={<AccountBoxIcon style={{fill: "gray"}} />}
                 selected={selected}
                 setSelected={setSelected}
               >
@@ -160,7 +160,7 @@ function SidebarNav() {
               <Item
                 title="Profile"
                 to="/profileOwner"
-                icon={<AccountBoxIcon />}
+                icon={<AccountBoxIcon style={{fill: "gray"}} />}
                 selected={selected}
                 setSelected={setSelected}
               />
@@ -169,7 +169,8 @@ function SidebarNav() {
               <Item
                 title="Riwayat Pemesanan"
                 to="/riwayatTransaksi"
-                icon={<Shop2Icon />}
+                icon={<Shop2Icon style={{fill: "gray"}} />}
+                fill="gray"
                 selected={selected}
                 setSelected={setSelected}
               />

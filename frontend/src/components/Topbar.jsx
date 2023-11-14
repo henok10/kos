@@ -8,6 +8,7 @@ import {
   IconButton,
   AppBar,
   Toolbar,
+  Avatar,
   Box,
 } from "@mui/material";
 import { useProSidebar } from "react-pro-sidebar";
@@ -21,12 +22,18 @@ function Topbar() {
   const { collapseSidebar, toggleSidebar, collapsed, broken } = useProSidebar();
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const email = useSelector((state) => state.auth.email);
+  const username = useSelector((state) => state.auth.username);
 
   const authLinks = (
-    <Box sx={{ m: "auto" }}>
-      {/* <Button color="inherit" onClick={() => dispatch(logout())}>
-        Logout
-      </Button> */}
+    <Box sx={{ m: "auto", display: "flex" }}>
+      <div style={{ marginRight: "10px" }}>
+        <Avatar alt="" src="/static/images/avatar/1.jpg" />
+      </div>
+      <div>
+        <span>{username}</span>
+        <span>{email}</span>
+      </div>
     </Box>
   );
 
@@ -43,10 +50,8 @@ function Topbar() {
 
   return (
     <Box backgroundColor="white">
-      <AppBar  color="default" elevation={4}>
-        <Toolbar
-          style={{ display: "flex", justifyContent: "space-between" }}
-        >
+      <AppBar color="default" elevation={4}>
+        <Toolbar style={{ display: "flex", justifyContent: "space-between" }}>
           <Box
             style={{
               display: "flex",

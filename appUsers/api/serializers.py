@@ -21,7 +21,7 @@ class UserSerializer(serializers.ModelSerializer):
     is_owner = serializers.BooleanField(default=False)
     class Meta:
         model = User
-        fields = ['email', 'is_customer', 'is_owner']
+        fields = ['email', 'username', 'is_customer', 'is_owner']
 
 class UserLoginSerializer(serializers.Serializer):
     email = serializers.EmailField()

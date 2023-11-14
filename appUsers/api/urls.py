@@ -9,6 +9,7 @@ urlpatterns=[
     path('customer/dashboard', users_api_views.CustomerOnlyView.as_view(), name='customer-dashboard'),
     path('owner/dashboard', users_api_views.OwnerOnlyView.as_view(), name='owner-dashboard'),
     path('profiles/', users_api_views.UserList.as_view()),
+    path('profiles/<int:pk>', users_api_views.UserDetail.as_view()),
     path('profiles/owner/', users_api_views.OwnerList.as_view()),
     path('profiles/customer/', users_api_views.CustomerList.as_view()),
     path('profiles/owner/<int:user>/', users_api_views.OwnerDetail.as_view()),
