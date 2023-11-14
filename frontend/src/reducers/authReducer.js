@@ -38,6 +38,7 @@ import {
         sukses: null,    
         user: null
     }
+   
     
 export const authReducer=(state=initialState, action)=>{
     switch(action.type){
@@ -89,6 +90,7 @@ export const authReducer=(state=initialState, action)=>{
             localStorage.setItem('token', action.payload.token)
             localStorage.setItem('access_token', action.payload.access_token)
             localStorage.setItem('refresh_token', action.payload.refresh_token)
+    
             return {
                 ...state,
                 ...action.payload,

@@ -24,13 +24,14 @@ function Topbar() {
   const navigate = useNavigate();
   const email = useSelector((state) => state.auth.email);
   const username = useSelector((state) => state.auth.username);
+  console.log(username)
 
   const authLinks = (
     <Box sx={{ m: "auto", display: "flex" }}>
       <div style={{ marginRight: "10px" }}>
         <Avatar alt="" src="/static/images/avatar/1.jpg" />
       </div>
-      <div>
+      <div style={{}}>
         <span>{username}</span>
         <span>{email}</span>
       </div>

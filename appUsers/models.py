@@ -98,8 +98,6 @@ class User(AbstractBaseUser, PermissionsMixin):
     is_owner = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-    profile_picture = models.ImageField(
-        blank=True, null=True, upload_to=upload_to, max_length=455)
     
 
 
@@ -118,6 +116,8 @@ class Customer(models.Model):
     phone_number = models.CharField(max_length=20, null=True, blank=True)
     address = models.CharField(max_length=200, null=True, blank=True)
     date_of_birth = models.DateField(max_length=200, null=True, blank=True)
+    profile_picture = models.ImageField(
+        blank=True, null=True, upload_to=upload_to, max_length=455)
 
     def __str__(self):
         return self.user.username
@@ -128,6 +128,8 @@ class Owner(models.Model):
     phone_number = models.CharField(max_length=25, null=True, blank=True)
     address = models.CharField(max_length=200, null=True, blank=True)
     bio = models.TextField(null=True, blank=True)
+    profile_picture = models.ImageField(
+        blank=True, null=True, upload_to=upload_to, max_length=455)
 
     def __str__(self):
         return self.user.username
