@@ -71,7 +71,7 @@ const OwnerSignup = ({ create_owneruser, isAuthenticated, isOwner }) => {
                 </Typography>
               )}
               {errors.username && (
-                <p style={{ color: "red" }}>{errors.username}</p>
+                <p style={{fontSize: "10px", color: "red" }}>{errors.username}</p>
               )}
               <TextField
                 id="username"
@@ -86,7 +86,7 @@ const OwnerSignup = ({ create_owneruser, isAuthenticated, isOwner }) => {
             </Grid>
 
             <Grid item container style={{ marginTop: "1rem" }}>
-              {errors.email && <p style={{ color: "red" }}>{errors.email}</p>}
+              {errors.email && <p style={{  fontSize: "10px", color: "red" }}>{errors.email}</p>}
               <TextField
                 id="email"
                 label="Email"
@@ -102,7 +102,7 @@ const OwnerSignup = ({ create_owneruser, isAuthenticated, isOwner }) => {
 
             <Grid item container style={{ marginTop: "1rem" }}>
               {errors.password && (
-                <p style={{ color: "red" }}>{errors.password}</p>
+                <p style={{fontSize: "10px", color: "red" }}>{errors.password}</p>
               )}
               <TextField
                 id="password"
@@ -118,7 +118,7 @@ const OwnerSignup = ({ create_owneruser, isAuthenticated, isOwner }) => {
             </Grid>
             <Grid item container style={{ marginTop: "1rem" }}>
               {errors.password2 && (
-                <p style={{ color: "red" }}>{errors.password2}</p>
+                <p style={{fontSize: "10px", color: "red" }}>{errors.password2}</p>
               )}
               <TextField
                 id="password2"
@@ -145,7 +145,7 @@ const OwnerSignup = ({ create_owneruser, isAuthenticated, isOwner }) => {
               // value={tc}
               label="I agree to term and condition."
             />
-            {errors.tc && <p style={{ color: "red" }}>{errors.tc}</p>}
+            {errors.tc && <p style={{fontSize: "10px", color: "red" }}>{errors.tc}</p>}
             {/* <button type="submit" className="btn btn-primary">Signup</button> */}
             <Grid
               item

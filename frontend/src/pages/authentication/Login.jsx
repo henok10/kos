@@ -132,7 +132,7 @@ function Login({ login, isAuthenticated, isCustomer, isOwner, clearErrors }) {
           </Typography>
 
           {errors.email && (
-            <p style={{ color: "red", height: "5px", alignSelf: "self-start" }}>
+            <p style={{ fontSize: "10px", color: "red", height: "5px", alignSelf: "self-start" }}>
               {errors.email}
             </p>
           )}
@@ -156,7 +156,7 @@ function Login({ login, isAuthenticated, isCustomer, isOwner, clearErrors }) {
             />
           </Grid>
           {errors.password && (
-            <p style={{ color: "red", height: "5px", alignSelf: "self-start" }}>
+            <p style={{ fontSize: "10px", color: "red", height: "5px", alignSelf: "self-start" }}>
               {errors.password}
             </p>
           )}

@@ -93,7 +93,8 @@ function Listings() {
   const [allListings, setAllListings] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [dataIsLoading, setDataIsLoading] = useState(true);
-  const setSearchResults = useState([]);
+  const [searchResults, setSearchResults] = useState([]);
+
 
   useEffect(() => {
     const source = Axios.CancelToken.source();
