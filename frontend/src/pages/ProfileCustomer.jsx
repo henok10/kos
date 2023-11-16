@@ -26,7 +26,22 @@ function ProfileCustomer() {
   
   const username = useSelector((state) => state.auth.username);
   const navigate = useNavigate();
-  console.log(userId)
+
+
+  const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
+  const isCustomer = useSelector((state) => state.auth.isCustomer);
+
+  useEffect(() => {
+    if (!isAuthenticated) {
+      navigate("/login");
+    }
+  }, [isAuthenticated, navigate]);
+
+  useEffect(() => {
+    if (!isCustomer) {
+      navigate("/login");
+    }
+  }, [isCustomer, navigate]);
 
   const initialState = {
     userProfile: {

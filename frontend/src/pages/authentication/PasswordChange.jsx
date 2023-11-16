@@ -5,12 +5,25 @@ import { useDispatch, useSelector, connect } from "react-redux";
 import { clearErrors, clearSuccess } from "../../actions/auth";
 import { change_user_password } from "../../actions/auth";
 import { Validation2 } from "./validation";
+import { useNavigate } from "react-router-dom";
+
+
 
 const ChangePassword = ({
   change_user_password,
   clearErrors,
   clearSuccess,
 }) => {
+
+  const navigate = useNavigate();
+  const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
+
+  useEffect(() => {
+    if (!isAuthenticated) {
+      navigate("/login");
+    }
+  }, [isAuthenticated, navigate]);
+
   useEffect(() => {
     // Dispatch aksi CLEAR_ERRORS saat komponen dimuat ulang atau website direfresh
     clearErrors();
