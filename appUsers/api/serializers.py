@@ -157,7 +157,7 @@ class SendPasswordResetEmailSerializer(serializers.Serializer):
             user = User.objects.get(email=email)
             uid = urlsafe_base64_encode(force_bytes(user.id))
             token = PasswordResetTokenGenerator().make_token(user)
-            link = f'https://mykos2.onrender.com/api/user/reset/{uid}/{token}'
+            link = f'https://mikos03.onrender.com/api/user/reset/{uid}/{token}'
             body = f'Click the following link to reset your password: {link}'
             recipient_email = user.email
 

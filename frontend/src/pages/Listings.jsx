@@ -55,14 +55,11 @@ function Listings() {
   const classes = useStyles();
   const isOwner = useSelector((state) => state.auth.isOwner);
 
-
   useEffect(() => {
     if (isOwner) {
       navigate("/owner/home");
     }
   }, [isOwner, navigate]);
-
- 
 
   const houseIcon = new Icon({
     iconUrl: houseIconPng,
@@ -82,7 +79,7 @@ function Listings() {
         return draft;
     }
   }
-  
+
   function TheMapComponents() {
     const map = useMap();
     useEffect(() => {
@@ -136,7 +133,6 @@ function Listings() {
     return (
       fuzzySearch(searchTerm, listing.title) ||
       fuzzySearch(searchTerm, listing.address) ||
-      fuzzySearch(searchTerm, listing.description) ||
       fuzzySearch(searchTerm, listing.borough)
     );
   });
@@ -209,7 +205,7 @@ function Listings() {
                           variant="h6"
                           style={{ fontSize: "18px" }}
                         >
-                          {listing.title.substring(0, 36)}
+                          {listing.title.substring(0, 35)}
                         </Typography>
                       }
                       action={
@@ -243,6 +239,8 @@ function Listings() {
                         position: "absolute",
                         bottom: "0",
                         width: "100%",
+                        backgroundColor: "white",
+                        zIndex: 99999,
                       }}
                     >
                       <Box
@@ -256,6 +254,7 @@ function Listings() {
                         <Typography
                           className={classes.priceLabel}
                           component="span"
+                          zIndex={99999}
                         >
                           {listing.price_month
                             ? `Rp${listing.price_month.toLocaleString(
