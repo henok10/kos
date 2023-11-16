@@ -135,7 +135,7 @@ function Listings() {
   const filteredListings = allListings.filter((listing) => {
     return (
       fuzzySearch(searchTerm, listing.title) ||
-      // fuzzySearch(searchTerm, listing.price_month) ||
+      fuzzySearch(searchTerm, listing.address) ||
       fuzzySearch(searchTerm, listing.description) ||
       fuzzySearch(searchTerm, listing.borough)
     );
