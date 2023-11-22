@@ -14,6 +14,7 @@ class Admins(UserAdmin):
         ('Permissions', {'fields': ('is_active', 'is_staff', 'is_superuser', 'is_customer', 'is_owner')}),
     )
     list_display = ['email', 'is_customer', 'is_owner']
+    search_fields = ['email', 'username']
     list_filter = ['is_customer', 'is_owner']
 
     # Fungsi untuk menentukan inline instances yang akan ditampilkan

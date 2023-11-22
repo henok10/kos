@@ -52,16 +52,16 @@ function SidebarNav() {
   const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
   const { collapseSidebar } = useProSidebar();
 
-  useEffect(() => {
-    // Use media query to detect Android devices
-    const isAndroid = /Android/i.test(navigator.userAgent);
+  // useEffect(() => {
+  //   // Use media query to detect Android devices
+  //   const isAndroid = /Android/i.test(navigator.userAgent);
 
-    if (isAndroid) {
-      setIsCollapsed(false); // Sidebar will remain open for Android devices
-    } else {
-      setIsCollapsed(true); // Sidebar will collapse for other devices
-    }
-  }, []);
+  //   if (isAndroid) {
+  //     setIsCollapsed(false); // Sidebar will remain open for Android devices
+  //   } else {
+  //     setIsCollapsed(true); // Sidebar will collapse for other devices
+  //   }
+  // }, []);
 
   return (
     <Sidebar

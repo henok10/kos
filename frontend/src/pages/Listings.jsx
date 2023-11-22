@@ -130,7 +130,7 @@ function Listings() {
     });
   }
 
-  const filteredListings = allListings.filter((listing) => {
+  const filteredListings = searchResults.filter((listing) => {
     return (
       fuzzySearch(searchTerm, listing.title) ||
       fuzzySearch(searchTerm, listing.address) ||

@@ -734,39 +734,33 @@ function ListingDetail() {
                 }
 
                 function CalculateDistance() {
-                  const latitude1 = DegreeToRadian(state.listingInfo.latitude);
-                  const longitude1 = DegreeToRadian(
-                    state.listingInfo.longitude
-                  );
-
-                  const latitude2 = DegreeToRadian(poi.location.coordinates[0]);
-                  const longitude2 = DegreeToRadian(
-                    poi.location.coordinates[1]
-                  );
-                  // The formula
-                  const latDiff = latitude2 - latitude1;
-                  const lonDiff = longitude2 - longitude1;
-                  const R = 6371000 / 1000;
-
-                  const a =
-                    Math.sin(latDiff / 2) * Math.sin(latDiff / 2) +
-                    Math.cos(latitude1) *
-                      Math.cos(latitude2) *
-                      Math.sin(lonDiff / 2) *
-                      Math.sin(lonDiff / 2);
-                  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-
-                  const d = R * c;
-
-                  const dist =
-                    Math.acos(
-                      Math.sin(latitude1) * Math.sin(latitude2) +
-                        Math.cos(latitude1) *
-                          Math.cos(latitude2) *
-                          Math.cos(lonDiff)
-                    ) * R;
-                  return dist.toFixed(2);
+                  const lat1 = DegreeToRadian(state.listingInfo.latitude);
+                  const lon1 = DegreeToRadian(state.listingInfo.longitude);
+                
+                  const lat2 = DegreeToRadian(poi.location.coordinates[0]);
+                  const lon2 = DegreeToRadian(poi.location.coordinates[1]);
+                
+                  // Great Circle Distance formula
+                  const R = 6371; // Earth radius in kilometers
+                
+                  const cosLat1 = Math.cos(lat1);
+                  const cosLat2 = Math.cos(lat2);
+                  const sinLat1 = Math.sin(lat1);
+                  const sinLat2 = Math.sin(lat2);
+                
+                  const dLon = lon2 - lon1;
+                
+                  // Formula for calculating the central angle (c) using the law of cosines
+                  const centralAngle = Math.acos(sinLat1 * sinLat2 + cosLat1 * cosLat2 * Math.cos(dLon));
+                
+                  // Calculate distance using Great Circle Distance formula
+                  const distance = R * centralAngle;
+                
+                  return distance.toFixed(2);
                 }
+                
+                
+                
                 return (
                   <div
                     key={poi.id}
@@ -779,7 +773,7 @@ function ListingDetail() {
                     <Typography variant="subtitle1">
                       {poi.type} |{" "}
                       <span style={{ fontWeight: "bolder", color: "black" }}>
-                        {CalculateDistance()} Kilometers
+                        {CalculateDistance()} Km
                       </span>
                     </Typography>
                   </div>
@@ -821,6 +815,36 @@ function ListingDetail() {
                     return universityIcon;
                   }
                 }
+
+                function DegreeToRadian(coordinate) {
+                  return (coordinate * Math.PI) / 180;
+                }
+
+                function CalculateDistance() {
+                  const lat1 = DegreeToRadian(state.listingInfo.latitude);
+                  const lon1 = DegreeToRadian(state.listingInfo.longitude);
+                
+                  const lat2 = DegreeToRadian(poi.location.coordinates[0]);
+                  const lon2 = DegreeToRadian(poi.location.coordinates[1]);
+                
+                  // Great Circle Distance formula
+                  const R = 6371; // Earth radius in kilometers
+                
+                  const cosLat1 = Math.cos(lat1);
+                  const cosLat2 = Math.cos(lat2);
+                  const sinLat1 = Math.sin(lat1);
+                  const sinLat2 = Math.sin(lat2);
+                
+                  const dLon = lon2 - lon1;
+                
+                  // Formula for calculating the central angle (c) using the law of cosines
+                  const centralAngle = Math.acos(sinLat1 * sinLat2 + cosLat1 * cosLat2 * Math.cos(dLon));
+                
+                  // Calculate distance using Great Circle Distance formula
+                  const distance = R * centralAngle;
+                
+                  return distance.toFixed(2);
+                }
                 return (
                   <Marker
                     key={poi.id}
@@ -830,7 +854,7 @@ function ListingDetail() {
                     ]}
                     icon={PoiIcon()}
                   >
-                    <Popup>{poi.name}</Popup>
+                    <Popup>{poi.name} {CalculateDistance()} Km</Popup>
                   </Marker>
                 );
               })}

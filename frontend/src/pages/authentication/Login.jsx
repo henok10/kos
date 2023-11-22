@@ -22,6 +22,7 @@ import { useSelector } from "react-redux";
 import { Validation } from "./validation";
 import LockIcon from "@mui/icons-material/Lock";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
+import RulesPage from "../RulesPage";
 
 const useStyles = makeStyles({
   formContainer: {
@@ -90,151 +91,175 @@ function Login({ login, isAuthenticated, isCustomer, isOwner, clearErrors }) {
   } else {
     // console.log(clearErrors())
     return (
-      <Container
-        maxWidth="xs"
-        style={{ display: "flex", position: "relative", height: "100%" }}
-      >
-        {/* <Alert variant="outlined" severity="warning">
-          This is a warning alert — check it out!
-        </Alert> */}
-        <Box
-          style={{
-            display: "flex",
-            position: "absolute",
-            top: 5,
-            width: "80%",
-            left: 70,
-          }}
+      <>
+        <Grid style={{margin: "2rem 0.5rem", display: "flex", justifyContent: "flex-end"}}>
+          <RulesPage />
+        </Grid>
+        <Container
+          maxWidth="xs"
+          style={{ display: "flex", position: "relative", height: "100%" }}
         >
-          {loginError && (
-            <Alert variant="outlined" severity="warning">
-              <p>{loginError}</p>
-            </Alert>
-          )}
-        </Box>
-
-        <Box
-          style={{
-            display: "flex",
-            alignItems: "center",
-            flexDirection: "column",
-            margin: "5rem auto",
-            width: "80%",
-          }}
-          onSubmit={handleLoginSubmit}
-          component="form"
-        >
-          <Avatar sx={{ backgroundColor: "secondary.main" }}>
-            <LockIcon />
-          </Avatar>
-          <Typography style={{ marginBottom: "1rem" }} variant="h4">
-            Sign In
-          </Typography>
-
-          {errors.email && (
-            <p style={{ fontSize: "10px", color: "red", height: "5px", alignSelf: "self-start" }}>
-              {errors.email}
-            </p>
-          )}
-          <Grid
-            item
-            container
-            style={{ display: "flex", marginBottom: "1rem", marginTop: "5px" }}
-          >
-            <TextField
-              id="email"
-              label="Email"
-              size="small"
-              fullWidth
-              // required
-              autoFocus
-              type="email"
-              name="email"
-              variant="outlined"
-              value={user.email}
-              onChange={loginChange}
-            />
-          </Grid>
-          {errors.password && (
-            <p style={{ fontSize: "10px", color: "red", height: "5px", alignSelf: "self-start" }}>
-              {errors.password}
-            </p>
-          )}
-          <Grid
-            item
-            container
-            style={{ display: "flex", position: "relative", marginTop: "5px" }}
-          >
-            <TextField
-              id="password"
-              label="Password"
-              size="small"
-              fullWidth
-              // required
-              autoFocus
-              name="password"
-              variant="outlined"
-              type={isShowPassword ? "text" : "password"}
-              value={user.password}
-              onChange={loginChange}
-            />
-            <div
-              style={{
-                display: "flex",
-                position: "absolute",
-                right: 15,
-                top: 10,
-                cursor: "pointer",
-              }}
-              onClick={() => setIsShowPassword(!isShowPassword)}
-            >
-              {isShowPassword ? (
-                <Visibility fontSize="small" />
-              ) : (
-                <VisibilityOff fontSize="small" />
-              )}
-            </div>
-          </Grid>
-          <NavLink to="/sendpasswordresetemail">Forgot Password ?</NavLink>
-          <Grid
-            item
-            xs={8}
+          <Box
             style={{
-              // marginTop: "1rem",
-              // marginLeft: "auto",
-              // marginRight: "auto",
-              width: "10rem",
-              margin: "1rem auto 0",
+              display: "flex",
+              position: "absolute",
+              top: 5,
+              width: "80%",
+              left: 70,
             }}
           >
-            <Button
-              variant="contained"
-              fullWidth
-              type="submit"
-              disabled={Object.keys(errors).length > 0}
-            >
-              SIGN IN
-            </Button>
-          </Grid>
+            {loginError && (
+              <Alert variant="outlined" severity="warning">
+                <p>{loginError}</p>
+              </Alert>
+            )}
+          </Box>
 
-          <Grid
-            item
-            container
-            justifyContent="center"
-            style={{ marginTop: "1rem" }}
+          <Box
+            style={{
+              display: "flex",
+              alignItems: "center",
+              flexDirection: "column",
+              margin: "5rem auto",
+              width: "80%",
+            }}
+            onSubmit={handleLoginSubmit}
+            component="form"
           >
-            <Typography variant="small">
-              Don't have an account yet?{" "}
-              <span
-                onClick={() => navigate("/")}
-                style={{ cursor: "pointer", color: "green" }}
-              >
-                SIGN UP
-              </span>
+            <Avatar sx={{ backgroundColor: "#2979ff" }}>
+              <LockIcon />
+            </Avatar>
+            <Typography style={{ marginBottom: "1rem", fontWeight: "bold" }} variant="h4">
+              Sign In
             </Typography>
-          </Grid>
-        </Box>
-      </Container>
+
+            {errors.email && (
+              <p
+                style={{
+                  fontSize: "10px",
+                  color: "red",
+                  height: "5px",
+                  alignSelf: "self-start",
+                }}
+              >
+                {errors.email}
+              </p>
+            )}
+            <Grid
+              item
+              container
+              style={{
+                display: "flex",
+                marginBottom: "1rem",
+                marginTop: "5px",
+              }}
+            >
+              <TextField
+                id="email"
+                label="Email"
+                size="small"
+                fullWidth
+                // required
+                autoFocus
+                type="email"
+                name="email"
+                variant="outlined"
+                value={user.email}
+                onChange={loginChange}
+              />
+            </Grid>
+            {errors.password && (
+              <p
+                style={{
+                  fontSize: "10px",
+                  color: "red",
+                  height: "5px",
+                  alignSelf: "self-start",
+                }}
+              >
+                {errors.password}
+              </p>
+            )}
+            <Grid
+              item
+              container
+              style={{
+                display: "flex",
+                position: "relative",
+                marginTop: "5px",
+              }}
+            >
+              <TextField
+                id="password"
+                label="Password"
+                size="small"
+                fullWidth
+                // required
+                autoFocus
+                name="password"
+                variant="outlined"
+                type={isShowPassword ? "text" : "password"}
+                value={user.password}
+                onChange={loginChange}
+              />
+              <div
+                style={{
+                  display: "flex",
+                  position: "absolute",
+                  right: 15,
+                  top: 10,
+                  cursor: "pointer",
+                }}
+                onClick={() => setIsShowPassword(!isShowPassword)}
+              >
+                {isShowPassword ? (
+                  <Visibility fontSize="small" />
+                ) : (
+                  <VisibilityOff fontSize="small" />
+                )}
+              </div>
+            </Grid>
+            <NavLink to="/sendpasswordresetemail">Forgot Password ?</NavLink>
+            <Grid
+              item
+              xs={8}
+              style={{
+                // marginTop: "1rem",
+                // marginLeft: "auto",
+                // marginRight: "auto",
+                width: "10rem",
+                margin: "1rem auto 0",
+              }}
+            >
+              <Button
+                variant="contained"
+                fullWidth
+                type="submit"
+                disabled={Object.keys(errors).length > 0}
+              >
+                SIGN IN
+              </Button>
+            </Grid>
+
+            <Grid
+              item
+              container
+              justifyContent="center"
+              style={{ marginTop: "1rem" }}
+            >
+              <Typography variant="small">
+                Don't have an account yet?{" "}
+                <span
+                  onClick={() => navigate("/")}
+                  style={{ cursor: "pointer", color: "green" }}
+                >
+                  SIGN UP
+                </span>
+              </Typography>
+            </Grid>
+          </Box>
+        </Container>
+      </>
     );
   }
 }

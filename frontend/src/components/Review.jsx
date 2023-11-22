@@ -12,6 +12,7 @@ import {
 import Alert from "@mui/material/Alert";
 import { useSelector } from "react-redux";
 import { FaStar } from "react-icons/fa";
+import Swal from "sweetalert2";
 
 const useStyles = makeStyles((theme) => ({
   formControl: {
@@ -59,8 +60,19 @@ function Review() {
   const [hoverValue, setHoverValue] = useState(undefined);
   const stars = Array(5).fill(0);
 
+  const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
+  const isCustomer = useSelector((state) => state.auth.isCustomer);
 
   const handleSubmit = (event) => {
+    if (!isAuthenticated || !isCustomer) {
+      Swal.fire({
+        title: "Error",
+        text: "Silakan Buat Account Customer Untuk Memulai Percakapan!",
+        icon: "error",
+      });
+    } else {
+   
+   
     event.preventDefault();
     axios
       .post("https://mikos03.onrender.com/api/review/create", {
@@ -75,6 +87,7 @@ function Review() {
       .catch((error) => {
         setError("There was an error submitting your review");
       });
+    }
   };
   const handleClick = (value) => {
     setRate(value);
