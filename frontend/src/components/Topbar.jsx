@@ -43,7 +43,7 @@ function Topbar() {
   const authLinks = (
     <Grid sx={{ m: "auto", display: "flex" }}>
       <div style={{ marginRight: "10px" }}>
-        <Avatar alt="" src="/static/images/avatar/1.jpg" />
+        <Avatar />
       </div>
       <Grid style={{ margin: "auto 1px" }}>
         <span className={isLargeScreen ? "username" : classes.hidden}>
