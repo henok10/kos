@@ -106,6 +106,7 @@ function Listings() {
         );
 
         setAllListings(response.data);
+        setSearchResults(response.data)
         setDataIsLoading(false);
       } catch (error) {}
     }
@@ -137,6 +138,9 @@ function Listings() {
       fuzzySearch(searchTerm, listing.borough)
     );
   });
+
+  console.log(filteredListings)
+  console.log(allListings)
 
   if (dataIsLoading === true) {
     return (

@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useSelector } from "react-redux";
 import Axios from "axios";
+import wellknown from "wellknown";
 
 import "leaflet-routing-machine/dist/leaflet-routing-machine.css";
 import "leaflet-routing-machine/dist/leaflet-routing-machine.js";
@@ -90,7 +91,6 @@ function ListingDetail() {
 
   const isOwner = useSelector((state) => state.auth.isOwner);
 
-
   useEffect(() => {
     if (isOwner) {
       navigate("/owner/home");
@@ -162,7 +162,7 @@ function ListingDetail() {
     async function GetKamarInfo() {
       try {
         const response = await Axios.get(
-          `https://mikos03.onrender.com/api/listings/${params.id}/`
+          `http://127.0.0.1:8000/api/listings/${params.id}/`
         );
 
         dispatch({
@@ -180,7 +180,7 @@ function ListingDetail() {
       async function GetListingInfo() {
         try {
           const response = await Axios.get(
-            `https://mikos03.onrender.com/api/profiles/owner/${state.listingInfo.user}/`
+            `http://127.0.0.1:8000/api/profiles/owner/${state.listingInfo.user}/`
           );
           dispatch({
             type: "catchUserProfileInfo",
@@ -725,10 +725,9 @@ function ListingDetail() {
           spacing={1}
           justifyContent="space-between"
         >
-          <Grid item lg={3} md={3} sm={12} xs={12} style={{ overflow: "auto" }}>
-            {state.listingInfo.listing_pois_within_10km
-              .slice(0, 4)
-              .map((poi) => {
+          <Grid item lg={3} md={3} sm={12} xs={12}>
+            <Box style={{ height: "24rem", overflow: "auto" }}>
+              {state.listingInfo.listing_pois_within_10km.map((poi) => {
                 function DegreeToRadian(coordinate) {
                   return (coordinate * Math.PI) / 180;
                 }
@@ -736,41 +735,57 @@ function ListingDetail() {
                 function CalculateDistance() {
                   const lat1 = DegreeToRadian(state.listingInfo.latitude);
                   const lon1 = DegreeToRadian(state.listingInfo.longitude);
-                
-                  const lat2 = DegreeToRadian(poi.location.coordinates[0]);
-                  const lon2 = DegreeToRadian(poi.location.coordinates[1]);
-                
-                  // Great Circle Distance formula
-                  const R = 6371; // Earth radius in kilometers
-                
-                  const cosLat1 = Math.cos(lat1);
-                  const cosLat2 = Math.cos(lat2);
-                  const sinLat1 = Math.sin(lat1);
-                  const sinLat2 = Math.sin(lat2);
-                
-                  const dLon = lon2 - lon1;
-                
-                  // Formula for calculating the central angle (c) using the law of cosines
-                  const centralAngle = Math.acos(sinLat1 * sinLat2 + cosLat1 * cosLat2 * Math.cos(dLon));
-                
-                  // Calculate distance using Great Circle Distance formula
-                  const distance = R * centralAngle;
-                
-                  return distance.toFixed(2);
+
+                  // Parse the WKT string and get the coordinates
+                  const coordinates = wellknown(poi.location).coordinates;
+
+                  if (coordinates && coordinates.length === 2) {
+                    const lat2 = DegreeToRadian(coordinates[0]);
+                    const lon2 = DegreeToRadian(coordinates[1]);
+
+                    // Haversine formula
+                    const R = 6371; // Earth radius in kilometers
+
+                    const dLat = lat2 - lat1;
+                    const dLon = lon2 - lon1;
+
+                    const a =
+                      Math.sin(dLat / 2) ** 2 +
+                      Math.cos(lat1) * Math.cos(lat2) * Math.sin(dLon / 2) ** 2;
+
+                    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+
+                    // Calculate distance using Haversine formula
+                    const distance = R * c;
+
+                    return distance.toFixed(2);
+                  } else {
+                    console.error(
+                      "Invalid or undefined coordinates in the parsed point"
+                    );
+                    return "Invalid Coordinates";
+                  }
                 }
-                
-                
-                
+
                 return (
                   <div
                     key={poi.id}
                     style={{
                       marginBottom: "0.5rem",
                       borderBottom: "1px solid black",
+                      fontSize: "16px",
                     }}
                   >
-                    <Typography variant="h6">{poi.name}</Typography>
-                    <Typography variant="subtitle1">
+                    <Typography
+                      variant="h6"
+                      style={{ fontSize: "16px", fontWeight: "bold" }}
+                    >
+                      {poi.name}
+                    </Typography>
+                    <Typography
+                      variant="subtitle1"
+                      style={{ fontSize: "12px" }}
+                    >
                       {poi.type} |{" "}
                       <span style={{ fontWeight: "bolder", color: "black" }}>
                         {CalculateDistance()} Km
@@ -779,6 +794,7 @@ function ListingDetail() {
                   </div>
                 );
               })}
+            </Box>
             <Button
               onClick={GoogleMapsShortcut}
               style={{
@@ -795,7 +811,8 @@ function ListingDetail() {
               google maps
             </Button>
           </Grid>
-          <Grid item lg={9} md={9} sm={12} xs={12} style={{ height: "35rem" }}>
+
+          <Grid item lg={9} md={9} sm={12} xs={12} style={{ height: "28rem" }}>
             <MapContainer
               center={[state.listingInfo.latitude, state.listingInfo.longitude]}
               zoom={16}
@@ -819,42 +836,51 @@ function ListingDetail() {
                 function DegreeToRadian(coordinate) {
                   return (coordinate * Math.PI) / 180;
                 }
-
                 function CalculateDistance() {
                   const lat1 = DegreeToRadian(state.listingInfo.latitude);
                   const lon1 = DegreeToRadian(state.listingInfo.longitude);
-                
-                  const lat2 = DegreeToRadian(poi.location.coordinates[0]);
-                  const lon2 = DegreeToRadian(poi.location.coordinates[1]);
-                
-                  // Great Circle Distance formula
-                  const R = 6371; // Earth radius in kilometers
-                
-                  const cosLat1 = Math.cos(lat1);
-                  const cosLat2 = Math.cos(lat2);
-                  const sinLat1 = Math.sin(lat1);
-                  const sinLat2 = Math.sin(lat2);
-                
-                  const dLon = lon2 - lon1;
-                
-                  // Formula for calculating the central angle (c) using the law of cosines
-                  const centralAngle = Math.acos(sinLat1 * sinLat2 + cosLat1 * cosLat2 * Math.cos(dLon));
-                
-                  // Calculate distance using Great Circle Distance formula
-                  const distance = R * centralAngle;
-                
-                  return distance.toFixed(2);
+
+                  // Parse the WKT string and get the coordinates
+                  const coordinates = wellknown(poi.location).coordinates;
+
+                  if (coordinates && coordinates.length === 2) {
+                    const lat2 = DegreeToRadian(coordinates[0]);
+                    const lon2 = DegreeToRadian(coordinates[1]);
+
+                    // Haversine formula
+                    const R = 6371; // Earth radius in kilometers
+
+                    const dLat = lat2 - lat1;
+                    const dLon = lon2 - lon1;
+
+                    const a =
+                      Math.sin(dLat / 2) ** 2 +
+                      Math.cos(lat1) * Math.cos(lat2) * Math.sin(dLon / 2) ** 2;
+
+                    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+
+                    // Calculate distance using Haversine formula
+                    const distance = R * c;
+
+                    return distance.toFixed(2);
+                  } else {
+                    console.error(
+                      "Invalid or undefined coordinates in the parsed point"
+                    );
+                    return "Invalid Coordinates";
+                  }
                 }
+                const coordinates = wellknown(poi.location).coordinates;
+
                 return (
                   <Marker
                     key={poi.id}
-                    position={[
-                      poi.location.coordinates[0],
-                      poi.location.coordinates[1],
-                    ]}
+                    position={[coordinates[0], coordinates[1]]}
                     icon={PoiIcon()}
                   >
-                    <Popup>{poi.name} {CalculateDistance()} Km</Popup>
+                    <Popup>
+                      {poi.name} {CalculateDistance()} Km
+                    </Popup>
                   </Marker>
                 );
               })}

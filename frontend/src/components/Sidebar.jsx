@@ -23,7 +23,7 @@ function AuthLinks() {
 
 function PublicLinks() {
   return (
-    <MenuItem component={<Link to="/login" />} icon={<LoginIcon />}>
+    <MenuItem component={<Link to="/login" />} icon={<LoginIcon style={{fill: "gray"}} />}>
       Login
     </MenuItem>
   );
@@ -51,17 +51,6 @@ function SidebarNav() {
   const isOwner = useSelector((state) => state.auth.isOwner);
   const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
   const { collapseSidebar } = useProSidebar();
-
-  // useEffect(() => {
-  //   // Use media query to detect Android devices
-  //   const isAndroid = /Android/i.test(navigator.userAgent);
-
-  //   if (isAndroid) {
-  //     setIsCollapsed(false); // Sidebar will remain open for Android devices
-  //   } else {
-  //     setIsCollapsed(true); // Sidebar will collapse for other devices
-  //   }
-  // }, []);
 
   return (
     <Sidebar

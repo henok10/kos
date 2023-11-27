@@ -23,7 +23,7 @@ import mikos1 from "../data/mikos.png";
 
 const useStyles = makeStyles((theme) => ({
   hidden: {
-    display: 'none',
+    display: "none",
   },
 }));
 
@@ -42,14 +42,18 @@ function Topbar() {
 
   const authLinks = (
     <Grid sx={{ m: "auto", display: "flex" }}>
-      <div style={{ marginRight: "10px" }}>
-        <Avatar />
-      </div>
-      <Grid style={{ margin: "auto 1px" }}>
-        <span className={isLargeScreen ? "username" : classes.hidden}>
-          {username}
-        </span>
-      </Grid>
+      {isAuthenticated && (
+        <>
+          <div style={{ marginRight: "10px" }}>
+            <Avatar />
+          </div>
+          <Grid style={{ margin: "auto 1px" }}>
+            <span className={isLargeScreen ? "username" : classes.hidden}>
+              {username}
+            </span>
+          </Grid>
+        </>
+      )}
     </Grid>
   );
 
