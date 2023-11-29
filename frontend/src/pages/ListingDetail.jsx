@@ -162,7 +162,7 @@ function ListingDetail() {
     async function GetKamarInfo() {
       try {
         const response = await Axios.get(
-          `http://127.0.0.1:8000/api/listings/${params.id}/`
+          `https://mikos03.onrender.com/api/listings/${params.id}/`
         );
 
         dispatch({
@@ -180,7 +180,7 @@ function ListingDetail() {
       async function GetListingInfo() {
         try {
           const response = await Axios.get(
-            `http://127.0.0.1:8000/api/profiles/owner/${state.listingInfo.user}/`
+            `https://mikos03.onrender.com/api/profiles/owner/${state.listingInfo.user}/`
           );
           dispatch({
             type: "catchUserProfileInfo",
