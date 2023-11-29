@@ -292,41 +292,6 @@ function KamarDetail() {
               </Grid>
             </Grid>
           </Grid>
-
-          <Grid
-            item
-            style={{
-              padding: "1rem",
-              marginTop: "0.3rem",
-            }}
-          >
-            <Grid>
-              <div>
-                <Typography variant="h6" style={{ fontSize: "16px" }}>
-                  Peraturan Kamar Kos :
-                </Typography>
-              </div>
-
-              <Grid container>
-                <Grid item xs={12} md={12} style={{ paddingRight: "1rem" }}>
-                  {allRule.slice(0, 4).map((rule, index) => (
-                    <Box key={index} display="flex" alignItems="center">
-                      <ErrorIcon
-                        style={{
-                          marginLeft: "0.5rem",
-                          width: "24px",
-                          height: "24px",
-                        }}
-                      />
-                      <Typography style={{ marginLeft: "6px" }}>
-                        {rule.aturan}
-                      </Typography>
-                    </Box>
-                  ))}
-                </Grid>
-              </Grid>
-            </Grid>
-          </Grid>
         </Grid>
         <Grid
           item
