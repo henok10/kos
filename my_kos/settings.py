@@ -187,7 +187,7 @@ GRAPH_MODELS = {
 # ACCOUNT_UNIQUE_EMAIL=True
 
 # CORS_ALLOW_ALL_ORIGINS = True
-CORS_ALLOWED_ORIGINS = ["http://localhost:3000", "https://mikos03.onrender.com"]
+CORS_ALLOWED_ORIGINS = ["http://localhost:3000"]
 
 os.environ['TZ'] = settings.TIME_ZONE
 
