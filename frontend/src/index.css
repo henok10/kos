@@ -22,15 +22,19 @@ canvas {
 }
 
 ::-webkit-scrollbar {
-  width: 10px;
+  width: 8px;
+
 }
 
 ::-webkit-scrollbar-track {
   background: #e0e0e0;
+  border-radius: 20px;
+ 
 }
 
 ::-webkit-scrollbar-thumb {
   background: #888;
+  border-radius: 20px;
 }
 
 ::-webkit-scrollbar-thumb:hover {

@@ -40,6 +40,7 @@ import CheckBoxIcon from "@mui/icons-material/CheckBox";
 import AssistantDirectionIcon from "@mui/icons-material/AssistantDirection";
 import TheMapComponent from "../components/TheMapComponent";
 import { choices } from "../components/Choice";
+import Swal from "sweetalert2";
 
 import { makeStyles } from "@mui/styles";
 import Review from "../components/Review";
@@ -85,6 +86,7 @@ function ListingDetail() {
   const [allFasilitas, setAllFasilitas] = useState([]);
   const [allRule, setAllRule] = useState([]);
   const [allKamar, setAllKamar] = useState([]);
+  const isCustomer = useSelector((state) => state.auth.isCustomer);
 
   const classes = useStyles();
   const params = useParams();
@@ -325,6 +327,18 @@ function ListingDetail() {
 
   const handleOptionChange = (event) => {
     setSelectedOption(event.target.value);
+  };
+
+  const handleOrderRoomClick = () => {
+    if (!isAuthenticated || !isCustomer) {
+      Swal.fire({
+        title: "Error",
+        text: "Silakan Buat Account Customer Untuk Memesan Kamar!",
+        icon: "error",
+      });
+    } else {
+      navigate(`/pesan_kamar/${state.listingInfo.id}`);
+    }
   };
 
   useEffect(() => {
@@ -699,10 +713,10 @@ function ListingDetail() {
                     variant="outlined"
                     color="primary"
                     size="small"
-                    // onClick={() => navigate(`/order/${state.listingInfo.id}`)}
-                    onClick={() =>
-                      navigate(`/pesan_kamar/${state.listingInfo.id}`)
-                    }
+                    onClick={() => handleOrderRoomClick()}
+                    // onClick={() =>
+                    //   navigate(`/pesan_kamar/${state.listingInfo.id}`)
+                    // }
                     style={{ width: "48%" }}
                   >
                     Pesan Kamar
@@ -773,12 +787,11 @@ function ListingDetail() {
                     style={{
                       marginBottom: "0.5rem",
                       borderBottom: "1px solid black",
-                      fontSize: "16px",
                     }}
                   >
                     <Typography
-                      variant="h6"
-                      style={{ fontSize: "16px", fontWeight: "bold" }}
+                      // variant="h6"
+                      style={{ fontSize: "14px", fontWeight: "bold" }}
                     >
                       {poi.name}
                     </Typography>

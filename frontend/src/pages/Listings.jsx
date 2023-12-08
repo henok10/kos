@@ -44,7 +44,7 @@ const useStyles = makeStyles({
     cursor: "pointer",
   },
   priceLabel: {
-    fontSize: "14px",
+    fontSize: "12px",
     fontWeight: "bold",
     color: "skyblue",
     height: "8px",
@@ -208,7 +208,7 @@ function Listings() {
                         <Typography
                           gutterBottom
                           variant="h6"
-                          style={{ fontSize: "18px" }}
+                          style={{ fontSize: "16px" }}
                         >
                           {listing.title.substring(0, 35)}
                         </Typography>
@@ -234,7 +234,7 @@ function Listings() {
                         gutterBottom
                         variant="body4"
                         component="div"
-                        style={{ fontSize: "13px" }}
+                        style={{ fontSize: "11px" }}
                       >
                         {listing.address.substring(0, 90)}...
                       </Typography>
@@ -245,7 +245,7 @@ function Listings() {
                         bottom: "0",
                         width: "100%",
                         backgroundColor: "white",
-                        zIndex: 99999,
+                        zIndex: 99,
                       }}
                     >
                       <Box
@@ -253,13 +253,15 @@ function Listings() {
                         style={{
                           display: "flex",
                           justifyContent: "space-between",
+                          alignItems: "center",
                           marginBottom: "2px",
                         }}
                       >
                         <Typography
                           className={classes.priceLabel}
                           component="span"
-                          zIndex={99999}
+                          zIndex={99}
+                          style={{fontSize: "14px"}}
                         >
                           {listing.price_month
                             ? `Rp${listing.price_month.toLocaleString(
@@ -267,7 +269,6 @@ function Listings() {
                               )}/bulan`
                             : "Harga tidak tersedia"}
                         </Typography>
-
                         <Button
                           variant="contained"
                           color="primary"
