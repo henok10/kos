@@ -24,10 +24,7 @@ import {
   Grid,
   Typography,
   CircularProgress,
-  Breadcrumbs,
-  Link,
   Box,
-  Stack,
   Button,
   Paper,
   TextField,
@@ -36,7 +33,6 @@ import {
 import ArrowCircleLeftIcon from "@mui/icons-material/ArrowCircleLeft";
 import ArrowCircleRightIcon from "@mui/icons-material/ArrowCircleRight";
 import RoomIcon from "@mui/icons-material/Room";
-import CheckBoxIcon from "@mui/icons-material/CheckBox";
 import AssistantDirectionIcon from "@mui/icons-material/AssistantDirection";
 import TheMapComponent from "../components/TheMapComponent";
 import { choices } from "../components/Choice";
@@ -199,17 +195,17 @@ function ListingDetail() {
   const [numItemsBoughtByListingId, setNumItemsBoughtByListingId] = useState(
     {}
   );
-  useEffect(() => {
-    async function GetAllOrderKos() {
-      try {
-        const response = await Axios.get(
-          `https://mikos03.onrender.com/api/transaction/${params.id}/user`
-        );
-        const data = response.data;
-      } catch (error) {}
-    }
-    GetAllOrderKos();
-  }, [params.id]);
+  // useEffect(() => {
+  //   async function GetAllOrderKos() {
+  //     try {
+  //       const response = await Axios.get(
+  //         `https://mikos03.onrender.com/api/transaction/${params.id}/user`
+  //       );
+  //       const data = response.data;
+  //     } catch (error) {}
+  //   }
+  //   GetAllOrderKos();
+  // }, [params.id]);
 
   useEffect(() => {
     async function GetFasilitasInfo() {
@@ -261,9 +257,8 @@ function ListingDetail() {
     }
 
     GetAllKamar();
-  }, []); // Tambah
+  }, [params.id]); // Tambah
 
-  const kamarKosongByListingId = {};
 
   const totalKamar = allKamar[params.id];
   const kamarDibeli = numItemsBoughtByListingId;
@@ -284,7 +279,7 @@ function ListingDetail() {
     }
   }
 
-  const roomsLeft = state.listingInfo.rooms - numItemsBoughtByListingId;
+  // const roomsLeft = state.listingInfo.rooms - numItemsBoughtByListingId;
 
   const listingPictures = [
     state.listingInfo.picture1,
