@@ -52,6 +52,7 @@ class OwnerSignupView(generics.GenericAPIView):
         serializer.is_valid(raise_exception=True)
         user = serializer.save()
         user_id = user.pk
+        username = user.username
         token = get_tokens_for_user(user)
         access_token = token['access']
         refresh_token = token['refresh']

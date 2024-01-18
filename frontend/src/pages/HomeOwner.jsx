@@ -20,6 +20,7 @@ function OwnerHome() {
   const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
   const isOwner = useSelector((state) => state.auth.isOwner);
   const userId = useSelector((state) => state.auth.userId);
+  const username = useSelector((state) => state.auth.username);
   const [dataIsLoading, setDataIsLoading] = useState(true);
   const [allKos, setAllKos] = useState([]);
   const [allKamar, setAllKamar] = useState([]);
@@ -355,7 +356,7 @@ function OwnerHome() {
               }}
             >
               <Typography variant="h6" style={{ textAlign: "center" }}>
-                Hai, <strong>{dataKos}</strong>
+                Hai, <strong>{username}</strong>
               </Typography>
               <Typography variant="h6" style={{ textAlign: "center" }}>
                 Selamat Datang Di Website Mikos untuk Pemilik Kos

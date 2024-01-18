@@ -99,7 +99,7 @@ const HomeImg = () => {
         const poiMatch =
           !searchResults.poi ||
           searchResults.poi.length === 0 ||
-          listing.listing_pois_within_10km.some((poi) =>
+          listing.listing_poi.some((poi) =>
             poi.name.toLowerCase().includes(searchResults.poi.toLowerCase())
           );
 

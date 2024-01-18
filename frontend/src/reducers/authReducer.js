@@ -97,7 +97,7 @@ export const authReducer=(state=initialState, action)=>{
                 userId: action.payload.user_id,
                 ownerId: action.payload.owner_id,
                 customerId: action.payload.customer_id,
-                // username: action.payload.username,
+                username: action.payload.username,
                 isAuthenticated:true,
                 isLoading:false,
                 isCustomer: action.payload.is_customer,
