@@ -182,18 +182,6 @@ class KamarUserList(generics.ListAPIView):
         queryset = Kamar.objects.filter(rumah__user=users).order_by('id')
         return queryset
 
-# class KamarUserList(generics.ListAPIView):
-#     serializer_class = KamarSerializer
-
-#     def get_queryset(self):
-#         user_id = self.kwargs['user']
-
-#         # Menggunakan get_list_or_404 untuk menangani jika Rumah tidak ditemukan
-#         rumah = get_object_or_404(Rumah.objects.filter(user=user_id).order_by('id'))
-
-#         # Mengubah filter menjadi rumah, bukan rumah.user
-#         queryset = Kamar.objects.filter(rumah=rumah).order_by('address_room')
-#         return queryset
 
 class KamarUpdate(generics.UpdateAPIView):
     queryset = Kamar.objects.all()
@@ -270,34 +258,10 @@ class RuleRumahCreate(generics.CreateAPIView):
     queryset = RuleRumah.objects.all()
 
 
-# class RuleKamarUpdate(generics.UpdateAPIView):
-#     serializer_class = RuleKamarSerializer
-#     queryset = RuleKamar.objects.all()
-
-
-# class RuleKamarList(generics.ListAPIView):
-#     serializer_class = RuleKamarSerializer
-
-#     def get_queryset(self):
-#         kamar_id = self.kwargs['kamar']
-#         kamar = Kamar.objects.get(id=kamar_id)
-#         queryset = RuleKamar.objects.filter(kamar=kamar).order_by('aturan')
-#         return queryset
-
-
-# class RuleKamarCreate(generics.CreateAPIView):
-#     serializer_class = RuleKamarSerializer
-#     queryset = RuleKamar.objects.all()
-
 
 class RuleRumahDelete(generics.DestroyAPIView):
     serializer_class = RuleRumahSerializer
     queryset = RuleRumah.objects.all()
-
-
-# class RuleKamarDelete(generics.DestroyAPIView):
-#     serializer_class = RuleKamarSerializer
-#     queryset = RuleKamar.objects.all()
 
 
 class PoiList(generics.ListAPIView):

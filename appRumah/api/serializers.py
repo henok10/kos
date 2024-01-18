@@ -9,7 +9,7 @@ from django.contrib.gis.geos import Point
 class ListingSerializer(serializers.ModelSerializer):
     country = serializers.SerializerMethodField()
     user_username = serializers.SerializerMethodField()
-    listing_pois_within_10km = serializers.SerializerMethodField()
+    listing_poi = serializers.SerializerMethodField()
     price_day = serializers.SerializerMethodField()
     price_month = serializers.SerializerMethodField()
     price_year = serializers.SerializerMethodField()
@@ -52,9 +52,6 @@ class ListingSerializer(serializers.ModelSerializer):
         query_serialized = PoiSerializer(query, many=True)
 
         return query_serialized.data
-
-    # def get_user_agency_name(self, obj):
-    #     return obj.user.agency_name
 
     def get_user_username(self, obj):
         return obj.user.username
