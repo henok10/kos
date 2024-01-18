@@ -9,7 +9,6 @@ from django.contrib.gis.geos import Point
 class ListingSerializer(serializers.ModelSerializer):
     country = serializers.SerializerMethodField()
     user_username = serializers.SerializerMethodField()
-    # user_agency_name = serializers.SerializerMethodField()
     listing_pois_within_10km = serializers.SerializerMethodField()
     price_day = serializers.SerializerMethodField()
     price_month = serializers.SerializerMethodField()
@@ -42,7 +41,7 @@ class ListingSerializer(serializers.ModelSerializer):
         else:
             return None
 
-    def get_listing_pois_within_10km(self, obj):
+    def get_listing_poi(self, obj):
         listing_location = Point(obj.latitude, obj.longitude, srid=4326)
         query = Poi.objects.filter(
             location__distance_lte=(listing_location, D(km=4))

@@ -10,10 +10,8 @@ import { ProSidebarProvider } from "react-pro-sidebar";
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <Provider store={store}>
-    <React.StrictMode>
-      <ProSidebarProvider>
-        <App />
-      </ProSidebarProvider>
-    </React.StrictMode>
+    <ProSidebarProvider>
+      <App />
+    </ProSidebarProvider>
   </Provider>
 );

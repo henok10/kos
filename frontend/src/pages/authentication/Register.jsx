@@ -22,7 +22,7 @@ const Register = () => {
           </Link>
         </Box>
         <Box textAlign={"center"}>
-          <Typography variant="h6" style={{textAlign: "center"}}>Signup as a owner</Typography>
+          <Typography variant="h6" style={{textAlign: "center"}}>Signup as a pemilik kos</Typography>
           <Link to="/owner/signup" className="btn btn-warning m-auto" >
             Signup
           </Link>

@@ -9,7 +9,11 @@ from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 from . import views
 import cloudinary
 import cloudinary_storage
-
+from rest_framework_simplejwt.views import (
+    TokenObtainPairView,
+    TokenRefreshView,
+    TokenVerifyView
+)
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -20,7 +24,6 @@ urlpatterns = [
     path('auth/', include('djoser.urls')),
     path('auth/', include('djoser.urls.jwt')),
     path('auth/', include('djoser.social.urls')),
-    # Your other URL patterns go here  from react js
 
     path('', TemplateView.as_view(template_name='index.html')),
     path('manifest.json', TemplateView.as_view(

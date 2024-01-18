@@ -92,7 +92,13 @@ function Login({ login, isAuthenticated, isCustomer, isOwner, clearErrors }) {
     // console.log(clearErrors())
     return (
       <>
-        <Grid style={{margin: "2rem 0.5rem", display: "flex", justifyContent: "flex-end"}}>
+        <Grid
+          style={{
+            margin: "2rem 0.5rem",
+            display: "flex",
+            justifyContent: "flex-end",
+          }}
+        >
           <RulesPage />
         </Grid>
         <Container
@@ -103,14 +109,17 @@ function Login({ login, isAuthenticated, isCustomer, isOwner, clearErrors }) {
             style={{
               display: "flex",
               position: "absolute",
-              top: 5,
-              width: "80%",
-              left: 70,
+              width: "70%",
+              left: 68,
             }}
           >
             {loginError && (
-              <Alert variant="outlined" severity="warning">
-                <p>{loginError}</p>
+              <Alert
+                variant="outlined"
+                severity="warning"
+                style={{ width: "100%" }}
+              >
+                <Typography>{loginError}</Typography>
               </Alert>
             )}
           </Box>
@@ -129,7 +138,10 @@ function Login({ login, isAuthenticated, isCustomer, isOwner, clearErrors }) {
             <Avatar sx={{ backgroundColor: "#2979ff" }}>
               <LockIcon />
             </Avatar>
-            <Typography style={{ marginBottom: "1rem", fontWeight: "bold" }} variant="h4">
+            <Typography
+              style={{ marginBottom: "1rem", fontWeight: "bold" }}
+              variant="h4"
+            >
               Sign In
             </Typography>
 
@@ -159,7 +171,6 @@ function Login({ login, isAuthenticated, isCustomer, isOwner, clearErrors }) {
                 label="Email"
                 size="small"
                 fullWidth
-                // required
                 autoFocus
                 type="email"
                 name="email"
@@ -194,7 +205,6 @@ function Login({ login, isAuthenticated, isCustomer, isOwner, clearErrors }) {
                 label="Password"
                 size="small"
                 fullWidth
-                // required
                 autoFocus
                 name="password"
                 variant="outlined"
@@ -224,9 +234,6 @@ function Login({ login, isAuthenticated, isCustomer, isOwner, clearErrors }) {
               item
               xs={8}
               style={{
-                // marginTop: "1rem",
-                // marginLeft: "auto",
-                // marginRight: "auto",
                 width: "10rem",
                 margin: "1rem auto 0",
               }}

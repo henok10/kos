@@ -13,21 +13,38 @@ import {
   Button,
   MenuItem,
   Snackbar,
+  Dialog,
+  DialogContent,
+  DialogTitle,
+  IconButton,
 } from "@mui/material";
 import { makeStyles } from "@mui/styles";
+import { styled } from "@mui/material/styles";
+import CloseIcon from "@mui/icons-material/Close";
 
 const useStyles = makeStyles({
   formContainer: {
-    width: "80%",
+    // width: "80%",
     marginLeft: "auto",
     marginRight: "auto",
     border: "5px solid lightWhite",
     padding: "1rem",
-  }
+  },
 });
-function Order() {
+
+const BootstrapDialog = styled(Dialog)(({ theme }) => ({
+  "& .MuiDialogContent-root": {
+    padding: theme.spacing(2),
+  },
+  "& .MuiDialogActions-root": {
+    padding: theme.spacing(1),
+  },
+}));
+function Order(props) {
+  const { id, rumah } = props;
   const classes = useStyles();
   const navigate = useNavigate();
+  const [modalOpen, setModalOpen] = useState(false);
   const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
   const isCustomer = useSelector((state) => state.auth.isCustomer);
   const userId = useSelector((state) => state.auth.userId);
@@ -85,10 +102,8 @@ function Order() {
       case "catchUserProfileInfo":
         draft.userProfile.fullName = action.profileObject.full_name;
         draft.userProfile.phoneNumber = action.profileObject.phone_number;
-        draft.userProfile.noRekeningValue = action.profileObject.no_rekening
-
+        draft.userProfile.noRekeningValue = action.profileObject.no_rekening;
         break;
-
       case "openTheSnack":
         draft.openSnack = true;
         break;
@@ -123,16 +138,14 @@ function Order() {
   const handleSubmit = useCallback(
     async (e) => {
       e.preventDefault();
-
       dispatch({ type: "sendRequest" });
-
       const formData = new FormData();
       formData.append("fullName", state.fullNameValue);
       formData.append("phoneNumber", state.phoneNumberValue);
       formData.append("rentalFrequency", state.rentalFrequencyValue);
       formData.append("nominal", state.nominalValue);
       formData.append("buktiTransfer", state.buktiTransferValue);
-      formData.append("kamar", params.id);
+      formData.append("kamar", id);
       formData.append("customer", customerId);
       formData.append("user", userId);
       Swal.fire({
@@ -151,14 +164,9 @@ function Order() {
               formData
             );
             await updateKamar(params.id, true);
-            Swal.fire(
-              'Ordered!',
-              'Your ordered has been success.',
-              'success'
-            )
+            Swal.fire("Ordered!", "Your ordered has been success.", "success");
             dispatch({ type: "openTheSnack" });
           } catch (error) {
-            console.error(error);
             dispatch({ type: "requestSent" });
           }
         }
@@ -205,14 +213,13 @@ function Order() {
     async function GetRumahInfo() {
       try {
         const response = await Axios.get(
-          `https://mikos03.onrender.com/api/listings/${params.rumah}/`
+          `https://mikos03.onrender.com/api/listings/${rumah}/`
         );
 
         dispatch({
           type: "catchUserOrderInfo",
           name: "noRekeningValue",
-          value: response.data.no_rekening
-          ,
+          value: response.data.no_rekening,
         });
       } catch (e) {}
     }
@@ -221,13 +228,13 @@ function Order() {
 
   async function updateKamar(id, newValue) {
     try {
-      await Axios.patch(`https://mikos03.onrender.com/api/kamar/${id}/update/`, {
-        barang_dipesan: newValue,
-      });
-      // window.location.reload();
-    } catch (error) {
-      console.error(error);
-    }
+      await Axios.patch(
+        `https://mikos03.onrender.com/api/kamar/${id}/update/`,
+        {
+          barang_dipesan: newValue,
+        }
+      );
+    } catch (error) {}
   }
 
   function SubmitButtonDisplay() {
@@ -280,6 +287,17 @@ function Order() {
     }
   }
 
+  const handleOpenClick = async () => {
+    try {
+      setModalOpen(true);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const handleCloseModal = () => {
+    setModalOpen(false);
+  };
 
   useEffect(() => {
     if (state.openSnack) {
@@ -290,153 +308,158 @@ function Order() {
   }, [state.openSnack, navigate]);
   return (
     <>
-      <Box width="40%" margin="auto" border="4px solid white" marginTop='20px'>
-        <Box
-          height="40px"
-          backgroundColor="#1E90FF"
-          justifyContent='center'
-          alignItems="center"
-          display="flex"
-        >
-          <Typography style={{ marginLeft: "10px", color: 'white' }}>
-            Pesan Kamar Kos Sekarang
-          </Typography>
-        </Box>
-        <Box height="550px" backgroundColor="#F8F8FF">
-          <div className={classes.formContainer}>
-            <form onSubmit={handleSubmit}>
-              <Grid item container style={{ marginTop: "1rem" }}>
-                <TextField
-                  id="username"
-                  label="Nama Penyewa"
-                  variant="outlined"
-                  fullWidth
-                  size="small"
-                  value={state.fullNameValue}
-                  onChange={handleChange}
-                  name="fullNameValue"
-                />
-              </Grid>
-              <Grid item container style={{ marginTop: "1rem" }}>
-                <TextField
-                  id="username"
-                  label="No. Telp"
-                  variant="outlined"
-                  fullWidth
-                  size="small"
-                  value={state.phoneNumberValue}
-                  onChange={handleChange}
-                  name="phoneNumberValue"
-                />
-              </Grid>
-              <Grid item container style={{ marginTop: "1rem" }}>
-                <TextField
-                  id="no_rekening"
-                  label="No. Rekening Tujuan"
-                  variant="outlined"
-                  fullWidth
-                  size="small"
-                  value={state.noRekeningValue}
-                  onChange={handleChange}
-                  name="noRekeningValue"
-                />
-              </Grid>
-              <Grid margin="auto" marginTop="1rem">
-                <TextField
-                  id="number"
-                  label="Durasi Penyewaan"
-                  variant="outlined"
-                  fullWidth
-                  size="small"
-                  value={state.rentalFrequencyValue}
-                  onChange={handleChange}
-                  name="rentalFrequencyValue"
-                  select
-                >
-                  <MenuItem value="Year">Year</MenuItem>
-                  <MenuItem value="Month">Month</MenuItem>
-                  <MenuItem value="Day">Day</MenuItem>
-                </TextField>
-              </Grid>
-              <Grid item container style={{ marginTop: "1rem" }}>
-                <TextField
-                  id="nominal pembayaran"
-                  label="Jumlah Pembayaran"
-                  variant="outlined"
-                  fullWidth
-                  size="small"
-                  value={state.nominalValue}
-                  onChange={handleChange}
-                  name="nominalValue"
-                />
-              </Grid>
-              <Grid
-                item
-                container
-                xs={6}
-                style={{
-                  marginTop: "1rem"
-                }}
-              >
-                <Button
-                  variant="outlined"
-                  component="label"
-                  style={{ textAlign: "center" }}
-                >
-                 upload struk
-                  <input
-                    type="file"
-                    accept="image/png, image/gif, image/jpeg"
-                    hidden
-                    onChange={(e) =>
-                      dispatch({
-                        type: "catchUploadedPicture",
-                        pictureChosen: e.target.files,
-                      })
-                    }
-                  />
-                </Button>
-                <Typography style={{ marginTop: "1rem" }}>
-                  {state.buktiTransferValue ? (
-                    <p>{state.buktiTransferValue.name}</p>
-                  ) : (
-                    ""
-                  )}
-                </Typography>
-              </Grid>
-
-              <Grid
-                style={{ marginTop: "1rem" }}
-              >
-                {SubmitButtonDisplay()}
-              </Grid>
-              <Grid
-                item
-                container
-                style={{ marginTop: "1rem" }}
-              >
-                <Typography variant="small">
-                  Sudah memesan?{" "}
-                  <span
-                    onClick={() => navigate(`/riwayatTransaksi`)}
-                    style={{ color: "#2F80ED", cursor: "pointer" }}
+      <Button variant="contained" onClick={handleOpenClick}>
+        Order
+      </Button>
+      <BootstrapDialog
+        open={modalOpen}
+        onClose={handleCloseModal}
+        style={{ zIndex: 1000, marginTop: "3rem" }}
+      >
+        <DialogContent dividers id="modal-content" style={{ overflow: "auto", height: "100%" }}>
+          <Box width="100%" margin="auto" border="4px solid white">
+            <Box
+              height="40px"
+              backgroundColor="#1E90FF"
+              justifyContent="center"
+              alignItems="center"
+              display="flex"
+            >
+              <Typography style={{ marginLeft: "10px", color: "white" }}>
+                Pesan Kamar Kos Sekarang
+              </Typography>
+            </Box>
+            <Box backgroundColor="#F8F8FF">
+              <div className={classes.formContainer}>
+                <form onSubmit={handleSubmit}>
+                  <Grid item container style={{ marginTop: "1rem" }}>
+                    <TextField
+                      id="username"
+                      label="Nama Penyewa"
+                      variant="outlined"
+                      fullWidth
+                      size="small"
+                      value={state.fullNameValue}
+                      onChange={handleChange}
+                      name="fullNameValue"
+                    />
+                  </Grid>
+                  <Grid item container style={{ marginTop: "1rem" }}>
+                    <TextField
+                      id="username"
+                      label="No. Telp"
+                      variant="outlined"
+                      fullWidth
+                      size="small"
+                      value={state.phoneNumberValue}
+                      onChange={handleChange}
+                      name="phoneNumberValue"
+                    />
+                  </Grid>
+                  <Grid item container style={{ marginTop: "1rem" }}>
+                    <TextField
+                      id="no_rekening"
+                      label="No. Rekening Tujuan"
+                      variant="outlined"
+                      fullWidth
+                      size="small"
+                      value={state.noRekeningValue}
+                      onChange={handleChange}
+                      name="noRekeningValue"
+                    />
+                  </Grid>
+                  <Grid margin="auto" marginTop="1rem">
+                    <TextField
+                      id="number"
+                      label="Durasi Penyewaan"
+                      variant="outlined"
+                      fullWidth
+                      size="small"
+                      value={state.rentalFrequencyValue}
+                      onChange={handleChange}
+                      name="rentalFrequencyValue"
+                      select
+                    >
+                      <MenuItem value="Year">Year</MenuItem>
+                      <MenuItem value="Month">Month</MenuItem>
+                      <MenuItem value="Day">Day</MenuItem>
+                    </TextField>
+                  </Grid>
+                  <Grid item container style={{ marginTop: "1rem" }}>
+                    <TextField
+                      id="nominal pembayaran"
+                      label="Jumlah Pembayaran"
+                      variant="outlined"
+                      fullWidth
+                      size="small"
+                      value={state.nominalValue}
+                      onChange={handleChange}
+                      name="nominalValue"
+                    />
+                  </Grid>
+                  <Grid
+                    item
+                    container
+                    xs={6}
+                    style={{
+                      marginTop: "1rem",
+                    }}
                   >
-                    Lihat transaksi kamu disini
-                  </span>
-                </Typography>
-              </Grid>
-            </form>
-            <Snackbar
-              open={state.openSnack}
-              message="You have successfully Order Rumah Kos!"
-              anchorOrigin={{
-                vertical: "bottom",
-                horizontal: "center",
-              }}
-            />
-          </div>
-        </Box>
-      </Box>
+                    <Button
+                      variant="outlined"
+                      component="label"
+                      style={{ textAlign: "center" }}
+                    >
+                      upload struk
+                      <input
+                        type="file"
+                        accept="image/png, image/gif, image/jpeg"
+                        hidden
+                        onChange={(e) =>
+                          dispatch({
+                            type: "catchUploadedPicture",
+                            pictureChosen: e.target.files,
+                          })
+                        }
+                      />
+                    </Button>
+                    <Typography style={{ marginTop: "1rem" }}>
+                      {state.buktiTransferValue ? (
+                        <p>{state.buktiTransferValue.name}</p>
+                      ) : (
+                        ""
+                      )}
+                    </Typography>
+                  </Grid>
+
+                  <Grid style={{ marginTop: "1rem" }}>
+                    {SubmitButtonDisplay()}
+                  </Grid>
+                  <Grid item container style={{ marginTop: "1rem" }}>
+                    <Typography variant="small">
+                      Sudah memesan?{" "}
+                      <span
+                        onClick={() => navigate(`/riwayatTransaksi`)}
+                        style={{ color: "#2F80ED", cursor: "pointer" }}
+                      >
+                        Lihat transaksi kamu disini
+                      </span>
+                    </Typography>
+                  </Grid>
+                </form>
+                <Snackbar
+                  open={state.openSnack}
+                  message="You have successfully Order Rumah Kos!"
+                  anchorOrigin={{
+                    vertical: "bottom",
+                    horizontal: "center",
+                  }}
+                />
+              </div>
+            </Box>
+          </Box>
+        </DialogContent>
+      </BootstrapDialog>
     </>
   );
 }

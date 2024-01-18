@@ -3,13 +3,13 @@ import { useNavigate, useParams } from "react-router-dom";
 import { useSelector } from "react-redux";
 import Axios from "axios";
 import wellknown from "wellknown";
+import Peta from "../components/Peta";
 
 import "leaflet-routing-machine/dist/leaflet-routing-machine.css";
 import "leaflet-routing-machine/dist/leaflet-routing-machine.js";
 import "leaflet-routing-machine";
 import "leaflet-control-geocoder";
 import "leaflet-routing-machine";
-// import { useMap } from 'react-leaflet';
 import { useImmerReducer } from "use-immer";
 // Assets
 import stadiumIconPng from "../data/Mapicons/stadium.png";
@@ -195,17 +195,6 @@ function ListingDetail() {
   const [numItemsBoughtByListingId, setNumItemsBoughtByListingId] = useState(
     {}
   );
-  // useEffect(() => {
-  //   async function GetAllOrderKos() {
-  //     try {
-  //       const response = await Axios.get(
-  //         `https://mikos03.onrender.com/api/transaction/${params.id}/user`
-  //       );
-  //       const data = response.data;
-  //     } catch (error) {}
-  //   }
-  //   GetAllOrderKos();
-  // }, [params.id]);
 
   useEffect(() => {
     async function GetFasilitasInfo() {
@@ -258,7 +247,6 @@ function ListingDetail() {
 
     GetAllKamar();
   }, [params.id]); // Tambah
-
 
   const totalKamar = allKamar[params.id];
   const kamarDibeli = numItemsBoughtByListingId;
@@ -709,9 +697,6 @@ function ListingDetail() {
                     color="primary"
                     size="small"
                     onClick={() => handleOrderRoomClick()}
-                    // onClick={() =>
-                    //   navigate(`/pesan_kamar/${state.listingInfo.id}`)
-                    // }
                     style={{ width: "48%" }}
                   >
                     Pesan Kamar
@@ -726,8 +711,9 @@ function ListingDetail() {
           </Grid>
         </Grid>
 
+        <Peta datapeta={state.listingInfo} />
         {/* Map */}
-        <Grid
+        {/* <Grid
           item
           container
           style={{ marginTop: "1rem" }}
@@ -896,7 +882,7 @@ function ListingDetail() {
               <TheMapComponent listingInfo={state.listingInfo} />
             </MapContainer>
           </Grid>
-        </Grid>
+        </Grid> */}
         <Grid item container margin={"auto"} marginTop={"1rem"}>
           <Grid width={"80%"} margin={"auto"}>
             <Typography

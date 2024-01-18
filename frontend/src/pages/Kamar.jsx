@@ -14,6 +14,7 @@ import {
   Button,
 } from "@mui/material";
 import { useSelector } from "react-redux";
+import Order from "./order/Order";
 
 import { makeStyles } from "@mui/styles";
 
@@ -87,7 +88,10 @@ function Kamar() {
     );
   }
   return (
-    <Grid container style={{ width: "90%",margin: "2rem auto", height: "100%" }}>
+    <Grid
+      container
+      style={{ width: "90%", margin: "2rem auto", height: "100%" }}
+    >
       <TableContainer component={Paper}>
         <Table sx={{ minWidth: 650 }} aria-label="simple table">
           <TableHead>
@@ -146,7 +150,7 @@ function Kamar() {
                     : "Harga tidak tersedia"}
                 </TableCell>
                 <TableCell>
-                 {typeof row.price_year === "string"
+                  {typeof row.price_year === "string"
                     ? `Rp${parseInt(row.price_year, 10).toLocaleString(
                         "id-ID"
                       )}`
@@ -169,12 +173,7 @@ function Kamar() {
                       Order
                     </Button>
                   ) : (
-                    <Button
-                      variant="contained"
-                      onClick={() => navigate(`/order/${row.id}/${row.rumah}`)}
-                    >
-                      Order
-                    </Button>
+                    <Order id={row.id} rumah={row.rumah} />
                   )}
                 </TableCell>
               </TableRow>

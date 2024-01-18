@@ -177,7 +177,7 @@ function ProfileOwner() {
   return (
     <>
       <Grid item container width="90%" margin="auto">
-        <Grid item lg={6} md={6} sm={12} xs={12} marginTop={"5rem"}>
+        <Grid item lg={6} md={6} sm={12} xs={12} marginTop={"2rem"}>
           <div>{WelcomeDisplay()}</div>
           <Button
             variant="outlined"
@@ -187,7 +187,7 @@ function ProfileOwner() {
             Change Password
           </Button>
         </Grid>
-        <Grid item lg={6} md={6} sm={12} xs={12} marginTop={"5rem"}>
+        <Grid item lg={6} md={6} sm={12} xs={12} marginTop={"2rem"}>
           <ProfileUpdate userProfile={state.userProfile} />
         </Grid>
       </Grid>

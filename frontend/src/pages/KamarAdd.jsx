@@ -6,8 +6,6 @@ import { choices } from "../components/Choice";
 import Swal from "sweetalert2";
 import IconButton from "@mui/material/IconButton";
 import DeleteIcon from "@mui/icons-material/Delete";
-
-// MUI
 import { Grid, Typography, Button, TextField, Snackbar } from "@mui/material";
 import { makeStyles } from "@mui/styles";
 import { useSelector } from "react-redux";
@@ -57,7 +55,7 @@ function KamarAdd() {
     priceYearValue: "",
     roomSizeValue: "",
     facilities: [],
-    newFacility: "", // State untuk menyimpan fasilitas baru yang akan dimasukkan
+    newFacility: "",
     rules: [],
     newRule: "",
     pictureRoomValue: [],
@@ -137,14 +135,14 @@ function KamarAdd() {
       case "addFacility":
         if (action.newFacilityChosen.trim()) {
           draft.facilities.push(action.newFacilityChosen.trim());
-          draft.newFacility = ""; // Reset the newFacility state after adding to facilities
+          draft.newFacility = "";
         }
         break;
 
       case "addRule":
         if (action.newRuleChosen.trim()) {
           draft.rules.push(action.newRuleChosen.trim());
-          draft.newRule = ""; // Reset the newFacility state after adding to facilities
+          draft.newRule = "";
         }
         break;
 
@@ -257,13 +255,6 @@ function KamarAdd() {
     });
   }
 
-  function handleRemoveRule(indexToRemove) {
-    dispatch({
-      type: "removeRule",
-      indexToRemove,
-    });
-  }
-
   function FormSubmit(e) {
     e.preventDefault();
 
@@ -273,7 +264,7 @@ function KamarAdd() {
       !state.priceMonthErrors.hasErrors &&
       !state.roomSizeErrors.hasErrors &&
       !state.priceYearErrors.hasErrors &&
-      state.facilities.length > 0 // Memastikan ada fasilitas yang dipilih
+      state.facilities.length > 0
     ) {
       dispatch({ type: "changeSendRequest" });
       dispatch({ type: "disableTheButton" });
@@ -306,8 +297,6 @@ function KamarAdd() {
         formData.append("picture_room", state.pictureRoomValue);
         formData.append("room_size", state.roomSizeValue);
         formData.append("rumah", params.id);
-
-        // Convert the facilities array into the appropriate format
         const facilitiesArray = state.facilities.map((facility) => ({
           name: facility,
         }));
@@ -323,13 +312,10 @@ function KamarAdd() {
         }).then(async (result) => {
           if (result.isConfirmed) {
             try {
-              // First, create the Kamar instance
               const kamarResponse = await Axios.post(
                 "https://mikos03.onrender.com/api/kamar/create",
                 formData
               );
-
-              // Now, use the created Kamar instance's ID to associate the FasilitasKamar instances
               const kamarId = kamarResponse.data.id;
 
               for (const facility of facilitiesArray) {
@@ -341,9 +327,6 @@ function KamarAdd() {
                   }
                 );
               }
-
-              // Menampilkan notifikasi sukses menggunakan Swal
-              // Menampilkan notifikasi sukses menggunakan Swal
               Swal.fire({
                 position: "center",
                 icon: "success",
@@ -354,7 +337,6 @@ function KamarAdd() {
 
               dispatch({ type: "openTheSnack" });
             } catch (e) {
-              // Menampilkan notifikasi kesalahan jika terjadi kesalahan
               Swal.fire({
                 position: "center",
                 icon: "error",
@@ -388,7 +370,7 @@ function KamarAdd() {
         navigate(`/data-kamar/${params.id}`);
       }, 1500);
     }
-  }, [state.openSnack, navigate]);
+  }, [state.openSnack, navigate, params.id]);
   return (
     <div className={classes.formContainer}>
       <form onSubmit={FormSubmit}>
@@ -600,7 +582,7 @@ function KamarAdd() {
               </Button>
               <Typography>
                 {state.pictureRoomValue ? (
-                  <p>{state.pictureRoomValue.name}</p>
+                  <span>{state.pictureRoomValue.name}</span>
                 ) : (
                   ""
                 )}

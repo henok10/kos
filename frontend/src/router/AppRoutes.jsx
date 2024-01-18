@@ -1,7 +1,7 @@
 import { createBrowserRouter, Route, Routes } from "react-router-dom";
-import Order from "../pages/Order";
+import Order from "../pages/order/Order";
 import TheMapComponent from "../components/TheMapComponent";
-import Listings from "../pages/Listings";
+import Listings from "../pages/listing/Listings";
 import ListingDetail from "../pages/ListingDetail";
 import ListingOwnerDetail from "../pages/ListingOwnerDetail";
 import HomePage from "../pages/HomePage";

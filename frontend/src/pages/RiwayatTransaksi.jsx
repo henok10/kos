@@ -1,5 +1,5 @@
 import { Grid, Typography } from "@mui/material";
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState } from "react";
 import Axios from "axios";
 import { useSelector } from "react-redux";
 import { useNavigate, Link } from "react-router-dom";
@@ -15,8 +15,6 @@ import {
   Button,
 } from "@mui/material";
 import ImageConverter from "../components/ImageConverter";
-
-// Komponen terpisah untuk mengkonversi elemen HTML menjadi gamb
 
 export default function RiwayatTransaksi() {
   const navigate = useNavigate();
@@ -38,7 +36,6 @@ export default function RiwayatTransaksi() {
     }
   }, [isCustomer, navigate]);
 
-  // request to get profile info
   useEffect(() => {
     const source = Axios.CancelToken.source();
     async function GetAllKos() {
@@ -123,15 +120,6 @@ export default function RiwayatTransaksi() {
                   const formattedDate = `${year}/${
                     month < 10 ? "0" : ""
                   }${month}/${day < 10 ? "0" : ""}${day}  ${hours}:${minutes}`;
-
-                  function formatPrice(price) {
-                    if (typeof price !== "number") {
-                      return "Harga tidak tersedia";
-                    }
-                    return `Rp${price.toLocaleString("id-ID")}`;
-                  }
-
-                  console.log(typeof row.nominal);
 
                   return (
                     <TableRow

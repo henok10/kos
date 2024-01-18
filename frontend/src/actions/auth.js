@@ -21,9 +21,8 @@ import {
   CLEAR_ERRORS,
   CLEAR_SUCCESS,
 } from "../actions/types";
-import Swal from 'sweetalert2'; 
+import Swal from "sweetalert2";
 
-// Fungsi untuk mendapatkan waktu kedaluwarsa token dari token JWT
 function getTokenExpirationDate(token) {
   const decodedToken = jwt_decode(token);
   if (!decodedToken.exp) return null;
@@ -32,7 +31,6 @@ function getTokenExpirationDate(token) {
   return expirationDate;
 }
 
-// Fungsi untuk memeriksa apakah token sudah kedaluwarsa
 function isTokenExpired(token) {
   const expirationDate = getTokenExpirationDate(token);
   return expirationDate && expirationDate < new Date();
@@ -61,14 +59,13 @@ export const getCustomerUser = () => (dispatch, getState) => {
         payload: res.data,
       });
     })
-    
+
     .catch((err) => {
       dispatch({
         type: CUSTOMER_USER_FAILED,
       });
     });
 };
-
 
 // check token and load freelance user
 export const getOwnerUser = () => (dispatch, getState) => {
@@ -91,7 +88,6 @@ export const getOwnerUser = () => (dispatch, getState) => {
         type: OWNER_USER_LOADED,
         payload: res.data,
       });
-   
     })
     .catch((err) => {
       dispatch({
@@ -121,13 +117,12 @@ export const create_customeruser =
           payload: res.data,
         });
         Swal.fire({
-          title: 'Successful!',
-          text: 'You have successfully created a customer account.',
-          icon: 'success',
+          title: "Successful!",
+          text: "You have successfully created a customer account.",
+          icon: "success",
         });
-        console.log(res.data);
       })
-      
+
       .catch((err) => {
         if (err.response && err.response.data && err.response.data.email) {
           // The server sent an error message for the email field
@@ -141,12 +136,11 @@ export const create_customeruser =
             payload: "An error occurred during signup: " + err.message,
           });
           Swal.fire({
-            title: 'Error',
-            text: 'An error occurred while processing your account.',
-            icon: 'error',
+            title: "Error",
+            text: "An error occurred while processing your account.",
+            icon: "error",
           });
         }
-        throw err; // Throw the error for the error case
       });
   };
 
@@ -168,17 +162,15 @@ export const create_owneruser =
           payload: res.data,
         });
         Swal.fire({
-          title: 'Successful!',
-          text: 'You have successfully created a owner account.',
-          icon: 'success',
+          title: "Successful!",
+          text: "You have successfully created a owner account.",
+          icon: "success",
         });
-        console.log(res.data);
       })
       .catch((err) => {
         dispatch({
           type: REGISTER_FUSER_FAILED,
         });
-        console.log(err.response.data);
       })
       .catch((err) => {
         if (err.response && err.response.data && err.response.data.email) {
@@ -193,7 +185,6 @@ export const create_owneruser =
             payload: "An error occurred during signup: " + err.message,
           });
         }
-        throw err; // Throw the error for the error case
       });
   };
 
@@ -216,9 +207,9 @@ export const login =
           payload: response.data,
         });
         Swal.fire({
-          title: 'Login',
-          text: 'you have successfully logged in.',
-          icon: 'success',
+          title: "Login",
+          text: "you have successfully logged in.",
+          icon: "success",
         });
         // dispatch(getCustomerUser());
       })
@@ -236,10 +227,8 @@ export const login =
             payload: err.response?.data?.non_field_errors[0],
           });
         }
-        throw err; // Throw the error for the error case
       });
   };
-
 
 // Fungsi logout yang akan dijalankan saat token kedaluwarsa atau pengguna logout manual
 export const logout = () => async (dispatch, getState) => {
@@ -251,55 +240,32 @@ export const logout = () => async (dispatch, getState) => {
     dispatch({
       type: LOGOUT_SUCCESS,
     });
-    // Redirect ke halaman login (jika menggunakan React Router)
-    // history.push('/login');
   } else {
-    // Token belum kedaluwarsa, lakukan logout dengan melakukan permintaan logout ke backend
-    const refresh_token = getState().auth.refresh_token;
-
-    const config = {
-      headers: {
-        "Content-Type": "application/json",
-      },
-    };
-
-    if (access_token) {
-      config.headers["Authorization"] = `Bearer ${access_token}`;
-    }
-
-    const data = {
-      refresh_token: refresh_token,
-    };
     const confirmUpdate = await Swal.fire({
-      title: 'Do you want to Logout??',
+      title: "Do you want to Logout??",
       showCancelButton: true,
-      confirmButtonText: 'Logout',
+      confirmButtonText: "Logout",
     });
 
     if (confirmUpdate.isConfirmed) {
       try {
-    axios
-      .post("https://mikos03.onrender.com/api/logout/", data, config)
-      .then((res) => {
         dispatch({
           type: LOGOUT_SUCCESS,
         });
-        Swal.fire({
-          title: 'Logout!',
-          text: 'you have successfully logged out.',
-          icon: 'success',
-        });
-      })
-      .catch((err) => {
-        console.log(err.response.data);
-        
-      });
 
-    } catch (error) {
-      // Handle errors during the logout process
-      console.error('Logout failed:', error);
+        Swal.fire({
+          title: "Logout!",
+          text: "you have successfully logged out.",
+          icon: "success",
+        });
+      } catch (error) {
+        Swal.fire({
+          title: "Logout!",
+          text: "terjadi kesalahan saat logged out.",
+          icon: "warning",
+        });
+      }
     }
-  }
   }
 };
 
@@ -352,9 +318,9 @@ export const change_user_password =
         payload: "Password changed successfully!",
       });
       Swal.fire({
-        title: 'Successful!',
-        text: 'you have successfully changed your password.',
-        icon: 'success',
+        title: "Successful!",
+        text: "you have successfully changed your password.",
+        icon: "success",
       });
     } catch (err) {
       // Handle errors and dispatch appropriate actions

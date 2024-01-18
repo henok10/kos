@@ -1,7 +1,7 @@
-import { useState, useEffect } from "react";
-import { useProSidebar, Sidebar, Menu, MenuItem } from "react-pro-sidebar";
+import { useState } from "react";
+import { Sidebar, Menu, MenuItem } from "react-pro-sidebar";
 import { logout } from "../actions/auth";
-import { Box, Grid, IconButton, Button, Typography } from "@mui/material";
+import { Box, Grid, Typography } from "@mui/material";
 import { useSelector, useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
 import HomeIcon from "@mui/icons-material/Home";
@@ -44,21 +44,17 @@ const Item = ({ title, to, icon, selected, setSelected }) => {
 };
 
 function SidebarNav() {
-  const [isCollapsed, setIsCollapsed] = useState(false);
   const [selected, setSelected] = useState("Dashboard");
-  const dispatch = useDispatch();
   const isCustomer = useSelector((state) => state.auth.isCustomer);
   const isOwner = useSelector((state) => state.auth.isOwner);
   const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
-  const { collapseSidebar } = useProSidebar();
 
   return (
     <Sidebar
-      // className="fixed-sidebar"s
-      defaultCollapsed={isCollapsed}
       style={{ height: "100%", top: "auto" }}
+      backgroundColor="white"
       breakPoint="md"
-      // backgroundColor="white"
+      zIndex={999}
     >
       <Menu
         menuItemStyles={{
@@ -72,7 +68,7 @@ function SidebarNav() {
         <Grid
           style={{
             display: "flex",
-            flexDirection: "column", // Corrected typo here
+            flexDirection: "column", 
             justifyContent: "space-between",
             height: "100%",
           }}
@@ -137,7 +133,6 @@ function SidebarNav() {
               <Item
                 title="Profile"
                 to="/profileCustomer"
-                // to="/profileCustomer"
                 icon={<AccountBoxIcon style={{fill: "gray"}} />}
                 selected={selected}
                 setSelected={setSelected}

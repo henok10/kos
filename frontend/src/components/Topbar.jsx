@@ -1,11 +1,9 @@
 import React from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { useSelector, useDispatch } from "react-redux";
-import { logout } from "../actions/auth";
+import { useSelector } from "react-redux";
 import { makeStyles } from "@mui/styles";
 import {
   Button,
-  Typography,
   IconButton,
   AppBar,
   Toolbar,
@@ -16,9 +14,7 @@ import {
   useTheme,
 } from "@mui/material";
 import { useProSidebar } from "react-pro-sidebar";
-import SettingsIcon from "@mui/icons-material/Settings";
 import MenuIcon from "@mui/icons-material/Menu";
-import mikos from "../data/mikos.png";
 import mikos1 from "../data/mikos.png";
 
 const useStyles = makeStyles((theme) => ({
@@ -29,16 +25,13 @@ const useStyles = makeStyles((theme) => ({
 
 function Topbar() {
   const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
-  const { collapseSidebar, toggleSidebar, collapsed, broken } = useProSidebar();
-  const dispatch = useDispatch();
+  const { collapseSidebar, toggleSidebar, broken } = useProSidebar();
   const navigate = useNavigate();
-  const email = useSelector((state) => state.auth.email);
+  // const email = useSelector((state) => state.auth.email);
   const username = useSelector((state) => state.auth.username);
   const classes = useStyles();
   const theme = useTheme();
   const isLargeScreen = useMediaQuery(theme.breakpoints.up("sm"));
-
-  console.log(username);
 
   const authLinks = (
     <Grid sx={{ m: "auto", display: "flex" }}>
@@ -62,9 +55,6 @@ function Topbar() {
       <Button color="inherit" component={Link} to="/register">
         Register
       </Button>
-      {/* <Button color="inherit" component={Link} to="/login">
-        Login
-      </Button> */}
     </Box>
   );
 
@@ -76,7 +66,6 @@ function Topbar() {
             style={{
               display: "flex",
               width: "100%",
-              // padding: "5px",
             }}
           >
             <IconButton
@@ -92,21 +81,14 @@ function Topbar() {
                 width: "10rem",
                 left: 10,
                 top: 0,
-                // justifyContent: "center",
-                // margin: "auto",
-                // alignItems: "center",
               }}
               color="inherit"
               onClick={() => navigate("/")}
             >
               <img style={{ width: "100%" }} src={mikos1} alt="" />
             </div>
-            {/* <Button color="inherit" onClick={() => navigate("/syarat_ketentuan")}>
-            Syarat dan Ketentuan
-          </Button> */}
           </Box>
           {isAuthenticated ? authLinks : publicLinks}
-          {/* </Box> */}
         </Toolbar>
       </AppBar>
     </Box>

@@ -1,4 +1,3 @@
-// import * as React from 'react';
 import { DataGrid } from "@mui/x-data-grid";
 import { Grid, Button, CircularProgress } from "@mui/material";
 import React, { useEffect, useState } from "react";
@@ -31,7 +30,6 @@ export default function DataTable() {
     }
   }, [isOwner, navigate]);
 
-  // request to get profile info
   useEffect(() => {
     const source = Axios.CancelToken.source();
     async function GetAllKos() {
@@ -69,13 +67,12 @@ export default function DataTable() {
           setAllKamar(totalRoomsByListing);
         }
       } catch (error) {
-        // Tangani error jika diperlukan
-        console.error("Error:", error);
+
       }
     }
 
     GetAllKamar();
-  }, [listingIds]); // Tambah
+  }, [listingIds]);
 
   useEffect(() => {
     const source = Axios.CancelToken.source();
@@ -102,17 +99,13 @@ export default function DataTable() {
     };
   }, [listingIds]);
 
-  // console.log(numItemsBoughtByListingId)
-  // console.log(allKamar)
-
-  const kamarKosongByListingId = {}; // Objek untuk menyimpan jumlah kamar kosong pada setiap rumah kos
+  const kamarKosongByListingId = {};
 
   for (const listingId in allKamar) {
     const totalKamar = allKamar[listingId];
     const kamarDibeli = numItemsBoughtByListingId[listingId] || 0;
     const kamarKosong = totalKamar - kamarDibeli;
     kamarKosongByListingId[listingId] = kamarKosong;
-    console.log(kamarKosong);
   }
 
   
@@ -143,11 +136,9 @@ export default function DataTable() {
           'Your file has been deleted.',
           'success'
         ).then(() => {
-          // Reload halaman setelah penghapusan berhasil
           window.location.reload();
         });
       } catch (error) {
-        // Handle error if deletion fails
         swalWithBootstrapButtons.fire(
           'Error',
           'An error occurred while deleting the file.',
@@ -155,7 +146,6 @@ export default function DataTable() {
         );
       }
     } else if (result.dismiss === Swal.DismissReason.cancel) {
-      // Handle cancellation
       swalWithBootstrapButtons.fire(
         'Cancelled',
         'Your imaginary file is safe :)',
@@ -196,7 +186,7 @@ export default function DataTable() {
       field: "allKamar",
       headerName: "Rooms",
       width: 60,
-      valueGetter: (params) => allKamar[params.row.id] || 0, // Mengambil jumlah kamar dari objek allKamar
+      valueGetter: (params) => allKamar[params.row.id] || 0, 
     },
     {
       field: "kamarKosongByListingId",
