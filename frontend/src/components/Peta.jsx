@@ -37,7 +37,7 @@ function Peta(props) {
       >
         <Grid item lg={3} md={3} sm={12} xs={12}>
           <Box style={{ height: "24rem", overflow: "auto" }}>
-            {datapeta.listing_pois_within_10km.map((poi) => {
+            {datapeta.listing_poi.map((poi) => {
               function DegreeToRadian(coordinate) {
                 return (coordinate * Math.PI) / 180;
               }
@@ -106,7 +106,7 @@ function Peta(props) {
               attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
               url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
             />
-            {datapeta.listing_pois_within_10km.map((poi) => {
+            {datapeta.listing_poi.map((poi) => {
               function PoiIcon() {
                 if (poi.type === "Stadium") {
                   return stadiumIcon;
