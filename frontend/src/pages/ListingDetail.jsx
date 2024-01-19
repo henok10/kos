@@ -647,7 +647,6 @@ function ListingDetail() {
                               "id-ID"
                             )}/hari`
                           : "Harga tidak tersedia"}
-                        i
                       </div>
                     )}
                     {selectedOption === "tahun" && (
@@ -658,7 +657,6 @@ function ListingDetail() {
                               "id-ID"
                             )}/tahun`
                           : "Harga tidak tersedia"}
-                        /tahun
                       </div>
                     )}
                   </Typography>
@@ -710,179 +708,7 @@ function ListingDetail() {
             </Box>
           </Grid>
         </Grid>
-
         <Peta datapeta={state.listingInfo} />
-        {/* Map */}
-        {/* <Grid
-          item
-          container
-          style={{ marginTop: "1rem" }}
-          spacing={1}
-          justifyContent="space-between"
-        >
-          <Grid item lg={3} md={3} sm={12} xs={12}>
-            <Box style={{ height: "24rem", overflow: "auto" }}>
-              {state.listingInfo.listing_pois_within_10km.map((poi) => {
-                function DegreeToRadian(coordinate) {
-                  return (coordinate * Math.PI) / 180;
-                }
-
-                function CalculateDistance() {
-                  const lat1 = DegreeToRadian(state.listingInfo.latitude);
-                  const lon1 = DegreeToRadian(state.listingInfo.longitude);
-
-                  // Parse the WKT string and get the coordinates
-                  const coordinates = wellknown(poi.location).coordinates;
-
-                  if (coordinates && coordinates.length === 2) {
-                    const lat2 = DegreeToRadian(coordinates[0]);
-                    const lon2 = DegreeToRadian(coordinates[1]);
-
-                    // Haversine formula
-                    const R = 6371; // Earth radius in kilometers
-
-                    const dLat = lat2 - lat1;
-                    const dLon = lon2 - lon1;
-
-                    const a =
-                      Math.sin(dLat / 2) ** 2 +
-                      Math.cos(lat1) * Math.cos(lat2) * Math.sin(dLon / 2) ** 2;
-
-                    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-
-                    // Calculate distance using Haversine formula
-                    const distance = R * c;
-
-                    return distance.toFixed(2);
-                  } else {
-                    console.error(
-                      "Invalid or undefined coordinates in the parsed point"
-                    );
-                    return "Invalid Coordinates";
-                  }
-                }
-
-                return (
-                  <div
-                    key={poi.id}
-                    style={{
-                      marginBottom: "0.5rem",
-                      borderBottom: "1px solid black",
-                    }}
-                  >
-                    <Typography
-                      // variant="h6"
-                      style={{ fontSize: "14px", fontWeight: "bold" }}
-                    >
-                      {poi.name}
-                    </Typography>
-                    <Typography
-                      variant="subtitle1"
-                      style={{ fontSize: "12px" }}
-                    >
-                      {poi.type} |{" "}
-                      <span style={{ fontWeight: "bolder", color: "black" }}>
-                        {CalculateDistance()} Km
-                      </span>
-                    </Typography>
-                  </div>
-                );
-              })}
-            </Box>
-            <Button
-              onClick={GoogleMapsShortcut}
-              style={{
-                backgroundColor: "#4CAF50",
-                color: "white",
-                fontSize: "16px",
-                padding: "10px 20px",
-                marginTop: "0.5rem",
-                borderRadius: "5px",
-                cursor: "pointer",
-              }}
-              startIcon={<AssistantDirectionIcon />}
-            >
-              google maps
-            </Button>
-          </Grid>
-
-          <Grid item lg={9} md={9} sm={12} xs={12} style={{ height: "28rem" }}>
-            <MapContainer
-              center={[state.listingInfo.latitude, state.listingInfo.longitude]}
-              zoom={16}
-              scrollWheelZoom={true}
-            >
-              <TileLayer
-                attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-                url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-              />
-              {state.listingInfo.listing_pois_within_10km.map((poi) => {
-                function PoiIcon() {
-                  if (poi.type === "Stadium") {
-                    return stadiumIcon;
-                  } else if (poi.type === "Hospital") {
-                    return hospitalIcon;
-                  } else if (poi.type === "University") {
-                    return universityIcon;
-                  }
-                }
-
-                function DegreeToRadian(coordinate) {
-                  return (coordinate * Math.PI) / 180;
-                }
-                function CalculateDistance() {
-                  const lat1 = DegreeToRadian(state.listingInfo.latitude);
-                  const lon1 = DegreeToRadian(state.listingInfo.longitude);
-
-                  // Parse the WKT string and get the coordinates
-                  const coordinates = wellknown(poi.location).coordinates;
-
-                  if (coordinates && coordinates.length === 2) {
-                    const lat2 = DegreeToRadian(coordinates[0]);
-                    const lon2 = DegreeToRadian(coordinates[1]);
-
-                    // Haversine formula
-                    const R = 6371; // Earth radius in kilometers
-
-                    const dLat = lat2 - lat1;
-                    const dLon = lon2 - lon1;
-
-                    const a =
-                      Math.sin(dLat / 2) ** 2 +
-                      Math.cos(lat1) * Math.cos(lat2) * Math.sin(dLon / 2) ** 2;
-
-                    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-
-                    // Calculate distance using Haversine formula
-                    const distance = R * c;
-
-                    return distance.toFixed(2);
-                  } else {
-                    console.error(
-                      "Invalid or undefined coordinates in the parsed point"
-                    );
-                    return "Invalid Coordinates";
-                  }
-                }
-                const coordinates = wellknown(poi.location).coordinates;
-
-                return (
-                  <Marker
-                    key={poi.id}
-                    position={[coordinates[0], coordinates[1]]}
-                    icon={PoiIcon()}
-                  >
-                    <Popup>
-                      {poi.name} {CalculateDistance()} Km
-                    </Popup>
-                  </Marker>
-                );
-              })}
-
-              <TheMapComponent listingInfo={state.listingInfo} />
-            </MapContainer>
-          </Grid>
-        </Grid> */}
         <Grid item container margin={"auto"} marginTop={"1rem"}>
           <Grid width={"80%"} margin={"auto"}>
             <Typography

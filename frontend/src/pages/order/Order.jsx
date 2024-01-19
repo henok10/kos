@@ -163,7 +163,7 @@ function Order(props) {
               `https://mikos03.onrender.com/api/transaction/create`,
               formData
             );
-            await updateKamar(params.id, true);
+            await updateKamar(id, true);
             Swal.fire("Ordered!", "Your ordered has been success.", "success");
             dispatch({ type: "openTheSnack" });
           } catch (error) {

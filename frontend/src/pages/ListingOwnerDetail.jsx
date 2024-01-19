@@ -24,7 +24,7 @@ import TheMapComponent from "../components/TheMapComponent";
 import { makeStyles } from "@mui/styles";
 import { choices } from "../components/Choice";
 import ErrorIcon from "@mui/icons-material/Error";
-
+import Peta from "../components/Peta";
 const useStyles = makeStyles({
   sliderContainer: {
     position: "relative",
@@ -195,7 +195,6 @@ function ListingOwnerDetail() {
       GetFasilitasInfo();
     }
   }, [state.listingInfo]);
-
 
   useEffect(() => {
     async function GetRuleInfo() {
@@ -462,152 +461,7 @@ function ListingOwnerDetail() {
             )}
           </Grid>
         </Grid>
-        <Grid item xs={6} style={{ marginTop: "2rem" }} columns={{ sm: 6 }}>
-          {/* Image slider */}
-          {listingPictures.length > 0 ? (
-            <Box
-              style={{
-                paddingLeft: "0.5rem",
-                paddingTop: "0.7rem",
-                paddingRight: "0.5rem",
-              }}
-            >
-              <Grid
-                item
-                container
-                justifyContent="center"
-                className={classes.sliderContainer}
-              >
-                {listingPictures.map((picture, index) => {
-                  return (
-                    <div key={index}>
-                      {index === currentPicture ? (
-                        <img
-                          src={picture}
-                          style={{ width: "100%", height: "31rem" }}
-                          alt="gambar1"
-                        />
-                      ) : (
-                        ""
-                      )}
-                    </div>
-                  );
-                })}
-                <ArrowCircleLeftIcon
-                  onClick={PreviousPicture}
-                  className={classes.leftArrow}
-                />
-                <ArrowCircleRightIcon
-                  onClick={NextPicture}
-                  className={classes.rightArrow}
-                />
-              </Grid>
-            </Box>
-          ) : (
-            ""
-          )}
-        </Grid>
-      </Grid>
-
-      {/* Map */}
-      <Grid
-        item
-        container
-        style={{ marginTop: "1rem" }}
-        spacing={1}
-        justifyContent="space-between"
-      >
-        <Grid item xs={3} style={{ overflow: "auto", height: "35rem" }}>
-          {state.listingInfo.listing_pois_within_10km.map((poi) => {
-            function DegreeToRadian(coordinate) {
-              return (coordinate * Math.PI) / 180;
-            }
-
-            function CalculateDistance() {
-              const latitude1 = DegreeToRadian(state.listingInfo.latitude);
-              const longitude1 = DegreeToRadian(state.listingInfo.longitude);
-
-              const latitude2 = DegreeToRadian(poi.location.coordinates[0]);
-              const longitude2 = DegreeToRadian(poi.location.coordinates[1]);
-              // The formula
-
-              const lonDiff = longitude2 - longitude1;
-              const R = 6371000 / 1000;
-
-              // const a =
-              //   Math.sin(latDiff / 2) * Math.sin(latDiff / 2) +
-              //   Math.cos(latitude1) *
-              //     Math.cos(latitude2) *
-              //     Math.sin(lonDiff / 2) *
-              //     Math.sin(lonDiff / 2);
-              // const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-
-              // const d = R * c;
-
-              const dist =
-                Math.acos(
-                  Math.sin(latitude1) * Math.sin(latitude2) +
-                    Math.cos(latitude1) *
-                      Math.cos(latitude2) *
-                      Math.cos(lonDiff)
-                ) * R;
-              return dist.toFixed(2);
-            }
-            return (
-              <div
-                key={poi.id}
-                style={{
-                  marginBottom: "0.5rem",
-                  borderBottom: "1px solid black",
-                }}
-              >
-                <Typography variant="h6">{poi.name}</Typography>
-                <Typography variant="subtitle1">
-                  {poi.type} |{" "}
-                  <span style={{ fontWeight: "bolder", color: "black" }}>
-                    {CalculateDistance()} Kilometers
-                  </span>
-                </Typography>
-              </div>
-            );
-          })}
-        </Grid>
-        <Grid item xs={9} style={{ height: "35rem" }}>
-          <MapContainer
-            center={[state.listingInfo.latitude, state.listingInfo.longitude]}
-            zoom={16}
-            scrollWheelZoom={true}
-          >
-            <TileLayer
-              attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-              url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-            />
-            {state.listingInfo.listing_pois_within_10km.map((poi) => {
-              function PoiIcon() {
-                if (poi.type === "Stadium") {
-                  return stadiumIcon;
-                } else if (poi.type === "Hospital") {
-                  return hospitalIcon;
-                } else if (poi.type === "University") {
-                  return universityIcon;
-                }
-              }
-              return (
-                <Marker
-                  key={poi.id}
-                  position={[
-                    poi.location.coordinates[0],
-                    poi.location.coordinates[1],
-                  ]}
-                  icon={PoiIcon()}
-                >
-                  <Popup>{poi.name}</Popup>
-                </Marker>
-              );
-            })}
-            <TheMapComponent listingInfo={state.listingInfo} />
-          </MapContainer>
-        </Grid>
+        <Peta datapeta={state.listingInfo} />
       </Grid>
     </div>
   );

@@ -96,11 +96,19 @@ function Peta(props) {
             google maps
           </Button>
         </Grid>
-        <Grid item lg={9} md={9} sm={12} xs={12} style={{ height: "28rem" }}>
+        <Grid
+          item
+          lg={9}
+          md={9}
+          sm={12}
+          xs={12}
+          style={{ height: "28rem", zIndex: 99 }}
+        >
           <MapContainer
             center={[datapeta.latitude, datapeta.longitude]}
             zoom={16}
             scrollWheelZoom={true}
+            zIndex={100}
           >
             <TileLayer
               attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'

@@ -71,9 +71,6 @@ function Review() {
         icon: "error",
       });
     } else {
-   
-   
-    event.preventDefault();
     axios
       .post("https://mikos03.onrender.com/api/review/create", {
         comment: comment,

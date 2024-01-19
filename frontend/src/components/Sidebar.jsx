@@ -54,7 +54,7 @@ function SidebarNav() {
       style={{ height: "100%", top: "auto" }}
       backgroundColor="white"
       breakPoint="md"
-      zIndex={999}
+      zIndex={9999}
     >
       <Menu
         menuItemStyles={{
